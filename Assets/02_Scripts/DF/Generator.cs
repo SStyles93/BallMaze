@@ -15,7 +15,7 @@ namespace PxP.DungeonForge
 
         private static int m_seed = -1;
         private static AlgorithmType m_algorithmType = AlgorithmType.Perlin;
-        private static Vector2Int m_mapSize = new Vector2Int(40,40);
+        private static Vector2Int m_mapSize = new Vector2Int(40, 40);
         private static Vector2 m_mapCenter = new Vector2();
         private static uint m_mapHeight = 1;
 
@@ -84,12 +84,33 @@ namespace PxP.DungeonForge
         }
 
         /// <summary>
+        /// Resets all the values of the Generator
+        /// </summary>
+        public static void ResetValues()
+        {
+            currentPosition = Vector3.zero;
+            m_terrainPrefab = null;
+            m_terrainObjects = null;
+            m_parent = null;
+
+            m_seed = -1;
+            m_algorithmType = AlgorithmType.Perlin;
+            m_mapSize = new Vector2Int(40, 40);
+            m_mapCenter = new Vector2();
+            m_mapHeight = 1;
+
+            m_maxRoomSize = 10;
+            m_iterations = 5;
+            m_fillProbability = 55;
+        }
+
+        /// <summary>
         /// Sets the Generator Seed (uses the Mersene-twister engine)
         /// </summary>
         /// <param name="value">Value of the seed</param>
         public static void SetSeed(int value)
         {
-            if(value < -1 || value > int.MaxValue)
+            if (value < -1 || value > int.MaxValue)
             {
                 Debug.Log($"Value must be set between -1 and {int.MaxValue}");
                 return;
@@ -117,12 +138,12 @@ namespace PxP.DungeonForge
                 size.x = 1;
                 Debug.LogWarning("Map size.x should not be lower than 1");
             }
-            if(size.y < 1)
+            if (size.y < 1)
             {
                 size.y = 1;
                 Debug.LogWarning("Map size.y should not be lower than 1");
             }
-                m_mapSize = size;
+            m_mapSize = size;
         }
 
         /// <summary>
@@ -131,7 +152,7 @@ namespace PxP.DungeonForge
         /// <param name="height">uint height</param>
         public static void SetMapHeight(uint height)
         {
-            if(height < 1)
+            if (height < 1)
             {
                 Debug.LogWarning("Map height should not be lower that 1");
             }
@@ -142,7 +163,7 @@ namespace PxP.DungeonForge
         /// Sets the center of the map
         /// </summary>
         /// <param name="center">Vector2 center</param>
-        public  static void  SetMapCenter(Vector2 center)
+        public static void SetMapCenter(Vector2 center)
         {
             m_mapCenter = center;
         }
@@ -153,7 +174,7 @@ namespace PxP.DungeonForge
         /// <param name="value">Value of fill probability</param>
         public static void SetAutomataFillProbability(int value)
         {
-            if(value < 1 || value > 100)
+            if (value < 1 || value > 100)
             {
                 Debug.Log("Fill probability must be between 1-100");
                 return;

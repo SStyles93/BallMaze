@@ -43,8 +43,7 @@ namespace PxP
                 DungeonForgeEditorWindow window = (DungeonForgeEditorWindow)EditorWindow.GetWindow(typeof(DungeonForgeEditorWindow));
                 window.Show();
             }
-
-            private void OnEnable()
+            private void ResetAllValues()
             {
                 //Generator
                 m_algorithmType = AlgorithmType.Perlin;
@@ -66,6 +65,15 @@ namespace PxP
                 m_generatorRules = true;
                 m_mapRules = true;
 
+                DungeonForge.Generator.ResetValues();
+            }
+            private void OnEnable()
+            {
+                ResetAllValues();
+            }
+            private void OnDestroy()
+            {
+                ResetAllValues();
             }
 
             private void OnGUI()
@@ -228,9 +236,9 @@ namespace PxP
                     {
                         case AlgorithmType.BSP:
                             GUILayout.Space(5);
-                            
 
-                            
+
+
                             EditorGUI.BeginChangeCheck();
                             int roomEdge = EditorGUILayout.IntField(
                                 new GUIContent("Max Edge Size", "Defines the maximal size of the edges of the room"), m_maxRoomEdgeSize);
