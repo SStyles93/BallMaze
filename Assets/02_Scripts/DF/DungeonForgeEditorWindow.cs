@@ -26,6 +26,10 @@ namespace PxP
             //BSP rules
             [SerializeField] private int m_maxRoomEdgeSize = 10;
 
+            //Automata rules
+            [SerializeField] private int m_fillProbability = 45;
+            [SerializeField] private int m_iterations = 5;
+
             // Editor variables
             private Vector2 m_scrollPosition = Vector2.zero;
             private bool m_generatorRules = true;
@@ -39,7 +43,6 @@ namespace PxP
                 DungeonForgeEditorWindow window = (DungeonForgeEditorWindow)EditorWindow.GetWindow(typeof(DungeonForgeEditorWindow));
                 window.Show();
             }
-
 
             private void OnGUI()
             {
@@ -59,7 +62,7 @@ namespace PxP
                 {
                     GUILayout.Space(5);
                     EditorGUI.indentLevel++;
-                    
+
                     EditorGUI.BeginChangeCheck();
                     AlgorithmType algorithmType = (AlgorithmType)EditorGUILayout.EnumPopup
                     (
@@ -183,27 +186,64 @@ namespace PxP
                         Repaint();
                     }
 
-
-                    if (m_algorithmType == AlgorithmType.BSP)
+                    switch (m_algorithmType)
                     {
-                        GUILayout.Space(5);
-
-                        EditorGUI.BeginChangeCheck();
-                        int roomEdge = EditorGUILayout.IntField(
-                            new GUIContent("Max Edge Size", "Defines the maximal size of the edges of the room"), m_maxRoomEdgeSize);
-                        if (EditorGUI.EndChangeCheck())
-                        {
-                            if (roomEdge < 1)
+                        case AlgorithmType.BSP:
+                            GUILayout.Space(5);
+                            EditorGUI.BeginChangeCheck();
+                            int roomEdge = EditorGUILayout.IntField(
+                                new GUIContent("Max Edge Size", "Defines the maximal size of the edges of the room"), m_maxRoomEdgeSize);
+                            if (EditorGUI.EndChangeCheck())
                             {
-                                roomEdge = 1;
-                                Debug.LogWarning("Room edge can not be lower than 1");
+                                if (roomEdge < 1)
+                                {
+                                    roomEdge = 1;
+                                    Debug.LogWarning("Room edge can not be lower than 1");
+                                }
+                                Undo.RecordObject(this, $"Modified MaxRoomEdgeSize");
+                                m_maxRoomEdgeSize = roomEdge;
+                                DungeonForge.Generator.SetBSPBorderSize(m_maxRoomEdgeSize);
+                                EditorUtility.SetDirty(this);
+                                Repaint();
                             }
-                            Undo.RecordObject(this, $"Modified MaxRoomEdgeSize");
-                            m_maxRoomEdgeSize = roomEdge;
-                            DungeonForge.Generator.SetBSPBorderSize(m_maxRoomEdgeSize);
-                            EditorUtility.SetDirty(this);
-                            Repaint();
-                        }
+                            break;
+                        case AlgorithmType.CellularAutomata:
+                            GUILayout.Space(5);
+                            EditorGUI.BeginChangeCheck();
+                            int fillProbability = EditorGUILayout.IntField(
+                                new GUIContent("Fill Probability", "Defines the chances for a tile to be filled"), m_fillProbability);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                if (fillProbability < 1)
+                                {
+                                    fillProbability = 1;
+                                    Debug.LogWarning("Fill probability can not be lower than 1");
+                                }
+                                Undo.RecordObject(this, "Modified Fill Probability");
+                                m_fillProbability = fillProbability;
+                                DungeonForge.Generator.SetAutomataFillProbability(m_fillProbability);
+                                EditorUtility.SetDirty(this);
+                                Repaint();
+                            }
+                            EditorGUI.BeginChangeCheck();
+                            int iterations = EditorGUILayout.IntField(
+                                new GUIContent("Number of Iteration", "Defines the number of time the Cellular Automata will smooth the map"), m_iterations);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                if (iterations < 1)
+                                {
+                                    iterations = 1;
+                                    Debug.LogWarning("Room edge can not be lower than 1");
+                                }
+                                Undo.RecordObject(this, "Modified Iterations");
+                                m_iterations = iterations;
+                                DungeonForge.Generator.SetAutomataIterations(m_iterations);
+                                EditorUtility.SetDirty(this);
+                                Repaint();
+                            }
+                            break;
+                        default:
+                            break;
                     }
 
                     EditorGUI.indentLevel--;

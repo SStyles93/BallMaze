@@ -33,11 +33,17 @@ namespace PxP.DungeonForge
         private static extern void SetSeed(IntPtr generatorInstance, int seed);
 
         [DllImport("DungeonForgeLib.dll")]
-        private static extern void SetMaxBoderSize(IntPtr generatorInstance, int maxBorderSize);
+        private static extern void SetMaxRoomEdgeSize(IntPtr generatorInstance, int maxBorderSize);
+
+        [DllImport("DungeonForgeLib.dll")]
+        private static extern void SetFillProbability(IntPtr generatorInstance, int value);
+
+        [DllImport("DungeonForgeLib.dll")]
+        private static extern void SetIterations(IntPtr generatorInstance, int value);
         #endregion
 
         #region Public Methods
-        
+
         /// <summary>
         /// Generates the Map and Physical Map
         /// </summary>
@@ -54,12 +60,21 @@ namespace PxP.DungeonForge
         }
 
         /// <summary>
-        /// Sets the prefab used as "Tiles" 
+        /// Sets the value of fill probability / chances to fill a tile of not
         /// </summary>
-        /// <param name="prefab">The prefab</param>
-        public static void SetTerrainPrefab(GameObject prefab)
+        /// <param name="value">Value of fill probability</param>
+        public static void SetAutomataFillProbability(int value)
         {
-            m_terrainPrefab = prefab;
+            SetFillProbability(generatorInstance, value);
+        }
+
+        /// <summary>
+        /// Set the value of number of iteration used to smooth the map 
+        /// </summary>
+        /// <param name="value">Number of iteration</param>
+        public static void SetAutomataIterations(int value)
+        {
+            SetIterations(generatorInstance, value);
         }
 
         /// <summary>
@@ -68,48 +83,21 @@ namespace PxP.DungeonForge
         /// <param name="size">Max size of a room</param>
         public static void SetBSPBorderSize(int size)
         {
-            SetMaxBoderSize(generatorInstance, size);
+            SetMaxRoomEdgeSize(generatorInstance, size);
+        }
+
+        /// <summary>
+        /// Sets the prefab used as "Tiles" 
+        /// </summary>
+        /// <param name="prefab">The prefab</param>
+        public static void SetTerrainPrefab(GameObject prefab)
+        {
+            m_terrainPrefab = prefab;
         }
 
         #endregion
 
         #region Private Methods
-
-        /// <summary>
-        /// Initializes the map generator
-        /// </summary>
-        /// <param name="mapWidth">Width of the map</param>
-        /// <param name="mapHeight">Height of the map</param>
-        private static void Init(int mapWidth = 1, int mapHeight = 1)
-        {
-            if (mapWidth < 1)
-            {
-                mapWidth = 1;
-                Debug.LogWarning("Map Width cannot be smaller than 1");
-            }
-            if (mapHeight < 1)
-            {
-                mapHeight = 1;
-                Debug.LogWarning("Map Height cannot be smaller than 1");
-            }
-
-
-            generatorInstance = CreateGenerator((uint)mapWidth, (uint)mapHeight);
-        }
-        
-        /// <summary>
-        /// Initializes the map generator
-        /// </summary>
-        /// <param name="mapSize">Map width and height</param>
-        private static void Init(Vector2Int mapSize = default)
-        {
-            if (mapSize == default)
-            {
-                Debug.LogWarning("Map Size cannot be smaller than (1,1)");
-                return;
-            }
-            generatorInstance = CreateGenerator((uint)mapSize.x, (uint)mapSize.y);
-        }
         
         /// <summary>
         /// Generated the phisical map with the data from the generator
@@ -160,6 +148,42 @@ namespace PxP.DungeonForge
             }
         }
 
+        /// <summary>
+        /// Initializes the map generator
+        /// </summary>
+        /// <param name="mapWidth">Width of the map</param>
+        /// <param name="mapHeight">Height of the map</param>
+        private static void Init(int mapWidth = 1, int mapHeight = 1)
+        {
+            if (mapWidth < 1)
+            {
+                mapWidth = 1;
+                Debug.LogWarning("Map Width cannot be smaller than 1");
+            }
+            if (mapHeight < 1)
+            {
+                mapHeight = 1;
+                Debug.LogWarning("Map Height cannot be smaller than 1");
+            }
+
+
+            generatorInstance = CreateGenerator((uint)mapWidth, (uint)mapHeight);
+        }
+        
+        /// <summary>
+        /// Initializes the map generator
+        /// </summary>
+        /// <param name="mapSize">Map width and height</param>
+        private static void Init(Vector2Int mapSize = default)
+        {
+            if (mapSize == default)
+            {
+                Debug.LogWarning("Map Size cannot be smaller than (1,1)");
+                return;
+            }
+            generatorInstance = CreateGenerator((uint)mapSize.x, (uint)mapSize.y);
+        }
+        
         /// <summary>
         /// Sets the instance position according to the Center and the MapSize
         /// </summary>
