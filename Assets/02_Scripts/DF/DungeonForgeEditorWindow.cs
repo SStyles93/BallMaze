@@ -30,6 +30,9 @@ namespace PxP
             [SerializeField] private int m_fillProbability = 45;
             [SerializeField] private int m_iterations = 5;
 
+            //Drunkard's Walk
+            [SerializeField] private float m_fillPercentage = 40.0f;
+
             // Editor variables
             private Vector2 m_scrollPosition = Vector2.zero;
             private bool m_generatorRules = true;
@@ -59,6 +62,9 @@ namespace PxP
                 //Automata rules
                 m_fillProbability = 45;
                 m_iterations = 5;
+
+                //Drunkard's Walk
+                m_fillPercentage = 40.0f;
 
                 // Editor variables
                 m_scrollPosition = Vector2.zero;
@@ -300,6 +306,35 @@ namespace PxP
                                 Repaint();
                             }
 
+
+
+                            break;
+                        case AlgorithmType.DrunkardsWalk:
+                            GUILayout.Space(5);
+
+
+
+                            EditorGUI.BeginChangeCheck();
+                            float fillPercentage = EditorGUILayout.FloatField(
+                                new GUIContent("Fill Percentage", "Defines the chances for a tile to be filled"), m_fillPercentage);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                if (fillPercentage < 1)
+                                {
+                                    fillPercentage = 1;
+                                    Debug.LogWarning("Fill probability can not be lower than 1");
+                                }
+                                if (fillPercentage > 90)
+                                {
+                                    fillPercentage = 90;
+                                    Debug.LogWarning("Fill probability can not be higher than 90");
+                                }
+                                Undo.RecordObject(this, "Modified Fill Percentage");
+                                m_fillPercentage = fillPercentage;
+                                DungeonForge.Generator.SetDrunkardsFillPercentage(m_fillPercentage);
+                                EditorUtility.SetDirty(this);
+                                Repaint();
+                            }
 
 
                             break;

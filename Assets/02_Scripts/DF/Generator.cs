@@ -22,6 +22,7 @@ namespace PxP.DungeonForge
         private static int m_maxRoomSize = 10;
         private static int m_iterations = 5;
         private static int m_fillProbability = 55;
+        private static float m_fillPercentage = 40.0f;
 
         #region DungeonForge_DLL
         private static IntPtr generatorInstance;
@@ -52,6 +53,9 @@ namespace PxP.DungeonForge
 
         [DllImport("DungeonForgeLib.dll")]
         private static extern void SetIterations(IntPtr generatorInstance, int value);
+
+        [DllImport("DungeonForgeLib.dll")]
+        private static extern void SetFillPercentage(IntPtr generatorInstance, float value);
         #endregion
 
         #region Public Methods
@@ -75,6 +79,9 @@ namespace PxP.DungeonForge
                 case AlgorithmType.CellularAutomata:
                     SetFillProbability(generatorInstance, m_fillProbability);
                     SetIterations(generatorInstance, m_iterations);
+                    break;
+                case AlgorithmType.DrunkardsWalk:
+                    SetFillPercentage(generatorInstance, m_fillPercentage);
                     break;
                 default:
                     break;
@@ -102,6 +109,7 @@ namespace PxP.DungeonForge
             m_maxRoomSize = 10;
             m_iterations = 5;
             m_fillProbability = 55;
+            m_fillPercentage = 40.0f;
         }
 
         /// <summary>
@@ -204,10 +212,29 @@ namespace PxP.DungeonForge
         {
             if (size < 1)
             {
-                Debug.Log("Border size must at least be 1");
+                Debug.LogWarning("Border size must at least be 1");
                 return;
             }
             m_maxRoomSize = size;
+        }
+
+        /// <summary>
+        /// Sets the % of floor filling for the Drunkard's Walk
+        /// </summary>
+        /// <param name="value">float Value [1-90]</param>
+        public static void SetDrunkardsFillPercentage(float value)
+        {
+            if(value < 1.0f)
+            {
+                Debug.LogWarning("Percentage value should not be lower that 1%");
+                value = 1.0f;
+            }
+            if(value > 90)
+            {
+                Debug.LogWarning("Percentage value should not be higher than 90%");
+                value = 90.0f;
+            }
+            m_fillPercentage = value;
         }
 
         /// <summary>
