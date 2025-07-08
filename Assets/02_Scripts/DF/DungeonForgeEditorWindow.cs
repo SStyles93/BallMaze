@@ -20,7 +20,7 @@ namespace PxP
             [SerializeField] private GameObject m_terrainPrefab;
             [SerializeField] private Vector3 m_mapCenter = Vector3.zero;
             [SerializeField] private Vector2Int m_mapSize = new Vector2Int(40, 40);
-            [SerializeField] private int m_mapHeight = 5;
+            [SerializeField] private int m_mapHeight = 1;
             [SerializeField] private int m_seed = -1;
 
             //BSP rules
@@ -44,6 +44,30 @@ namespace PxP
                 window.Show();
             }
 
+            private void OnEnable()
+            {
+                //Generator
+                m_algorithmType = AlgorithmType.Perlin;
+                m_terrainPrefab = null;
+                m_mapCenter = Vector3.zero;
+                m_mapSize = new Vector2Int(40, 40);
+                m_mapHeight = 1;
+                m_seed = -1;
+
+                //BSP rules
+                m_maxRoomEdgeSize = 10;
+
+                //Automata rules
+                m_fillProbability = 45;
+                m_iterations = 5;
+
+                // Editor variables
+                m_scrollPosition = Vector2.zero;
+                m_generatorRules = true;
+                m_mapRules = true;
+
+            }
+
             private void OnGUI()
             {
                 // Scroll logic ************************************************************************
@@ -57,11 +81,12 @@ namespace PxP
                 m_generatorRules = EditorGUILayout.Foldout(m_generatorRules, new GUIContent(
                "Generator Rules",
                "Possibility to change the Type of Algorithm and the Seed used for map generation"));
-
                 if (m_generatorRules)
                 {
                     GUILayout.Space(5);
                     EditorGUI.indentLevel++;
+
+
 
                     EditorGUI.BeginChangeCheck();
                     AlgorithmType algorithmType = (AlgorithmType)EditorGUILayout.EnumPopup
@@ -98,9 +123,12 @@ namespace PxP
                     {
                         Undo.RecordObject(this, "Modified AlgorithmType");
                         m_algorithmType = algorithmType;
+                        DungeonForge.Generator.SetAlgorithmType(m_algorithmType);
                         EditorUtility.SetDirty(this);
                         Repaint();
                     }
+
+
 
                     EditorGUI.BeginChangeCheck();
                     int seed = EditorGUILayout.IntField(new GUIContent(
@@ -116,9 +144,12 @@ namespace PxP
                     {
                         Undo.RecordObject(this, "Modified Seed value");
                         m_seed = seed;
+                        DungeonForge.Generator.SetSeed(m_seed);
                         EditorUtility.SetDirty(this);
                         Repaint();
                     }
+
+
 
                     EditorGUI.indentLevel--;
                 }
@@ -134,16 +165,20 @@ namespace PxP
                     GUILayout.Space(5);
                     EditorGUI.indentLevel++;
 
+
+
                     EditorGUI.BeginChangeCheck();
                     Vector3 mapCenter = EditorGUILayout.Vector3Field(new GUIContent("Map Center", "Defines the center of the generated map"), m_mapCenter);
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(this, "Modified Map center");
                         m_mapCenter = mapCenter;
+                        DungeonForge.Generator.SetMapCenter(m_mapCenter);
                         EditorUtility.SetDirty(this);
                         Repaint();
                     }
                     //GUILayout.Space(10);
+
 
 
                     EditorGUI.BeginChangeCheck();
@@ -151,23 +186,23 @@ namespace PxP
                     (new GUIContent("Map Size", "Defines the size of the map used for the generation"), m_mapSize);
                     if (mapSize.x < 1)
                     {
-                        m_mapSize.x = 1;
-                        Debug.LogWarning("Map width must not be lower than 1");
+                        mapSize.x = 1;
+                        Debug.LogWarning("Map size.x must not be lower than 1");
                     }
                     if (mapSize.y < 1)
                     {
-                        m_mapSize.y = 1;
-                        Debug.LogWarning("Map lenght must not be lower than 1");
+                        mapSize.y = 1;
+                        Debug.LogWarning("Map size.y must not be lower than 1");
                     }
                     if (EditorGUI.EndChangeCheck())
                     {
                         Undo.RecordObject(this, "Modified Map center");
                         m_mapSize = mapSize;
+                        DungeonForge.Generator.SetMapSize(m_mapSize);
                         EditorUtility.SetDirty(this);
                         Repaint();
                     }
 
-                    //GUILayout.Space(10);
 
 
                     EditorGUI.BeginChangeCheck();
@@ -178,18 +213,24 @@ namespace PxP
                         if (mapHeight < 1)
                         {
                             mapHeight = 1;
-                            Debug.LogWarning("Map lenght must not be lower than 1");
+                            Debug.LogWarning("Map Height must not be lower than 1");
                         }
-                        Undo.RecordObject(this, "Modified MapHeight");
+                        Undo.RecordObject(this, "Modified Map Height");
                         m_mapHeight = mapHeight;
+                        DungeonForge.Generator.SetMapHeight((uint)m_mapHeight);
                         EditorUtility.SetDirty(this);
                         Repaint();
                     }
+
+
 
                     switch (m_algorithmType)
                     {
                         case AlgorithmType.BSP:
                             GUILayout.Space(5);
+                            
+
+                            
                             EditorGUI.BeginChangeCheck();
                             int roomEdge = EditorGUILayout.IntField(
                                 new GUIContent("Max Edge Size", "Defines the maximal size of the edges of the room"), m_maxRoomEdgeSize);
@@ -206,9 +247,15 @@ namespace PxP
                                 EditorUtility.SetDirty(this);
                                 Repaint();
                             }
+
+
+
                             break;
                         case AlgorithmType.CellularAutomata:
                             GUILayout.Space(5);
+
+
+
                             EditorGUI.BeginChangeCheck();
                             int fillProbability = EditorGUILayout.IntField(
                                 new GUIContent("Fill Probability", "Defines the chances for a tile to be filled"), m_fillProbability);
@@ -225,6 +272,9 @@ namespace PxP
                                 EditorUtility.SetDirty(this);
                                 Repaint();
                             }
+
+
+
                             EditorGUI.BeginChangeCheck();
                             int iterations = EditorGUILayout.IntField(
                                 new GUIContent("Number of Iteration", "Defines the number of time the Cellular Automata will smooth the map"), m_iterations);
@@ -241,6 +291,9 @@ namespace PxP
                                 EditorUtility.SetDirty(this);
                                 Repaint();
                             }
+
+
+
                             break;
                         default:
                             break;
@@ -249,6 +302,7 @@ namespace PxP
                     EditorGUI.indentLevel--;
                 }
                 GUILayout.Space(20);
+
 
 
                 EditorGUI.BeginChangeCheck();
@@ -268,7 +322,7 @@ namespace PxP
 
                 if (GUILayout.Button("Generate Map"))
                 {
-                    DungeonForge.Generator.Generate(m_mapSize, (uint)m_mapHeight, m_algorithmType, m_seed, m_mapCenter);
+                    DungeonForge.Generator.Generate();
                 }
                 GUILayout.Space(10);
 

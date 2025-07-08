@@ -1,6 +1,8 @@
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace PxP.DungeonForge
 {
@@ -10,6 +12,16 @@ namespace PxP.DungeonForge
         private static GameObject m_terrainPrefab;
         private static GameObject[][] m_terrainObjects;
         private static GameObject m_parent;
+
+        private static int m_seed = -1;
+        private static AlgorithmType m_algorithmType = AlgorithmType.Perlin;
+        private static Vector2Int m_mapSize = new Vector2Int(40,40);
+        private static Vector2 m_mapCenter = new Vector2();
+        private static uint m_mapHeight = 1;
+
+        private static int m_maxRoomSize = 10;
+        private static int m_iterations = 5;
+        private static int m_fillProbability = 55;
 
         #region DungeonForge_DLL
         private static IntPtr generatorInstance;
@@ -50,13 +62,89 @@ namespace PxP.DungeonForge
         /// <param name="mapCenter">Center of the map</param>
         /// <param name="mapSize">Size of the map (X/Z axes)</param>
         /// <param name="mapHeight">Height of the map (Y axis)</param>
-        public static void Generate(Vector2Int mapSize, uint mapHeight, AlgorithmType algorithmType, int seed = -1, Vector3 mapCenter = default)
+        public static void Generate()
         {
-            Init(mapSize);
-            SetSeed(generatorInstance, seed);
-            SetAlgorithm(generatorInstance, (int)algorithmType);
+            Init(m_mapSize);
+            SetSeed(generatorInstance, m_seed);
+            SetAlgorithm(generatorInstance, (int)m_algorithmType);
+            switch (m_algorithmType)
+            {
+                case AlgorithmType.BSP:
+                    SetMaxRoomEdgeSize(generatorInstance, m_maxRoomSize);
+                    break;
+                case AlgorithmType.CellularAutomata:
+                    SetFillProbability(generatorInstance, m_fillProbability);
+                    SetIterations(generatorInstance, m_iterations);
+                    break;
+                default:
+                    break;
+            }
             Generate(generatorInstance);
-            GeneratePhisicalMap(mapSize, mapHeight, mapCenter);
+            GeneratePhisicalMap(m_mapSize, m_mapHeight, m_mapCenter);
+        }
+
+        /// <summary>
+        /// Sets the Generator Seed (uses the Mersene-twister engine)
+        /// </summary>
+        /// <param name="value">Value of the seed</param>
+        public static void SetSeed(int value)
+        {
+            if(value < -1 || value > int.MaxValue)
+            {
+                Debug.Log($"Value must be set between -1 and {int.MaxValue}");
+                return;
+            }
+            m_seed = value;
+        }
+
+        /// <summary>
+        /// Sets the algorithm type
+        /// </summary>
+        /// <param name="type">AlgorithmType</param>
+        public static void SetAlgorithmType(AlgorithmType type)
+        {
+            m_algorithmType = type;
+        }
+
+        /// <summary>
+        /// Sets the Map Size to the given value
+        /// </summary>
+        /// <param name="size">Vector2Int size</param>
+        public static void SetMapSize(Vector2Int size)
+        {
+            if (size.x < 1)
+            {
+                size.x = 1;
+                Debug.LogWarning("Map size.x should not be lower than 1");
+            }
+            if(size.y < 1)
+            {
+                size.y = 1;
+                Debug.LogWarning("Map size.y should not be lower than 1");
+            }
+                m_mapSize = size;
+        }
+
+        /// <summary>
+        /// Sets the height of the map
+        /// </summary>
+        /// <param name="height">uint height</param>
+        public static void SetMapHeight(uint height)
+        {
+            if(height < 1)
+            {
+                Debug.LogWarning("Map height should not be lower that 1");
+            }
+            m_mapHeight = height;
+        }
+
+        /// <summary>
+        /// Sets the center of the map
+        /// </summary>
+        /// <param name="center">Vector2 center</param>
+        public  static void  SetMapCenter(Vector2 center)
+        {
+            m_mapCenter = center;
         }
 
         /// <summary>
@@ -65,7 +153,12 @@ namespace PxP.DungeonForge
         /// <param name="value">Value of fill probability</param>
         public static void SetAutomataFillProbability(int value)
         {
-            SetFillProbability(generatorInstance, value);
+            if(value < 1 || value > 100)
+            {
+                Debug.Log("Fill probability must be between 1-100");
+                return;
+            }
+            m_fillProbability = value;
         }
 
         /// <summary>
@@ -74,7 +167,12 @@ namespace PxP.DungeonForge
         /// <param name="value">Number of iteration</param>
         public static void SetAutomataIterations(int value)
         {
-            SetIterations(generatorInstance, value);
+            if (value < 1 || value > 100)
+            {
+                Debug.Log("Automata Iterations must be between 1-100");
+                return;
+            }
+            m_iterations = value;
         }
 
         /// <summary>
@@ -83,7 +181,12 @@ namespace PxP.DungeonForge
         /// <param name="size">Max size of a room</param>
         public static void SetBSPBorderSize(int size)
         {
-            SetMaxRoomEdgeSize(generatorInstance, size);
+            if (size < 1)
+            {
+                Debug.Log("Border size must at least be 1");
+                return;
+            }
+            m_maxRoomSize = size;
         }
 
         /// <summary>
@@ -98,7 +201,7 @@ namespace PxP.DungeonForge
         #endregion
 
         #region Private Methods
-        
+
         /// <summary>
         /// Generated the phisical map with the data from the generator
         /// </summary>
@@ -107,14 +210,14 @@ namespace PxP.DungeonForge
         /// <param name="mapHeight">Height (Y axis) of the map</param>
         private static void GeneratePhisicalMap(Vector2Int mapSize, uint mapHeight, Vector3 mapCenter = default)
         {
-            if(!ValuesAreCorrect(mapSize, mapHeight)) return;
+            if (!ValuesAreCorrect(mapSize, mapHeight)) return;
             if (m_terrainPrefab == null)
             {
                 Debug.LogWarning("There is not GameObject contained in the \"Terrain prefab\" field\n" +
                     "In order for the script to work you need to input a GameObject");
                 return;
             }
-            if(m_parent != null)
+            if (m_parent != null)
             {
                 DestroyImmediate(m_parent);
             }
@@ -134,7 +237,7 @@ namespace PxP.DungeonForge
                     if (GetTile(generatorInstance, x, y) == 0)
                     {
                         m_terrainObjects[x][y] = Instantiate(m_terrainPrefab, currentPosition, Quaternion.identity, m_parent.transform);
-                        for (uint z = 0; z < mapHeight-1; z++)
+                        for (uint z = 0; z < mapHeight - 1; z++)
                         {
                             currentPosition.y--;
                             Instantiate(m_terrainPrefab, currentPosition, Quaternion.identity, m_parent.transform);
@@ -169,7 +272,7 @@ namespace PxP.DungeonForge
 
             generatorInstance = CreateGenerator((uint)mapWidth, (uint)mapHeight);
         }
-        
+
         /// <summary>
         /// Initializes the map generator
         /// </summary>
@@ -183,7 +286,7 @@ namespace PxP.DungeonForge
             }
             generatorInstance = CreateGenerator((uint)mapSize.x, (uint)mapSize.y);
         }
-        
+
         /// <summary>
         /// Sets the instance position according to the Center and the MapSize
         /// </summary>
@@ -220,7 +323,7 @@ namespace PxP.DungeonForge
             }
             return true;
         }
-        
+
         #endregion
     }
 }
