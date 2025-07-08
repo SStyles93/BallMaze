@@ -1,6 +1,9 @@
 using System;
 using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -224,12 +227,12 @@ namespace PxP.DungeonForge
         /// <param name="value">float Value [1-90]</param>
         public static void SetDrunkardsFillPercentage(float value)
         {
-            if(value < 1.0f)
+            if (value < 1.0f)
             {
                 Debug.LogWarning("Percentage value should not be lower that 1%");
                 value = 1.0f;
             }
-            if(value > 90)
+            if (value > 90)
             {
                 Debug.LogWarning("Percentage value should not be higher than 90%");
                 value = 90.0f;
@@ -373,5 +376,98 @@ namespace PxP.DungeonForge
         }
 
         #endregion
+
+
+        /// <summary>
+        /// Savec the currently displayed map
+        /// </summary>
+        /// <param name="invertLines">if true inverts the Y writing order (starts at the bottom-left)(</param>
+        public static void SaveMap(bool invertLines = false)
+        {
+            SaveData mapData = new SaveData();
+            mapData.mapSize = m_mapSize;
+            mapData.mapHeight = m_mapHeight;
+
+            string mapString = "";
+            for (uint x = 0; x < m_mapSize.x; x++)
+            {
+                string mapLine = "\n";
+
+                for (uint y = 0; y < m_mapSize.y; y++)
+                {
+                    if (GetTile(generatorInstance, x, y) == 0)
+                    {
+                        mapLine += "0";
+                    }
+                    else
+                    {
+                        mapLine += "1";
+                    }
+                }
+                if (invertLines)
+                    mapString = mapLine + mapString; //Inverts writing order of the lines to respect Unity map order X+/Y+
+                else
+                    mapString += mapLine; //Writes lines normally
+            }
+            Debug.Log(mapString);
+            mapData.mapTiles = mapString;
+            string json = JsonUtility.ToJson(mapData);
+
+            File.WriteAllText(Application.dataPath + "/SavedMap.json", json);
+        }
+        
+        /// <summary>
+        /// Loads a JSON file and reinterprets it in an instantiated 3D map
+        /// </summary>
+        public static void LoadMap()
+        {
+            string path = Application.dataPath + "/SavedMap.json";
+            if (File.Exists(path))
+            {
+                string json = File.ReadAllText(path);
+                SaveData mapData = JsonUtility.FromJson<SaveData>(json);
+
+                m_mapSize = mapData.mapSize;
+                m_mapHeight = mapData.mapHeight;
+                string mapString = mapData.mapTiles;
+
+                m_parent = new GameObject("Terrain Tiles");
+                Vector3 physicalPosition = SetInstancePosition(m_mapCenter, m_mapSize);
+                currentPosition = physicalPosition;
+
+                m_terrainObjects = new GameObject[m_mapSize.x][];
+                for (int x = 0; x < m_mapSize.x; x++)
+                {
+                    mapString = mapString.Substring(1, mapString.Length-1);
+                    m_terrainObjects[x] = new GameObject[m_mapSize.y];
+                    for (int y = 0; y < m_mapSize.y; y++)
+                    {
+                        if (mapString[0] == '0')
+                        {
+                            m_terrainObjects[x][y] = Instantiate(m_terrainPrefab, currentPosition, Quaternion.identity, m_parent.transform);
+                            for (int z = 0; z < m_mapHeight - 1; z++)
+                            {
+                                currentPosition.y--;
+                                Instantiate(m_terrainPrefab, currentPosition, Quaternion.identity, m_parent.transform);
+                            }
+                            currentPosition.y = physicalPosition.y;
+                        }
+                        
+                        mapString = mapString.Substring(1, mapString.Length - 1);
+                        currentPosition.z++;
+                    }
+                    currentPosition.x++;
+                    currentPosition.z = physicalPosition.z;
+                }
+            }
+        }
+    }
+
+    [System.Serializable]
+    class SaveData
+    {
+        public Vector2Int mapSize;
+        public uint mapHeight;
+        public string mapTiles;
     }
 }

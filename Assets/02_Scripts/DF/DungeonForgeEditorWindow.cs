@@ -369,6 +369,16 @@ namespace PxP
                 }
                 GUILayout.Space(10);
 
+                if(GUILayout.Button("Save Map"))
+                {
+                    DungeonForge.Generator.SaveMap();
+                }
+
+                if (GUILayout.Button("Load Map"))
+                {
+                    DungeonForge.Generator.LoadMap();
+                }
+
 
                 // Scroll logic ************************************************************************
                 EditorGUILayout.EndVertical();
