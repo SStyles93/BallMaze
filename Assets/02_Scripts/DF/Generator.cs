@@ -382,7 +382,7 @@ namespace PxP.DungeonForge
         /// Savec the currently displayed map
         /// </summary>
         /// <param name="invertLines">if true inverts the Y writing order (starts at the bottom-left)(</param>
-        public static void SaveMap(bool invertLines = false)
+        public static void SaveMap(bool invertLines = false, bool isDataPersistent = false)
         {
             SaveData mapData = new SaveData();
             mapData.mapSize = m_mapSize;
@@ -413,15 +413,21 @@ namespace PxP.DungeonForge
             mapData.mapTiles = mapString;
             string json = JsonUtility.ToJson(mapData);
 
-            File.WriteAllText(Application.dataPath + "/SavedMap.json", json);
+
+            string path; 
+            path = isDataPersistent ? Application.persistentDataPath : Application.dataPath;
+            File.WriteAllText(path + "/SavedMap.json", json);
+            
         }
         
         /// <summary>
         /// Loads a JSON file and reinterprets it in an instantiated 3D map
         /// </summary>
-        public static void LoadMap()
+        public static void LoadMap(bool wasDataPersistent = false)
         {
-            string path = Application.dataPath + "/SavedMap.json";
+            string path;
+            path = wasDataPersistent ? Application.persistentDataPath : Application.dataPath;
+            path += "/SavedMap.json";
             if (File.Exists(path))
             {
                 string json = File.ReadAllText(path);
