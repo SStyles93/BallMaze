@@ -14,9 +14,17 @@ public class UVModWindow : EditorWindow
     private Vector2[] workingUvs;
     private Dictionary<int, Vector2> dragStartIslandUVs;
 
-    // UV Modification Settings
+    // --- Transform States ---
+    // Global transforms (when nothing is selected)
     private Vector2 uvOffset = Vector2.zero;
     private Vector2 uvScale = Vector2.one;
+    // Per-island transforms (when islands are selected)
+    private Vector2 islandTransformOffset = Vector2.zero;
+    private Vector2 islandTransformScale = Vector2.one;
+    private Dictionary<int, Vector2> selectionStartUVs; // Snapshot of UVs at the moment of selection
+    private Vector2 selectionCenter; // Pivot for scaling selected islands
+
+    // UV Modification Settings
     private int selectedUVChannel = 0;
     private int selectedSubmeshIndex = -1;
     private Color selectedVertexColor = Color.white;
@@ -204,19 +212,43 @@ public class UVModWindow : EditorWindow
 
         if (selectedGameObject == null || mesh == null) return;
 
-        EditorGUILayout.Space();
-        GUILayout.Label("UV Modification", EditorStyles.boldLabel);
-
-        EditorGUI.BeginChangeCheck();
-        selectedUVChannel = EditorGUILayout.IntSlider("UV Channel", selectedUVChannel, 0, 7);
-        if (EditorGUI.EndChangeCheck())
+        // --- Global Controls ---
+        if (selectedUVIsslandIndices.Count == 0)
         {
-            LoadUVsFromChannel(selectedUVChannel, true);
-            DetectUVIsslands();
-            uvOffset = Vector2.zero;
-            uvScale = Vector2.one;
+            GUI.enabled = selectedUVIsslandIndices.Count == 0;
+            EditorGUILayout.Space();
+            GUILayout.Label("Global UV Modification", EditorStyles.boldLabel);
+            EditorGUI.BeginChangeCheck();
+            uvOffset = EditorGUILayout.Vector2Field("UV Offset", uvOffset);
+            uvScale = EditorGUILayout.Vector2Field("UV Scale", uvScale);
+            if (EditorGUI.EndChangeCheck())
+            {
+                ApplyGlobalUVChanges();
+            }
+        }        
+        // --- Per-Island Controls ---
+        else
+        {
+            EditorGUILayout.Space();
+            GUILayout.Label("Selected Islands Transform", EditorStyles.boldLabel);
+            EditorGUI.BeginChangeCheck();
+            islandTransformOffset = EditorGUILayout.Vector2Field("Offset", islandTransformOffset);
+            islandTransformScale = EditorGUILayout.Vector2Field("Scale", islandTransformScale);
+            if (EditorGUI.EndChangeCheck())
+            {
+                ApplyIslandTransforms();
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Apply")) CommitIslandTransforms();
+            if (GUILayout.Button("Reset")) ResetIslandTransforms();
+            EditorGUILayout.EndHorizontal();
         }
 
+        EditorGUILayout.Space();
+        GUILayout.Label("Settings & Tools", EditorStyles.boldLabel);
+
+        selectedUVChannel = EditorGUILayout.IntSlider("UV Channel", selectedUVChannel, 0, 7);
         if (mesh.subMeshCount > 1)
         {
             string[] submeshOptions = new string[mesh.subMeshCount + 1];
@@ -231,12 +263,10 @@ public class UVModWindow : EditorWindow
             EditorGUILayout.BeginHorizontal();
             {
                 selectedVertexColor = EditorGUILayout.ColorField("Target Vertex Color", selectedVertexColor);
-
-                // Only show the button if an island is selected
                 if (selectedUVIsslandIndices.Count > 0)
                 {
                     GUI.enabled = uvTexturePreview != null;
-                    if (GUILayout.Button("Pick & Apply", GUILayout.Width(140)))
+                    if (GUILayout.Button("Pick & Apply Color", GUILayout.Width(140)))
                     {
                         isPickingColor = true;
                     }
@@ -246,18 +276,8 @@ public class UVModWindow : EditorWindow
             EditorGUILayout.EndHorizontal();
         }
 
-        EditorGUI.BeginChangeCheck();
-        uvOffset = EditorGUILayout.Vector2Field("UV Offset", uvOffset);
-        uvScale = EditorGUILayout.Vector2Field("UV Scale", uvScale);
-        if (EditorGUI.EndChangeCheck())
-        {
-            ApplyUVChangesToWorkingUVs();
-        }
-
-        if (GUILayout.Button("Reset UVs")) ResetUVs();
         EditorGUILayout.Space();
-        if (GUILayout.Button("Apply to Selected Objects (Batch)")) ApplyUVChangesToMultipleObjects();
-        EditorGUILayout.Space();
+        if (GUILayout.Button("Reset All UVs")) ResetUVs();
         if (GUILayout.Button("Save Modified Mesh"))
         {
             SaveMeshAsset();
@@ -344,10 +364,7 @@ public class UVModWindow : EditorWindow
         if (isDraggingSelectionRect)
         {
             Handles.BeginGUI();
-            Handles.DrawSolidRectangleWithOutline(
-                selectionRect, 
-                new Color(0, 255.0f, 255.0f, 0.2f), 
-                new Color(0, 255.0f, 255.0f, 255.0f));
+            Handles.DrawSolidRectangleWithOutline(selectionRect, new Color(0, 1f, 1f, 0.2f), new Color(0, 1f, 1f, 1f));
             Handles.EndGUI();
         }
     }
@@ -439,10 +456,12 @@ public class UVModWindow : EditorWindow
                         dragStartMousePos = currentEvent.mousePosition;
                         Undo.RecordObject(mesh, "Drag UV Point");
 
-                        dragStartIslandUVs = new Dictionary<int, Vector2>();
                         if (!selectedUVIsslandIndices.Contains(activeUVHandle))
                         {
-                            if (!currentEvent.shift) selectedUVIsslandIndices.Clear();
+                            if (!currentEvent.shift)
+                            {
+                                selectedUVIsslandIndices.Clear();
+                            }
                             foreach (var island in uvIslands)
                             {
                                 if (island.Contains(activeUVHandle))
@@ -451,7 +470,10 @@ public class UVModWindow : EditorWindow
                                     break;
                                 }
                             }
+                            CaptureSelectionState();
                         }
+
+                        dragStartIslandUVs = new Dictionary<int, Vector2>();
                         foreach (int index in selectedUVIsslandIndices)
                         {
                             dragStartIslandUVs[index] = workingUvs[index];
@@ -487,6 +509,7 @@ public class UVModWindow : EditorWindow
                 {
                     workingUvs[islandKvp.Key] = islandKvp.Value + deltaUV;
                 }
+                CaptureSelectionState(); // Recapture state to update pivot while dragging
             }
             else if (isDraggingSelectionRect)
             {
@@ -520,11 +543,13 @@ public class UVModWindow : EditorWindow
                         selectedUVIsslandIndices.AddRange(island.Except(selectedUVIsslandIndices));
                     }
                 }
+                CaptureSelectionState();
             }
             else if (activeUVHandle != -1)
             {
                 mesh.SetUVs(selectedUVChannel, new List<Vector2>(workingUvs));
                 EditorUtility.SetDirty(mesh);
+                CaptureSelectionState();
             }
 
             activeUVHandle = -1;
@@ -627,10 +652,14 @@ public class UVModWindow : EditorWindow
     #endregion
 
     #region Data Modification and Saving
-    private void ApplyUVChangesToWorkingUVs()
+    private void ApplyGlobalUVChanges()
     {
         if (mesh == null || initialUvs == null) return;
+
+        // Re-clone initialUvs to ensure changes are not cumulative
         workingUvs = (Vector2[])initialUvs.Clone();
+
+        // Determine which vertices to affect
         List<int> affectedIndices = new List<int>();
         if (selectedSubmeshIndex >= 0 && selectedSubmeshIndex < mesh.subMeshCount)
         {
@@ -641,12 +670,16 @@ public class UVModWindow : EditorWindow
             affectedIndices.AddRange(Enumerable.Range(0, mesh.vertexCount));
         }
 
+        // If the filter is on, further reduce the list of affected vertices
         if (useVertexColorFilter && mesh.colors.Length > 0)
         {
             Color[] vertexColors = mesh.colors;
-            affectedIndices = affectedIndices.Where(index => index < vertexColors.Length && AreColorsApproximatelyEqual(vertexColors[index], selectedVertexColor)).ToList();
+            affectedIndices = affectedIndices.Where(index =>
+                index < vertexColors.Length && AreColorsApproximatelyEqual(vertexColors[index], selectedVertexColor)
+            ).ToList();
         }
 
+        // Apply transformations only to the final list of affected vertices
         foreach (int index in affectedIndices)
         {
             if (index < workingUvs.Length)
@@ -654,40 +687,79 @@ public class UVModWindow : EditorWindow
                 workingUvs[index] = new Vector2(initialUvs[index].x * uvScale.x + uvOffset.x, initialUvs[index].y * uvScale.y + uvOffset.y);
             }
         }
+
         mesh.SetUVs(selectedUVChannel, workingUvs);
         EditorUtility.SetDirty(mesh);
         Repaint();
     }
 
-    private void ApplyUVChangesToMultipleObjects()
+
+    private void CaptureSelectionState()
     {
-        GameObject[] selectedObjects = Selection.gameObjects;
-        if (selectedObjects.Length == 0)
+        selectionStartUVs = new Dictionary<int, Vector2>();
+        if (selectedUVIsslandIndices.Count == 0)
         {
-            EditorUtility.DisplayDialog("No Objects Selected", "Please select one or more GameObjects.", "OK");
+            selectionCenter = Vector2.zero;
             return;
         }
-        Undo.SetCurrentGroupName("Batch Modify UVs");
-        int undoGroup = Undo.GetCurrentGroup();
-        foreach (GameObject obj in selectedObjects)
+
+        Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
+        Vector2 max = new Vector2(float.MinValue, float.MinValue);
+
+        foreach (int index in selectedUVIsslandIndices)
         {
-            MeshFilter mf = obj.GetComponent<MeshFilter>();
-            if (mf != null && mf.sharedMesh != null)
-            {
-                Mesh m = mf.sharedMesh;
-                List<Vector2> uvs = new List<Vector2>();
-                m.GetUVs(selectedUVChannel, uvs);
-                if (uvs.Count > 0)
-                {
-                    Undo.RecordObject(m, "Modify UVs for " + obj.name);
-                    Vector2[] newUvs = uvs.Select(uv => new Vector2(uv.x * uvScale.x + uvOffset.x, uv.y * uvScale.y + uvOffset.y)).ToArray();
-                    m.SetUVs(selectedUVChannel, newUvs);
-                    EditorUtility.SetDirty(m);
-                }
-            }
+            selectionStartUVs[index] = workingUvs[index];
+            min.x = Mathf.Min(min.x, workingUvs[index].x);
+            min.y = Mathf.Min(min.y, workingUvs[index].y);
+            max.x = Mathf.Max(max.x, workingUvs[index].x);
+            max.y = Mathf.Max(max.y, workingUvs[index].y);
         }
-        Undo.CollapseUndoOperations(undoGroup);
-        EditorUtility.DisplayDialog("Batch UV Modification", selectedObjects.Length + " objects processed.", "OK");
+        selectionCenter = (min + max) / 2f;
+
+        islandTransformOffset = Vector2.zero;
+        islandTransformScale = Vector2.one;
+    }
+
+    private void ApplyIslandTransforms()
+    {
+        if (selectionStartUVs == null) return;
+
+        foreach (var kvp in selectionStartUVs)
+        {
+            int index = kvp.Key;
+            Vector2 startUv = kvp.Value;
+
+            Vector2 pivotedUv = startUv - selectionCenter;
+            pivotedUv.x *= islandTransformScale.x;
+            pivotedUv.y *= islandTransformScale.y;
+            Vector2 transformedUv = pivotedUv + selectionCenter + islandTransformOffset;
+
+            workingUvs[index] = transformedUv;
+        }
+        mesh.SetUVs(selectedUVChannel, workingUvs);
+        EditorUtility.SetDirty(mesh);
+        Repaint();
+    }
+
+    private void CommitIslandTransforms()
+    {
+        ApplyIslandTransforms();
+        CaptureSelectionState();
+    }
+
+    private void ResetIslandTransforms()
+    {
+        if (selectionStartUVs == null) return;
+        foreach (var kvp in selectionStartUVs)
+        {
+            workingUvs[kvp.Key] = kvp.Value;
+        }
+        mesh.SetUVs(selectedUVChannel, workingUvs);
+        EditorUtility.SetDirty(mesh);
+
+        islandTransformOffset = Vector2.zero;
+        islandTransformScale = Vector2.one;
+        Repaint();
     }
 
     private void SaveMeshAsset()
