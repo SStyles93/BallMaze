@@ -186,27 +186,22 @@ public class UVModWindow : EditorWindow
 
     void OnGUI()
     {
-        GUILayout.Label("UV Editor Window", EditorStyles.boldLabel);
-        EditorGUILayout.HelpBox("Select a 3D model. Use Scroll Wheel to Zoom. Use Scrollbars or Middle-Mouse-Drag to Pan.", MessageType.Info);
+        DrawSettingsGUI();
 
-        EditorGUILayout.ObjectField("Selected Object", selectedGameObject, typeof(GameObject), true);
+        EditorGUILayout.Space();
+        GUILayout.Label("Visual UV Editor", EditorStyles.boldLabel);
 
-        if (selectedGameObject != null && mesh != null && initialUvs != null)
-        {
-            DrawSettingsGUI();
-
-            EditorGUILayout.Space();
-            GUILayout.Label("Visual UV Editor", EditorStyles.boldLabel);
-            DrawUvEditorArea();
-        }
-        else
-        {
-            EditorGUILayout.LabelField("No mesh found on selected object.");
-        }
+        DrawUvEditorArea();
     }
 
     private void DrawSettingsGUI()
     {
+        GUILayout.Label("UV Editor Window", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("Select a 3D model. Use Scroll Wheel to Zoom. Use Scrollbars or Middle-Mouse-Drag to Pan.", MessageType.Info);
+        EditorGUILayout.ObjectField("Selected Object", selectedGameObject, typeof(GameObject), true);
+
+        if (selectedGameObject == null || mesh == null) return;
+
         EditorGUILayout.Space();
         GUILayout.Label("UV Modification", EditorStyles.boldLabel);
 
@@ -255,65 +250,57 @@ public class UVModWindow : EditorWindow
 
     private void DrawUvEditorArea()
     {
-        // *** THE FIX: Use a single, contained block for layout and drawing. ***
-        // This group provides a flexible, framed area for the editor.
-        GUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
+        Rect viewRect = GUILayoutUtility.GetRect(100, 100, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
+        Rect contentRect = new Rect(0, 0, viewRect.width * _zoom, viewRect.height * _zoom);
+
+        GUI.Box(viewRect, GUIContent.none);
+
+        HandleEvents(viewRect, contentRect);
+
+        _scrollPosition = GUI.BeginScrollView(viewRect, _scrollPosition, contentRect, true, true);
         {
-            // Reserve a square area that fills the available space.
-            Rect viewRect = GUILayoutUtility.GetAspectRect(1.0f);
+            // *** FIX #2: Calculate the actual texture display rect to handle aspect ratio ***
+            Rect textureDisplayRect = CalculateAspectRatioRect(contentRect, uvTexturePreview);
 
-            // The rect is now valid for all event types within this OnGUI call.
-            if (viewRect.width > 0 && viewRect.height > 0)
+            if (uvTexturePreview != null)
             {
-                Rect contentRect = new Rect(0, 0, viewRect.width * _zoom, viewRect.height * _zoom);
+                GUI.DrawTexture(textureDisplayRect, uvTexturePreview, ScaleMode.ScaleToFit);
+            }
 
-                HandleEvents(viewRect, contentRect);
-
-                _scrollPosition = GUI.BeginScrollView(viewRect, _scrollPosition, contentRect, false, false);
+            if (workingUvs != null && workingUvs.Length > 0)
+            {
+                // Draw all UVs relative to the correctly scaled textureDisplayRect
+                for (int i = 0; i < mesh.subMeshCount; i++)
                 {
-                    if (uvTexturePreview != null)
+                    int[] triangles = mesh.GetTriangles(i);
+                    for (int j = 0; j < triangles.Length; j += 3)
                     {
-                        GUI.DrawTexture(new Rect(0, 0, contentRect.width, contentRect.height), uvTexturePreview, ScaleMode.StretchToFill);
-                    }
-
-                    if (workingUvs != null && workingUvs.Length > 0)
-                    {
-                        GUI.BeginGroup(new Rect(0, 0, contentRect.width, contentRect.height));
+                        int v1 = triangles[j], v2 = triangles[j + 1], v3 = triangles[j + 2];
+                        if (v1 < workingUvs.Length && v2 < workingUvs.Length && v3 < workingUvs.Length)
                         {
-                            for (int i = 0; i < mesh.subMeshCount; i++)
-                            {
-                                int[] triangles = mesh.GetTriangles(i);
-                                for (int j = 0; j < triangles.Length; j += 3)
-                                {
-                                    int v1 = triangles[j], v2 = triangles[j + 1], v3 = triangles[j + 2];
-                                    if (v1 < workingUvs.Length && v2 < workingUvs.Length && v3 < workingUvs.Length)
-                                    {
-                                        Vector3 p1 = ConvertUVToContentPos(workingUvs[v1], contentRect);
-                                        Vector3 p2 = ConvertUVToContentPos(workingUvs[v2], contentRect);
-                                        Vector3 p3 = ConvertUVToContentPos(workingUvs[v3], contentRect);
+                            Vector3 p1 = ConvertUVToContentPos(workingUvs[v1], textureDisplayRect);
+                            Vector3 p2 = ConvertUVToContentPos(workingUvs[v2], textureDisplayRect);
+                            Vector3 p3 = ConvertUVToContentPos(workingUvs[v3], textureDisplayRect);
 
-                                        Handles.color = selectedUVIsslandIndices.Contains(v1) ? Color.yellow : new Color(1, 0.3f, 0.3f, 0.8f);
-                                        Handles.DrawLine(p1, p2);
-                                        Handles.DrawLine(p2, p3);
-                                        Handles.DrawLine(p3, p1);
-                                    }
-                                }
-                            }
-
-                            for (int index = 0; index < workingUvs.Length; index++)
-                            {
-                                Vector3 handlePos = ConvertUVToContentPos(workingUvs[index], contentRect);
-                                Handles.color = selectedUVIsslandIndices.Contains(index) ? Color.green : Color.cyan;
-                                Handles.DrawSolidDisc(handlePos, Vector3.forward, 3f);
-                            }
+                            Handles.color = selectedUVIsslandIndices.Contains(v1) ? Color.yellow : new Color(1, 0.3f, 0.3f, 0.8f);
+                            Handles.DrawLine(p1, p2);
+                            Handles.DrawLine(p2, p3);
+                            Handles.DrawLine(p3, p1);
                         }
-                        GUI.EndGroup();
                     }
                 }
-                GUI.EndScrollView();
+
+                for (int index = 0; index < workingUvs.Length; index++)
+                {
+                    Vector3 handlePos = ConvertUVToContentPos(workingUvs[index], textureDisplayRect);
+                    Handles.color = selectedUVIsslandIndices.Contains(index) ? Color.green : Color.cyan;
+                    // *** FIX #3: Correctly scale handles to appear consistent size ***
+                    Handles.DrawSolidDisc(handlePos, Vector3.forward, 3f); // Apparent size is now consistent
+                }
             }
         }
-        GUILayout.EndVertical();
+        GUI.EndScrollView();
 
         if (isDraggingSelectionRect)
         {
@@ -356,6 +343,18 @@ public class UVModWindow : EditorWindow
 
             if (eventType == EventType.MouseDown)
             {
+                // *** FIX #1: Check if click is on a scrollbar before doing anything else ***
+                bool isVerticalScrollbarVisible = contentRect.height > viewRect.height;
+                bool isHorizontalScrollbarVisible = contentRect.width > viewRect.width;
+                Rect verticalScrollbarRect = new Rect(viewRect.x + viewRect.width - GUI.skin.verticalScrollbar.fixedWidth, viewRect.y, GUI.skin.verticalScrollbar.fixedWidth, viewRect.height);
+                Rect horizontalScrollbarRect = new Rect(viewRect.x, viewRect.y + viewRect.height - GUI.skin.horizontalScrollbar.fixedHeight, viewRect.width, GUI.skin.horizontalScrollbar.fixedHeight);
+                if ((isVerticalScrollbarVisible && verticalScrollbarRect.Contains(currentEvent.mousePosition)) ||
+                    (isHorizontalScrollbarVisible && horizontalScrollbarRect.Contains(currentEvent.mousePosition)))
+                {
+                    // Let the ScrollView handle its own scrollbar drag
+                    return;
+                }
+
                 if (currentEvent.button == 2)
                 {
                     isPanning = true;
@@ -367,21 +366,10 @@ public class UVModWindow : EditorWindow
 
                 if (currentEvent.button == 0)
                 {
-                    bool isVerticalScrollbarVisible = contentRect.height > viewRect.height;
-                    bool isHorizontalScrollbarVisible = contentRect.width > viewRect.width;
-
-                    Rect verticalScrollbarRect = new Rect(viewRect.x + viewRect.width - GUI.skin.verticalScrollbar.fixedWidth, viewRect.y, GUI.skin.verticalScrollbar.fixedWidth, viewRect.height);
-                    Rect horizontalScrollbarRect = new Rect(viewRect.x, viewRect.y + viewRect.height - GUI.skin.horizontalScrollbar.fixedHeight, viewRect.width, GUI.skin.horizontalScrollbar.fixedHeight);
-
-                    if ((isVerticalScrollbarVisible && verticalScrollbarRect.Contains(currentEvent.mousePosition)) ||
-                        (isHorizontalScrollbarVisible && horizontalScrollbarRect.Contains(currentEvent.mousePosition)))
-                    {
-                        return;
-                    }
-
                     GUIUtility.hotControl = controlID;
                     activeUVHandle = -1;
-                    Vector2 mouseUVPos = ConvertScreenPosToUVPos(currentEvent.mousePosition, viewRect);
+                    Rect textureDisplayRect = CalculateAspectRatioRect(contentRect, uvTexturePreview);
+                    Vector2 mouseUVPos = ConvertScreenPosToUVPos(currentEvent.mousePosition, viewRect, textureDisplayRect);
                     float minDistance = (0.02f / _zoom);
 
                     int topHandle = -1;
@@ -441,8 +429,9 @@ public class UVModWindow : EditorWindow
             }
             else if (activeUVHandle != -1)
             {
-                Vector2 startMouseUV = ConvertScreenPosToUVPos(dragStartMousePos, viewRect);
-                Vector2 currentMouseUV = ConvertScreenPosToUVPos(currentEvent.mousePosition, viewRect);
+                Rect textureDisplayRect = CalculateAspectRatioRect(contentRect, uvTexturePreview);
+                Vector2 startMouseUV = ConvertScreenPosToUVPos(dragStartMousePos, viewRect, textureDisplayRect);
+                Vector2 currentMouseUV = ConvertScreenPosToUVPos(currentEvent.mousePosition, viewRect, textureDisplayRect);
                 Vector2 deltaUV = currentMouseUV - startMouseUV;
 
                 foreach (var islandKvp in dragStartIslandUVs)
@@ -467,49 +456,83 @@ public class UVModWindow : EditorWindow
         {
             GUIUtility.hotControl = 0;
             isPanning = false;
-            activeUVHandle = -1;
-            dragStartIslandUVs = null;
 
             if (isDraggingSelectionRect)
             {
                 isDraggingSelectionRect = false;
                 if (!currentEvent.shift) selectedUVIsslandIndices.Clear();
 
+                Rect textureDisplayRect = CalculateAspectRatioRect(contentRect, uvTexturePreview);
                 foreach (var island in uvIslands)
                 {
-                    bool islandIntersects = island.Any(uvIndex => selectionRect.Contains(ConvertUVToScreenPos(workingUvs[uvIndex], viewRect)));
+                    bool islandIntersects = island.Any(uvIndex => selectionRect.Contains(ConvertUVToScreenPos(workingUvs[uvIndex], viewRect, textureDisplayRect)));
                     if (islandIntersects)
                     {
                         selectedUVIsslandIndices.AddRange(island.Except(selectedUVIsslandIndices));
                     }
                 }
             }
-            else
+            else if (activeUVHandle != -1)
             {
                 mesh.SetUVs(selectedUVChannel, new List<Vector2>(workingUvs));
                 EditorUtility.SetDirty(mesh);
             }
+
+            activeUVHandle = -1;
+            dragStartIslandUVs = null;
             Repaint();
             currentEvent.Use();
         }
     }
 
     #region Coordinate Conversion Helpers
-    private Vector2 ConvertScreenPosToUVPos(Vector2 screenPos, Rect viewRect)
+
+    private Rect CalculateAspectRatioRect(Rect container, Texture2D texture)
+    {
+        if (texture == null) return container;
+
+        float containerAspect = container.width / container.height;
+        float textureAspect = (float)texture.width / texture.height;
+
+        Rect result = new Rect(container);
+
+        if (containerAspect > textureAspect) // Container is wider than texture
+        {
+            result.width = container.height * textureAspect;
+            result.x = container.x + (container.width - result.width) / 2f;
+        }
+        else // Container is taller than texture
+        {
+            result.height = container.width / textureAspect;
+            result.y = container.y + (container.height - result.height) / 2f;
+        }
+        return result;
+    }
+
+    private Vector2 ConvertScreenPosToUVPos(Vector2 screenPos, Rect viewRect, Rect textureDisplayRect)
     {
         Vector2 localPos = screenPos - viewRect.position;
         Vector2 posInContent = localPos + _scrollPosition;
-        return new Vector2(posInContent.x / (viewRect.width * _zoom), 1 - posInContent.y / (viewRect.height * _zoom));
+
+        // Convert to position relative to the texture's top-left corner
+        Vector2 posInTexture = posInContent - textureDisplayRect.position;
+
+        return new Vector2(posInTexture.x / textureDisplayRect.width, 1 - posInTexture.y / textureDisplayRect.height);
     }
 
-    private Vector3 ConvertUVToContentPos(Vector2 uvPos, Rect contentRect)
+    private Vector3 ConvertUVToContentPos(Vector2 uvPos, Rect textureDisplayRect)
     {
-        return new Vector3(uvPos.x * contentRect.width, (1 - uvPos.y) * contentRect.height, 0);
+        float x = textureDisplayRect.x + uvPos.x * textureDisplayRect.width;
+        float y = textureDisplayRect.y + (1 - uvPos.y) * textureDisplayRect.height;
+        return new Vector3(x, y, 0);
     }
 
-    private Vector3 ConvertUVToScreenPos(Vector2 uvPos, Rect viewRect)
+    private Vector3 ConvertUVToScreenPos(Vector2 uvPos, Rect viewRect, Rect textureDisplayRect)
     {
-        Vector2 posInContent = new Vector2(uvPos.x * (viewRect.width * _zoom), (1 - uvPos.y) * (viewRect.height * _zoom));
+        Vector2 posInContent = new Vector2(
+            textureDisplayRect.x + uvPos.x * textureDisplayRect.width,
+            textureDisplayRect.y + (1 - uvPos.y) * textureDisplayRect.height
+        );
         Vector2 screenPos = posInContent - _scrollPosition + viewRect.position;
         return new Vector3(screenPos.x, screenPos.y, 0);
     }
