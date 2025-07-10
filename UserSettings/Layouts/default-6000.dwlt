@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 51
+  controlID: 45
   draggingID: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -251,7 +251,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 52
+  controlID: 46
   draggingID: 0
 --- !u!114 &11
 MonoBehaviour:
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 50}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 53
+  controlID: 47
   draggingID: 0
 --- !u!114 &12
 MonoBehaviour:
@@ -425,7 +425,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/04_Materials
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -435,16 +435,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/04_Materials
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\00_Dev\Unity\BallMaze
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 18}
-    m_SelectedIDs: a6b50000
-    m_LastClickedID: 46502
-    m_ExpandedIDs: 0000000038b40000
+    m_SelectedIDs: 7ab50000
+    m_LastClickedID: 46458
+    m_ExpandedIDs: 000000003ab40000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -473,7 +473,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000038b40000
+    m_ExpandedIDs: 000000003ab40000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -621,7 +621,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 1cf6fffff6faffff
+      m_ExpandedIDs: f6faffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1043,9 +1043,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 3.8918803, y: -35.68065, z: 30.75328}
+    m_Target: {x: -44.957867, y: -21.380383, z: 8.738033}
     speed: 2
-    m_Value: {x: 3.8918803, y: -35.68065, z: 30.75328}
+    m_Value: {x: -44.957867, y: -21.380383, z: 8.738033}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1091,13 +1091,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.42908964, y: -0.05359329, z: 0.025533874, w: -0.90134645}
+    m_Target: {x: -0.17808092, y: 0.61871445, z: -0.14669307, w: -0.7510202}
     speed: 2
-    m_Value: {x: -0.42908964, y: -0.053593293, z: 0.025533875, w: -0.9013465}
+    m_Value: {x: -0.17808092, y: 0.6187144, z: -0.14669307, w: -0.7510202}
   m_Size:
-    m_Target: 32.536232
+    m_Target: 28.166725
     speed: 2
-    m_Value: 32.536232
+    m_Value: 28.166725
   m_Ortho:
     m_Target: 0
     speed: 2
