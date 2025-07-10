@@ -6,63 +6,71 @@ using System.Linq;
 
 public class UVModWindow : EditorWindow
 {
+    // Mesh and UV Data
     private GameObject selectedGameObject;
     private MeshFilter meshFilter;
     private Mesh mesh;
-    private Vector2[] initialUvs; // Store initial UVs when object is selected or channel changes
-    private Vector2[] workingUvs; // UVs currently being displayed/modified in the editor, not directly applied to mesh until explicitly saved
+    private Vector2[] initialUvs;
+    private Vector2[] workingUvs;
+    private Dictionary<int, Vector2> dragStartIslandUVs;
 
+    // UV Modification Settings
     private Vector2 uvOffset = Vector2.zero;
     private Vector2 uvScale = Vector2.one;
-    private int selectedUVChannel = 0; // Default to UV0
-    private int selectedSubmeshIndex = -1; // -1 for all submeshes, otherwise specific index
-    private Color selectedVertexColor = Color.white; // Default to white, for filtering by vertex color
+    private int selectedUVChannel = 0;
+    private int selectedSubmeshIndex = -1;
+    private Color selectedVertexColor = Color.white;
     private bool useVertexColorFilter = false;
 
+    // UV Editor State
     private Texture2D uvTexturePreview;
+    private List<List<int>> uvIslands;
+    private List<int> selectedUVIsslandIndices = new List<int>();
 
+    // Interaction State
     private int activeUVHandle = -1;
     private Vector2 dragStartMousePos;
-    private Vector2 dragStartUVPos;
-
-    private List<List<int>> uvIslands;
-    private List<int> selectedUVIsslandIndices;
-
     private bool isDraggingSelectionRect = false;
     private Rect selectionRect;
     private Vector2 selectionRectStartPos;
 
-    /// <summary>
-    /// Opens the UV Editor Window from the Unity Editor menu.
-    /// </summary>
+    // Viewport Pan and Zoom State
+    private float _zoom = 1.0f;
+    private Vector2 _scrollPosition = Vector2.zero;
+    private bool isPanning = false;
+    private Vector2 panStartMousePos;
+    private const float MinZoom = 0.1f;
+    private const float MaxZoom = 20.0f;
+
+
     [MenuItem("Tools/UV Editor")]
     public static void ShowWindow()
     {
         GetWindow<UVModWindow>("UV Mod");
     }
 
-    /// <summary>
-    /// Called when the window is enabled or gains focus.
-    /// </summary>
     private void OnEnable()
     {
         Selection.selectionChanged += OnSelectionChange;
-        OnSelectionChange(); // Initial setup
+        OnSelectionChange();
     }
 
-    /// <summary>
-    /// Called when the window is disabled or loses focus.
-    /// </summary>
     private void OnDisable()
     {
         Selection.selectionChanged -= OnSelectionChange;
     }
 
-    /// <summary>
-    /// Handles changes in the Unity editor selection.
-    /// </summary>
     private void OnSelectionChange()
     {
+        if (mesh != null && initialUvs != null && workingUvs != null && !Enumerable.SequenceEqual(initialUvs, workingUvs))
+        {
+            if (EditorUtility.DisplayDialog("Unsaved UV Changes",
+               "You have unsaved UV modifications. Would you like to revert them?", "Revert", "Keep"))
+            {
+                ResetUVs();
+            }
+        }
+
         selectedGameObject = Selection.activeGameObject;
         meshFilter = null;
         mesh = null;
@@ -70,8 +78,8 @@ public class UVModWindow : EditorWindow
         workingUvs = null;
         uvOffset = Vector2.zero;
         uvScale = Vector2.one;
-        selectedUVChannel = 0; // Reset channel selection on new object
-        selectedSubmeshIndex = -1; // Reset submesh selection
+        selectedUVChannel = 0;
+        selectedSubmeshIndex = -1;
         selectedVertexColor = Color.white;
         useVertexColorFilter = false;
         uvTexturePreview = null;
@@ -79,6 +87,8 @@ public class UVModWindow : EditorWindow
         uvIslands = null;
         selectedUVIsslandIndices = new List<int>();
         isDraggingSelectionRect = false;
+        _zoom = 1.0f;
+        _scrollPosition = Vector2.zero;
 
         if (selectedGameObject != null)
         {
@@ -88,10 +98,9 @@ public class UVModWindow : EditorWindow
                 mesh = meshFilter.sharedMesh;
                 if (mesh != null)
                 {
-                    LoadUVsFromChannel(selectedUVChannel, true); // Load initial UVs and working UVs
-                    DetectUVIsslands(); // Detect islands on mesh load
+                    LoadUVsFromChannel(selectedUVChannel, true);
+                    DetectUVIsslands();
 
-                    // Try to get the main texture from the material
                     Renderer renderer = selectedGameObject.GetComponent<Renderer>();
                     if (renderer != null && renderer.sharedMaterial != null && renderer.sharedMaterial.mainTexture != null)
                     {
@@ -100,183 +109,91 @@ public class UVModWindow : EditorWindow
                 }
             }
         }
-        Repaint(); // Redraw the window
+        Repaint();
     }
 
-    /// <summary>
-    /// Loads UVs from a specified channel into the \"initialUvs\" and \"workingUvs\" arrays.
-    /// </summary>
-    /// <param name="channel">The UV channel index (0 for UV0, 1 for UV1, etc.).</param>
-    /// <param name="resetInitial">If true, initialUvs will be set from the mesh. Otherwise, only workingUvs is updated.</param>
+    #region Data Loading and Setup
+    private void ResetUVs()
+    {
+        if (initialUvs == null || mesh == null) return;
+        workingUvs = (Vector2[])initialUvs.Clone();
+        mesh.SetUVs(selectedUVChannel, new List<Vector2>(workingUvs));
+        EditorUtility.SetDirty(mesh);
+        uvOffset = Vector2.zero;
+        uvScale = Vector2.one;
+        Repaint();
+    }
+
     private void LoadUVsFromChannel(int channel, bool resetInitial = false)
     {
         if (mesh == null) return;
-
         List<Vector2> tempUvs = new List<Vector2>();
         mesh.GetUVs(channel, tempUvs);
-
         if (resetInitial)
         {
             initialUvs = tempUvs.ToArray();
         }
-        workingUvs = tempUvs.ToArray(); // Always update workingUvs from mesh
+        workingUvs = tempUvs.ToArray();
     }
 
-    /// <summary>
-    /// Detects UV islands (connected components of UVs) in the mesh.
-    /// </summary>
     private void DetectUVIsslands()
     {
         uvIslands = new List<List<int>>();
         if (mesh == null || workingUvs == null || workingUvs.Length == 0) return;
 
-        bool[] visited = new bool[workingUvs.Length];
+        var visited = new bool[mesh.vertexCount];
+        var adj = new Dictionary<int, List<int>>();
+        for (int i = 0; i < mesh.vertexCount; i++) adj[i] = new List<int>();
 
-        // Build adjacency list for UVs based on shared triangles
-        Dictionary<int, List<int>> uvAdjacency = new Dictionary<int, List<int>>();
-        for (int i = 0; i < mesh.vertexCount; i++)
+        for (int i = 0; i < mesh.subMeshCount; i++)
         {
-            uvAdjacency[i] = new List<int>();
-        }
-
-        for (int submeshIndex = 0; submeshIndex < mesh.subMeshCount; submeshIndex++)
-        {
-            int[] triangles = mesh.GetTriangles(submeshIndex);
-            for (int i = 0; i < triangles.Length; i += 3)
+            int[] triangles = mesh.GetTriangles(i);
+            for (int j = 0; j < triangles.Length; j += 3)
             {
-                int v1 = triangles[i];
-                int v2 = triangles[i + 1];
-                int v3 = triangles[i + 2];
-
-                // Add connections between UVs of the same triangle
-                if (!uvAdjacency[v1].Contains(v2)) uvAdjacency[v1].Add(v2);
-                if (!uvAdjacency[v1].Contains(v3)) uvAdjacency[v1].Add(v3);
-
-                if (!uvAdjacency[v2].Contains(v1)) uvAdjacency[v2].Add(v1);
-                if (!uvAdjacency[v2].Contains(v3)) uvAdjacency[v2].Add(v3);
-
-                if (!uvAdjacency[v3].Contains(v1)) uvAdjacency[v3].Add(v1);
-                if (!uvAdjacency[v3].Contains(v2)) uvAdjacency[v3].Add(v2);
+                int v1 = triangles[j], v2 = triangles[j + 1], v3 = triangles[j + 2];
+                adj[v1].Add(v2); adj[v1].Add(v3);
+                adj[v2].Add(v1); adj[v2].Add(v3);
+                adj[v3].Add(v1); adj[v3].Add(v2);
             }
         }
 
-        // Perform BFS/DFS to find connected components (UV islands)
-        for (int i = 0; i < workingUvs.Length; i++)
+        for (int i = 0; i < mesh.vertexCount; i++)
         {
             if (!visited[i])
             {
-                List<int> currentIsland = new List<int>();
-                Queue<int> queue = new Queue<int>();
-
-                queue.Enqueue(i);
+                var island = new List<int>();
+                var q = new Queue<int>();
+                q.Enqueue(i);
                 visited[i] = true;
-
-                while (queue.Count > 0)
+                while (q.Count > 0)
                 {
-                    int currentUVIndex = queue.Dequeue();
-                    currentIsland.Add(currentUVIndex);
-
-                    foreach (int neighbor in uvAdjacency[currentUVIndex])
+                    int u = q.Dequeue();
+                    island.Add(u);
+                    foreach (int v in adj[u].Distinct())
                     {
-                        // Check if the UV coordinates are actually the same (or very close) in UV space
-                        // This is crucial for distinguishing between connected vertices that are part of the same island
-                        // versus vertices that are connected in 3D but separated in UV space (UV seam).
-                        // For now, we are considering any vertex connected by a triangle to be part of the same island.
-                        // A more robust island detection would involve checking if the UV edge is continuous.
-                        if (!visited[neighbor])
+                        if (!visited[v])
                         {
-                            visited[neighbor] = true;
-                            queue.Enqueue(neighbor);
+                            visited[v] = true;
+                            q.Enqueue(v);
                         }
                     }
                 }
-                uvIslands.Add(currentIsland);
+                uvIslands.Add(island);
             }
         }
     }
+    #endregion
 
-    /// <summary>
-    /// Called to draw and handle GUI events for the editor window.
-    /// </summary>
     void OnGUI()
     {
         GUILayout.Label("UV Editor Window", EditorStyles.boldLabel);
-        EditorGUILayout.HelpBox("Select a 3D model in the scene to modify its UVs.", MessageType.Info);
+        EditorGUILayout.HelpBox("Select a 3D model. Use Scroll Wheel to Zoom. Use Scrollbars or Middle-Mouse-Drag to Pan.", MessageType.Info);
 
         EditorGUILayout.ObjectField("Selected Object", selectedGameObject, typeof(GameObject), true);
 
         if (selectedGameObject != null && mesh != null && initialUvs != null)
         {
-            EditorGUILayout.Space();
-            GUILayout.Label("UV Modification", EditorStyles.boldLabel);
-
-            // UV Channel Selection
-            EditorGUI.BeginChangeCheck();
-            selectedUVChannel = EditorGUILayout.IntSlider("UV Channel", selectedUVChannel, 0, 7);
-            if (EditorGUI.EndChangeCheck())
-            {
-                LoadUVsFromChannel(selectedUVChannel, true); // Reload initial UVs on channel change
-                DetectUVIsslands(); // Re-detect islands on channel change
-                uvOffset = Vector2.zero;
-                uvScale = Vector2.one;
-            }
-
-            // Submesh Selection
-            if (mesh.subMeshCount > 1)
-            {
-                string[] submeshOptions = new string[mesh.subMeshCount + 1];
-                submeshOptions[0] = "All Submeshes";
-                for (int i = 0; i < mesh.subMeshCount; i++)
-                {
-                    submeshOptions[i + 1] = "Submesh " + i;
-                }
-                selectedSubmeshIndex = EditorGUILayout.Popup("Target Submesh", selectedSubmeshIndex + 1, submeshOptions) - 1;
-            }
-
-            // Vertex Color Filter
-            useVertexColorFilter = EditorGUILayout.Toggle("Filter by Vertex Color", useVertexColorFilter);
-            if (useVertexColorFilter)
-            {
-                selectedVertexColor = EditorGUILayout.ColorField("Target Vertex Color", selectedVertexColor);
-            }
-
-            EditorGUI.BeginChangeCheck();
-            uvOffset = EditorGUILayout.Vector2Field("UV Offset", uvOffset);
-            uvScale = EditorGUILayout.Vector2Field("UV Scale", uvScale);
-
-            if (EditorGUI.EndChangeCheck())
-            {
-                ApplyUVChangesToWorkingUVs();
-            }
-
-            if (GUILayout.Button("Reset UVs"))
-            {
-                // Revert workingUvs to initialUvs
-                workingUvs = (Vector2[])initialUvs.Clone();
-                // Apply workingUvs to the mesh for visual feedback, but do NOT save the asset here
-                if (mesh != null) // Ensure mesh is not null before setting UVs
-                {
-                    mesh.SetUVs(selectedUVChannel, new List<Vector2>(workingUvs));
-                    EditorUtility.SetDirty(mesh); // Mark mesh as dirty so changes are reflected in inspector
-                }
-                uvOffset = Vector2.zero;
-                uvScale = Vector2.one;
-                Repaint();
-            }
-
-            EditorGUILayout.Space();
-            if (GUILayout.Button("Apply to Selected Objects (Batch)"))
-            {
-                ApplyUVChangesToMultipleObjects();
-            }
-
-            EditorGUILayout.Space();
-            if (GUILayout.Button("Save Modified Mesh"))
-            {
-                SaveMeshAsset();
-                // After saving, the current state becomes the new initial state for reset
-                LoadUVsFromChannel(selectedUVChannel, true);
-            }
+            DrawSettingsGUI();
 
             EditorGUILayout.Space();
             GUILayout.Label("Visual UV Editor", EditorStyles.boldLabel);
@@ -288,337 +205,373 @@ public class UVModWindow : EditorWindow
         }
     }
 
-    /// <summary>
-    /// Draws the UV editor area with the texture preview and UV overlay, and handles interactive manipulation.
-    /// </summary>
+    private void DrawSettingsGUI()
+    {
+        EditorGUILayout.Space();
+        GUILayout.Label("UV Modification", EditorStyles.boldLabel);
+
+        EditorGUI.BeginChangeCheck();
+        selectedUVChannel = EditorGUILayout.IntSlider("UV Channel", selectedUVChannel, 0, 7);
+        if (EditorGUI.EndChangeCheck())
+        {
+            LoadUVsFromChannel(selectedUVChannel, true);
+            DetectUVIsslands();
+            uvOffset = Vector2.zero;
+            uvScale = Vector2.one;
+        }
+
+        if (mesh.subMeshCount > 1)
+        {
+            string[] submeshOptions = new string[mesh.subMeshCount + 1];
+            submeshOptions[0] = "All Submeshes";
+            for (int i = 0; i < mesh.subMeshCount; i++) submeshOptions[i + 1] = "Submesh " + i;
+            selectedSubmeshIndex = EditorGUILayout.Popup("Target Submesh", selectedSubmeshIndex + 1, submeshOptions) - 1;
+        }
+
+        useVertexColorFilter = EditorGUILayout.Toggle("Filter by Vertex Color", useVertexColorFilter);
+        if (useVertexColorFilter)
+        {
+            selectedVertexColor = EditorGUILayout.ColorField("Target Vertex Color", selectedVertexColor);
+        }
+
+        EditorGUI.BeginChangeCheck();
+        uvOffset = EditorGUILayout.Vector2Field("UV Offset", uvOffset);
+        uvScale = EditorGUILayout.Vector2Field("UV Scale", uvScale);
+        if (EditorGUI.EndChangeCheck())
+        {
+            ApplyUVChangesToWorkingUVs();
+        }
+
+        if (GUILayout.Button("Reset UVs")) ResetUVs();
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Apply to Selected Objects (Batch)")) ApplyUVChangesToMultipleObjects();
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Save Modified Mesh"))
+        {
+            SaveMeshAsset();
+            LoadUVsFromChannel(selectedUVChannel, true);
+        }
+    }
+
     private void DrawUvEditorArea()
     {
-        // Calculate a square rect for the UV editor area to maintain aspect ratio
-        float desiredSize = Mathf.Min(position.width - 20, 512); // Max size 512, or window width - 20
-        Rect uvEditorRect = GUILayoutUtility.GetRect(desiredSize, desiredSize, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
-
-        // Center the square rect within the available horizontal space
-        float centerX = position.width / 2f;
-        uvEditorRect.x = centerX - (uvEditorRect.width / 2f);
-
-        GUI.Box(uvEditorRect, ""); // Draw a background box
-
-        if (uvTexturePreview != null)
+        // *** THE FIX: Use a single, contained block for layout and drawing. ***
+        // This group provides a flexible, framed area for the editor.
+        GUILayout.BeginVertical(GUI.skin.box, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
         {
-            // Draw the texture preview
-            GUI.DrawTexture(uvEditorRect, uvTexturePreview, ScaleMode.ScaleToFit);
-        }
-        else
-        {
-            EditorGUI.HelpBox(uvEditorRect, "No texture found on material. UVs will be drawn on a blank background.", MessageType.Info);
-        }
+            // Reserve a square area that fills the available space.
+            Rect viewRect = GUILayoutUtility.GetAspectRect(1.0f);
 
-        // Handle mouse input for UV manipulation and selection
-        Event currentEvent = Event.current;
-        int controlID = GUIUtility.GetControlID(FocusType.Passive);
-        EventType eventType = currentEvent.GetTypeForControl(controlID);
-
-        // Ensure that the event is processed only if the mouse is within the UV editor area
-        if (uvEditorRect.Contains(currentEvent.mousePosition))
-        {
-            // Convert mouse position to UV space (0-1 range) relative to the uvEditorRect
-            Vector2 mouseUVPos = new Vector2(
-                (currentEvent.mousePosition.x - uvEditorRect.x) / uvEditorRect.width,
-                1 - (currentEvent.mousePosition.y - uvEditorRect.y) / uvEditorRect.height // Invert Y for UV space
-            );
-
-            switch (eventType)
+            // The rect is now valid for all event types within this OnGUI call.
+            if (viewRect.width > 0 && viewRect.height > 0)
             {
-                case EventType.MouseDown:
-                    if (currentEvent.button == 0) // Left mouse button down
+                Rect contentRect = new Rect(0, 0, viewRect.width * _zoom, viewRect.height * _zoom);
+
+                HandleEvents(viewRect, contentRect);
+
+                _scrollPosition = GUI.BeginScrollView(viewRect, _scrollPosition, contentRect, false, false);
+                {
+                    if (uvTexturePreview != null)
                     {
-                        activeUVHandle = -1;
-                        selectedUVIsslandIndices.Clear(); // Clear previous selection
-                        float minDistance = 0.02f; // Tolerance for clicking a UV point
+                        GUI.DrawTexture(new Rect(0, 0, contentRect.width, contentRect.height), uvTexturePreview, ScaleMode.StretchToFill);
+                    }
 
-                        // Check if a UV point is clicked for single island selection
-                        for (int i = 0; i < workingUvs.Length; i++)
+                    if (workingUvs != null && workingUvs.Length > 0)
+                    {
+                        GUI.BeginGroup(new Rect(0, 0, contentRect.width, contentRect.height));
                         {
-                            Vector2 uvPoint = workingUvs[i];
-                            if (Vector2.Distance(uvPoint, mouseUVPos) < minDistance)
+                            for (int i = 0; i < mesh.subMeshCount; i++)
                             {
-                                activeUVHandle = i;
-                                dragStartMousePos = currentEvent.mousePosition;
-                                dragStartUVPos = workingUvs[i]; // Store current UV for relative dragging
-                                Undo.RecordObject(mesh, "Drag UV Point");
-
-                                // Select the entire UV island
-                                foreach (var island in uvIslands)
+                                int[] triangles = mesh.GetTriangles(i);
+                                for (int j = 0; j < triangles.Length; j += 3)
                                 {
-                                    if (island.Contains(activeUVHandle))
+                                    int v1 = triangles[j], v2 = triangles[j + 1], v3 = triangles[j + 2];
+                                    if (v1 < workingUvs.Length && v2 < workingUvs.Length && v3 < workingUvs.Length)
                                     {
-                                        selectedUVIsslandIndices.AddRange(island);
-                                        break;
+                                        Vector3 p1 = ConvertUVToContentPos(workingUvs[v1], contentRect);
+                                        Vector3 p2 = ConvertUVToContentPos(workingUvs[v2], contentRect);
+                                        Vector3 p3 = ConvertUVToContentPos(workingUvs[v3], contentRect);
+
+                                        Handles.color = selectedUVIsslandIndices.Contains(v1) ? Color.yellow : new Color(1, 0.3f, 0.3f, 0.8f);
+                                        Handles.DrawLine(p1, p2);
+                                        Handles.DrawLine(p2, p3);
+                                        Handles.DrawLine(p3, p1);
                                     }
                                 }
-                                GUIUtility.hotControl = controlID; // Capture mouse for dragging
-                                currentEvent.Use();
-                                return;
                             }
-                        }
 
-                        // If no UV point is clicked, start selection rectangle
-                        isDraggingSelectionRect = true;
-                        selectionRectStartPos = currentEvent.mousePosition;
-                        selectionRect = new Rect(selectionRectStartPos.x, selectionRectStartPos.y, 0, 0);
-                        GUIUtility.hotControl = controlID; // Capture mouse for dragging
-                        currentEvent.Use();
-                    }
-                    break;
-
-                case EventType.MouseDrag:
-                    if (GUIUtility.hotControl == controlID)
-                    {
-                        if (activeUVHandle != -1) // Dragging a UV island
-                        {
-                            Vector2 deltaMousePos = currentEvent.mousePosition - dragStartMousePos;
-                            Vector2 deltaUV = new Vector2(
-                                deltaMousePos.x / uvEditorRect.width,
-                                -deltaMousePos.y / uvEditorRect.height // Invert Y for UV space
-                            );
-
-                            // Apply the delta to all selected UV island points
-                            foreach (int index in selectedUVIsslandIndices)
+                            for (int index = 0; index < workingUvs.Length; index++)
                             {
-                                workingUvs[index] = dragStartUVPos + deltaUV; // Apply delta to initial UVs
+                                Vector3 handlePos = ConvertUVToContentPos(workingUvs[index], contentRect);
+                                Handles.color = selectedUVIsslandIndices.Contains(index) ? Color.green : Color.cyan;
+                                Handles.DrawSolidDisc(handlePos, Vector3.forward, 3f);
                             }
-
-                            // Update the mesh UVs immediately for visual feedback
-                            // mesh.SetUVs(selectedUVChannel, new List<Vector2>(workingUvs)); // Removed to prevent automatic saving
-                            // EditorUtility.SetDirty(mesh); // Removed to prevent automatic saving
-                            Repaint();
-                            currentEvent.Use();
                         }
-                        else if (isDraggingSelectionRect) // Dragging selection rectangle
-                        {
-                            // Normalize selectionRect to handle dragging in any direction
-                            selectionRect = new Rect(
-                                Mathf.Min(selectionRectStartPos.x, currentEvent.mousePosition.x),
-                                Mathf.Min(selectionRectStartPos.y, currentEvent.mousePosition.y),
-                                Mathf.Abs(selectionRectStartPos.x - currentEvent.mousePosition.x),
-                                Mathf.Abs(selectionRectStartPos.y - currentEvent.mousePosition.y)
-                            );
-                            Repaint();
-                            currentEvent.Use();
-                        }
+                        GUI.EndGroup();
                     }
-                    break;
-
-                case EventType.MouseUp:
-                    if (GUIUtility.hotControl == controlID)
-                    {
-                        GUIUtility.hotControl = 0; // Release mouse capture
-                        if (activeUVHandle != -1) // Finished dragging a UV island
-                        {
-                            activeUVHandle = -1;
-                            // UVs are updated in workingUvs during drag, but not applied to mesh until Save Modified Mesh is clicked.
-                            // The Reset UVs button will revert workingUvs to initialUvs.
-                            // No mesh.SetUVs here to prevent automatic saving.
-                            // Apply workingUvs to the mesh for visual feedback, but do NOT save the asset here
-                            mesh.SetUVs(selectedUVChannel, new List<Vector2>(workingUvs));
-                            EditorUtility.SetDirty(mesh); // Mark mesh as dirty so changes are reflected in inspector
-                            Repaint();
-                            currentEvent.Use();
-                        }
-                        else if (isDraggingSelectionRect) // Finished dragging selection rectangle
-                        {
-                            isDraggingSelectionRect = false;
-                            selectedUVIsslandIndices.Clear();
-
-                            // Find UV islands that intersect with the selection rectangle
-                            foreach (var island in uvIslands)
-                            {
-                                bool islandIntersects = false;
-                                foreach (int uvIndex in island)
-                                {
-                                    // Convert UV point to screen space for intersection check
-                                    Vector2 uvPointScreenPos = new Vector2(
-                                        uvEditorRect.x + workingUvs[uvIndex].x * uvEditorRect.width,
-                                        uvEditorRect.y + (1 - workingUvs[uvIndex].y) * uvEditorRect.height
-                                    );
-
-                                    if (selectionRect.Contains(uvPointScreenPos))
-                                    {
-                                        islandIntersects = true;
-                                        break;
-                                    }
-                                }
-                                if (islandIntersects)
-                                {
-                                    selectedUVIsslandIndices.AddRange(island);
-                                }
-                            }
-                            Repaint();
-                            currentEvent.Use();
-                        }
-                    }
-                    break;
-
-                case EventType.Repaint:
-                    // Draw selection rectangle if active
-                    if (isDraggingSelectionRect)
-                    {
-                        Handles.DrawSolidRectangleWithOutline(selectionRect, new Color(0, 0.5f, 1, 0.2f), Color.cyan);
-                    }
-                    break;
+                }
+                GUI.EndScrollView();
             }
         }
+        GUILayout.EndVertical();
 
-        // Draw UVs over the texture
-        if (workingUvs != null && workingUvs.Length > 0)
+        if (isDraggingSelectionRect)
         {
             Handles.BeginGUI();
-
-            // Draw triangles
-            for (int i = 0; i < mesh.subMeshCount; i++)
-            {
-                int[] triangles = mesh.GetTriangles(i);
-                for (int j = 0; j < triangles.Length; j += 3)
-                {
-                    int v1Index = triangles[j];
-                    int v2Index = triangles[j + 1];
-                    int v3Index = triangles[j + 2];
-
-                    if (v1Index < workingUvs.Length && v2Index < workingUvs.Length && v3Index < workingUvs.Length)
-                    {
-                        Vector2 uv1 = workingUvs[v1Index];
-                        Vector2 uv2 = workingUvs[v2Index];
-                        Vector2 uv3 = workingUvs[v3Index];
-
-                        // Convert UV coordinates (0-1 range) to screen coordinates within the uvEditorRect
-                        Vector3 p1 = new Vector3(uvEditorRect.x + uv1.x * uvEditorRect.width, uvEditorRect.y + (1 - uv1.y) * uvEditorRect.height, 0);
-                        Vector3 p2 = new Vector3(uvEditorRect.x + uv2.x * uvEditorRect.width, uvEditorRect.y + (1 - uv2.y) * uvEditorRect.height, 0);
-                        Vector3 p3 = new Vector3(uvEditorRect.x + uv3.x * uvEditorRect.width, uvEditorRect.y + (1 - uv3.y) * uvEditorRect.height, 0);
-
-                        Handles.color = Color.red; // Default color for triangles
-                        if (selectedUVIsslandIndices.Contains(v1Index) && selectedUVIsslandIndices.Contains(v2Index) && selectedUVIsslandIndices.Contains(v3Index))
-                        {
-                            Handles.color = Color.yellow; // Highlight selected island triangles
-                        }
-                        Handles.DrawLine(p1, p2);
-                        Handles.DrawLine(p2, p3);
-                        Handles.DrawLine(p3, p1);
-                    }
-                }
-            }
-
-            // Draw UV points as circles
-            foreach (int index in Enumerable.Range(0, workingUvs.Length))
-            {
-                Vector2 uvPoint = workingUvs[index];
-                Vector3 screenPos = new Vector3(uvEditorRect.x + uvPoint.x * uvEditorRect.width, uvEditorRect.y + (1 - uvPoint.y) * uvEditorRect.height, 0);
-
-                Handles.color = Color.blue; // Default color for UV points
-                if (selectedUVIsslandIndices.Contains(index))
-                {
-                    Handles.color = Color.green; // Highlight selected UV points
-                }
-                Handles.DrawSolidDisc(screenPos, Vector3.forward, 3); // Draw a small disc for each UV point
-            }
-
+            Handles.DrawSolidRectangleWithOutline(selectionRect, new Color(0, 0.5f, 1, 0.2f), Color.cyan);
             Handles.EndGUI();
         }
     }
 
-    /// <summary>
-    /// Applies the calculated UV changes (offset and scale) to the mesh of the currently selected object,
-    /// considering submesh and vertex color filters.
-    /// </summary>
+    private void HandleEvents(Rect viewRect, Rect contentRect)
+    {
+        Event currentEvent = Event.current;
+
+        if (!viewRect.Contains(currentEvent.mousePosition))
+        {
+            if (currentEvent.type != EventType.MouseUp && currentEvent.type != EventType.MouseDrag)
+            {
+                return;
+            }
+        }
+
+        int controlID = GUIUtility.GetControlID(FocusType.Passive);
+        EventType eventType = currentEvent.GetTypeForControl(controlID);
+
+        if (viewRect.Contains(currentEvent.mousePosition))
+        {
+            if (currentEvent.type == EventType.ScrollWheel)
+            {
+                float oldZoom = _zoom;
+                float zoomDelta = -currentEvent.delta.y * 0.05f;
+                _zoom = Mathf.Clamp(_zoom + zoomDelta * _zoom, MinZoom, MaxZoom);
+
+                Vector2 mousePosInView = currentEvent.mousePosition - viewRect.position;
+                _scrollPosition = ((_scrollPosition + mousePosInView) * (_zoom / oldZoom)) - mousePosInView;
+
+                Repaint();
+                currentEvent.Use();
+                return;
+            }
+
+            if (eventType == EventType.MouseDown)
+            {
+                if (currentEvent.button == 2)
+                {
+                    isPanning = true;
+                    panStartMousePos = currentEvent.mousePosition;
+                    GUIUtility.hotControl = controlID;
+                    currentEvent.Use();
+                    return;
+                }
+
+                if (currentEvent.button == 0)
+                {
+                    bool isVerticalScrollbarVisible = contentRect.height > viewRect.height;
+                    bool isHorizontalScrollbarVisible = contentRect.width > viewRect.width;
+
+                    Rect verticalScrollbarRect = new Rect(viewRect.x + viewRect.width - GUI.skin.verticalScrollbar.fixedWidth, viewRect.y, GUI.skin.verticalScrollbar.fixedWidth, viewRect.height);
+                    Rect horizontalScrollbarRect = new Rect(viewRect.x, viewRect.y + viewRect.height - GUI.skin.horizontalScrollbar.fixedHeight, viewRect.width, GUI.skin.horizontalScrollbar.fixedHeight);
+
+                    if ((isVerticalScrollbarVisible && verticalScrollbarRect.Contains(currentEvent.mousePosition)) ||
+                        (isHorizontalScrollbarVisible && horizontalScrollbarRect.Contains(currentEvent.mousePosition)))
+                    {
+                        return;
+                    }
+
+                    GUIUtility.hotControl = controlID;
+                    activeUVHandle = -1;
+                    Vector2 mouseUVPos = ConvertScreenPosToUVPos(currentEvent.mousePosition, viewRect);
+                    float minDistance = (0.02f / _zoom);
+
+                    int topHandle = -1;
+                    float minD = float.MaxValue;
+                    for (int i = 0; i < workingUvs.Length; i++)
+                    {
+                        float d = Vector2.Distance(workingUvs[i], mouseUVPos);
+                        if (d < minDistance && d < minD)
+                        {
+                            minD = d;
+                            topHandle = i;
+                        }
+                    }
+
+                    if (topHandle != -1)
+                    {
+                        activeUVHandle = topHandle;
+                        dragStartMousePos = currentEvent.mousePosition;
+                        Undo.RecordObject(mesh, "Drag UV Point");
+
+                        dragStartIslandUVs = new Dictionary<int, Vector2>();
+                        if (!selectedUVIsslandIndices.Contains(activeUVHandle))
+                        {
+                            if (!currentEvent.shift) selectedUVIsslandIndices.Clear();
+                            foreach (var island in uvIslands)
+                            {
+                                if (island.Contains(activeUVHandle))
+                                {
+                                    selectedUVIsslandIndices.AddRange(island.Except(selectedUVIsslandIndices));
+                                    break;
+                                }
+                            }
+                        }
+                        foreach (int index in selectedUVIsslandIndices)
+                        {
+                            dragStartIslandUVs[index] = workingUvs[index];
+                        }
+                    }
+                    else
+                    {
+                        isDraggingSelectionRect = true;
+                        selectionRectStartPos = currentEvent.mousePosition;
+                        selectionRect = new Rect(selectionRectStartPos.x, selectionRectStartPos.y, 0, 0);
+                    }
+                    currentEvent.Use();
+                }
+            }
+        }
+
+        if (eventType == EventType.MouseDrag && GUIUtility.hotControl == controlID)
+        {
+            if (isPanning)
+            {
+                Vector2 delta = currentEvent.mousePosition - panStartMousePos;
+                _scrollPosition -= delta;
+                panStartMousePos = currentEvent.mousePosition;
+            }
+            else if (activeUVHandle != -1)
+            {
+                Vector2 startMouseUV = ConvertScreenPosToUVPos(dragStartMousePos, viewRect);
+                Vector2 currentMouseUV = ConvertScreenPosToUVPos(currentEvent.mousePosition, viewRect);
+                Vector2 deltaUV = currentMouseUV - startMouseUV;
+
+                foreach (var islandKvp in dragStartIslandUVs)
+                {
+                    workingUvs[islandKvp.Key] = islandKvp.Value + deltaUV;
+                }
+            }
+            else if (isDraggingSelectionRect)
+            {
+                selectionRect = new Rect(
+                    Mathf.Min(selectionRectStartPos.x, currentEvent.mousePosition.x),
+                    Mathf.Min(selectionRectStartPos.y, currentEvent.mousePosition.y),
+                    Mathf.Abs(selectionRectStartPos.x - currentEvent.mousePosition.x),
+                    Mathf.Abs(selectionRectStartPos.y - currentEvent.mousePosition.y)
+                );
+            }
+            Repaint();
+            currentEvent.Use();
+        }
+
+        if (eventType == EventType.MouseUp && GUIUtility.hotControl == controlID)
+        {
+            GUIUtility.hotControl = 0;
+            isPanning = false;
+            activeUVHandle = -1;
+            dragStartIslandUVs = null;
+
+            if (isDraggingSelectionRect)
+            {
+                isDraggingSelectionRect = false;
+                if (!currentEvent.shift) selectedUVIsslandIndices.Clear();
+
+                foreach (var island in uvIslands)
+                {
+                    bool islandIntersects = island.Any(uvIndex => selectionRect.Contains(ConvertUVToScreenPos(workingUvs[uvIndex], viewRect)));
+                    if (islandIntersects)
+                    {
+                        selectedUVIsslandIndices.AddRange(island.Except(selectedUVIsslandIndices));
+                    }
+                }
+            }
+            else
+            {
+                mesh.SetUVs(selectedUVChannel, new List<Vector2>(workingUvs));
+                EditorUtility.SetDirty(mesh);
+            }
+            Repaint();
+            currentEvent.Use();
+        }
+    }
+
+    #region Coordinate Conversion Helpers
+    private Vector2 ConvertScreenPosToUVPos(Vector2 screenPos, Rect viewRect)
+    {
+        Vector2 localPos = screenPos - viewRect.position;
+        Vector2 posInContent = localPos + _scrollPosition;
+        return new Vector2(posInContent.x / (viewRect.width * _zoom), 1 - posInContent.y / (viewRect.height * _zoom));
+    }
+
+    private Vector3 ConvertUVToContentPos(Vector2 uvPos, Rect contentRect)
+    {
+        return new Vector3(uvPos.x * contentRect.width, (1 - uvPos.y) * contentRect.height, 0);
+    }
+
+    private Vector3 ConvertUVToScreenPos(Vector2 uvPos, Rect viewRect)
+    {
+        Vector2 posInContent = new Vector2(uvPos.x * (viewRect.width * _zoom), (1 - uvPos.y) * (viewRect.height * _zoom));
+        Vector2 screenPos = posInContent - _scrollPosition + viewRect.position;
+        return new Vector3(screenPos.x, screenPos.y, 0);
+    }
+    #endregion
+
+    #region Data Modification and Saving
     private void ApplyUVChangesToWorkingUVs()
     {
         if (mesh == null || initialUvs == null) return;
-
-        // Start with initial UVs for the selected channel
         workingUvs = (Vector2[])initialUvs.Clone();
-
-        List<int> affectedVertexIndices = new List<int>();
-
-        // Determine affected vertices based on submesh selection
+        List<int> affectedIndices = new List<int>();
         if (selectedSubmeshIndex >= 0 && selectedSubmeshIndex < mesh.subMeshCount)
         {
-            int[] triangles = mesh.GetTriangles(selectedSubmeshIndex);
-            foreach (int triIndex in triangles)
-            {
-                if (!affectedVertexIndices.Contains(triIndex))
-                {
-                    affectedVertexIndices.Add(triIndex);
-                }
-            }
+            affectedIndices.AddRange(mesh.GetTriangles(selectedSubmeshIndex).Distinct());
         }
-        else // All submeshes
+        else
         {
-            for (int i = 0; i < mesh.vertexCount; i++)
-            {
-                affectedVertexIndices.Add(i);
-            }
+            affectedIndices.AddRange(Enumerable.Range(0, mesh.vertexCount));
         }
 
-        // Further filter by vertex color if enabled
         if (useVertexColorFilter && mesh.colors.Length > 0)
         {
             Color[] vertexColors = mesh.colors;
-            List<int> colorFilteredIndices = new List<int>();
-            foreach (int index in affectedVertexIndices)
-            {
-                if (index < vertexColors.Length && AreColorsApproximatelyEqual(vertexColors[index], selectedVertexColor))
-                {
-                    colorFilteredIndices.Add(index);
-                }
-            }
-            affectedVertexIndices = colorFilteredIndices;
+            affectedIndices = affectedIndices.Where(index => index < vertexColors.Length && AreColorsApproximatelyEqual(vertexColors[index], selectedVertexColor)).ToList();
         }
 
-        // Apply transformations only to affected vertices
-        foreach (int index in affectedVertexIndices)
+        foreach (int index in affectedIndices)
         {
             if (index < workingUvs.Length)
             {
                 workingUvs[index] = new Vector2(initialUvs[index].x * uvScale.x + uvOffset.x, initialUvs[index].y * uvScale.y + uvOffset.y);
             }
         }
+        mesh.SetUVs(selectedUVChannel, workingUvs);
+        EditorUtility.SetDirty(mesh);
+        Repaint();
     }
 
-    /// <summary>
-    /// Applies the calculated UV changes (offset and scale) to the meshes of all currently selected objects,
-    /// considering submesh and vertex color filters.
-    /// </summary>
     private void ApplyUVChangesToMultipleObjects()
     {
         GameObject[] selectedObjects = Selection.gameObjects;
         if (selectedObjects.Length == 0)
         {
-            EditorUtility.DisplayDialog("No Objects Selected", "Please select one or more GameObjects to apply UV changes to.", "OK");
+            EditorUtility.DisplayDialog("No Objects Selected", "Please select one or more GameObjects.", "OK");
             return;
         }
-
         Undo.SetCurrentGroupName("Batch Modify UVs");
         int undoGroup = Undo.GetCurrentGroup();
-
         foreach (GameObject obj in selectedObjects)
         {
-            MeshFilter currentMeshFilter = obj.GetComponent<MeshFilter>();
-            if (currentMeshFilter != null && currentMeshFilter.sharedMesh != null)
+            MeshFilter mf = obj.GetComponent<MeshFilter>();
+            if (mf != null && mf.sharedMesh != null)
             {
-                Mesh currentMesh = currentMeshFilter.sharedMesh;
-                List<Vector2> currentUvsList = new List<Vector2>();
-                currentMesh.GetUVs(selectedUVChannel, currentUvsList);
-
-                if (currentUvsList.Count > 0)
+                Mesh m = mf.sharedMesh;
+                List<Vector2> uvs = new List<Vector2>();
+                m.GetUVs(selectedUVChannel, uvs);
+                if (uvs.Count > 0)
                 {
-                    Undo.RecordObject(currentMesh, "Modify UVs for " + obj.name);
-
-                    Vector2[] newUvs = new Vector2[currentUvsList.Count];
-                    for (int i = 0; i < currentUvsList.Count; i++)
-                    {
-                        newUvs[i] = new Vector2(currentUvsList[i].x * uvScale.x + uvOffset.x, currentUvsList[i].y * uvScale.y + uvOffset.y);
-                    }
-                    currentMesh.SetUVs(selectedUVChannel, new List<Vector2>(newUvs));
-                    EditorUtility.SetDirty(currentMesh);
+                    Undo.RecordObject(m, "Modify UVs for " + obj.name);
+                    Vector2[] newUvs = uvs.Select(uv => new Vector2(uv.x * uvScale.x + uvOffset.x, uv.y * uvScale.y + uvOffset.y)).ToArray();
+                    m.SetUVs(selectedUVChannel, newUvs);
+                    EditorUtility.SetDirty(m);
                 }
             }
         }
@@ -626,65 +579,27 @@ public class UVModWindow : EditorWindow
         EditorUtility.DisplayDialog("Batch UV Modification", selectedObjects.Length + " objects processed.", "OK");
     }
 
-    /// <summary>
-    /// Saves the modified mesh as a new asset or updates an existing one.
-    /// </summary>
     private void SaveMeshAsset()
     {
-        if (mesh == null)
-        {
-            EditorUtility.DisplayDialog("Error", "No mesh to save.", "OK");
-            return;
-        }
-
+        if (mesh == null) return;
         string path = AssetDatabase.GetAssetPath(mesh);
-        if (string.IsNullOrEmpty(path))
+        if (string.IsNullOrEmpty(path) || !AssetDatabase.IsMainAsset(mesh))
         {
-            path = EditorUtility.SaveFilePanelInProject("Save Modified Mesh", selectedGameObject.name + "_Modified", "asset", "Save the modified mesh as a new asset.");
-            if (string.IsNullOrEmpty(path))
-            {
-                return; // User cancelled save operation
-            }
+            path = EditorUtility.SaveFilePanelInProject("Save Modified Mesh", selectedGameObject.name + "_Modified", "asset", "Save the modified mesh.");
+            if (string.IsNullOrEmpty(path)) return;
 
-            Mesh newMesh = new Mesh();
-            newMesh.vertices = mesh.vertices;
-            newMesh.triangles = mesh.triangles;
-            newMesh.normals = mesh.normals;
-            newMesh.tangents = mesh.tangents;
-
-            for (int i = 0; i < 8; i++)
-            {
-                List<Vector2> tempUvs = new List<Vector2>();
-                mesh.GetUVs(i, tempUvs);
-                if (tempUvs.Count > 0)
-                {
-                    newMesh.SetUVs(i, tempUvs);
-                }
-            }
-
-            newMesh.colors = mesh.colors;
-            newMesh.name = mesh.name + "_Modified";
-
+            Mesh newMesh = Instantiate(mesh);
+            newMesh.name = Path.GetFileNameWithoutExtension(path);
             AssetDatabase.CreateAsset(newMesh, path);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
             meshFilter.mesh = newMesh;
-            EditorUtility.DisplayDialog("Success", "Mesh saved as new asset: " + path, "OK");
         }
-        else
-        {
-            // Apply workingUvs to the mesh before saving
-            mesh.SetUVs(selectedUVChannel, new List<Vector2>(workingUvs));
-            EditorUtility.SetDirty(mesh);
-            AssetDatabase.SaveAssets();
-            EditorUtility.DisplayDialog("Success", "Mesh asset updated: " + path, "OK");
-        }
+
+        mesh.SetUVs(selectedUVChannel, workingUvs);
+        EditorUtility.SetDirty(mesh);
+        AssetDatabase.SaveAssets();
+        EditorUtility.DisplayDialog("Success", "Mesh asset saved/updated at: " + path, "OK");
     }
 
-    /// <summary>
-    /// Compares two colors for approximate equality, useful for floating-point color values.
-    /// </summary>
     private bool AreColorsApproximatelyEqual(Color c1, Color c2, float tolerance = 0.01f)
     {
         return Mathf.Abs(c1.r - c2.r) < tolerance &&
@@ -692,5 +607,5 @@ public class UVModWindow : EditorWindow
                Mathf.Abs(c1.b - c2.b) < tolerance &&
                Mathf.Abs(c1.a - c2.a) < tolerance;
     }
+    #endregion
 }
-
