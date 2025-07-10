@@ -197,14 +197,15 @@ public static class UVMod_Actions
         data.IslandTransformScale = Vector2.one;
     }
 
-    public static void SaveMeshAsset(UVMod_Data data)
+    public static bool SaveMeshAsset(UVMod_Data data)
     {
-        if (data.Mesh == null) return;
+        if (data.Mesh == null) return false;
         string path = AssetDatabase.GetAssetPath(data.Mesh);
         if (string.IsNullOrEmpty(path) || !AssetDatabase.IsMainAsset(data.Mesh))
         {
             path = EditorUtility.SaveFilePanelInProject("Save Modified Mesh", data.SelectedGameObject.name + "_Modified", "asset", "Save the modified mesh.");
-            if (string.IsNullOrEmpty(path)) return;
+            //Save file did not conclude
+            if (string.IsNullOrEmpty(path)) return false;
 
             Mesh newMesh = Object.Instantiate(data.Mesh);
             newMesh.name = Path.GetFileNameWithoutExtension(path);
@@ -216,6 +217,7 @@ public static class UVMod_Actions
         EditorUtility.SetDirty(data.Mesh);
         AssetDatabase.SaveAssets();
         EditorUtility.DisplayDialog("Success", "Mesh asset saved/updated at: " + path, "OK");
+        return true;
     }
 
     public static bool AreColorsApproximatelyEqual(Color c1, Color c2, float tolerance = 0.01f)

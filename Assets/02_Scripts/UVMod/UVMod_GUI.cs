@@ -80,10 +80,10 @@ public static class UVMod_GUI
 
         EditorGUILayout.Space();
         if (GUILayout.Button("Reset All UVs")) data.ResetUVs();
-        if (GUILayout.Button("Save Modified Mesh"))
+        if (GUILayout.Button("Save Modified Mesh in Folder"))
         {
-            UVMod_Actions.SaveMeshAsset(data);
-            data.LoadUVsFromChannel(data.SelectedUVChannel, true);
+            if(UVMod_Actions.SaveMeshAsset(data))
+                data.LoadUVsFromChannel(data.SelectedUVChannel, true);
         }
     }
 
