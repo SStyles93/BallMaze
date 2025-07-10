@@ -33,6 +33,7 @@ public class UVModWindow : EditorWindow
     private bool isDraggingSelectionRect = false;
     private Rect selectionRect;
     private Vector2 selectionRectStartPos;
+    private bool isPickingColor = false;
 
     // Viewport Pan and Zoom State
     private float _zoom = 1.0f;
@@ -87,6 +88,7 @@ public class UVModWindow : EditorWindow
         uvIslands = null;
         selectedUVIsslandIndices = new List<int>();
         isDraggingSelectionRect = false;
+        isPickingColor = false;
         _zoom = 1.0f;
         _scrollPosition = Vector2.zero;
 
@@ -226,7 +228,22 @@ public class UVModWindow : EditorWindow
         useVertexColorFilter = EditorGUILayout.Toggle("Filter by Vertex Color", useVertexColorFilter);
         if (useVertexColorFilter)
         {
-            selectedVertexColor = EditorGUILayout.ColorField("Target Vertex Color", selectedVertexColor);
+            EditorGUILayout.BeginHorizontal();
+            {
+                selectedVertexColor = EditorGUILayout.ColorField("Target Vertex Color", selectedVertexColor);
+
+                // Only show the button if an island is selected
+                if (selectedUVIsslandIndices.Count > 0)
+                {
+                    GUI.enabled = uvTexturePreview != null;
+                    if (GUILayout.Button("Pick & Apply", GUILayout.Width(140)))
+                    {
+                        isPickingColor = true;
+                    }
+                    GUI.enabled = true;
+                }
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
         EditorGUI.BeginChangeCheck();
@@ -254,13 +271,20 @@ public class UVModWindow : EditorWindow
 
         Rect contentRect = new Rect(0, 0, viewRect.width * _zoom, viewRect.height * _zoom);
 
-        GUI.Box(viewRect, GUIContent.none);
+        if (isPickingColor)
+        {
+            EditorGUI.DrawRect(viewRect, new Color(0, 1, 1, 0.2f));
+            EditorGUIUtility.AddCursorRect(viewRect, MouseCursor.Arrow);
+        }
+        else
+        {
+            GUI.Box(viewRect, GUIContent.none);
+        }
 
         HandleEvents(viewRect, contentRect);
 
         _scrollPosition = GUI.BeginScrollView(viewRect, _scrollPosition, contentRect, true, true);
         {
-            // *** FIX #2: Calculate the actual texture display rect to handle aspect ratio ***
             Rect textureDisplayRect = CalculateAspectRatioRect(contentRect, uvTexturePreview);
 
             if (uvTexturePreview != null)
@@ -270,7 +294,6 @@ public class UVModWindow : EditorWindow
 
             if (workingUvs != null && workingUvs.Length > 0)
             {
-                // Draw all UVs relative to the correctly scaled textureDisplayRect
                 for (int i = 0; i < mesh.subMeshCount; i++)
                 {
                     int[] triangles = mesh.GetTriangles(i);
@@ -294,9 +317,25 @@ public class UVModWindow : EditorWindow
                 for (int index = 0; index < workingUvs.Length; index++)
                 {
                     Vector3 handlePos = ConvertUVToContentPos(workingUvs[index], textureDisplayRect);
-                    Handles.color = selectedUVIsslandIndices.Contains(index) ? Color.green : Color.cyan;
-                    // *** FIX #3: Correctly scale handles to appear consistent size ***
-                    Handles.DrawSolidDisc(handlePos, Vector3.forward, 3f); // Apparent size is now consistent
+
+                    Color handleColor;
+                    bool isSelected = selectedUVIsslandIndices.Contains(index);
+
+                    if (isSelected)
+                    {
+                        handleColor = Color.cyan;
+                    }
+                    else if (mesh.colors.Length == mesh.vertexCount && mesh.colors[index].a > 0)
+                    {
+                        handleColor = mesh.colors[index];
+                    }
+                    else
+                    {
+                        handleColor = Color.blue;
+                    }
+
+                    Handles.color = handleColor;
+                    Handles.DrawSolidDisc(handlePos, Vector3.forward, 3f);
                 }
             }
         }
@@ -305,7 +344,10 @@ public class UVModWindow : EditorWindow
         if (isDraggingSelectionRect)
         {
             Handles.BeginGUI();
-            Handles.DrawSolidRectangleWithOutline(selectionRect, new Color(0, 0.5f, 1, 0.2f), Color.cyan);
+            Handles.DrawSolidRectangleWithOutline(
+                selectionRect, 
+                new Color(0, 255.0f, 255.0f, 0.2f), 
+                new Color(0, 255.0f, 255.0f, 255.0f));
             Handles.EndGUI();
         }
     }
@@ -343,7 +385,6 @@ public class UVModWindow : EditorWindow
 
             if (eventType == EventType.MouseDown)
             {
-                // *** FIX #1: Check if click is on a scrollbar before doing anything else ***
                 bool isVerticalScrollbarVisible = contentRect.height > viewRect.height;
                 bool isHorizontalScrollbarVisible = contentRect.width > viewRect.width;
                 Rect verticalScrollbarRect = new Rect(viewRect.x + viewRect.width - GUI.skin.verticalScrollbar.fixedWidth, viewRect.y, GUI.skin.verticalScrollbar.fixedWidth, viewRect.height);
@@ -351,7 +392,6 @@ public class UVModWindow : EditorWindow
                 if ((isVerticalScrollbarVisible && verticalScrollbarRect.Contains(currentEvent.mousePosition)) ||
                     (isHorizontalScrollbarVisible && horizontalScrollbarRect.Contains(currentEvent.mousePosition)))
                 {
-                    // Let the ScrollView handle its own scrollbar drag
                     return;
                 }
 
@@ -366,6 +406,15 @@ public class UVModWindow : EditorWindow
 
                 if (currentEvent.button == 0)
                 {
+                    if (isPickingColor)
+                    {
+                        PickAndApplyVertexColor(currentEvent.mousePosition, viewRect, contentRect);
+                        isPickingColor = false;
+                        GUIUtility.hotControl = controlID;
+                        currentEvent.Use();
+                        return;
+                    }
+
                     GUIUtility.hotControl = controlID;
                     activeUVHandle = -1;
                     Rect textureDisplayRect = CalculateAspectRatioRect(contentRect, uvTexturePreview);
@@ -485,7 +534,47 @@ public class UVModWindow : EditorWindow
         }
     }
 
-    #region Coordinate Conversion Helpers
+    #region Coordinate Conversion and Color Picking
+
+    private void PickAndApplyVertexColor(Vector2 screenPos, Rect viewRect, Rect contentRect)
+    {
+        if (uvTexturePreview == null || selectedUVIsslandIndices.Count == 0) return;
+
+        if (!uvTexturePreview.isReadable)
+        {
+            EditorUtility.DisplayDialog("Texture Not Readable", "The texture '" + uvTexturePreview.name + "' is not marked as readable. Please enable 'Read/Write Enabled' in its import settings.", "OK");
+            return;
+        }
+
+        Rect textureDisplayRect = CalculateAspectRatioRect(contentRect, uvTexturePreview);
+        Vector2 pickedUV = ConvertScreenPosToUVPos(screenPos, viewRect, textureDisplayRect);
+
+        pickedUV.x = Mathf.Clamp01(pickedUV.x);
+        pickedUV.y = Mathf.Clamp01(pickedUV.y);
+
+        selectedVertexColor = uvTexturePreview.GetPixelBilinear(pickedUV.x, pickedUV.y);
+
+        Color[] vertexColors = mesh.colors;
+        if (vertexColors.Length != mesh.vertexCount)
+        {
+            vertexColors = new Color[mesh.vertexCount];
+            for (int i = 0; i < vertexColors.Length; i++) vertexColors[i] = Color.white;
+        }
+
+        Undo.RecordObject(mesh, "Apply Vertex Color");
+
+        foreach (int vertIndex in selectedUVIsslandIndices)
+        {
+            if (vertIndex < vertexColors.Length)
+            {
+                vertexColors[vertIndex] = selectedVertexColor;
+            }
+        }
+
+        mesh.colors = vertexColors;
+        EditorUtility.SetDirty(mesh);
+        Repaint();
+    }
 
     private Rect CalculateAspectRatioRect(Rect container, Texture2D texture)
     {
@@ -496,12 +585,12 @@ public class UVModWindow : EditorWindow
 
         Rect result = new Rect(container);
 
-        if (containerAspect > textureAspect) // Container is wider than texture
+        if (containerAspect > textureAspect)
         {
             result.width = container.height * textureAspect;
             result.x = container.x + (container.width - result.width) / 2f;
         }
-        else // Container is taller than texture
+        else
         {
             result.height = container.width / textureAspect;
             result.y = container.y + (container.height - result.height) / 2f;
@@ -514,7 +603,6 @@ public class UVModWindow : EditorWindow
         Vector2 localPos = screenPos - viewRect.position;
         Vector2 posInContent = localPos + _scrollPosition;
 
-        // Convert to position relative to the texture's top-left corner
         Vector2 posInTexture = posInContent - textureDisplayRect.position;
 
         return new Vector2(posInTexture.x / textureDisplayRect.width, 1 - posInTexture.y / textureDisplayRect.height);

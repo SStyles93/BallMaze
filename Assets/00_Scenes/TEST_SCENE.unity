@@ -508,6 +508,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brazier_Model01_001
       objectReference: {fileID: 0}
+    - target: {fileID: 2092660183683516350, guid: 1a21732c004f1bb489e700b7210869e5, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 2196462581457907491, guid: 40cd71f459c03c04e82dbd63da032715, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
