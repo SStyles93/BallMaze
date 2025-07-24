@@ -3,7 +3,9 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-public static class UVMod_Events
+namespace PxP.Tools
+{
+    public static class UVMod_Events
 {
     public static void HandleEvents(UVModWindow window, UVMod_Data data, Rect viewRect, Rect contentRect)
     {
@@ -194,4 +196,5 @@ public static class UVMod_Events
             currentEvent.Use();
         }
     }
+}
 }
