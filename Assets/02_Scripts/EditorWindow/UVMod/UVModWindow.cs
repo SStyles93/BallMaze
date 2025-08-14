@@ -1,13 +1,12 @@
 using UnityEditor;
 using UnityEngine;
 
-
 namespace PxP.Tools
 {
     public class UVModWindow : EditorWindow
     {
-        // The central data container for the entire tool.
         public UVMod_Data Data { get; private set; }
+        public SerializedObject SerializedData { get; private set; }
 
         [MenuItem("PxPTools/UV Editor")]
         public static void ShowWindow()
@@ -17,37 +16,73 @@ namespace PxP.Tools
 
         private void OnEnable()
         {
-            // Initialize the data container when the window is enabled.
-            Data = new UVMod_Data();
+            if (Data == null)
+            {
+                Data = ScriptableObject.CreateInstance<UVMod_Data>();
+                SerializedData = new SerializedObject(Data);
+            }
             Selection.selectionChanged += OnSelectionChange;
-            OnSelectionChange(); // Initial setup
+            Undo.undoRedoPerformed += OnUndoRedo; // Repaint on Undo/Redo
+            OnSelectionChange();
         }
 
         private void OnDisable()
         {
             Selection.selectionChanged -= OnSelectionChange;
+            Undo.undoRedoPerformed -= OnUndoRedo;
+
+            if (Data != null)
+            {
+                DestroyImmediate(Data);
+            }
         }
 
-        /// <summary>
-        /// Handles selection changes by delegating to the data class.
-        /// </summary>
         private void OnSelectionChange()
         {
-            Data.LoadDataFromSelection(Selection.activeGameObject);
+            GameObject selectedObject = Selection.activeGameObject;
+            if (selectedObject != null && (Data.SelectedGameObject != selectedObject))
+            {
+                Data.LoadDataFromSelection(selectedObject);
+                SerializedData = new SerializedObject(Data); // Re-create SerializedObject for the new data
+            }
+            else if (selectedObject == null)
+            {
+                Data.LoadDataFromSelection(null);
+                SerializedData = new SerializedObject(Data);
+            }
             Repaint();
         }
 
-        /// <summary>
-        /// The main OnGUI loop, which delegates drawing to the specialized GUI class.
-        /// </summary>
+        private void OnUndoRedo()
+        {
+            // When an undo or redo is performed, re-read the data from the serialized object
+            // and apply changes if necessary.
+            if (SerializedData != null)
+            {
+                SerializedData.Update();
+                if (Data.Mesh != null)
+                {
+                    UVMod_Actions.ApplyIslandTransforms(Data);
+                    UVMod_Actions.ApplyGlobalUVChanges(Data);
+                }
+            }
+            Repaint();
+        }
+
         void OnGUI()
         {
-            UVMod_GUI.DrawSettingsGUI(this, Data);
+            if (SerializedData == null) return;
 
+            SerializedData.Update(); // Always start with updating the serialized object
+
+            UVMod_GUI.DrawSettingsGUI(this, Data, SerializedData);
             EditorGUILayout.Space();
-            GUILayout.Label("Visual UV Editor", EditorStyles.boldLabel);
 
+            GUILayout.Label("Visual UV Editor", EditorStyles.boldLabel);
             UVMod_GUI.DrawUvEditorArea(this, Data);
+
+            // Apply changes at the end of the GUI loop
+            SerializedData.ApplyModifiedProperties();
         }
     }
 }

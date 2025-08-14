@@ -5,54 +5,51 @@ using System.Linq;
 
 namespace PxP.Tools
 {
-    public class UVMod_Data
+    public class UVMod_Data : ScriptableObject
     {
         // --- Mesh and UV Data ---
-        public GameObject SelectedGameObject { get; private set; }
-        public MeshFilter MeshFilter { get; private set; }
-        public Mesh Mesh { get; private set; }
-        public Vector2[] InitialUvs { get; private set; }
-        public Vector2[] WorkingUvs { get; set; } // Public setter for modification
-        public Dictionary<int, Vector2> DragStartIslandUVs { get; set; }
+        public GameObject SelectedGameObject;
+        public MeshFilter MeshFilter;
+        public Mesh Mesh;
+        public Vector2[] InitialUvs;
+        public Vector2[] WorkingUvs;
+        public Dictionary<int, Vector2> DragStartIslandUVs;
 
         // --- Transform States ---
-        public Vector2 UvOffset { get; set; } = Vector2.zero;
-        public Vector2 UvScale { get; set; } = Vector2.one;
-        public Vector2 IslandTransformOffset { get; set; } = Vector2.zero;
-        public Vector2 IslandTransformScale { get; set; } = Vector2.one;
-        public Dictionary<int, Vector2> SelectionStartUVs { get; set; }
-        public Vector2 SelectionCenter { get; set; }
+        public Vector2 UvOffset = Vector2.zero;
+        public Vector2 UvScale = Vector2.one;
+        public Vector2 IslandTransformOffset = Vector2.zero;
+        public Vector2 IslandTransformScale = Vector2.one;
+        public Dictionary<int, Vector2> SelectionStartUVs;
+        public Vector2 SelectionCenter;
 
         // --- UV Modification Settings ---
-        public int SelectedUVChannel { get; set; } = 0;
-        public int SelectedSubmeshIndex { get; set; } = -1;
-        public Color SelectedVertexColor { get; set; } = Color.white;
-        public bool UseVertexColorFilter { get; set; } = false;
+        public int SelectedUVChannel = 0;
+        public int SelectedSubmeshIndex = -1;
+        public Color SelectedVertexColor = Color.white;
+        public bool UseVertexColorFilter = false;
 
         // --- UV Editor State ---
-        public Texture2D UvTexturePreview { get; private set; }
-        public List<List<int>> UvIslands { get; private set; }
-        public List<int> SelectedUVIsslandIndices { get; set; } = new List<int>();
+        public Texture2D UvTexturePreview;
+        public List<List<int>> UvIslands;
+        public List<int> SelectedUVIsslandIndices = new List<int>();
 
         // --- Interaction State ---
-        public int ActiveUVHandle { get; set; } = -1;
-        public Vector2 DragStartMousePos { get; set; }
-        public bool IsDraggingSelectionRect { get; set; } = false;
-        public Rect SelectionRect { get; set; }
-        public Vector2 SelectionRectStartPos { get; set; }
-        public bool IsPickingColor { get; set; } = false;
+        public int ActiveUVHandle = -1;
+        public Vector2 DragStartMousePos;
+        public bool IsDraggingSelectionRect = false;
+        public Rect SelectionRect;
+        public Vector2 SelectionRectStartPos;
+        public bool IsPickingColor = false;
 
         // --- Viewport Pan and Zoom State ---
-        public float Zoom { get; set; } = 1.0f;
-        public Vector2 ScrollPosition { get; set; } = Vector2.zero;
-        public bool IsPanning { get; set; } = false;
-        public Vector2 PanStartMousePos { get; set; }
+        public float Zoom = 1.0f;
+        public Vector2 ScrollPosition = Vector2.zero;
+        public bool IsPanning = false;
+        public Vector2 PanStartMousePos;
         public const float MinZoom = 0.1f;
         public const float MaxZoom = 20.0f;
 
-        /// <summary>
-        /// Loads all necessary data from the newly selected GameObject.
-        /// </summary>
         public void LoadDataFromSelection(GameObject newSelection)
         {
             if (Mesh != null && InitialUvs != null && WorkingUvs != null && !Enumerable.SequenceEqual(InitialUvs, WorkingUvs))
@@ -69,23 +66,15 @@ namespace PxP.Tools
             InitializeData();
         }
 
-        /// <summary>
-        /// Overrides the current's object mesh
-        /// </summary>
         public void OverrideMesh()
         {
             if (EditorUtility.DisplayDialog("UV Data Override",
                     "You are about to save UV modifications done to the current object. Are you sure you want to apply changes", "Override", "Revert"))
             {
-                ResetData();
                 InitializeData();
             }
         }
 
-        /// <summary>
-        /// Resets the UVs of the current mesh.
-        /// Current UVs = Initial UVs
-        /// </summary>
         public void ResetUVs()
         {
             if (InitialUvs == null || Mesh == null) return;
@@ -94,14 +83,9 @@ namespace PxP.Tools
             EditorUtility.SetDirty(Mesh);
             UvOffset = Vector2.zero;
             UvScale = Vector2.one;
-            SelectedUVIsslandIndices = new List<int>();
+            SelectedUVIsslandIndices.Clear();
         }
 
-        /// <summary>
-        /// Loads the UVs from the currently selected UV channel
-        /// </summary>
-        /// <param name="channel">The selected UV channel</param>
-        /// <param name="resetInitial">When True:Sets the Initial UVs to the current ones</param>
         public void LoadUVsFromChannel(int channel, bool resetInitial = false)
         {
             if (Mesh == null) return;
@@ -114,9 +98,6 @@ namespace PxP.Tools
             WorkingUvs = tempUvs.ToArray();
         }
 
-        /// <summary>
-        /// Algorithm to detect the different UV Islands
-        /// </summary>
         public void DetectUVIsslands()
         {
             UvIslands = new List<List<int>>();
@@ -164,9 +145,6 @@ namespace PxP.Tools
             }
         }
 
-        /// <summary>
-        /// Resets the current Data of the UVMod_Data
-        /// </summary>
         private void ResetData()
         {
             MeshFilter = null;
@@ -187,12 +165,8 @@ namespace PxP.Tools
             IsPickingColor = false;
             Zoom = 1.0f;
             ScrollPosition = Vector2.zero;
-
         }
 
-        /// <summary>
-        /// Initializes the data of the currently selected object
-        /// </summary>
         private void InitializeData()
         {
             if (SelectedGameObject != null)

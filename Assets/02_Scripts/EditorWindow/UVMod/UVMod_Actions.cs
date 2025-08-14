@@ -101,6 +101,8 @@ namespace PxP.Tools
         {
             if (data.Mesh == null || data.InitialUvs == null) return;
 
+            Undo.RecordObject(data.Mesh, "Apply Global UV Changes");
+
             data.WorkingUvs = (Vector2[])data.InitialUvs.Clone();
 
             List<int> affectedIndices = new List<int>();
@@ -163,6 +165,8 @@ namespace PxP.Tools
         {
             if (data.SelectionStartUVs == null) return;
 
+            Undo.RecordObject(data.Mesh, "Transform UV Islands");
+
             foreach (var kvp in data.SelectionStartUVs)
             {
                 int index = kvp.Key;
@@ -188,6 +192,9 @@ namespace PxP.Tools
         public static void ResetIslandTransforms(UVMod_Data data)
         {
             if (data.SelectionStartUVs == null) return;
+
+            Undo.RecordObject(data.Mesh, "Reset Island Transforms");
+
             foreach (var kvp in data.SelectionStartUVs)
             {
                 data.WorkingUvs[kvp.Key] = kvp.Value;
@@ -206,7 +213,6 @@ namespace PxP.Tools
             if (string.IsNullOrEmpty(path) || !AssetDatabase.IsMainAsset(data.Mesh))
             {
                 path = EditorUtility.SaveFilePanelInProject("Save Modified Mesh", data.SelectedGameObject.name + "_Modified", "asset", "Save the modified mesh.");
-                //Save file did not conclude
                 if (string.IsNullOrEmpty(path)) return false;
 
                 Mesh newMesh = Object.Instantiate(data.Mesh);

@@ -5,7 +5,7 @@ namespace PxP.Tools
 {
     public static class UVMod_GUI
     {
-        public static void DrawSettingsGUI(UVModWindow window, UVMod_Data data)
+        public static void DrawSettingsGUI(UVModWindow window, UVMod_Data data, SerializedObject serializedData)
         {
             GUILayout.Label("UV Editor Window", EditorStyles.boldLabel);
             EditorGUILayout.HelpBox("Select a 3D model. Use Scroll Wheel to Zoom. Use Scrollbars or Middle-Mouse-Drag to Pan.", MessageType.Info);
@@ -16,17 +16,17 @@ namespace PxP.Tools
             // --- Global Controls ---
             if (data.SelectedUVIsslandIndices.Count == 0)
             {
-                GUI.enabled = data.SelectedUVIsslandIndices.Count == 0;
+                GUI.enabled = true;
                 EditorGUILayout.Space();
                 GUILayout.Label("Global UV Modification", EditorStyles.boldLabel);
                 EditorGUI.BeginChangeCheck();
-                data.UvOffset = EditorGUILayout.Vector2Field("UV Offset", data.UvOffset);
-                data.UvScale = EditorGUILayout.Vector2Field("UV Scale", data.UvScale);
+                EditorGUILayout.PropertyField(serializedData.FindProperty("UvOffset"), new GUIContent("UV Offset"));
+                EditorGUILayout.PropertyField(serializedData.FindProperty("UvScale"), new GUIContent("UV Scale"));
                 if (EditorGUI.EndChangeCheck())
                 {
+                    serializedData.ApplyModifiedProperties();
                     UVMod_Actions.ApplyGlobalUVChanges(data);
                 }
-                GUI.enabled = true;
             }
             // --- Per-Island Controls ---
             else
@@ -35,11 +35,12 @@ namespace PxP.Tools
                 GUI.color = Color.cyan;
                 GUILayout.Label("Islands UV Modification", EditorStyles.boldLabel);
                 EditorGUI.BeginChangeCheck();
-                data.IslandTransformOffset = EditorGUILayout.Vector2Field("UV Offset", data.IslandTransformOffset);
-                data.IslandTransformScale = EditorGUILayout.Vector2Field("UV Scale", data.IslandTransformScale);
+                EditorGUILayout.PropertyField(serializedData.FindProperty("IslandTransformOffset"), new GUIContent("UV Offset"));
+                EditorGUILayout.PropertyField(serializedData.FindProperty("IslandTransformScale"), new GUIContent("UV Scale"));
                 GUI.color = Color.white;
                 if (EditorGUI.EndChangeCheck())
                 {
+                    serializedData.ApplyModifiedProperties();
                     UVMod_Actions.ApplyIslandTransforms(data);
                 }
 
@@ -52,30 +53,36 @@ namespace PxP.Tools
             EditorGUILayout.Space();
             GUILayout.Label("Settings & Tools", EditorStyles.boldLabel);
 
-            data.SelectedUVChannel = EditorGUILayout.IntSlider("UV Channel", data.SelectedUVChannel, 0, 7);
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(serializedData.FindProperty("SelectedUVChannel"), new GUIContent("UV Channel"));
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedData.ApplyModifiedProperties();
+                data.LoadUVsFromChannel(data.SelectedUVChannel, true);
+                data.DetectUVIsslands();
+            }
+
             if (data.Mesh.subMeshCount > 1)
             {
                 string[] submeshOptions = new string[data.Mesh.subMeshCount + 1];
                 submeshOptions[0] = "All Submeshes";
                 for (int i = 0; i < data.Mesh.subMeshCount; i++) submeshOptions[i + 1] = "Submesh " + i;
-                data.SelectedSubmeshIndex = EditorGUILayout.Popup("Target Submesh", data.SelectedSubmeshIndex + 1, submeshOptions) - 1;
+                EditorGUILayout.PropertyField(serializedData.FindProperty("SelectedSubmeshIndex"), new GUIContent("Target Submesh"));
             }
 
-            data.UseVertexColorFilter = EditorGUILayout.Toggle("Filter by Vertex Color", data.UseVertexColorFilter);
+            EditorGUILayout.PropertyField(serializedData.FindProperty("UseVertexColorFilter"), new GUIContent("Filter by Vertex Color"));
             if (data.UseVertexColorFilter)
             {
                 EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.PropertyField(serializedData.FindProperty("SelectedVertexColor"), new GUIContent("Target Vertex Color"));
+                if (data.SelectedUVIsslandIndices.Count > 0)
                 {
-                    data.SelectedVertexColor = EditorGUILayout.ColorField("Target Vertex Color", data.SelectedVertexColor);
-                    if (data.SelectedUVIsslandIndices.Count > 0)
+                    GUI.enabled = data.UvTexturePreview != null;
+                    if (GUILayout.Button("Pick & Apply Color", GUILayout.Width(140)))
                     {
-                        GUI.enabled = data.UvTexturePreview != null;
-                        if (GUILayout.Button("Pick & Apply Color", GUILayout.Width(140)))
-                        {
-                            data.IsPickingColor = true;
-                        }
-                        GUI.enabled = true;
+                        data.IsPickingColor = true;
                     }
+                    GUI.enabled = true;
                 }
                 EditorGUILayout.EndHorizontal();
             }
@@ -99,7 +106,7 @@ namespace PxP.Tools
             if (data.IsPickingColor)
             {
                 EditorGUI.DrawRect(viewRect, new Color(0, 1, 1, 0.2f));
-                EditorGUIUtility.AddCursorRect(viewRect, MouseCursor.Arrow);
+                EditorGUIUtility.AddCursorRect(viewRect, MouseCursor.Orbit);
             }
             else
             {
