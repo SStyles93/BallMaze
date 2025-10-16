@@ -375,7 +375,7 @@ namespace PxP.DungeonForge
 
 
         /// <summary>
-        /// Savec the currently displayed map
+        /// Save the currently displayed map
         /// </summary>
         /// <param name="invertLines">if true inverts the Y writing order (starts at the bottom-left)(</param>
         public static void SaveMap(bool invertLines = false, bool isDataPersistent = false)

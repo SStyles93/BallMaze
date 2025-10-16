@@ -11,16 +11,16 @@ public class LineDrawer : MonoBehaviour
 
     private void OnEnable()
     {
-        Controler.TouchStarted += SetLineStartPosition;
-        Controler.TouchPerformed += SetLineEndPosition;
-        Controler.TouchStopped += DisableLine;
+        //Controler.TouchStarted += SetLineStartPosition;
+        //Controler.TouchPerformed += SetLineEndPosition;
+        //Controler.TouchStopped += DisableLine;
     }
 
     private void OnDisable()
     {
-        Controler.TouchStarted -= SetLineStartPosition;
-        Controler.TouchPerformed -= SetLineEndPosition;
-        Controler.TouchStopped -= DisableLine;
+        //Controler.TouchStarted -= SetLineStartPosition;
+        //Controler.TouchPerformed -= SetLineEndPosition;
+        //Controler.TouchStopped -= DisableLine;
     }
 
     private void Awake()
