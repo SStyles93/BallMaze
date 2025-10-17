@@ -39,6 +39,9 @@ jobs:
     outputs:
       sanitized_name: ${{ steps.sanitize.outputs.sanitized_name }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Run Project Name Sanitizer
         id: sanitize
         uses: ./.github/actions/resolve-project-name
