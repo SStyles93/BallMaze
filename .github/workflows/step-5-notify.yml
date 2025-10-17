@@ -59,6 +59,9 @@ jobs:
           path: deploy-results
           merge-multiple: true
 
+      - name:  checkout repository
+        uses: actions/checkout@v4
+
       - name: Generate Notification
         id: generate_notification
         uses: ./.github/actions/generate-notification

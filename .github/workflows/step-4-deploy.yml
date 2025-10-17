@@ -85,6 +85,10 @@ jobs:
       PROJECT_DIR: ${{ inputs.projectName }}-${{ inputs.buildVersion }}
       ARTIFACT_DIR: deployment-artifacts/${{ inputs.projectName }}-${{ inputs.buildVersion }}
     steps:
+
+      - name:  checkout repository
+        uses: actions/checkout@v4
+
       - name: 📥 Retrieve Artifacts from Release
         uses: ./.github/actions/download-from-release
         with:
