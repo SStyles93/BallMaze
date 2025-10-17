@@ -38,6 +38,10 @@ on:
         required: false
   # Automatically run tests & builds on certain branches or PR changes
   push:
+  # Use Only the MAIN branch to build
+    branches:
+      - main
+
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'            # matches v1.2.3
       - 'v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'  # matches v1.2.3-rc.1
@@ -135,11 +139,11 @@ jobs:
       runnerMain: ${{ needs.resolve_runners.outputs.main }}
       unityVersion: ${{ vars.UNITY_VERSION }}
       projectName: ${{ vars.PROJECT_NAME }}
-      skipTests: ${{ inputs.skipTests }}
-      deployTargets: ${{ inputs.deployTargets }}
-      buildTargets: ${{ inputs.buildTargets }}
-      buildType: ${{ inputs.buildType }}
-      buildVersion: ${{ inputs.buildVersion }}
+      skipTests: ${{ github.event_name == 'workflow_dispatch' && inputs.skipTests || 'false' }}
+      deployTargets: ${{ github.event_name == 'workflow_dispatch' && inputs.deployTargets || '[]' }} # e.g., don't deploy on push
+      buildTargets: ${{ github.event_name == 'workflow_dispatch' && inputs.buildTargets || '["WebGL"]' }} # Default build
+      buildType: ${{ github.event_name == 'workflow_dispatch' && inputs.buildType || 'preview' }}
+      buildVersion: ${{ github.event_name == 'workflow_dispatch' && inputs.buildVersion || '' }}
 
   tagging:
     name: Create or Verify Tag
