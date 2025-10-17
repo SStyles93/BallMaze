@@ -109,7 +109,7 @@ jobs:
 
       - name: ⏳ Prepare Metadata
         id: metadata
-        uses: ./.github/actions/prepare-metadata@main
+        uses: ./.github/actions/prepare-metadata
         with:
           artifactSource: build
           projectNameInput: ${{ inputs.projectName }}
@@ -157,13 +157,13 @@ jobs:
 
       - name: 🔍 Detect Tests-Only Mode
         id: tests_only
-        uses: ./.github/actions/detect-tests-only@main
+        uses: ./.github/actions/detect-tests-only
         with:
           testsOnlyInput: ${{ inputs.testsOnly }}
 
       - name: 🔍 Detect Skip Tests Flag
         id: skip_tests
-        uses: ./.github/actions/detect-skip-tests@main
+        uses: ./.github/actions/detect-skip-tests
         with:
           skipTestsInput: ${{ inputs.skipTests }}
           skipTestsRepoVar: ${{ steps.metadata.outputs.excludeUnityTests }}

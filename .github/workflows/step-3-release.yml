@@ -59,13 +59,13 @@ jobs:
 
       - name: 📝 Create GitHub Release
         id: create_release
-        uses: ./.github/actions/create-release@main
+        uses: ./.github/actions/create-release
         with:
           version: ${{ inputs.buildVersion }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🧮 Upload Per-Platform Artifacts
-        uses: ./.github/actions/upload-per-build-target-artifacts@main
+        uses: ./.github/actions/upload-per-build-target-artifacts
         with:
           project: ${{ inputs.projectName }}
           version: ${{ inputs.buildVersion }}

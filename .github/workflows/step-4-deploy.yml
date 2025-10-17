@@ -86,7 +86,7 @@ jobs:
       ARTIFACT_DIR: deployment-artifacts/${{ inputs.projectName }}-${{ inputs.buildVersion }}
     steps:
       - name: 📥 Retrieve Artifacts from Release
-        uses: ./.github/actions/download-from-release@main
+        uses: ./.github/actions/download-from-release
         with:
           projectName: ${{ inputs.projectName }}
           version: ${{ inputs.buildVersion }}
@@ -105,7 +105,7 @@ jobs:
 
       - name: 📥 Retrieve Artifacts from Build (Per-Build-Target)
         if: ${{ inputs.artifactSource == 'build' && inputs.hasCombinedArtifacts == 'false' }}
-        uses: ./.github/actions/download-per-build-target-artifacts-from-build@main
+        uses: ./.github/actions/download-per-build-target-artifacts-from-build
         with:
           artifactDir: ${{ env.ARTIFACT_DIR }}
           projectName: ${{ inputs.projectName }}
@@ -116,7 +116,7 @@ jobs:
 
       - name: 🛠️ Normalize Artifact Layout (Release Per-Build-Target Only)
         if: ${{ inputs.artifactSource == 'release' && inputs.hasCombinedArtifacts == 'false' }}
-        uses: ./.github/actions/normalize-artifact-layout@main
+        uses: ./.github/actions/normalize-artifact-layout
         with:
           artifactDir: ${{ env.ARTIFACT_DIR }}
 
@@ -134,13 +134,13 @@ jobs:
 
       - name: 🔎 Detect WebGL Compression Format
         id: detect-compression
-        uses: ./.github/actions/detect-webgl-compression@main
+        uses: ./.github/actions/detect-webgl-compression
         with:
           artifactDir: ${{ env.ARTIFACT_DIR }}
 
       - name: 🩹 Patch & Decompress Unity WebGL for GitHub Pages
         if: ${{ matrix.target == 'gh-pages' && steps.detect-compression.outputs.needs_patch == 'true' }}
-        uses: ./.github/actions/patch-webgl-for-gh-pages@main
+        uses: ./.github/actions/patch-webgl-for-gh-pages
         with:
           artifactDir: ${{ env.ARTIFACT_DIR }}
 

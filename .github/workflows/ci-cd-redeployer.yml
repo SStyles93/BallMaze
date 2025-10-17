@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Run Project Name Sanitizer
         id: sanitize
-        uses: ./.github/actions/resolve-project-name@main
+        uses: ./.github/actions/resolve-project-name
         with:
           projectNameInput: ${{ vars.PROJECT_NAME }}
 
