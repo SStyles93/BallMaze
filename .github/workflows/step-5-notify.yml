@@ -61,7 +61,7 @@ jobs:
 
       - name: Generate Notification
         id: generate_notification
-        uses: ./.github/actions/generate-notification@v1
+        uses: ./.github/actions/generate-notification
         with:
           releaseResult: ${{ inputs.releaseResult }}
           releaseErrorMessage: ${{ inputs.releaseErrorMessage }}
