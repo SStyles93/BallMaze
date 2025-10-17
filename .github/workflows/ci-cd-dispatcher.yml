@@ -66,6 +66,9 @@ jobs:
       main: ${{ steps.resolve.outputs.main }}
       macos: ${{ steps.resolve.outputs.macos }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Resolve runners
         id: resolve
         uses: ./.github/actions/resolve-runners
