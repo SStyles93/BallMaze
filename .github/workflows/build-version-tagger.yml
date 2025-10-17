@@ -40,6 +40,14 @@ jobs:
       tag_existed: ${{ steps.tag_exists.outputs.exists }}
 
     steps:
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch all history and tags to be able to check if a tag exists
+          fetch-depth: 0 
+          token: ${{ github.token }} 
+
       - name: Check if Tag Exists
         id: tag_exists
         uses: ./.github/actions/check-tag-exists
