@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00_Scenes/BallMaze.unity
+    path: Assets/0_Scenes/BallMaze.unity
     guid: 01978b206e52dd346b44ae7588f35db8
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b369852d9e5a62c42aaedf664ffbd4ec, type: 2}
