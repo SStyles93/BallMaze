@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class PathGeneratorManager : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class PathGeneratorManager : MonoBehaviour
 
     CellType[,] cells;
     public CellType[,] Cells => cells;
+
+    public static event Action OnGenerationFinished;
 
     private void Awake()
     {
@@ -45,6 +48,8 @@ public class PathGeneratorManager : MonoBehaviour
         GameObject floor = floorPrefab;
         Vector3 scale = floor.transform.localScale;
         scale.y = generationParams.MapDepth;
+        scale.x = generationParams.PathWidth;
+        scale.z = generationParams.PathWidth;
         floor.transform.localScale = scale;
 
         for (int x = 0; x < cells.GetLength(0); x++)
@@ -74,6 +79,7 @@ public class PathGeneratorManager : MonoBehaviour
                 }
             }
         }
+        OnGenerationFinished?.Invoke();
     }
 
     /// <summary>

@@ -18,8 +18,6 @@ public class PathGenerator
     {
         // 1. Initialization
         this.p = parameters;
-        // NEW: Ensure PathWidth is at least 1
-        if (this.p.PathWidth < 1) this.p.PathWidth = 1;
         this.step = p.Spacing + 1;
         if (p.Seed != -1) random = new System.Random(p.Seed);
         else random = new System.Random((int)System.DateTime.Now.Ticks);
@@ -59,23 +57,17 @@ public class PathGenerator
         }
 
         // --- Finalization ---
-        // MODIFIED: Use CarveThickPath for start and end points to ensure they are also widened.
-        CarveThickPath(startPos, CellType.Start);
+        // REVERTED: Simple single-cell placement for start and end points.
+        grid[startPos.x, startPos.y] = CellType.Start;
         if (IsWithinBounds(endPos))
         {
-            CarveThickPath(endPos, CellType.End);
+            grid[endPos.x, endPos.y] = CellType.End;
         }
-
-        // Ensure the exact start/end points are marked correctly over any widened path
-        grid[startPos.x, startPos.y] = CellType.Start;
-        if (IsWithinBounds(endPos)) grid[endPos.x, endPos.y] = CellType.End;
-
 
         return grid;
     }
 
-    // --- Core Path Generation & Carving Methods (Unchanged) ---
-    // The logic of *finding* the path is the same. Only the carving methods below are changed.
+    // --- Core Path Generation Methods (Unchanged) ---
     private void GenerateRandomizedSolutionPath()
     {
         var current = startPos;
@@ -252,49 +244,25 @@ public class PathGenerator
 
     private bool IsWithinBounds(Vector2Int pos) => pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y;
 
-    // --- MODIFIED & NEW Carving Methods ---
-
-    // MODIFIED: This is now a simple wrapper around the new CarveThickPath method.
+    // REVERTED: CarvePath now only carves a single cell.
     private void CarvePath(Vector2Int pos)
     {
-        CarveThickPath(pos, CellType.Path);
+        if (IsWithinBounds(pos) && grid[pos.x, pos.y] == CellType.Wall)
+        {
+            grid[pos.x, pos.y] = CellType.Path;
+        }
     }
 
-    // MODIFIED: This now calls CarveThickPath for every point along the line.
     private void CarvePathBetween(Vector2Int from, Vector2Int to)
     {
         Vector2Int diff = to - from;
         Vector2Int dir = new Vector2Int(Mathf.Clamp(diff.x, -1, 1), Mathf.Clamp(diff.y, -1, 1));
         int distance = (int)Mathf.Max(Mathf.Abs(diff.x), Mathf.Abs(diff.y));
+        Vector2Int current = from; // Start carving from the 'from' position
         for (int i = 0; i <= distance; i++)
         {
-            CarveThickPath(from + dir * i, CellType.Path);
-        }
-    }
-
-    // NEW: This is the core method for creating wide paths.
-    // It carves a square of cells around a central point.
-    private void CarveThickPath(Vector2Int center, CellType type)
-    {
-        // PathWidth=1 -> radius=0 (1x1 square)
-        // PathWidth=2 -> radius=1 (3x3 square)
-        // PathWidth=3 -> radius=2 (5x5 square)
-        int radius = p.PathWidth - 1;
-
-        for (int x = -radius; x <= radius; x++)
-        {
-            for (int y = -radius; y <= radius; y++)
-            {
-                Vector2Int pointToCarve = center + new Vector2Int(x, y);
-                if (IsWithinBounds(pointToCarve))
-                {
-                    // Only carve if it's a wall. Don't overwrite existing Start/End points.
-                    if (grid[pointToCarve.x, pointToCarve.y] == CellType.Wall)
-                    {
-                        grid[pointToCarve.x, pointToCarve.y] = type;
-                    }
-                }
-            }
+            CarvePath(current);
+            current += dir; // Move to the next cell in the line
         }
     }
 
