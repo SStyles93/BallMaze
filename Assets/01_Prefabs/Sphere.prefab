@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5788141387175152010}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -303,6 +303,7 @@ MonoBehaviour:
   movementForce: 10
   jumpForceMode: 1
   jumpForce: 15
+  gravityScale: 3
   groundedLayerMask:
     serializedVersion: 2
     m_Bits: 32768
