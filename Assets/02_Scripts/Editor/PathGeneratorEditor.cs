@@ -38,6 +38,7 @@ public class PathGeneratorEditor : EditorWindow
         EditorGUILayout.LabelField("Map Size", EditorStyles.miniBoldLabel);
         activeManager.generationParams.MaxX = EditorGUILayout.IntSlider("MaxX", activeManager.generationParams.MaxX, 10, 200);
         activeManager.generationParams.MaxZ = EditorGUILayout.IntSlider("MaxX", activeManager.generationParams.MaxZ, 10, 200);
+        activeManager.generationParams.MapDepth = EditorGUILayout.IntSlider("Map Depth", activeManager.generationParams.MapDepth, 1, 100);
 
         EditorGUILayout.Space(5);
         EditorGUILayout.LabelField("Path Setup", EditorStyles.miniBoldLabel);

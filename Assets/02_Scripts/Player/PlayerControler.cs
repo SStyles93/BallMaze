@@ -45,6 +45,8 @@ public class PlayerControler : MonoBehaviour
     /// </summary>
     public static event Action OnJumpPerformed;
 
+    public static event Action<string> OnControlsChanged;
+
     private void Awake()
     {
         if(playerInput == null)
@@ -78,6 +80,11 @@ public class PlayerControler : MonoBehaviour
             OnJumpPerformed?.Invoke();
             //Debug.Log(ctx.ReadValue<float>());
         }
+    }
+
+    public void ControlsChanged(PlayerInput input)
+    {
+        OnControlsChanged?.Invoke(input.currentControlScheme);
     }
 
     #region Touch

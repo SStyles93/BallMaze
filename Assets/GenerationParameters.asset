@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: GenerationParameters
   m_EditorClassIdentifier: 
   Seed: -1
-  StartPos: {x: 10, y: 0}
+  StartPos: {x: 20, y: 0}
   PlaceEndManually: 0
   EndPos: {x: 0, y: 0}
   MinEndDistance: 0
-  Spacing: 3
+  Spacing: 5
   PathDensity: 50
   PathTwistiness: 50
+  PathWidth: 2
   AllowBranching: 0
-  MaxX: 20
-  MaxZ: 20
+  MaxX: 40
+  MaxZ: 40
+  MapDepth: 1

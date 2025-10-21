@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
         // Apply movement with force
         playerRigidbody.AddForce(movement * movementForce, movementForceMode);
         
-        Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
+        //Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isGrounded) return;
         isGrounded = false;
         playerRigidbody.AddForce(Vector3.up * jumpForce, jumpForceMode);
-        Debug.Log($"Force Applied up with {jumpForce} force, and {movementForceMode.ToString()}");
+        //Debug.Log($"Force Applied up with {jumpForce} force, and {movementForceMode.ToString()}");
     }
 
     private void OnCollisionEnter(Collision collision)
