@@ -14,6 +14,7 @@ public class SceneDatabase : MonoBehaviour
         Null = -1,
         Core,
         MainMenu,
-        Level
+        GamesMenu,
+        Games
     }
 }

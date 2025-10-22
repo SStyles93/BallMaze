@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public void OpenSavedGamesMenu()
+    public void OpenGamesMenu()
     {
         SceneController.Instance
             .NewTransition()
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.Null)
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
             .Unload(SceneDatabase.Scenes.MainMenu)
+            .WithOverlay()
             .Perform();
     }
 

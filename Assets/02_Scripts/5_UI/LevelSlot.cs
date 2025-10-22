@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SessionSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
+public class LevelSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Image slotBackground;
     [SerializeField] private Image slotImage;
@@ -11,7 +11,7 @@ public class SessionSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHand
 
     private string sessionID;
 
-    public void InitializeSessionSlot()
+    public void InitializeLevelSlot()
     {
         
     }
