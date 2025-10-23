@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72d4bfaef8b7e24b9753009aec88ba6, type: 3}
   m_Name: LevelsPcgData
   m_EditorClassIdentifier: 
-  levelParameters: []
+  levelParameters:
+  - Seed: 42
+    Spacing: 2
+    PathDensity: 50
+    PathTwistiness: 0
+    PathWidth: 5
+    AllowBranching: 0
+    GeneratedAutomatically: 0

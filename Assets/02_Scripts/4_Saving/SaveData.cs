@@ -18,7 +18,6 @@ public class LevelData
 {
     public int levelGrade;
     public int levelScore;
-    public float levelTime;
 }
 
 /// <summary>

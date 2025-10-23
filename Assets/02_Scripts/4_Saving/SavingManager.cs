@@ -1,6 +1,6 @@
 using System;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SavingManager : MonoBehaviour
 {
@@ -48,7 +48,7 @@ public class SavingManager : MonoBehaviour
 
     private void CaptureLevelsData()
     {
-        foreach (var kvp in LevelManager.Instance.kvpLevelData)
+        foreach (var kvp in LevelManager.Instance.KvpLevelData)
         {
             if (currentGameData.levelsData.ContainsKey(kvp.Key))
                 currentGameData.levelsData[kvp.Key] = kvp.Value;
@@ -63,13 +63,12 @@ public class SavingManager : MonoBehaviour
     /// <summary>
     /// Loads the GameData and calls restore for player and levels data
     /// </summary>
-    /// <param name="sessionID">ID of the session to restore</param>
-    public void LoadSession(string sessionID)
+    public void LoadSession()
     {
         currentGameData = LoadFile("Session");
         if (currentGameData == null)
         {
-            Debug.Log("Current Session Data does not exist");
+            Debug.Log("Current Session Data does not exist, creating new GameData");
             currentGameData = new GameData();
         }
 
@@ -83,6 +82,16 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void RestorePlayerData()
     {
+        if(currentGameData.playerData == null)
+        {
+            PlayerData playerData = new PlayerData()
+            {
+                currency = 0
+            };
+            Debug.Log("Current Session Data does not exist, creating new PlayerData");
+            currentGameData.playerData = playerData;
+        }
+
         CurrencyManager.Instance.currencyValue = currentGameData.playerData.currency;
     }
 
@@ -93,11 +102,22 @@ public class SavingManager : MonoBehaviour
     {
         if (LevelManager.Instance == null) return;
         
-        LevelManager.Instance.kvpLevelData.Clear();
-        
-        foreach (var kvp in currentGameData.levelsData)
+        LevelManager.Instance.KvpLevelData.Clear();
+
+        if(currentGameData.levelsData == null)
         {
-            LevelManager.Instance.kvpLevelData[kvp.Key] = kvp.Value;
+            LevelData levelsData = new LevelData()
+            {
+
+            };
+            Debug.Log("Current Session Data does not exist, creating new levelsData");
+        }
+        else
+        {
+            foreach (var kvp in currentGameData.levelsData)
+            {
+                LevelManager.Instance.KvpLevelData[kvp.Key] = kvp.Value;
+            }
         }
     }
 

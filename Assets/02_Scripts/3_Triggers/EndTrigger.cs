@@ -6,7 +6,14 @@ public class EndTrigger : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //TODO: Send player LIFE and effective time
+            LevelManager.Instance.SetLevelData(3, 30.0f);
+
+            SavingManager.Instance.SaveSession();
+
+            SceneController.Instance.NewTransition()
+                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
+                .Perform();
         }
     }
 }

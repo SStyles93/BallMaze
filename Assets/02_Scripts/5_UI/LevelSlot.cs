@@ -10,16 +10,30 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
     [SerializeField] private Image slotImage;
     [SerializeField] private TMP_Text slotText;
 
+    [SerializeField] private Sprite lockedImage;
+
+    private bool isLocked = false;
     private int slotIndex;
 
-    public void InitializeLevelSlot(int level)
+    public void InitializeLevelSlot(int level, bool isLocked = false)
     {
         slotIndex = level;
-        slotText.text = level.ToString();
+        this.isLocked = isLocked;
+
+        if (this.isLocked)
+        {
+            slotImage.sprite = lockedImage;
+            slotText.text = "?";
+        }
+        else
+        {
+            slotText.text = level.ToString();
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (isLocked) return;
         slotImage.color = new Color(1, 1, 1, 0.5f);
         //Debug.Log($"PointerDown on {this.gameObject.name}");
     }
@@ -32,7 +46,8 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
         }
         else
         {
-            LevelManager.Instance.InitializePCG(slotIndex);
+            if (isLocked) return;
+            LevelManager.Instance.InitializeLevel(slotIndex);
 
             SceneController.Instance
                 .NewTransition()

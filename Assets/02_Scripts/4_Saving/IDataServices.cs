@@ -11,5 +11,4 @@ public interface IDataService
     T Load<T>(string fileName);
     void Delete(string fileName);
     void ClearAllData();
-    IEnumerable<string> ListSaves();
 }

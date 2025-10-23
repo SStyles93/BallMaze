@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
+using UnityEditor;
 
 public class JsonDataService : IDataService
 {
@@ -19,6 +20,9 @@ public class JsonDataService : IDataService
             // Use JsonConvert from Newtonsoft.Json
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
             File.WriteAllText(path, json);
+#if UNITY_EDITOR
+            AssetDatabase.Refresh();
+#endif
             return true;
         }
         catch (System.Exception e)
@@ -71,49 +75,12 @@ public class JsonDataService : IDataService
         Debug.LogWarning("ClearAllData not fully implemented. Implement with caution.");
     }
 
-    public IEnumerable<string> ListSaves()
-    {
-        string directoryPath;
-
-#if UNITY_EDITOR
-        directoryPath = Application.dataPath;
-#else
-    directoryPath = Application.persistentDataPath;
-#endif
-
-        try
-        {
-            if (!Directory.Exists(directoryPath))
-            {
-                Debug.LogWarning($"Directory not found: {directoryPath}");
-                return new List<string>();
-            }
-
-            // Get all files starting with "SessionData" and ending with ".json"
-            string[] files = Directory.GetFiles(directoryPath, "SessionData*.json");
-
-            // Convert full paths to file names only (without directory)
-            List<string> saveFiles = new List<string>();
-            foreach (string file in files)
-            {
-                saveFiles.Add(Path.GetFileName(file));
-            }
-
-            return saveFiles;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Could not list save files: {e.Message}");
-            return new List<string>();
-        }
-    }
-
     private string GetPath(string fileName)
     {
 #if UNITY_EDITOR
-        return Path.Combine(Application.dataPath, fileName);
+        return Path.Combine(Application.dataPath, $"{fileName}.json");
 #else
-        return Path.Combine(Application.persistentDataPath, fileName);
+        return Path.Combine(Application.persistentDataPath, $"{fileName}.json");
 #endif
     }
 }

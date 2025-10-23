@@ -167,9 +167,13 @@ public class SceneController : MonoBehaviour
         public bool ClearUnusedAssets { get; private set; } = false;
         public bool Overlay { get; private set; } = false;
 
-        public SceneTransitionPlan Load(SceneDatabase.Slots slot, SceneDatabase.Scenes scene)
+        public SceneTransitionPlan Load(SceneDatabase.Slots slot, SceneDatabase.Scenes scene, bool setActive = true)
         {
             ScenesToLoad[slot.ToString()] = scene.ToString();
+            if (setActive)
+            {
+                ActiveScene = scene.ToString();
+            }
             return this;
         }
         public SceneTransitionPlan Unload(SceneDatabase.Scenes scene)

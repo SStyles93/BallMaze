@@ -5,12 +5,19 @@ using UnityEngine;
 [System.Serializable]
 public class LevelParameters
 {
+    [Header("Seed")]
     public int Seed = -1;
+    [Header("Path Settings")]
     public int Spacing = 5;
     public float PathDensity = 50; // 0-100
     public float PathTwistiness = 50; // 0 = straight, 50 = neutral, 100 = twisty
     public int PathWidth = 2;
     public bool AllowBranching = false;
+
+    [Header("Level Settings")]
+    public float timeToComplete = 10;
+
+    [Space(10)]
     public bool GeneratedAutomatically = false;
 }
 
