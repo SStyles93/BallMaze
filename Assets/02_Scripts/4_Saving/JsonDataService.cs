@@ -89,8 +89,8 @@ public class JsonDataService : IDataService
                 return new List<string>();
             }
 
-            // Get all files starting with "session_" and ending with ".json"
-            string[] files = Directory.GetFiles(directoryPath, "playerData_*.json");
+            // Get all files starting with "SessionData" and ending with ".json"
+            string[] files = Directory.GetFiles(directoryPath, "SessionData*.json");
 
             // Convert full paths to file names only (without directory)
             List<string> saveFiles = new List<string>();

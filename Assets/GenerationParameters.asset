@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99a5bb750384b7a4e842a4701ad28a1a, type: 3}
+  m_Script: {fileID: 11500000, guid: e7c5a8f28db86444ba5a2d4b1d1da11d, type: 3}
   m_Name: GenerationParameters
   m_EditorClassIdentifier: 
   Seed: -1
@@ -24,4 +24,4 @@ MonoBehaviour:
   AllowBranching: 0
   MaxX: 40
   MaxZ: 40
-  MapDepth: 1
+  MapDepth: 50

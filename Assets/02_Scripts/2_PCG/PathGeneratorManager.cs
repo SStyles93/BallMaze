@@ -5,7 +5,7 @@ using System;
 public class PathGeneratorManager : MonoBehaviour
 {
     [Header("Generation Parameters")]
-    public GenerationParams generationParams;
+    public GenerationParamameters_SO generationParams;
 
     [Header("Prefabs")]
     public GameObject floorPrefab;

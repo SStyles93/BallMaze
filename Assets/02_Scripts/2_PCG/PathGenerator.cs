@@ -5,7 +5,7 @@ using System.Linq;
 public class PathGenerator
 {
     // --- Member Variables ---
-    private GenerationParams p;
+    private GenerationParamameters_SO p;
     private int step;
     private Vector2Int gridSize;
     private Vector2Int startPos;
@@ -14,7 +14,7 @@ public class PathGenerator
     private System.Random random;
 
     // --- Main Public Method ---
-    public CellType[,] Generate(GenerationParams parameters)
+    public CellType[,] Generate(GenerationParamameters_SO parameters)
     {
         // 1. Initialization
         this.p = parameters;

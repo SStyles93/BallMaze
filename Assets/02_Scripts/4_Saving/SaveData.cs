@@ -1,35 +1,34 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 
-// --- Main Save File Structure ---
-
+/// <summary>
+/// Data of the player (currency)
+/// </summary>
 [System.Serializable]
-public class PlayerSaveData
+public class PlayerData
 {
-    int currentSceneUnlocked;
-    int currency;
+    public int currency;
 }
 
 /// <summary>
-/// The root container for the entire scene save data.
+/// The data for one scene "level"
 /// </summary>
 [System.Serializable]
-public class SceneSaveData
+public class LevelData
 {
-    int sceneID;
-    int sceneScore;
+    public int levelGrade;
+    public int levelScore;
+    public float levelTime;
 }
 
+/// <summary>
+/// Data of the Session (Game)
+/// </summary>
 [System.Serializable]
-public class SessionSaveData
+public class GameData
 {
     public DateTime timestamp; // Date-Time at which the game was saved
-    public PlayerSaveData playerData; // The data of the player
-    public Dictionary<string, SceneSaveData> sceneData = new Dictionary<string, SceneSaveData>(); // The dictionary holding the kvp sceneName - SceneSave Data
-    public string currentSceneName; // The current active scene when saving
+    public PlayerData playerData; // The data of the player
+    public Dictionary<int, LevelData> levelsData = new Dictionary<int, LevelData>(); // The dictionary holding the kvp sceneID - LevelData
+    public string lastUnlockedScene; // The current unlocked scene when saving
 }
-
-
-
-
