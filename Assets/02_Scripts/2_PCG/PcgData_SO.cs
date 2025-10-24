@@ -46,7 +46,7 @@ public class PcgData_SO : ScriptableObject
     /// Adds a generation parameters field to the list
     /// </summary>
     /// <param name="gen">The current GenerationParameter_SO used</param>
-    public void AddDataParameter(GenerationParamameters_SO gen)
+    public void AddDataParameter(GenerationParamameters_SO gen, int indexOfDataToWrite = -1)
     {
         LevelParameters levelParameter = new LevelParameters()
         {
@@ -60,7 +60,35 @@ public class PcgData_SO : ScriptableObject
             MaxZ = gen.MaxZ,
             timeToComplete = 30.0f
         };
-        levelParameters.Add(levelParameter);
+
+        if (indexOfDataToWrite == -1)
+            levelParameters.Add(levelParameter);
+        else
+            if (levelParameters[indexOfDataToWrite] != null)
+        {
+            levelParameters[indexOfDataToWrite] = levelParameter;
+        }
+    }
+
+    public void GetDataFromSO(GenerationParamameters_SO gen, int indexOfDataToGet)
+    {
+        if (indexOfDataToGet == -1) return;
+        if (levelParameters.Count < indexOfDataToGet)
+        {
+            Debug.Log($"No LevelParameter at index {indexOfDataToGet}");
+            return;
+        }
+
+        gen.currentSeed = levelParameters[indexOfDataToGet].Seed;
+        gen.Spacing = levelParameters[indexOfDataToGet].Spacing;
+        gen.PathDensity = levelParameters[indexOfDataToGet].PathDensity;
+        gen.PathTwistiness = levelParameters[indexOfDataToGet].PathTwistiness;
+        gen.PathWidth = levelParameters[indexOfDataToGet].PathWidth;
+        gen.AllowBranching = levelParameters[indexOfDataToGet].AllowBranching;
+        gen.MaxX = levelParameters[indexOfDataToGet].MaxX;
+        gen.MaxZ = levelParameters[indexOfDataToGet].MaxZ;
+
+
     }
 
 

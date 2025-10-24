@@ -12,7 +12,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jump Settings")]
     [SerializeField] private ForceMode jumpForceMode = ForceMode.Impulse;
     [SerializeField] private float jumpForce = 5.0f;
-    [SerializeField] private float gravityScale = 3.0f;
+    [SerializeField] private float gravityScale = 2.0f;
+    [SerializeField] float groundCheckDistance = 1.1f;
     [SerializeField] LayerMask groundedLayerMask;
 
     private bool isGrounded = false;
@@ -38,6 +39,15 @@ public class PlayerMovement : MonoBehaviour
         else Debug.Log($"No Rigidbody found on {this.gameObject.name}");
     }
 
+    private void Update()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, groundCheckDistance))
+            isGrounded = true;
+        else
+            isGrounded = false;
+        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, Color.green);
+    }
+
     private void FixedUpdate()
     {
         // Updates the gravity for a better fall
@@ -55,11 +65,11 @@ public class PlayerMovement : MonoBehaviour
 
         // Correct movement for x/z directions
         Vector3 movement = new Vector3(movementDirection.x, 0, movementDirection.y);
-        
+
         // Apply movement with force
-        playerRigidbody.linearDamping = 2;
+        //playerRigidbody.linearDamping = 2;
         playerRigidbody.AddForce(movement * movementForce, movementForceMode);
-        
+
         //Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
     }
 
@@ -71,16 +81,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGrounded) return;
         isGrounded = false;
-        playerRigidbody.linearDamping = 1;
+        //playerRigidbody.linearDamping = 1f;
         playerRigidbody.AddForce(Vector3.up * jumpForce, jumpForceMode);
         //Debug.Log($"Force Applied up with {jumpForce} force, and {movementForceMode.ToString()}");
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(((1 << collision.gameObject.layer) & groundedLayerMask) != 0)
-        {
-            isGrounded = true;
-        }
     }
 }

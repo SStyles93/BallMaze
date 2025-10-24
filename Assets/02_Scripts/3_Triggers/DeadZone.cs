@@ -23,18 +23,25 @@ public class DeadZone : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            collision.gameObject.transform.position = spawnPosition;
-            collision.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
+            rb.isKinematic = true; // Block player
+            collision.gameObject.transform.position = spawnPosition; // Replace player
+            rb.isKinematic = false; // Unblock player
 
             LifeManager.Instance.RemoveLife();
 
             if(LifeManager.Instance.CurrentLife == 0)
             {
+                // Block Player
+                rb.isKinematic = true;
+
+                // Remove Level Data from saving
                 LevelManager.Instance.RemoveCurrentLevelData();
 
+                // Save Session
                 SavingManager.Instance.SaveSession();
 
+                // Open EndPannel
                 SceneController.Instance.NewTransition()
                     .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
                     .Perform();

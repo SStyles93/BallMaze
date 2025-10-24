@@ -21,7 +21,7 @@ public class JsonDataService : IDataService
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
             File.WriteAllText(path, json);
 #if UNITY_EDITOR
-            AssetDatabase.Refresh();
+            //AssetDatabase.Refresh();
 #endif
             return true;
         }

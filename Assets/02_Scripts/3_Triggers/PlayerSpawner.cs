@@ -1,13 +1,11 @@
-using Unity.Cinemachine;
 using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private float offset = 1.0f;
-    private Vector3 spawnPosition;
-
     public Vector3 SpawnPosition => spawnPosition;
+    private Vector3 spawnPosition;
 
     private void OnEnable()
     {
@@ -18,12 +16,10 @@ public class PlayerSpawner : MonoBehaviour
         PathGeneratorManager.OnGenerationFinished -= InstantiatePlayer;
     }
 
-
     private void InstantiatePlayer()
     {
         spawnPosition = this.transform.position + Vector3.up * offset;
         GameObject player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
-        GameObject.FindFirstObjectByType<CinemachineCamera>().Follow = player.transform;
     }
     private void OnDrawGizmos()
     {

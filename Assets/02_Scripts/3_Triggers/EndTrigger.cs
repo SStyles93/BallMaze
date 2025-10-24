@@ -8,7 +8,7 @@ public class EndTrigger : MonoBehaviour
         {
             other.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
-            
+            //TODO: Timer
             LevelManager.Instance.SetLevelData(LifeManager.Instance.CurrentLife, 30.0f);
 
             SavingManager.Instance.SaveSession();

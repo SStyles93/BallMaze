@@ -18,6 +18,7 @@ public class PathGeneratorEditor : EditorWindow
     private readonly Color startColor = Color.green;
     private readonly Color endColor = Color.red;
 
+    private int indexOfSoData;
 
     [MenuItem("Tools/Path Generator")]
     public static void ShowWindow()
@@ -35,6 +36,21 @@ public class PathGeneratorEditor : EditorWindow
         EditorGUILayout.LabelField("Editor Parameters", EditorStyles.boldLabel);
         EditorGUILayout.Space(3);
 
+        PcgData_SO = (PcgData_SO)EditorGUILayout.ObjectField("PCG Data SO", PcgData_SO, typeof(PcgData_SO), false);
+
+        if (GUILayout.Button("Save Params. to SO ⬆️"))
+        {
+            PcgData_SO.AddDataParameter(activeManager.generationParams);
+        }
+        GUILayout.BeginHorizontal();
+        indexOfSoData = EditorGUILayout.IntField("Idx of Data r/w", indexOfSoData);
+
+        if (GUILayout.Button("⬇️ Get Params. from SO "))
+        {
+            PcgData_SO.GetDataFromSO(activeManager.generationParams, indexOfSoData);
+            activeManager.generationParams.Seed = activeManager.generationParams.currentSeed;
+        }
+        GUILayout.EndHorizontal();
 
         EditorGUILayout.LabelField("Map Size", EditorStyles.miniBoldLabel);
         activeManager.generationParams.MaxX = EditorGUILayout.IntSlider("MaxX", activeManager.generationParams.MaxX, 10, 200);
@@ -86,7 +102,6 @@ public class PathGeneratorEditor : EditorWindow
         // --- SECTION 2: SCENE LINK ---
         EditorGUILayout.LabelField("Scene Manager Link", EditorStyles.boldLabel);
         activeManager = (PathGeneratorManager)EditorGUILayout.ObjectField("Path Manager", activeManager, typeof(PathGeneratorManager), true);
-        PcgData_SO = (PcgData_SO)EditorGUILayout.ObjectField("PCG Data SO", PcgData_SO, typeof(PcgData_SO), false);
 
         if (activeManager != null)
         {
@@ -108,10 +123,7 @@ public class PathGeneratorEditor : EditorWindow
                 gridTexture = null;
             }
 
-            if(GUILayout.Button("Save Params. to SO"))
-            {
-                PcgData_SO.AddDataParameter(activeManager.generationParams);
-            }
+            GUILayout.Space(5);
         }
         else
         {

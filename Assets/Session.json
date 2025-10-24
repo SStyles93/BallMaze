@@ -1,0 +1,49 @@
+{
+  "timestamp": "2025-10-25T01:03:27.4131979+02:00",
+  "playerData": {
+    "currency": 0
+  },
+  "levelsData": {
+    "0": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "1": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "2": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "3": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "4": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "5": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "6": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "7": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "8": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "9": {
+      "levelGrade": 2,
+      "levelScore": 0
+    }
+  },
+  "lastUnlockedScene": null
+}
