@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Apply movement with force
         //playerRigidbody.linearDamping = 2;
-        playerRigidbody.AddForce(movement * movementForce, movementForceMode);
+        playerRigidbody.AddForce(movement * movementForce * Time.deltaTime, movementForceMode);
 
         //Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
     }

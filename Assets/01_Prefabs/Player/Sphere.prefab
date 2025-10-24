@@ -316,7 +316,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerRigidbody: {fileID: 6087839670450387137}
   movementForceMode: 0
-  movementForce: 80
+  movementForce: 1400
   jumpForceMode: 1
   jumpForce: 15
   gravityScale: 2
