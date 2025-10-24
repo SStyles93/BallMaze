@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour
@@ -21,9 +22,9 @@ public class PlayerSpawner : MonoBehaviour
     private void InstantiatePlayer()
     {
         spawnPosition = this.transform.position + Vector3.up * offset;
-        Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+        GameObject player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+        GameObject.FindFirstObjectByType<CinemachineCamera>().Follow = player.transform;
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;

@@ -47,6 +47,9 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
         else
         {
             if (isLocked) return;
+
+            GamesMenuManager.Instance.SaveScrollbarValues();
+
             LevelManager.Instance.InitializeLevel(slotIndex);
 
             SceneController.Instance

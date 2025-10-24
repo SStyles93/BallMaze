@@ -19,8 +19,15 @@ public class PathGenerator
         // 1. Initialization
         this.p = parameters;
         this.step = p.Spacing + 1;
-        if (p.Seed != -1) random = new System.Random(p.Seed);
-        else random = new System.Random((int)System.DateTime.Now.Ticks);
+        int finalSeed;
+        if (p.Seed != -1)
+            finalSeed = p.Seed; // Use the provided seed
+        else
+            finalSeed = (int)System.DateTime.Now.Ticks; // Generate a new seed from the system clock
+
+        p.currentSeed = finalSeed;
+        // Initialize the random number generator with the definitive seed
+        random = new System.Random(finalSeed);
 
         CalculateGridSize();
         this.startPos = SanitizeCoord(p.StartPos);

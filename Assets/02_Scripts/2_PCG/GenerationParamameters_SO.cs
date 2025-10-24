@@ -5,6 +5,7 @@ using MyBox;
 public class GenerationParamameters_SO : ScriptableObject
 {
     public int Seed = -1;
+    public int currentSeed = -1;
 
     [Header("Map Points")]
     public Vector2Int StartPos = new Vector2Int(20, 0);

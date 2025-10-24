@@ -947,8 +947,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollViewContent: {fileID: 4710719528390126957}
+  scrollbar: {fileID: 4710719528390126958}
+  scrollbarData: {fileID: 11400000, guid: a87b144f2210efa4fb6e1ea9e9ba7d25, type: 2}
   slotPrefab: {fileID: 6114339248805080769, guid: 71d0ff4a681cf544eb37a85bffdf14dc, type: 3}
-  numberOfLevels: 10
+  numberOfLevels: 30
 --- !u!1 &1948236508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1275,6 +1277,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8323669299615853729, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
   m_PrefabInstance: {fileID: 4710719528390126956}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4710719528390126958 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5461082072299805760, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+  m_PrefabInstance: {fileID: 4710719528390126956}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

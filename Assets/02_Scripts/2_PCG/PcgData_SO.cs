@@ -14,6 +14,10 @@ public class LevelParameters
     public int PathWidth = 2;
     public bool AllowBranching = false;
 
+    [Header("Map Size")]
+    public int MaxX = 20;
+    public int MaxZ = 20;
+
     [Header("Level Settings")]
     public float timeToComplete = 10;
 
@@ -46,12 +50,14 @@ public class PcgData_SO : ScriptableObject
     {
         LevelParameters levelParameter = new LevelParameters()
         {
-            Seed = gen.Seed,
+            Seed = gen.currentSeed,
             Spacing = gen.Spacing,
             PathDensity = gen.PathDensity,
             PathTwistiness = gen.PathTwistiness,
             PathWidth = gen.PathWidth,
             AllowBranching = gen.AllowBranching,
+            MaxX = gen.MaxX,
+            MaxZ = gen.MaxZ,
             timeToComplete = 30.0f
         };
         levelParameters.Add(levelParameter);

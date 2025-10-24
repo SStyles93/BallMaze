@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movement = new Vector3(movementDirection.x, 0, movementDirection.y);
         
         // Apply movement with force
+        playerRigidbody.linearDamping = 2;
         playerRigidbody.AddForce(movement * movementForce, movementForceMode);
         
         //Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
@@ -70,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGrounded) return;
         isGrounded = false;
+        playerRigidbody.linearDamping = 1;
         playerRigidbody.AddForce(Vector3.up * jumpForce, jumpForceMode);
         //Debug.Log($"Force Applied up with {jumpForce} force, and {movementForceMode.ToString()}");
     }

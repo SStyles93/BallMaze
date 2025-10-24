@@ -13,355 +13,213 @@ MonoBehaviour:
   m_Name: LevelsPcgData
   m_EditorClassIdentifier: 
   levelParameters:
-  - Seed: 2
-    Spacing: 2
+  - Seed: -2047236694
+    Spacing: 10
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 6
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 40
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -2047236694
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 8
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 40
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -2047236694
+    Spacing: 8
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 7
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 40
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -1179725165
+    Spacing: 8
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 6
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 40
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -886148422
+    Spacing: 8
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 4
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 40
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -780869265
+    Spacing: 8
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 4
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 60
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -670566623
+    Spacing: 7
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 4
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 60
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -591283493
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 4
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 60
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -558701304
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 4
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 60
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -431999954
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 3
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 70
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -408432920
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 3
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 70
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -367980582
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 3
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 70
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -300376109
+    Spacing: 7
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 3
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 70
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: -251336902
+    Spacing: 7
     PathDensity: 50
     PathTwistiness: 0
     PathWidth: 3
     AllowBranching: 0
+    MaxX: 40
+    MaxZ: 70
     timeToComplete: 30
     GeneratedAutomatically: 0
-  - Seed: 3
-    Spacing: 1
-    PathDensity: 50
-    PathTwistiness: 49
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 3
-    Spacing: 1
-    PathDensity: 50
-    PathTwistiness: 51
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 4
-    Spacing: 1
-    PathDensity: 50
-    PathTwistiness: 70
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 5
-    Spacing: 1
-    PathDensity: 50
-    PathTwistiness: 70
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 6
-    Spacing: 1
-    PathDensity: 50
-    PathTwistiness: 90
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 10
-    Spacing: 1
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 10
-    Spacing: 3
+  - Seed: -95764266
+    Spacing: 9
     PathDensity: 50
     PathTwistiness: 0
-    PathWidth: 2
+    PathWidth: 3
     AllowBranching: 0
+    MaxX: 40
+    MaxZ: 70
     timeToComplete: 30
     GeneratedAutomatically: 0
-  - Seed: 11
-    Spacing: 3
-    PathDensity: 50
-    PathTwistiness: 0
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 12
-    Spacing: 4
-    PathDensity: 50
-    PathTwistiness: 0
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 13
-    Spacing: 4
-    PathDensity: 50
-    PathTwistiness: 0
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 14
-    Spacing: 4
-    PathDensity: 50
-    PathTwistiness: 0
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 16
-    Spacing: 4
-    PathDensity: 50
-    PathTwistiness: 0
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 16
-    Spacing: 4
+  - Seed: 9580449
+    Spacing: 9
     PathDensity: 50
     PathTwistiness: 50
-    PathWidth: 2
+    PathWidth: 3
     AllowBranching: 0
+    MaxX: 40
+    MaxZ: 80
     timeToComplete: 30
     GeneratedAutomatically: 0
-  - Seed: 17
-    Spacing: 4
+  - Seed: 67222999
+    Spacing: 9
     PathDensity: 50
     PathTwistiness: 50
-    PathWidth: 2
+    PathWidth: 3
     AllowBranching: 0
+    MaxX: 40
+    MaxZ: 80
     timeToComplete: 30
     GeneratedAutomatically: 0
-  - Seed: 18
-    Spacing: 4
-    PathDensity: 50
-    PathTwistiness: 75
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 18
-    Spacing: 5
-    PathDensity: 50
-    PathTwistiness: 0
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 19
-    Spacing: 5
-    PathDensity: 50
-    PathTwistiness: 50
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 19
-    Spacing: 5
-    PathDensity: 50
-    PathTwistiness: 75
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 20
-    Spacing: 5
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 22
-    Spacing: 6
-    PathDensity: 50
-    PathTwistiness: 50
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 22
-    Spacing: 6
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 24
-    Spacing: 6
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 25
-    Spacing: 6
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 26
-    Spacing: 6
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 27
-    Spacing: 6
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 28
-    Spacing: 6
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 28
+  - Seed: 176445194
     Spacing: 7
     PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
+    PathTwistiness: 50
+    PathWidth: 3
     AllowBranching: 0
+    MaxX: 40
+    MaxZ: 80
     timeToComplete: 30
     GeneratedAutomatically: 0
-  - Seed: 28
-    Spacing: 8
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 29
-    Spacing: 8
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 30
-    Spacing: 8
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 2
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 30
-    Spacing: 0
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 31
-    Spacing: 0
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 32
-    Spacing: 0
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 33
-    Spacing: 1
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 33
-    Spacing: 2
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 33
-    Spacing: 4
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 33
-    Spacing: 5
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 33
-    Spacing: 6
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 33
+  - Seed: 200457977
     Spacing: 7
     PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
+    PathTwistiness: 50
+    PathWidth: 3
     AllowBranching: 0
+    MaxX: 40
+    MaxZ: 80
     timeToComplete: 30
     GeneratedAutomatically: 0
-  - Seed: 33
-    Spacing: 8
+  - Seed: 284366630
+    Spacing: 7
     PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
+    PathTwistiness: 50
+    PathWidth: 3
     AllowBranching: 0
+    MaxX: 40
+    MaxZ: 100
     timeToComplete: 30
     GeneratedAutomatically: 0
-  - Seed: 34
-    Spacing: 9
+  - Seed: 320891756
+    Spacing: 7
     PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
+    PathTwistiness: 50
+    PathWidth: 3
     AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 35
-    Spacing: 9
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
-    timeToComplete: 30
-    GeneratedAutomatically: 0
-  - Seed: 50
-    Spacing: 9
-    PathDensity: 50
-    PathTwistiness: 100
-    PathWidth: 1
-    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 100
     timeToComplete: 30
     GeneratedAutomatically: 0

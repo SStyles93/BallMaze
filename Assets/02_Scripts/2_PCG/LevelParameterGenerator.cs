@@ -1,64 +1,113 @@
 using UnityEngine;
+
 public static class LevelParameterGenerator
 {
-    // --- BASE VALUES ---
-    // These are the starting values for level 0.
+    // --- BASE VALUES (The absolute easiest settings) ---
     private const int BASE_SEED = 42; // A fixed starting seed for predictability
-    private const int BASE_PATH_WIDTH = 3;
-    private const int BASE_PATH_DENSITY = 50;
-    private const int BASE_SPACING = 0;
-    private const float BASE_PATH_TWISTINESS = 0f;
+    private const int BASE_MAX_Z = 40;
+    private const int BASE_PATH_DENSITY = 50; // Kept constant as per the request
 
-    // --- MODIFIERS ---
-    // How much each stat changes per step.
-    private const int SPACING_INCREMENT = 1;
-    private const float TWISTINESS_INCREMENT = 1.0f;
+    // --- PROGRESSION RULES ---
 
-    // --- CYCLE DEFINITION ---
-    // This defines how many steps of one parameter occur before the next one increments.
-    private const int TWISTINESS_CYCLE_LENGTH = 101; // (0 to 100)
+    // Path Width (Easy -> Hard)
+    private static readonly int[] PATH_WIDTH_STEPS = { 6, 5, 4, 3, 2 }; // Starts at 6, ends at 2
+
+    // Path Twistiness (Easy -> Hard)
+    private const float TWISTINESS_MIN = 0f;
+    private const float TWISTINESS_MAX = 100f;
+    private const float TWISTINESS_INCREMENT = 25f; // 0, 25, 50, 75, 100
+
+    // Map Size
+    private const int MAX_Z_INCREMENT = 20;
+
+    // --- CYCLE LENGTH CALCULATION ---
+    // We pre-calculate how many levels are in each "cycle" to make the main function cleaner.
+
+    // 1. How many steps are in a single Twistiness cycle? (e.g., 0, 25, 50, 75, 100 -> 5 steps)
+    private const int TWISTINESS_CYCLE_LENGTH = (int)((TWISTINESS_MAX - TWISTINESS_MIN) / TWISTINESS_INCREMENT) + 1;
+
+    // 2. How many levels are in a full PathWidth cycle?
+    // This is complex because the spacing range changes. We need a helper function.
+    private static readonly int LEVELS_PER_PATHWIDTH_CYCLE = CalculateLevelsPerWidthCycle();
+
+    // 3. How many levels are in a full MaxZ cycle?
+    // This is the total number of combinations before MaxZ increments.
+    private static readonly int LEVELS_PER_MAX_Z_CYCLE = LEVELS_PER_PATHWIDTH_CYCLE * PATH_WIDTH_STEPS.Length;
 
     /// <summary>
-    /// Generates a new set of level parameters based on the level index.
+    /// Calculates the parameters for a given level index based on an easy-to-hard progression.
     /// </summary>
-    /// <param name="levelIndex">The index of the level (e.g., 0, 1, 2...).</param>
-    /// <returns>A new LevelGenerationParameters object with calculated values.</returns>
     public static LevelParameters GenerateParametersForLevel(int levelIndex)
     {
-        if (levelIndex < 0)
-        {
-            levelIndex = 0; // Ensure index is not negative
-        }
+        if (levelIndex < 0) levelIndex = 0;
 
-        var parameters = new LevelParameters();
+        var p = new LevelParameters();
+        int remainingIndex = levelIndex;
 
         // --- ALGORITHM ---
 
-        // 1. Calculate how many full "Spacing" cycles have been completed.
-        int spacingCycles = levelIndex / TWISTINESS_CYCLE_LENGTH;
+        // 1. Calculate MaxZ (Outermost loop)
+        int maxZCycles = remainingIndex / LEVELS_PER_MAX_Z_CYCLE;
+        p.MaxZ = BASE_MAX_Z + (maxZCycles * MAX_Z_INCREMENT);
+        remainingIndex %= LEVELS_PER_MAX_Z_CYCLE;
 
-        // 2. Calculate the current step within the "Twistiness" cycle.
-        // The modulo operator gives the remainder.
-        int twistinessStep = levelIndex % TWISTINESS_CYCLE_LENGTH;
+        // 2. Calculate PathWidth (Second loop)
+        int pathWidthCycles = remainingIndex / LEVELS_PER_PATHWIDTH_CYCLE;
+        p.PathWidth = PATH_WIDTH_STEPS[pathWidthCycles];
+        remainingIndex %= LEVELS_PER_PATHWIDTH_CYCLE;
 
-        // 3. Set the final parameter values based on the calculations.
-        parameters.Seed = BASE_SEED + levelIndex; // Seed always increments by 1.
-        parameters.PathWidth = BASE_PATH_WIDTH; // PathWidth is constant in this example.
-        parameters.PathDensity = BASE_PATH_DENSITY;
-        parameters.AllowBranching = false; // Also constant.
+        // 3. Calculate PathSpacing (Third loop)
+        // This is the most complex part, as its cycle length depends on the current PathWidth.
+        int spacingMin = GetMinSpacingForWidth(p.PathWidth);
+        int spacingMax = 10;
+        int spacingCycleLength = (spacingMax - spacingMin + 1) * TWISTINESS_CYCLE_LENGTH;
 
-        // Spacing increases only after a full twistiness cycle.
-        parameters.Spacing = BASE_SPACING + (spacingCycles * SPACING_INCREMENT);
+        int spacingCycles = remainingIndex / TWISTINESS_CYCLE_LENGTH;
+        p.Spacing = spacingMin + spacingCycles;
+        remainingIndex %= TWISTINESS_CYCLE_LENGTH;
 
-        // Twistiness increases at each level and resets after a cycle.
-        parameters.PathTwistiness = BASE_PATH_TWISTINESS + (twistinessStep * TWISTINESS_INCREMENT);
+        // 4. Calculate PathTwistiness (Innermost loop)
+        p.PathTwistiness = TWISTINESS_MIN + (remainingIndex * TWISTINESS_INCREMENT);
 
-        // Optional: Clamp values to ensure they don't exceed limits.
-        parameters.PathTwistiness = Mathf.Clamp(parameters.PathTwistiness, 0f, 100f);
-        parameters.Spacing = Mathf.Clamp(parameters.Spacing, 0, 10); // Example max spacing
+        // 5. Set remaining and constant parameters
+        p.Seed = BASE_SEED + levelIndex; // Seed increments uniquely for every level
+        p.PathDensity = BASE_PATH_DENSITY; // Constant
+        p.AllowBranching = false; // Constant
+        p.GeneratedAutomatically = true;
 
-        parameters.GeneratedAutomatically = true;
+        // Optional: Clamp values as a safeguard, though the logic should prevent overflows.
+        p.PathTwistiness = Mathf.Clamp(p.PathTwistiness, TWISTINESS_MIN, TWISTINESS_MAX);
+        p.Spacing = Mathf.Clamp(p.Spacing, spacingMin, spacingMax);
 
-        return parameters;
+        return p;
+    }
+
+    /// <summary>
+    /// Helper to get the dynamic minimum spacing based on path width.
+    /// </summary>
+    private static int GetMinSpacingForWidth(int pathWidth)
+    {
+        if (pathWidth >= 6) return 6;
+        if (pathWidth <= 2) return 3;
+        // Linear interpolation for widths between 6 and 2
+        float t = Mathf.InverseLerp(6, 2, pathWidth); // 0 if width is 6, 1 if width is 2
+        return (int)Mathf.Round(Mathf.Lerp(6, 3, t));
+    }
+
+    /// <summary>
+    /// Helper to calculate the total number of combinations for a single PathWidth cycle.
+    /// This is needed because the number of spacing steps is not constant.
+    /// </summary>
+    private static int CalculateLevelsPerWidthCycle()
+    {
+        int totalLevels = 0;
+        int spacingMax = 10;
+        // This assumes the progression always uses the same path width steps.
+        // We are calculating the levels for ONE path width, but since the spacing range
+        // changes, we take the largest possible range to create a uniform cycle length.
+        // This simplifies the main logic significantly.
+        int maxSpacingRange = spacingMax - GetMinSpacingForWidth(2) + 1; // Largest range (3 to 10)
+        totalLevels = maxSpacingRange * TWISTINESS_CYCLE_LENGTH;
+        return totalLevels;
     }
 }

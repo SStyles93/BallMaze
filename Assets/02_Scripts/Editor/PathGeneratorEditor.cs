@@ -38,7 +38,7 @@ public class PathGeneratorEditor : EditorWindow
 
         EditorGUILayout.LabelField("Map Size", EditorStyles.miniBoldLabel);
         activeManager.generationParams.MaxX = EditorGUILayout.IntSlider("MaxX", activeManager.generationParams.MaxX, 10, 200);
-        activeManager.generationParams.MaxZ = EditorGUILayout.IntSlider("MaxX", activeManager.generationParams.MaxZ, 10, 200);
+        activeManager.generationParams.MaxZ = EditorGUILayout.IntSlider("MaxZ", activeManager.generationParams.MaxZ, 10, 200);
         activeManager.generationParams.MapDepth = EditorGUILayout.IntSlider("Map Depth", activeManager.generationParams.MapDepth, 1, 100);
 
         EditorGUILayout.Space(5);
@@ -67,6 +67,12 @@ public class PathGeneratorEditor : EditorWindow
             activeManager.generationParams.Seed = (int)System.DateTime.Now.Ticks;
         }
         EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.Space(5);
+        if (activeManager.generationParams.Seed != -1)
+        {
+            activeManager.generationParams.currentSeed = EditorGUILayout.IntField("Current Seed", activeManager.generationParams.currentSeed);
+        }
 
         //if (GUILayout.Button("Generate Preview", GUILayout.Height(30)))
         //{
