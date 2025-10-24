@@ -5,6 +5,7 @@ public class PathGeneratorEditor : EditorWindow
 {
     // --- Scene Link ---
     private PathGeneratorManager activeManager;
+    private PcgData_SO PcgData_SO;
 
     // --- Visualization ---
     private CellType[,] generatedGrid;
@@ -79,6 +80,7 @@ public class PathGeneratorEditor : EditorWindow
         // --- SECTION 2: SCENE LINK ---
         EditorGUILayout.LabelField("Scene Manager Link", EditorStyles.boldLabel);
         activeManager = (PathGeneratorManager)EditorGUILayout.ObjectField("Path Manager", activeManager, typeof(PathGeneratorManager), true);
+        PcgData_SO = (PcgData_SO)EditorGUILayout.ObjectField("PCG Data SO", PcgData_SO, typeof(PcgData_SO), false);
 
         if (activeManager != null)
         {
@@ -98,6 +100,11 @@ public class PathGeneratorEditor : EditorWindow
                 activeManager.ClearPath();
                 generatedGrid = null;
                 gridTexture = null;
+            }
+
+            if(GUILayout.Button("Save Params. to SO"))
+            {
+                PcgData_SO.AddDataParameter(activeManager.generationParams);
             }
         }
         else

@@ -38,6 +38,25 @@ public class PcgData_SO : ScriptableObject
         }
     }
 
+    /// <summary>
+    /// Adds a generation parameters field to the list
+    /// </summary>
+    /// <param name="gen">The current GenerationParameter_SO used</param>
+    public void AddDataParameter(GenerationParamameters_SO gen)
+    {
+        LevelParameters levelParameter = new LevelParameters()
+        {
+            Seed = gen.Seed,
+            Spacing = gen.Spacing,
+            PathDensity = gen.PathDensity,
+            PathTwistiness = gen.PathTwistiness,
+            PathWidth = gen.PathWidth,
+            AllowBranching = gen.AllowBranching,
+            timeToComplete = 30.0f
+        };
+        levelParameters.Add(levelParameter);
+    }
+
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(PcgData_SO))]

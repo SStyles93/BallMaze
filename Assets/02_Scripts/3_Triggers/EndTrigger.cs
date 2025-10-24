@@ -6,8 +6,10 @@ public class EndTrigger : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            //TODO: Send player LIFE and effective time
-            LevelManager.Instance.SetLevelData(3, 30.0f);
+            other.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+            
+            LevelManager.Instance.SetLevelData(LifeManager.Instance.CurrentLife, 30.0f);
 
             SavingManager.Instance.SaveSession();
 

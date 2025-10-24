@@ -9,6 +9,8 @@ public class EndPannel : MonoBehaviour
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private List<Image> starImages = new List<Image>();
     [SerializeField] private TMP_Text scoreText;
+    [SerializeField] private GameObject continueButton;
+    [SerializeField] private GameObject retryButton;
 
     [Header("End Pannel Assets")]
     [SerializeField] private Sprite starSprite;
@@ -26,12 +28,44 @@ public class EndPannel : MonoBehaviour
         }
         scoreText.text = "???"; //TODO: max score - time & lost life
         //scoreText.text = levelManager.CurrentLevelData.levelTime.ToString();
+
+        if (!levelManager.KvpLevelData.ContainsKey(levelManager.CurrentLevelIndex))
+        {
+            retryButton.SetActive(true);
+            continueButton.SetActive(false);
+        }
+        else
+        {
+            continueButton.SetActive(true);
+            retryButton.SetActive(false);
+        }
     }
 
+    /// <summary>
+    /// Loads the current scene (RETRY)
+    /// </summary>
+    public void LoadCurrentScene()
+    {
+        LoadScene(0);
+    }
 
+    /// <summary>
+    /// Loads the next scene (CONTINUE)
+    /// </summary>
     public void LoadNextScene()
     {
-        levelManager.InitializeLevel(levelManager.CurrentLevelIndex + 1);
+        LoadScene(1);
+    }
+
+    /// <summary>
+    /// Loading (LevelManager initialize, Life reset, Scene transition)
+    /// </summary>
+    /// <param name="sceneIndex">0 = current, 1 = next</param>
+    private void LoadScene(int sceneIndex)
+    {
+        levelManager.InitializeLevel(levelManager.CurrentLevelIndex + sceneIndex);
+
+        LifeManager.Instance.ResetLife();
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
@@ -44,6 +78,8 @@ public class EndPannel : MonoBehaviour
 
     public void ReturnToGamesMenu()
     {
+        LifeManager.Instance.ResetLife();
+
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
             .Unload(SceneDatabase.Scenes.Game)

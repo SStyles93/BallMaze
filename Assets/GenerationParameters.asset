@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c5a8f28db86444ba5a2d4b1d1da11d, type: 3}
   m_Name: GenerationParameters
   m_EditorClassIdentifier: 
-  Seed: -1
+  Seed: 50
   StartPos: {x: 20, y: 0}
   PlaceEndManually: 0
   EndPos: {x: 0, y: 0}
   MinEndDistance: 0
-  Spacing: 5
+  Spacing: 9
   PathDensity: 50
-  PathTwistiness: 50
-  PathWidth: 2
+  PathTwistiness: 100
+  PathWidth: 1
   AllowBranching: 0
   MaxX: 40
   MaxZ: 40

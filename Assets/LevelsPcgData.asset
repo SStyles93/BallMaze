@@ -13,10 +13,355 @@ MonoBehaviour:
   m_Name: LevelsPcgData
   m_EditorClassIdentifier: 
   levelParameters:
-  - Seed: 42
+  - Seed: 2
     Spacing: 2
     PathDensity: 50
     PathTwistiness: 0
-    PathWidth: 5
+    PathWidth: 3
     AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 3
+    Spacing: 1
+    PathDensity: 50
+    PathTwistiness: 49
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 3
+    Spacing: 1
+    PathDensity: 50
+    PathTwistiness: 51
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 4
+    Spacing: 1
+    PathDensity: 50
+    PathTwistiness: 70
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 5
+    Spacing: 1
+    PathDensity: 50
+    PathTwistiness: 70
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 6
+    Spacing: 1
+    PathDensity: 50
+    PathTwistiness: 90
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 10
+    Spacing: 1
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 10
+    Spacing: 3
+    PathDensity: 50
+    PathTwistiness: 0
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 11
+    Spacing: 3
+    PathDensity: 50
+    PathTwistiness: 0
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 12
+    Spacing: 4
+    PathDensity: 50
+    PathTwistiness: 0
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 13
+    Spacing: 4
+    PathDensity: 50
+    PathTwistiness: 0
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 14
+    Spacing: 4
+    PathDensity: 50
+    PathTwistiness: 0
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 16
+    Spacing: 4
+    PathDensity: 50
+    PathTwistiness: 0
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 16
+    Spacing: 4
+    PathDensity: 50
+    PathTwistiness: 50
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 17
+    Spacing: 4
+    PathDensity: 50
+    PathTwistiness: 50
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 18
+    Spacing: 4
+    PathDensity: 50
+    PathTwistiness: 75
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 18
+    Spacing: 5
+    PathDensity: 50
+    PathTwistiness: 0
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 19
+    Spacing: 5
+    PathDensity: 50
+    PathTwistiness: 50
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 19
+    Spacing: 5
+    PathDensity: 50
+    PathTwistiness: 75
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 20
+    Spacing: 5
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 22
+    Spacing: 6
+    PathDensity: 50
+    PathTwistiness: 50
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 22
+    Spacing: 6
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 24
+    Spacing: 6
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 25
+    Spacing: 6
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 26
+    Spacing: 6
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 27
+    Spacing: 6
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 28
+    Spacing: 6
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 28
+    Spacing: 7
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 28
+    Spacing: 8
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 29
+    Spacing: 8
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 30
+    Spacing: 8
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 2
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 30
+    Spacing: 0
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 31
+    Spacing: 0
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 32
+    Spacing: 0
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 33
+    Spacing: 1
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 33
+    Spacing: 2
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 33
+    Spacing: 4
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 33
+    Spacing: 5
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 33
+    Spacing: 6
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 33
+    Spacing: 7
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 33
+    Spacing: 8
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 34
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 35
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 50
+    Spacing: 9
+    PathDensity: 50
+    PathTwistiness: 100
+    PathWidth: 1
+    AllowBranching: 0
+    timeToComplete: 30
     GeneratedAutomatically: 0

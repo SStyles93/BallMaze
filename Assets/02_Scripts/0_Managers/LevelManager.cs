@@ -45,36 +45,43 @@ public class LevelManager : MonoBehaviour
         generationParamameters.PathTwistiness = targetParams.PathTwistiness;
         generationParamameters.PathWidth = targetParams.PathWidth;
         generationParamameters.AllowBranching = targetParams.AllowBranching;
-        
+
         CurrentLevelIndex = index;
         CurrentLevelData = new LevelData();
         CurrentLevelTimeToComplete = pcgData.levelParameters[index].timeToComplete;
 
         if (!KvpLevelData.ContainsKey(index))
-        KvpLevelData.Add(index, CurrentLevelData);
+            KvpLevelData.Add(index, CurrentLevelData);
+    }
+
+    public void RemoveCurrentLevelData()
+    {
+        KvpLevelData.Remove(CurrentLevelIndex);
     }
 
     public void SetLevelData(int lifeLeft, float levelTime)
     {
-        if(CurrentLevelData == null)
+        if (CurrentLevelData == null)
         {
             Debug.Log("LevelData is null");
         }
 
-        CurrentLevelData.levelScore = ((100 - (int)levelTime) - ((3-lifeLeft)*10));
-        int levelGrade = 0;
-        switch (CurrentLevelData.levelScore)
+        int levelGrade = 3;
+        if (lifeLeft < 3)
         {
-            case > 80:
-                levelGrade = 3;
-                break;
-            case >= 50:
-                levelGrade = 2;
-                break;
-            case < 50:
-                levelGrade = 1;
-                break;
+            levelGrade -= 1;
+        }
+        if (levelTime > CurrentLevelTimeToComplete)
+        {
+            levelGrade -= 1;
+        }
+        if (lifeLeft == 0)
+        {
+            levelGrade = 0;
         }
         CurrentLevelData.levelGrade = levelGrade;
-}
+
+        //CurrentLevelData.levelScore = ((100 - (int)levelTime) - ((3 - lifeLeft) * 10));
+
+    }
 }

@@ -469,6 +469,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pcgData: {fileID: 11400000, guid: c78b11adcb1b42f43951254aa7e8c352, type: 2}
   generationParamameters: {fileID: 11400000, guid: a5105104f3b6fd94baab9a19ee5448aa, type: 2}
+  CurrentLevelIndex: 0
+  CurrentLevelData:
+    levelGrade: 0
+    levelScore: 0
+  CurrentLevelTimeToComplete: 0
 --- !u!1 &1333845251
 GameObject:
   m_ObjectHideFlags: 0
@@ -582,6 +587,7 @@ Transform:
   - {fileID: 2109442887}
   - {fileID: 1441120721}
   - {fileID: 1230751199}
+  - {fileID: 1943483671}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1441120720
@@ -661,6 +667,51 @@ Transform:
   - {fileID: 442186513}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1943483670
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1943483671}
+  - component: {fileID: 1943483672}
+  m_Layer: 0
+  m_Name: LifeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1943483671
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1943483670}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1441058359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1943483672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1943483670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b324e61430b1bac4a86f529e25c55279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  currentLife: 3
 --- !u!1 &2010482525
 GameObject:
   m_ObjectHideFlags: 0
