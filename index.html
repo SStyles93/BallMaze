@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
+      <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -55,13 +55,13 @@
       var loaderUrl = buildUrl + "/66a4c90dcc960f927f0e7f860408e371.loader.js";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/22fa06a843d4852bba66f073df08f459.data",
+        dataUrl: buildUrl + "/73857995d3f4eb850b7b20664bf07164.data",
         frameworkUrl: buildUrl + "/726b5f73e477643231273fcbb63a710f.framework.js",
         codeUrl: buildUrl + "/b884f6ab4842f0e5020566dbb8230d4d.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "PxP",
         productName: "BallMaze",
-        productVersion: "1.0.0",
+        productVersion: "0.1.4",
         showBanner: unityShowBanner,
         // errorHandler: function(err, url, line) {
         //    alert("error " + err + " occurred at line " + line);
@@ -104,8 +104,8 @@
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
+        canvas.style.width = "1920px";
+        canvas.style.height = "1080px";
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";
