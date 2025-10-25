@@ -43,7 +43,7 @@ MonoBehaviour:
     MaxZ: 40
     timeToComplete: 30
     GeneratedAutomatically: 0
-  - Seed: -1179725165
+  - Seed: 643120977
     Spacing: 8
     PathDensity: 50
     PathTwistiness: 100
@@ -221,5 +221,15 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 100
+    timeToComplete: 30
+    GeneratedAutomatically: 0
+  - Seed: 176445194
+    Spacing: 7
+    PathDensity: 50
+    PathTwistiness: 50
+    PathWidth: 3
+    AllowBranching: 0
+    MaxX: 40
+    MaxZ: 40
     timeToComplete: 30
     GeneratedAutomatically: 0

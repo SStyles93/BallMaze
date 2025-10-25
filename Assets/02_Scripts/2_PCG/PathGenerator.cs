@@ -11,23 +11,41 @@ public class PathGenerator
     private Vector2Int startPos;
     private Vector2Int endPos;
     private CellType[,] grid;
-    private System.Random random;
+    //private System.Random random;
 
+    // --- Main Public Method ---
     // --- Main Public Method ---
     public CellType[,] Generate(GenerationParamameters_SO parameters)
     {
+        // --- MODIFIED: Complete overhaul of the seeding and state management logic. ---
+
         // 1. Initialization
         this.p = parameters;
         this.step = p.Spacing + 1;
+
+        // 2. Preserve Unity's current random state.
+        // This is a critical best practice. It ensures our generator doesn't permanently
+        // alter the random sequence for other game systems (like particle effects, AI, etc.).
+        var originalRandomState = Random.state;
+
+        // 3. Determine and apply the seed for our generation.
         int finalSeed;
         if (p.Seed != -1)
+        {
             finalSeed = p.Seed; // Use the provided seed
+        }
         else
-            finalSeed = (int)System.DateTime.Now.Ticks; // Generate a new seed from the system clock
+        {
+            // Generate a new seed. Using Unity's Random.Range ensures this is also deterministic
+            // if the initial state was the same. Ticks can still have cross-platform issues.
+            // A robust way is to use a combination of Ticks and a random value.
+            finalSeed = (int)System.DateTime.Now.Ticks ^ Random.Range(int.MinValue, int.MaxValue);
+        }
 
-        p.currentSeed = finalSeed;
-        // Initialize the random number generator with the definitive seed
-        random = new System.Random(finalSeed);
+        p.currentSeed = finalSeed; // Store the seed that was actually used.
+        Random.InitState(finalSeed); // Initialize Unity's generator with our definitive seed.
+
+        // --- End of Seeding Overhaul ---
 
         CalculateGridSize();
         this.startPos = SanitizeCoord(p.StartPos);
@@ -64,17 +82,20 @@ public class PathGenerator
         }
 
         // --- Finalization ---
-        // REVERTED: Simple single-cell placement for start and end points.
         grid[startPos.x, startPos.y] = CellType.Start;
         if (IsWithinBounds(endPos))
         {
             grid[endPos.x, endPos.y] = CellType.End;
         }
 
+        // --- MODIFIED: Restore Unity's original random state. ---
+        Random.state = originalRandomState;
+
         return grid;
     }
 
     // --- Core Path Generation Methods (Unchanged) ---
+    // --- Core Path Generation Methods (Calls to random updated) ---
     private void GenerateRandomizedSolutionPath()
     {
         var current = startPos;
@@ -101,7 +122,8 @@ public class PathGenerator
                 if (moveDirection == lastMoveDirection) score += 100 - p.PathTwistiness;
                 else if (moveDirection == -lastMoveDirection) score -= 50;
                 else score += p.PathTwistiness;
-                score += random.Next(0, 20);
+                // --- MODIFIED: Use Random.Range for integer values. Note the exclusive upper bound.
+                score += Random.Range(0, 20);
                 moveScores[move] = score;
             }
             Vector2Int nextMove = moveScores.OrderByDescending(kvp => kvp.Value).First().Key;
@@ -126,7 +148,8 @@ public class PathGenerator
             var neighbors = GetValidNeighbors(current, allowOccupied: false);
             if (neighbors.Count > 0)
             {
-                var next = neighbors[random.Next(neighbors.Count)];
+                // --- MODIFIED: Use Random.Range ---
+                var next = neighbors[Random.Range(0, neighbors.Count)];
                 CarvePathBetween(current, next);
                 frontier.Add(next);
                 cellsToCarve -= (step > 0 ? step : 1);
@@ -147,8 +170,10 @@ public class PathGenerator
             var neighbors = GetValidNeighbors(cell, allowOccupied: false);
             if (neighbors.Count > 0)
             {
-                var branchTo = neighbors[random.Next(neighbors.Count)];
-                int branchLength = random.Next(1, 4) * step;
+                // --- MODIFIED: Use Random.Range ---
+                var branchTo = neighbors[Random.Range(0, neighbors.Count)];
+                // --- MODIFIED: Use Random.Range ---
+                int branchLength = Random.Range(1, 4) * step;
                 var current = cell;
                 for (int j = 0; j < branchLength && IsWithinBounds(branchTo); j += step)
                 {
@@ -157,7 +182,8 @@ public class PathGenerator
                     current = branchTo;
                     var nextNeighbors = GetValidNeighbors(current, false);
                     if (nextNeighbors.Count == 0) break;
-                    branchTo = nextNeighbors[random.Next(nextNeighbors.Count)];
+                    // --- MODIFIED: Use Random.Range ---
+                    branchTo = nextNeighbors[Random.Range(0, nextNeighbors.Count)];
                 }
             }
         }
@@ -277,7 +303,8 @@ public class PathGenerator
     {
         for (int i = list.Count - 1; i > 0; i--)
         {
-            int k = random.Next(i + 1);
+            // --- MODIFIED: Use Random.Range ---
+            int k = Random.Range(0, i + 1); // Note: Random.Range for ints has an exclusive upper bound.
             (list[k], list[i]) = (list[i], list[k]);
         }
     }

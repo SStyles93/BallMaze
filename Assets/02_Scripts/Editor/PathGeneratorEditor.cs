@@ -40,7 +40,7 @@ public class PathGeneratorEditor : EditorWindow
 
         if (GUILayout.Button("Save Params. to SO ⬆️"))
         {
-            PcgData_SO.AddDataParameter(activeManager.generationParams);
+            PcgData_SO.AddDataParameter(activeManager.generationParams, indexOfSoData);
         }
         GUILayout.BeginHorizontal();
         indexOfSoData = EditorGUILayout.IntField("Idx of Data r/w", indexOfSoData);
