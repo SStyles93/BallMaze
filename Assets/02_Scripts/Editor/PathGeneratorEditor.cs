@@ -52,6 +52,33 @@ public class PathGeneratorEditor : EditorWindow
         }
         GUILayout.EndHorizontal();
 
+        if (activeManager != null)
+        {
+            GUI.backgroundColor = Color.green;
+            if (GUILayout.Button("Generate In Scene", GUILayout.Height(40)))
+            {
+                activeManager.ClearPath();
+                activeManager.GeneratePath();
+                generatedGrid = activeManager.Cells;
+                gridTexture = new Texture2D(activeManager.generationParams.MaxX, activeManager.generationParams.MaxZ);
+                UpdateTexture();
+            }
+            GUI.backgroundColor = Color.white;
+
+            if (GUILayout.Button("Clear Scene"))
+            {
+                activeManager.ClearPath();
+                generatedGrid = null;
+                gridTexture = null;
+            }
+
+            GUILayout.Space(5);
+        }
+        else
+        {
+            EditorGUILayout.HelpBox("Assign a PathGeneratorManager from your scene to enable in-scene generation.", MessageType.Info);
+        }
+
         EditorGUILayout.LabelField("Map Size", EditorStyles.miniBoldLabel);
         activeManager.generationParams.MaxX = EditorGUILayout.IntSlider("MaxX", activeManager.generationParams.MaxX, 10, 200);
         activeManager.generationParams.MaxZ = EditorGUILayout.IntSlider("MaxZ", activeManager.generationParams.MaxZ, 10, 200);
@@ -102,33 +129,6 @@ public class PathGeneratorEditor : EditorWindow
         // --- SECTION 2: SCENE LINK ---
         EditorGUILayout.LabelField("Scene Manager Link", EditorStyles.boldLabel);
         activeManager = (PathGeneratorManager)EditorGUILayout.ObjectField("Path Manager", activeManager, typeof(PathGeneratorManager), true);
-
-        if (activeManager != null)
-        {
-            GUI.backgroundColor = Color.green;
-            if (GUILayout.Button("Generate In Scene", GUILayout.Height(40)))
-            {
-                activeManager.ClearPath();
-                activeManager.GeneratePath();
-                generatedGrid = activeManager.Cells;
-                gridTexture = new Texture2D(activeManager.generationParams.MaxX, activeManager.generationParams.MaxZ);
-                UpdateTexture();
-            }
-            GUI.backgroundColor = Color.white;
-
-            if (GUILayout.Button("Clear Scene"))
-            {
-                activeManager.ClearPath();
-                generatedGrid = null;
-                gridTexture = null;
-            }
-
-            GUILayout.Space(5);
-        }
-        else
-        {
-            EditorGUILayout.HelpBox("Assign a PathGeneratorManager from your scene to enable in-scene generation.", MessageType.Info);
-        }
 
         EditorGUILayout.Space(20);
         EditorGUILayout.LabelField("Generated Map Preview", EditorStyles.boldLabel);
