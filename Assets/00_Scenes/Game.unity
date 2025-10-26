@@ -15,16 +15,16 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
   m_Fog: 1
-  m_FogColor: {r: 0, g: 0.15294118, b: 0.22352941, a: 1}
+  m_FogColor: {r: 0.04922034, g: 0.061572954, b: 0.11698109, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.032
   m_LinearFogStart: 20
-  m_LinearFogEnd: 40
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_LinearFogEnd: 38
+  m_AmbientSkyColor: {r: 0.3433962, g: 0.3433962, b: 0.3433962, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 0
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 1
@@ -36,7 +36,7 @@ RenderSettings:
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
-  m_CustomReflection: {fileID: 0}
+  m_CustomReflection: {fileID: 8900000, guid: 49f1b2c53e05f1d4dbc5be02c923ea71, type: 3}
   m_Sun: {fileID: 0}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -707,14 +707,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.10235214, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 96945b921bea37e4d9c547251fb30d4c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -887,13 +887,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211016355}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.45883867, y: -0.16407755, z: 0.32465327, w: 0.81064534}
+  m_LocalRotation: {x: 0.516768, y: -0.18732996, z: 0.31181502, w: 0.77500314}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 58.26, y: 3.478, z: 45.589}
+  m_LocalEulerAnglesHint: {x: 66.609, y: 4.61, z: 46.864}
 --- !u!114 &1211016358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1143,14 +1143,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.10235214, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 96945b921bea37e4d9c547251fb30d4c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1284,14 +1284,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.10235214, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 96945b921bea37e4d9c547251fb30d4c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1379,25 +1379,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7021670226263004662, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7021670226263004662, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7021670226263004662, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 7483844068113630689, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
       propertyPath: m_Name
       value: Sky
-      objectReference: {fileID: 0}
-    - target: {fileID: 7483844068113630689, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8914530116951114979, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1405,7 +1389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914530116951114979, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.4
+      value: -11.3
       objectReference: {fileID: 0}
     - target: {fileID: 8914530116951114979, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
       propertyPath: m_LocalPosition.z

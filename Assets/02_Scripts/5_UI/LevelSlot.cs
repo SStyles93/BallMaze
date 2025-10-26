@@ -23,10 +23,11 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
         if (this.isLocked)
         {
             slotImage.sprite = lockedImage;
-            slotText.text = "?";
+            slotText.enabled = false;
         }
         else
         {
+            slotImage.enabled = false;
             slotText.text = level.ToString();
         }
     }
@@ -42,6 +43,7 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
     {
         if (eventData.dragging)
         {
+            slotImage.color = Color.white;
             //Debug.Log($"Pointer was dragged on {this.gameObject.name}");
         }
         else
@@ -71,7 +73,7 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        slotBackground.color = Color.black;
+        slotBackground.color = Color.white;
 
         //Debug.Log($"PointerExit of {this.gameObject.name}");
     }

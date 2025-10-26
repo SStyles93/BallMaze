@@ -15,7 +15,7 @@ public class DeadZone : MonoBehaviour
 
     private void Update()
     {
-        if(spawnPosition == Vector3.zero)
+        if (spawnPosition == Vector3.zero)
             spawnPosition = GameObject.FindGameObjectWithTag("Respawn").GetComponent<PlayerSpawner>().SpawnPosition;
     }
 
@@ -24,13 +24,10 @@ public class DeadZone : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
-            rb.isKinematic = true; // Block player
-            collision.gameObject.transform.position = spawnPosition; // Replace player
-            rb.isKinematic = false; // Unblock player
 
             LifeManager.Instance.RemoveLife();
 
-            if(LifeManager.Instance.CurrentLife == 0)
+            if (LifeManager.Instance.CurrentLife == 0)
             {
                 // Block Player
                 rb.isKinematic = true;
@@ -45,6 +42,12 @@ public class DeadZone : MonoBehaviour
                 SceneController.Instance.NewTransition()
                     .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
                     .Perform();
+            }
+            else
+            {
+                rb.isKinematic = true; // Block player
+                collision.gameObject.transform.position = spawnPosition; // Replace player
+                rb.isKinematic = false; // Unblock player
             }
         }
     }

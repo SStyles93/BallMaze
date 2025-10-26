@@ -49,10 +49,10 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _FrontColor: {r: 1, g: 0, b: 0.08939266, a: 1}
-    - _LeftColor: {r: 1, g: 0.4887361, b: 0, a: 1}
-    - _RIghtColor: {r: 1, g: 0, b: 0, a: 1}
-    - _TopColor: {r: 0.82641506, g: 0.39761475, b: 0.57633954, a: 1}
+    - _FrontColor: {r: 0.5018867, g: 0.1202634, b: 0.2565278, a: 1}
+    - _LeftColor: {r: 0.7372549, g: 0.5372549, b: 0.49411768, a: 1}
+    - _RIghtColor: {r: 0.735849, g: 0.5370562, b: 0.49288, a: 1}
+    - _TopColor: {r: 0.9169811, g: 0.57089645, b: 0.5588394, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &8278486938686021526
