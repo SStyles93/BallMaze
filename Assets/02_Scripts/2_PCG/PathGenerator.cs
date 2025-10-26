@@ -14,7 +14,6 @@ public class PathGenerator
     //private System.Random random;
 
     // --- Main Public Method ---
-    // --- Main Public Method ---
     public CellType[,] Generate(GenerationParamameters_SO parameters)
     {
         // --- MODIFIED: Complete overhaul of the seeding and state management logic. ---

@@ -48,8 +48,9 @@ public class PathGeneratorManager : MonoBehaviour
         GameObject floor = floorPrefab;
         Vector3 scale = floor.transform.localScale;
         scale.y = generationParams.MapDepth;
-        scale.x = generationParams.PathWidth;
-        scale.z = generationParams.PathWidth;
+        int pathWidth = generationParams.PathWidth;
+        scale.x = pathWidth;
+        scale.z = pathWidth;
         floor.transform.localScale = scale;
 
         for (int x = 0; x < cells.GetLength(0); x++)

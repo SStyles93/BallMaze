@@ -12,9 +12,6 @@ public class EndPannel : MonoBehaviour
     [SerializeField] private GameObject continueButton;
     [SerializeField] private GameObject retryButton;
 
-    [Header("End Pannel Assets")]
-    [SerializeField] private Sprite starSprite;
-
     private LevelManager levelManager;
 
     private void Start()
@@ -24,7 +21,7 @@ public class EndPannel : MonoBehaviour
         levelText.text = $"Level {levelManager.CurrentLevelIndex}";
         for (int i = 0; i < levelManager.CurrentLevelData.levelGrade; i++) 
         {
-            starImages[i].sprite = starSprite;
+            starImages[i].enabled = true;
         }
         scoreText.text = "???"; //TODO: max score - time & lost life
         //scoreText.text = levelManager.CurrentLevelData.levelTime.ToString();
