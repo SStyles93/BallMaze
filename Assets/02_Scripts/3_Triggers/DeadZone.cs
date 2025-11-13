@@ -48,6 +48,9 @@ public class DeadZone : MonoBehaviour
                 rb.isKinematic = true; // Block player
                 collision.gameObject.transform.position = spawnPosition; // Replace player
                 rb.isKinematic = false; // Unblock player
+
+                //--- Time Def. ---
+                TimeDefinitionSaver.levelTime = 0.0f;
             }
         }
     }

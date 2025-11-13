@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-10-26T16:41:16.9312958+01:00",
+  "timestamp": "2025-11-12T17:15:33.4777731-08:00",
   "playerData": {
     "currency": 0
   },
   "levelsData": {
     "0": {
-      "levelGrade": 0,
+      "levelGrade": 3,
       "levelScore": 0
     },
     "1": {
@@ -21,6 +21,54 @@
       "levelScore": 0
     },
     "4": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "5": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "6": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "7": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "8": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "9": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "10": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "11": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "12": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "13": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "14": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "15": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "16": {
       "levelGrade": 3,
       "levelScore": 0
     }

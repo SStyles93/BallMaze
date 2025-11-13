@@ -16,6 +16,11 @@ public class EndTrigger : MonoBehaviour
             SceneController.Instance.NewTransition()
                 .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
                 .Perform();
+
+
+            // --- Time Def ---
+            TimeDefinitionSaver.IsTimeUpdated = false;
+            FindFirstObjectByType<TimeDefinitionSaver>().SaveTimeForLevel();
         }
     }
 }
