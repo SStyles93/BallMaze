@@ -12,6 +12,8 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
 
     [SerializeField] private Sprite lockedImage;
 
+    [SerializeField] private Color lockedColor = Color.orange;
+
     private bool isLocked = false;
     private int slotIndex;
 
@@ -43,6 +45,12 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
     {
         if (eventData.dragging)
         {
+            if (isLocked)
+            {
+                slotImage.color = lockedColor;
+                return;
+            }
+
             slotImage.color = Color.white;
             //Debug.Log($"Pointer was dragged on {this.gameObject.name}");
         }
@@ -73,6 +81,11 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (isLocked)
+        {
+            slotImage.color = lockedColor;
+        }
+            
         slotBackground.color = Color.white;
 
         //Debug.Log($"PointerExit of {this.gameObject.name}");

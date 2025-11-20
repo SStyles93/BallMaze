@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-12T17:15:33.4777731-08:00",
+  "timestamp": "2025-11-20T10:57:13.8159403-08:00",
   "playerData": {
     "currency": 0
   },
@@ -33,7 +33,7 @@
       "levelScore": 0
     },
     "7": {
-      "levelGrade": 2,
+      "levelGrade": 3,
       "levelScore": 0
     },
     "8": {
@@ -70,6 +70,142 @@
     },
     "16": {
       "levelGrade": 3,
+      "levelScore": 0
+    },
+    "17": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "18": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "19": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "20": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "21": {
+      "levelGrade": 3,
+      "levelScore": 0
+    },
+    "22": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "23": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "24": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "25": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "26": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "27": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "28": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "29": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "30": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "31": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "32": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "33": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "34": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "35": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "36": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "37": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "38": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "39": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "40": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "41": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "42": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "43": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "44": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "45": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "46": {
+      "levelGrade": 1,
+      "levelScore": 0
+    },
+    "47": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "48": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "49": {
+      "levelGrade": 2,
+      "levelScore": 0
+    },
+    "50": {
+      "levelGrade": 2,
       "levelScore": 0
     }
   },

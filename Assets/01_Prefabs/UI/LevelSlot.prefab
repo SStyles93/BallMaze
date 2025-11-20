@@ -206,6 +206,7 @@ MonoBehaviour:
   slotImage: {fileID: 4506905975593040979}
   slotText: {fileID: 6210114943099747530}
   lockedImage: {fileID: 21300000, guid: 6d90ed7e46bc33a4db0979f71069e102, type: 3}
+  lockedColor: {r: 1, g: 0.57659525, b: 0, a: 1}
 --- !u!114 &8985845922843921
 MonoBehaviour:
   m_ObjectHideFlags: 0
