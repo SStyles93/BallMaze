@@ -67,6 +67,16 @@ public class GamesMenuManager : MonoBehaviour
             .Perform();
     }
 
+    public void OpenCustomizationMenu()
+    {
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.CustomizationMenu)
+            .Unload(SceneDatabase.Scenes.GamesMenu)
+            .WithOverlay()
+            .Perform();
+    }
+
     public void SaveScrollbarValues()
     {
         scrollbarData.SetScrollbarValues(scrollbar);

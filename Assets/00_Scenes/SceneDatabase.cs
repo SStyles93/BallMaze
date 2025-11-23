@@ -16,6 +16,7 @@ public class SceneDatabase : MonoBehaviour
         MainMenu,
         GamesMenu,
         Game,
-        EndPannel
+        EndPannel,
+        CustomizationMenu
     }
 }

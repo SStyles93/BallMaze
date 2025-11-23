@@ -12,6 +12,16 @@ public class MainMenuManager : MonoBehaviour
             .Perform();
     }
 
+    public void OpenCustomizationMenu()
+    {
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.CustomizationMenu)
+            .Unload(SceneDatabase.Scenes.MainMenu)
+            .WithOverlay()
+            .Perform();
+    }
+
     public void OpenSettingsMenu()
     {
         //SceneController.Instance
