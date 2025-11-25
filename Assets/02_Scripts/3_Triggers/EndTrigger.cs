@@ -8,19 +8,16 @@ public class EndTrigger : MonoBehaviour
         {
             other.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
-            //TODO: Timer
-            LevelManager.Instance.SetLevelData(LifeManager.Instance.CurrentLife, 30.0f);
+            LevelManager.Instance.SetLevelData(LifeManager.Instance.CurrentLife);
+            // --- Time Def ---
+            TimeDefinitionSaver.IsTimeUpdated = false;
+            FindFirstObjectByType<TimeDefinitionSaver>().SaveTimeForLevel();
 
             SavingManager.Instance.SaveSession();
 
             SceneController.Instance.NewTransition()
                 .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
                 .Perform();
-
-
-            // --- Time Def ---
-            TimeDefinitionSaver.IsTimeUpdated = false;
-            FindFirstObjectByType<TimeDefinitionSaver>().SaveTimeForLevel();
         }
     }
 }

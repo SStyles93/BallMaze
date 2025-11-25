@@ -59,7 +59,7 @@ public class LevelManager : MonoBehaviour
         KvpLevelData.Remove(CurrentLevelIndex);
     }
 
-    public void SetLevelData(int lifeLeft, float levelTime)
+    public void SetLevelData(int lifeLeft)
     {
         if (CurrentLevelData == null)
         {
@@ -71,17 +71,10 @@ public class LevelManager : MonoBehaviour
         {
             levelGrade -= 1;
         }
-        if (levelTime > CurrentLevelTimeToComplete)
-        {
-            levelGrade -= 1;
-        }
         if (lifeLeft == 0)
         {
             levelGrade = 0;
         }
         CurrentLevelData.levelGrade = levelGrade;
-
-        //CurrentLevelData.levelScore = ((100 - (int)levelTime) - ((3 - lifeLeft) * 10));
-
     }
 }

@@ -58,7 +58,7 @@ public class PcgData_SO : ScriptableObject
             AllowBranching = gen.AllowBranching,
             MaxX = gen.MaxX,
             MaxZ = gen.MaxZ,
-            timeToComplete = 30.0f
+            timeToComplete = 10.0f
         };
 
         if (indexOfDataToWrite == -1)
@@ -87,8 +87,6 @@ public class PcgData_SO : ScriptableObject
         gen.AllowBranching = levelParameters[indexOfDataToGet].AllowBranching;
         gen.MaxX = levelParameters[indexOfDataToGet].MaxX;
         gen.MaxZ = levelParameters[indexOfDataToGet].MaxZ;
-
-
     }
 
 
