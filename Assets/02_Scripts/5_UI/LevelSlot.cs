@@ -4,17 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
+public class LevelSlot : BaseUISlot
 {
-    [SerializeField] private Image slotBackground;
-    [SerializeField] private Image slotImage;
     [SerializeField] private TMP_Text slotText;
 
-    [SerializeField] private Sprite lockedImage;
-
-    [SerializeField] private Color lockedColor = Color.orange;
-
-    private bool isLocked = false;
     private int slotIndex;
 
     public void InitializeLevelSlot(int level, bool isLocked = false)
@@ -24,35 +17,27 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
 
         if (this.isLocked)
         {
-            slotImage.sprite = lockedImage;
+            lockImage.sprite = lockSprite;
             slotText.enabled = false;
         }
         else
         {
-            slotImage.enabled = false;
+            lockImage.enabled = false;
             slotText.text = level.ToString();
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (isLocked) return;
-        slotImage.color = new Color(1, 1, 1, 0.5f);
-        //Debug.Log($"PointerDown on {this.gameObject.name}");
-    }
-
-    public void OnPointerUp(PointerEventData eventData)
+    public override void OnPointerUp(PointerEventData eventData)
     {
         if (eventData.dragging)
         {
             if (isLocked)
             {
-                slotImage.color = lockedColor;
+                lockImage.color = lockColor;
                 return;
             }
 
-            slotImage.color = Color.white;
-            //Debug.Log($"Pointer was dragged on {this.gameObject.name}");
+            lockImage.color = Color.white;
         }
         else
         {
@@ -72,22 +57,25 @@ public class LevelSlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, 
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public override void OnPointerDown(PointerEventData eventData)
     {
-        slotBackground.color = Color.gray;
-
-        //Debug.Log($"PointerEnter in {this.gameObject.name}");
+        if (isLocked) return;
+        lockImage.color = new Color(1, 1, 1, 0.5f);
+        //Debug.Log($"PointerDown on {this.gameObject.name}");
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        slotImage.color = Color.gray;
+    }
+
+    public override void OnPointerExit(PointerEventData eventData)
     {
         if (isLocked)
         {
-            slotImage.color = lockedColor;
+            lockImage.color = lockColor;
         }
-            
-        slotBackground.color = Color.white;
 
-        //Debug.Log($"PointerExit of {this.gameObject.name}");
+        slotImage.color = Color.white;
     }
 }

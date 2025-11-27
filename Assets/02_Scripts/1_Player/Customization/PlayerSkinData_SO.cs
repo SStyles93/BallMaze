@@ -4,5 +4,5 @@ using UnityEngine;
 public class PlayerSkinData_SO : ScriptableObject
 {
     public Material playerMaterial;
-    public Mesh playerMesh;
+    public Color playerColor;
 }
