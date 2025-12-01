@@ -44,7 +44,6 @@ public class MaterialSlot : BaseUISlot
         else // when the element is not dragged
         {
             if (isLocked) return;
-            // TODO: ASSIGN COLOR
             playerCustomization.AssignMaterial(skinData.material);
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
