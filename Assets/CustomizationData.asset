@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d8ab3b68e8ce4c4292323bcb2d002b0, type: 3}
+  m_Name: CustomizationData
+  m_EditorClassIdentifier: Assembly-CSharp::CustomizationData_SO
+  materials:
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: 2123846a701b0d24d917b4567c4a5f3a, type: 2}
+    sprite: {fileID: 21300000, guid: b0431fce197961d4ba411b94b375475f, type: 3}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: a38b88f3861292b4aac51ff067a95bc6, type: 2}
+    sprite: {fileID: 21300000, guid: 8418a1af4becdd347a56a17b5d21df19, type: 3}
+  - isLocked: 1
+    price: 200
+    material: {fileID: 2100000, guid: a48e4dad8240ba54eaaa0b996e4a3b85, type: 2}
+    sprite: {fileID: 21300000, guid: 78fc39312eaed3b4ca57534803fcdfce, type: 3}
+  colors:
+  - isLocked: 0
+    price: 0
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - isLocked: 0
+    price: 0
+    color: {r: 1, g: 0, b: 0, a: 1}
+  - isLocked: 1
+    price: 100
+    color: {r: 0, g: 1, b: 0, a: 1}
+  - isLocked: 1
+    price: 100
+    color: {r: 0, g: 0, b: 1, a: 1}

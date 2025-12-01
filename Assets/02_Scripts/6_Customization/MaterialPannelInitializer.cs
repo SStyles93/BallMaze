@@ -1,15 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
-
-[System.Serializable]
-public class MaterialOption
-{
-    public Material material;
-    public Sprite sprite;
-    public bool isLocked;
-}
 
 public class MaterialPannelInitializer : MonoBehaviour
 {
@@ -20,10 +10,11 @@ public class MaterialPannelInitializer : MonoBehaviour
     [SerializeField] private GameObject materialPannel;
     [SerializeField] private GameObject materialSlotPrefab;
 
-    [SerializeField] private List<MaterialOption> materials = new List<MaterialOption>();
+    [SerializeField] private CustomizationData_SO customizationData_SO;
+
     private void Start()
     {
-        foreach (var option in materials)
+        foreach (var option in customizationData_SO.materials)
         {
             GameObject materialSlot = Instantiate(materialSlotPrefab, materialPannel.transform);
             materialSlot.GetComponent<MaterialSlot>().InitializeMaterialSlot(option, playerCustomization);

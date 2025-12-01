@@ -1,34 +1,21 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-public class ColorSlot : BaseUISlot
+public class ColorSlot : CustomizationSlot
 {
     [SerializeField] private Color slotColor;
 
     private Color m_lockedColor;
 
-    private PlayerCustomization playerCustomization;
-
     public void InitializeColorSlot(ColorOption option, PlayerCustomization playerCustomization)
     {
+        InitializeSlot(option, playerCustomization);
+
         slotColor = option.color;
         slotImage.color = option.color;
+
         m_lockedColor = slotColor;
-        m_lockedColor.a = .5f;
-
-        this.playerCustomization = playerCustomization;
-
-        if (option.isLocked)
-        {
-            this.isLocked = option.isLocked;
-            lockImage.sprite = lockSprite;
-            lockImage.color = lockColor;
-        }
-        else
-        {
-            lockImage.enabled = false;
-        }
+        m_lockedColor.a = 50f;
     }
 
     public override void OnPointerUp(PointerEventData eventData)

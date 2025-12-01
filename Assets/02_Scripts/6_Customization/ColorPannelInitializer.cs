@@ -1,13 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class ColorOption 
-{
-    public Color color;
-    public bool isLocked;
-}
-
 public class ColorPannelInitializer : MonoBehaviour
 {
     // Reference to the player customization
@@ -16,12 +9,12 @@ public class ColorPannelInitializer : MonoBehaviour
     [SerializeField] private GameObject colorPannel;
     [SerializeField] private GameObject colorSlotPrefab;
 
-    [SerializeField] private List<ColorOption> colors = new List<ColorOption>();
+    [SerializeField] private CustomizationData_SO customizationData_SO;
 
 
     private void Start()
     {
-        foreach (var option in colors)
+        foreach (var option in customizationData_SO.colors)
         {
             GameObject colorSlot = Instantiate(colorSlotPrefab, colorPannel.transform);
             colorSlot.GetComponent<ColorSlot>().InitializeColorSlot(option, playerCustomization);
