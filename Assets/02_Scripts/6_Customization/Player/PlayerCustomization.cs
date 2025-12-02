@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerCustomization : MonoBehaviour
 {
-    [SerializeField] PlayerSkinData_SO playerSkinData;
+    [SerializeField] PlayerSkinData_SO playerSkinData_SO;
 
     [SerializeField] private Color m_color;
     [SerializeField] private MeshRenderer m_meshRenderer;
@@ -15,20 +15,20 @@ public class PlayerCustomization : MonoBehaviour
 
     void Start()
     {
-        m_meshRenderer.material = playerSkinData.playerMaterial;
-        m_meshRenderer.material.color = playerSkinData.playerColor;
+        m_meshRenderer.material = playerSkinData_SO.playerMaterial;
+        m_meshRenderer.material.color = playerSkinData_SO.playerColor;
     }
 
     public void AssignColor(Color color)
     {
         m_meshRenderer.material.color = color;
-        playerSkinData.playerColor = color;
+        playerSkinData_SO.playerColor = color;
     }
     public void AssignMaterial(Material material)
     {
         Color currentColor = m_meshRenderer.material.color; 
         m_meshRenderer.sharedMaterial = material;
         m_meshRenderer.material.color = currentColor;
-        playerSkinData.playerMaterial = material;
+        playerSkinData_SO.playerMaterial = material;      
     }
 }

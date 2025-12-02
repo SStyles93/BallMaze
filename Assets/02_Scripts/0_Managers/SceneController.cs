@@ -87,6 +87,14 @@ public class SceneController : MonoBehaviour
             }
         }
 
+        if (plan.SaveSession)
+        {
+            if(SavingManager.Instance != null)
+            {
+                SavingManager.Instance.SaveSession();
+            }
+        }
+
         if (plan.Overlay)
         {
             yield return loadingOverlay.FadeOutBlack();
@@ -161,10 +169,11 @@ public class SceneController : MonoBehaviour
     {
         // Key is slotName (string), Value is SceneDatabase.Scenes enum (for internal tracking if needed)
         public Dictionary<string, string> ScenesToLoad { get; } = new();
-        public List<string> SceneToUnload { get; } = new(); // List of scene names to unload
+        public List<string> SceneToUnload { get; } = new();
 
-        public string ActiveScene;// Renamed to avoid confusion with string name
+        public string ActiveScene;
         public bool ClearUnusedAssets { get; private set; } = false;
+        public bool SaveSession { get; private set; } = false;
         public bool Overlay { get; private set; } = false;
 
         public SceneTransitionPlan Load(SceneDatabase.Slots slot, SceneDatabase.Scenes scene, bool setActive = true)
@@ -189,6 +198,12 @@ public class SceneController : MonoBehaviour
         public SceneTransitionPlan WithClearUnusedAssets()
         {
             ClearUnusedAssets = true;
+            return this;
+        }
+
+        public SceneTransitionPlan WithSave()
+        {
+            SaveSession = true;
             return this;
         }
 

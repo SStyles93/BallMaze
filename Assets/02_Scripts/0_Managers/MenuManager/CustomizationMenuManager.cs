@@ -21,6 +21,7 @@ public class CustomizationMenuManager : MonoBehaviour
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
             .Unload(SceneDatabase.Scenes.CustomizationMenu)
             .WithOverlay()
+            .WithSave()
             .Perform();
     }
     public void OpenMainMenu()
@@ -30,6 +31,7 @@ public class CustomizationMenuManager : MonoBehaviour
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu)
             .Unload(SceneDatabase.Scenes.CustomizationMenu)
             .WithOverlay()
+            .WithSave()
             .Perform();
     }
 }
