@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-26T16:29:03.1382922-08:00",
+  "timestamp": "2025-12-01T20:37:44.0829331-08:00",
   "playerData": {
     "currency": 0
   },
@@ -209,5 +209,6 @@
       "levelScore": 0
     }
   },
+  "shopData": null,
   "lastUnlockedScene": null
 }

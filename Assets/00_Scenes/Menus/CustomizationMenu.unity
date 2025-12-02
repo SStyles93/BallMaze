@@ -3197,7 +3197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54ca91241d25de148ad90e03eb516e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  playerSkinData: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
+  playerSkinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
   m_color: {r: 0, g: 0, b: 0, a: 0}
   m_meshRenderer: {fileID: 979986777676302208}
 --- !u!1660057539 &9223372036854775807

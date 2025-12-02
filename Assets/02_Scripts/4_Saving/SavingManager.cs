@@ -205,8 +205,7 @@ public class SavingManager : MonoBehaviour
 
     // ------------ Helper functions ------------
 
-
-    public GameData LoadFile(string sessionID)
+    private GameData LoadFile(string sessionID)
     {
         if (string.IsNullOrEmpty(sessionID))
         {

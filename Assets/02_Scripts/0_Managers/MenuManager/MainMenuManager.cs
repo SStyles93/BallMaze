@@ -2,6 +2,12 @@ using UnityEngine;
 
 public class MainMenuManager : MonoBehaviour
 {
+    private void Start()
+    {
+        if (SavingManager.Instance != null)
+            SavingManager.Instance.LoadSession();
+    }
+
     public void OpenGamesMenu()
     {
         SceneController.Instance
