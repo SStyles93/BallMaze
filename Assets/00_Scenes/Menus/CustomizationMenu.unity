@@ -2783,6 +2783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb69bd867f9d1844858d2c7e231b95b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomizationMenuManager
+  customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
 --- !u!1 &1948236508
 GameObject:
   m_ObjectHideFlags: 0

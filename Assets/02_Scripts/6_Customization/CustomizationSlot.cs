@@ -35,10 +35,9 @@ public class CustomizationSlot : BaseUISlot
             priceText.enabled = true;
 
             
-            // TODO: NO WORKING
             //Reduce Visibility of the Lock
             Color tmpColor = lockImage.color;
-            tmpColor.a = 50f;
+            tmpColor.a = .5f;
             lockImage.color = tmpColor;
             
             return;
@@ -53,9 +52,8 @@ public class CustomizationSlot : BaseUISlot
         {
             priceText.enabled = false;
 
-            // TODO: NO WORKING
             Color tmpColor = lockImage.color;
-            tmpColor.a = 255f;
+            tmpColor.a = 1f;
             lockImage.color = tmpColor;
 
             return;

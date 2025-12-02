@@ -21,13 +21,24 @@ public class LevelData
 }
 
 /// <summary>
+/// The data of the customization menu options (locked or not)
+/// </summary>
+[System.Serializable]
+public class ShopData
+{
+    public List<bool> colorsState;
+    public List<bool> materialsState;
+}
+
+/// <summary>
 /// Data of the Session (Game)
 /// </summary>
 [System.Serializable]
 public class GameData
 {
     public DateTime timestamp; // Date-Time at which the game was saved
-    public PlayerData playerData; // The data of the player
+    public PlayerData playerData;
     public Dictionary<int, LevelData> levelsData = new Dictionary<int, LevelData>(); // The dictionary holding the kvp sceneID - LevelData
+    public ShopData shopData;
     public string lastUnlockedScene; // The current unlocked scene when saving
 }
