@@ -73,9 +73,9 @@ public class ShopManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Updates the SkinData_SO
+    /// Updates the SkinData_SO with the given option
     /// </summary>
-    /// <param name="option">the current option to update with</param>
+    /// <param name="option">the current option to be passed to the SkinData</param>
     private void UpdatePlayerOption(CustomizationOption option)
     {
         if (option is ColorOption colorOption)

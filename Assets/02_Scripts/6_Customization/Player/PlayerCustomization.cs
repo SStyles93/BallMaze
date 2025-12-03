@@ -34,11 +34,21 @@ public class PlayerCustomization : MonoBehaviour
         m_meshRenderer.material.color = color;
         playerSkinData_SO.playerColor = color;
     }
+    public void AssignColorIndex(int index)
+    {
+        playerSkinData_SO.playerColorIndex = index;
+    }
+
     public void AssignMaterial(Material material)
     {
         Color currentColor = m_meshRenderer.material.color; 
         m_meshRenderer.sharedMaterial = material;
         m_meshRenderer.material.color = currentColor;
         playerSkinData_SO.playerMaterial = material;      
+    }
+
+    public void AssignMaterialIndex(int index)
+    {
+        playerSkinData_SO.playerMaterialIndex = index;
     }
 }

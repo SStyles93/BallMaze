@@ -1,7 +1,9 @@
 {
-  "timestamp": "2025-12-03T12:47:11.7629659-08:00",
+  "timestamp": "2025-12-03T15:25:54.2965148-08:00",
   "playerData": {
-    "currency": 100
+    "currency": 0,
+    "colorIndex": 0,
+    "materialIndex": 0
   },
   "levelsData": {
     "0": {
@@ -279,7 +281,7 @@
     "colorsLockedState": [
       false,
       false,
-      true,
+      false,
       true
     ],
     "materialsLockedState": [

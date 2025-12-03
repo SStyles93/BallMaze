@@ -9,7 +9,7 @@ public class SavingManager : MonoBehaviour
 
     private IDataService dataService;
 
-    private GameData currentGameData = null;
+    public GameData currentGameData = null;
 
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class SavingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Captures the player's data (currency (int))
+    /// Captures the player's data (currency (int), colorIndex(int), materialIndex(int))
     /// </summary>
     private void CapturePlayerData()
     {
@@ -143,13 +143,20 @@ public class SavingManager : MonoBehaviour
         {
             PlayerData playerData = new PlayerData()
             {
-                currency = 0
+                currency = 0,
+                colorIndex = 0,
+                materialIndex = 0,
+
             };
             Debug.Log("Current Session Data does not exist, creating new PlayerData");
             currentGameData.playerData = playerData;
         }
 
         CurrencyManager.Instance.currencyValue = currentGameData.playerData.currency;
+
+        ShopManager shopManager = ShopManager.Instance;
+        shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentGameData.playerData.colorIndex].color;
+        shopManager.skinData_SO.playerMaterial = shopManager.customizationData_SO.materials[currentGameData.playerData.materialIndex].material;
     }
 
     /// <summary>

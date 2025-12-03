@@ -8,7 +8,14 @@ public class EndTrigger : MonoBehaviour
         {
             other.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
-            LevelManager.Instance.SetLevelData(LifeManager.Instance.CurrentLife);
+            LevelManager manager = LevelManager.Instance;
+            manager.SetLifeLeftOnLevel(LifeManager.Instance.CurrentLife);
+            
+            // TODO: CREATE TIME SYSTEM TO CORRECTLY INJECT HERE
+            manager.SetTimeValueOnLevel(0);
+            manager.ProcessLevelData();
+
+
             // --- Time Def ---
             TimeDefinitionSaver.IsTimeUpdated = false;
             FindFirstObjectByType<TimeDefinitionSaver>().SaveTimeForLevel();

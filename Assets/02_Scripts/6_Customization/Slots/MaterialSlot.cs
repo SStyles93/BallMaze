@@ -33,6 +33,7 @@ public class MaterialSlot : CustomizationSlot
                 return;
             }
             playerCustomization.AssignMaterial(skinData.material);
+            playerCustomization.AssignMaterialIndex(index);
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
     }

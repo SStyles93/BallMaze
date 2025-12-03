@@ -20,6 +20,7 @@ public class LevelParameters
 
     [Header("Level Settings")]
     public float timeToComplete = 10;
+    public int currencyToEarn = 300;
 
     [Space(10)]
     public bool GeneratedAutomatically = false;

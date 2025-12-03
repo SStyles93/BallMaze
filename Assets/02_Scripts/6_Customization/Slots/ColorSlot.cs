@@ -42,6 +42,7 @@ public class ColorSlot : CustomizationSlot
             }
 
             playerCustomization.AssignColor(colorOption.color);
+            playerCustomization.AssignColorIndex(index);
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
     }
