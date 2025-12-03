@@ -2,17 +2,10 @@ using UnityEngine;
 
 public class CustomizationMenuManager : MonoBehaviour
 {
-    public static CustomizationMenuManager Instance { get; private set; }
-
-    public CustomizationData_SO customizationData_SO;
-
-    private void Awake()
+    private void Start()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
-        //DontDestroyOnLoad(gameObject);
+        SavingManager.Instance.LoadSession();
     }
-
 
     public void OpenGamesMenu()
     {
@@ -21,7 +14,6 @@ public class CustomizationMenuManager : MonoBehaviour
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
             .Unload(SceneDatabase.Scenes.CustomizationMenu)
             .WithOverlay()
-            .WithSave()
             .Perform();
     }
     public void OpenMainMenu()
@@ -31,7 +23,11 @@ public class CustomizationMenuManager : MonoBehaviour
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu)
             .Unload(SceneDatabase.Scenes.CustomizationMenu)
             .WithOverlay()
-            .WithSave()
             .Perform();
+    }
+
+    public void SaveSession()
+    {
+        SavingManager.Instance.SaveSession();
     }
 }

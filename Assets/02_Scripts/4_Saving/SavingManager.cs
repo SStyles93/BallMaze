@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -85,11 +86,15 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void CaptureShopData()
     {
-        if (CustomizationMenuManager.Instance == null) return;
+        if (ShopManager.Instance == null) return;
 
-        CustomizationData_SO currentDataSO = CustomizationMenuManager.Instance.customizationData_SO;
+        CustomizationData_SO currentDataSO = ShopManager.Instance.customizationData_SO;
 
-        ShopData shopData = new ShopData{};
+        ShopData shopData = new ShopData
+        {
+            colorsState = new List<bool>(ShopManager.Instance.customizationData_SO.colors.Length),
+            materialsState = new List<bool>(ShopManager.Instance.customizationData_SO.colors.Length)
+        };
 
         // Save colors state (un-locked
         foreach (var colorOption in currentDataSO.colors)
@@ -175,9 +180,9 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void RestoreShopData()
     {
-        if (CustomizationMenuManager.Instance == null) return;
+        if (ShopManager.Instance == null) return;
 
-        var dataSO = CustomizationMenuManager.Instance.customizationData_SO;
+        var dataSO = ShopManager.Instance.customizationData_SO;
 
         if (currentGameData?.shopData == null)
         {
