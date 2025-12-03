@@ -8,8 +8,16 @@ public class CustomizationSlot : BaseUISlot
 
     protected PlayerCustomization playerCustomization;
 
-    public virtual void InitializeSlot(CustomizationOption option, PlayerCustomization playerCustomization)
+    public CustomizationOption option;
+
+    public int index;
+
+    public virtual void InitializeSlot(CustomizationOption option, int optionIndex, PlayerCustomization playerCustomization)
     {
+        this.option = option;
+
+        this.index = optionIndex;
+
         this.playerCustomization = playerCustomization;
 
         priceText ??= transform.GetComponentInChildren<TMP_Text>();
@@ -33,7 +41,6 @@ public class CustomizationSlot : BaseUISlot
         if (isLocked)
         {
             priceText.enabled = true;
-
             
             //Reduce Visibility of the Lock
             Color tmpColor = lockImage.color;

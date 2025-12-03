@@ -15,6 +15,16 @@ public class PlayerCustomization : MonoBehaviour
 
     void Start()
     {
+        UpdateAppearence();
+    }
+
+    private void LateUpdate()
+    {
+        UpdateAppearence();
+    }
+
+    public void UpdateAppearence()
+    {
         m_meshRenderer.material = playerSkinData_SO.playerMaterial;
         m_meshRenderer.material.color = playerSkinData_SO.playerColor;
     }

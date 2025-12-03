@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class SavingManager : MonoBehaviour
@@ -55,7 +54,9 @@ public class SavingManager : MonoBehaviour
 
         PlayerData playerSaveData = new PlayerData
         {
-            currency = CurrencyManager.Instance.currencyValue
+            currency = CurrencyManager.Instance.currencyValue,
+            colorIndex = ShopManager.Instance.skinData_SO.playerColorIndex,
+            materialIndex = ShopManager.Instance.skinData_SO.playerMaterialIndex
         };
 
         currentGameData.playerData = playerSaveData;
@@ -92,20 +93,20 @@ public class SavingManager : MonoBehaviour
 
         ShopData shopData = new ShopData
         {
-            colorsState = new List<bool>(ShopManager.Instance.customizationData_SO.colors.Length),
-            materialsState = new List<bool>(ShopManager.Instance.customizationData_SO.colors.Length)
+            colorsLockedState = new List<bool>(ShopManager.Instance.customizationData_SO.colors.Length),
+            materialsLockedState = new List<bool>(ShopManager.Instance.customizationData_SO.colors.Length)
         };
 
         // Save colors state (un-locked
         foreach (var colorOption in currentDataSO.colors)
         {
-            shopData.colorsState.Add(colorOption.isLocked);
+            shopData.colorsLockedState.Add(colorOption.isLocked);
         }
 
         // Save materials state (un-locked)
         foreach (var materialOption in currentDataSO.materials)
         {
-            shopData.materialsState.Add(materialOption.isLocked);
+            shopData.materialsLockedState.Add(materialOption.isLocked);
         }
 
         currentGameData.shopData = shopData;
@@ -195,15 +196,15 @@ public class SavingManager : MonoBehaviour
         for (int i = 0; i < dataSO.colors.Count(); i++)
         {
             // Ensure saved list has the same size
-            if (i < currentGameData.shopData.colorsState.Count)
-                dataSO.colors[i].isLocked = currentGameData.shopData.colorsState[i];
+            if (i < currentGameData.shopData.colorsLockedState.Count)
+                dataSO.colors[i].isLocked = currentGameData.shopData.colorsLockedState[i];
         }
 
         // Restore materials state (un-locked)
         for (int i = 0; i < dataSO.materials.Count(); i++)
         {
-            if (i < currentGameData.shopData.materialsState.Count)
-                dataSO.materials[i].isLocked = currentGameData.shopData.materialsState[i];
+            if (i < currentGameData.shopData.materialsLockedState.Count)
+                dataSO.materials[i].isLocked = currentGameData.shopData.materialsLockedState[i];
         }
     }
 

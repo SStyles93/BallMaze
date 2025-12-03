@@ -473,6 +473,7 @@ MonoBehaviour:
   CurrentLevelData:
     levelGrade: 0
     levelScore: 0
+    currencyLeftToEarn: 0
   CurrentLevelTimeToComplete: 0
 --- !u!1 &1333845251
 GameObject:
@@ -681,6 +682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
+  skinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
 --- !u!1 &1549264545
 GameObject:
   m_ObjectHideFlags: 0

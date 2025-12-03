@@ -23,5 +23,6 @@ public class MaterialOption : CustomizationOption
 [System.Serializable]
 public class ColorOption : CustomizationOption
 {
+    public string name;
     public Color color;
 }

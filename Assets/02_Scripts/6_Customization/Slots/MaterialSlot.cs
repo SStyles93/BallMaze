@@ -3,11 +3,11 @@ using UnityEngine.EventSystems;
 
 public class MaterialSlot : CustomizationSlot
 {
-    private MaterialOption skinData;
+    public MaterialOption skinData;
 
-    public void InitializeMaterialSlot(MaterialOption option, PlayerCustomization playerCustomization)
+    public void InitializeMaterialSlot(MaterialOption option, int optionIndex, PlayerCustomization playerCustomization)
     {
-        InitializeSlot(option, playerCustomization);
+        InitializeSlot(option, optionIndex, playerCustomization);
 
         skinData = option;
         slotImage.sprite = option.sprite;
@@ -27,7 +27,11 @@ public class MaterialSlot : CustomizationSlot
         }
         else // when the element is not dragged
         {
-            if (isLocked) return;
+            if (isLocked)
+            {
+                ShopManager.Instance.SetCurrentCustomizationSlot(this);
+                return;
+            }
             playerCustomization.AssignMaterial(skinData.material);
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
@@ -35,11 +39,7 @@ public class MaterialSlot : CustomizationSlot
 
     public override void OnPointerDown(PointerEventData eventData)
     {
-        if (isLocked)
-        {
-            //Try to buy
-            return;
-        }
+        if (isLocked)return;
         //Debug.Log($"PointerDown on {this.gameObject.name}");
     }
 }

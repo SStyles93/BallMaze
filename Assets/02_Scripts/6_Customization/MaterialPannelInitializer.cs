@@ -14,10 +14,10 @@ public class MaterialPannelInitializer : MonoBehaviour
 
     private void Start()
     {
-        foreach (var option in customizationData_SO.materials)
+        for (int i = 0; i < customizationData_SO.materials.Length; i++)
         {
             GameObject materialSlot = Instantiate(materialSlotPrefab, materialPannel.transform);
-            materialSlot.GetComponent<MaterialSlot>().InitializeMaterialSlot(option, playerCustomization);
+            materialSlot.GetComponent<MaterialSlot>().InitializeMaterialSlot(customizationData_SO.materials[i], i, playerCustomization);
         }
     }
 }

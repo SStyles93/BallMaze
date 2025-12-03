@@ -71,4 +71,13 @@ public class BaseUISlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler,
         transform.localScale = new Vector3(1f, 1f, 1f);
         //Debug.Log($"PointerExit of {this.gameObject.name}");
     }
+
+    /// <summary>
+    /// Removes the lock image and Unlocks the slot
+    /// </summary>
+    public void Unlock()
+    {
+        isLocked = false;
+        lockImage.enabled = false;
+    }
 }

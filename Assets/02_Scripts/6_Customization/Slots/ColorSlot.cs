@@ -3,18 +3,18 @@ using UnityEngine.EventSystems;
 
 public class ColorSlot : CustomizationSlot
 {
-    [SerializeField] private Color slotColor;
+    public ColorOption colorOption;
 
     private Color m_lockedColor;
 
-    public void InitializeColorSlot(ColorOption option, PlayerCustomization playerCustomization)
+    public void InitializeColorSlot(ColorOption option, int optionIndex, PlayerCustomization playerCustomization)
     {
-        InitializeSlot(option, playerCustomization);
+        InitializeSlot(option, optionIndex, playerCustomization);
 
-        slotColor = option.color;
+        colorOption = option;
         slotImage.color = option.color;
 
-        m_lockedColor = slotColor;
+        m_lockedColor = colorOption.color;
         m_lockedColor.a = 50f;
     }
 
@@ -30,14 +30,18 @@ public class ColorSlot : CustomizationSlot
                 return;
             }
 
-            slotImage.color = slotColor;
+            slotImage.color = colorOption.color;
             //Debug.Log($"Pointer was dragged on {this.gameObject.name}");
         }
         else // when the element is not dragged
         {
-            if (isLocked) return;
-            // TODO: ASSIGN COLOR
-            playerCustomization.AssignColor(slotColor);
+            if (isLocked)
+            {
+                ShopManager.Instance.SetCurrentCustomizationSlot(this);
+                return;
+            }
+
+            playerCustomization.AssignColor(colorOption.color);
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
     }
@@ -45,7 +49,7 @@ public class ColorSlot : CustomizationSlot
     public override void OnPointerDown(PointerEventData eventData)
     {
         if (isLocked) return;
-        lockImage.color = slotColor;
+        lockImage.color = colorOption.color;
         //Debug.Log($"PointerDown on {this.gameObject.name}");
     }
 }

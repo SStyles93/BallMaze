@@ -8,6 +8,8 @@ using System.Collections.Generic;
 public class PlayerData
 {
     public int currency;
+    public int colorIndex;
+    public int materialIndex;
 }
 
 /// <summary>
@@ -18,6 +20,7 @@ public class LevelData
 {
     public int levelGrade;
     public int levelScore;
+    public int currencyLeftToEarn;
 }
 
 /// <summary>
@@ -26,8 +29,8 @@ public class LevelData
 [System.Serializable]
 public class ShopData
 {
-    public List<bool> colorsState;
-    public List<bool> materialsState;
+    public List<bool> colorsLockedState;
+    public List<bool> materialsLockedState;
 }
 
 /// <summary>
