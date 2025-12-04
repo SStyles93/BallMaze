@@ -7,17 +7,19 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private PcgData_SO pcgData;
     [SerializeField] private GenerationParamameters_SO generationParamameters;
 
-    public LevelData CurrentLevelData = null;
-    public int CurrentLevelIndex = 0;
-    public int LifeLeftOnLevel = 0;
-    public float TimeToCompleteLevel = 0;
-    public int CurrencyToEarn = 0;
-    public int CurrencyLeftOnLevel = 0;
+    private LevelData currentLevelData = null;
+    private int currentLevelIndex = 0;
+    private int lifeLeftOnLevel = 0;
+    private float timeToCompleteLevel = 0;
+    private int currencyToEarn = 0;
+    private int previousGrade = 0;
 
     public float CurrentTimeToCompleteLevel = 0;
 
     #region Singleton
     public static LevelManager Instance { get; private set; }
+    public int CurrentLevelIndex { get => currentLevelIndex; }
+    public LevelData CurrentLevelData { get => currentLevelData; }
 
     private void Awake()
     {
@@ -44,6 +46,7 @@ public class LevelManager : MonoBehaviour
         // Now that we're sure the parameters exist at 'index', we can safely access them.
         LevelParameters targetParams = pcgData.levelParameters[index];
 
+        // Get all the generation parameters from the PCGData_SO
         generationParamameters.Seed = targetParams.Seed;
         generationParamameters.Spacing = targetParams.Spacing;
         generationParamameters.PathDensity = targetParams.PathDensity;
@@ -51,46 +54,65 @@ public class LevelManager : MonoBehaviour
         generationParamameters.PathWidth = targetParams.PathWidth;
         generationParamameters.AllowBranching = targetParams.AllowBranching;
 
-        CurrentLevelIndex = index;
-        CurrentLevelData = KvpLevelData[index];
-        TimeToCompleteLevel = pcgData.levelParameters[index].timeToComplete;
-        CurrencyToEarn = pcgData.levelParameters[index].currencyToEarn;
+        currentLevelIndex = index;
 
+        // If no LevelData is present, create one with initial values
         if (!KvpLevelData.ContainsKey(index))
-            KvpLevelData.Add(index, CurrentLevelData);
+        {
+            currentLevelData = new LevelData()
+            {
+                levelGrade = 0,
+                levelScore = 0,
+                currencyLeftToEarn = pcgData.levelParameters[index].currencyToEarn
+            };
+            KvpLevelData.Add(index, currentLevelData);
+        }
+        else
+        {
+            currentLevelData = KvpLevelData[index];
+        }
+
+        // Get the values of time and currency to earn from the SO
+        timeToCompleteLevel = pcgData.levelParameters[index].timeToComplete;
+        currencyToEarn = pcgData.levelParameters[index].currencyToEarn;
+
+        previousGrade = KvpLevelData[index].levelGrade;
     }
 
     public void ProcessLevelData()
     {
         int grade = CalculateGradeFromData();
+
+        currentLevelData.levelGrade = grade;
+
         int currencyEarned = CalculateCurrencyEarnedFromGrade(grade);
 
         if (currencyEarned <= 0)
             return;
 
         // If currency earned is bigger that what is left, return what is left
-        if (currencyEarned >= CurrentLevelData.currencyLeftToEarn)
+        if (currencyEarned >= currentLevelData.currencyLeftToEarn)
         {
-            currencyEarned = CurrentLevelData.currencyLeftToEarn;
-            CurrentLevelData.currencyLeftToEarn = 0;
+            currencyEarned = currentLevelData.currencyLeftToEarn;
+            currentLevelData.currencyLeftToEarn = 0;
         }
         // If what is earned is lower that what is left, return what is earned and remove that amount from what is left
         else
         {
-            CurrentLevelData.currencyLeftToEarn -= currencyEarned;
+            currentLevelData.currencyLeftToEarn -= currencyEarned;
         }
 
-        CurrencyManager.Instance.currencyValue += currencyEarned;
+        CurrencyManager.Instance.IncreaseCurrency(currencyEarned);
     }
 
     public void RemoveCurrentLevelData()
     {
-        KvpLevelData.Remove(CurrentLevelIndex);
+        KvpLevelData.Remove(currentLevelIndex);
     }
 
     public void SetLifeLeftOnLevel(int lifeLeft)
     {
-        LifeLeftOnLevel = lifeLeft;
+        lifeLeftOnLevel = lifeLeft;
     }
 
     public void SetTimeValueOnLevel(float timeValue)
@@ -106,9 +128,9 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     private int CalculateCurrencyEarnedFromGrade(int grade)
     {
-        int currencyToReturn = CurrencyToEarn;
+        int currencyToReturn = currencyToEarn;
         currencyToReturn /= 3;
-        currencyToReturn *= grade;
+        currencyToReturn *= (grade - previousGrade);
         currencyToReturn = Mathf.RoundToInt(currencyToReturn);
 
         return currencyToReturn;
@@ -121,13 +143,13 @@ public class LevelManager : MonoBehaviour
     private int CalculateGradeFromData()
     {
         int gradeLevel = 3;
-        
-        gradeLevel -= (3-LifeLeftOnLevel);
-        
-        if(CurrentTimeToCompleteLevel <= TimeToCompleteLevel)
+
+        gradeLevel -= (3 - lifeLeftOnLevel);
+
+        if (CurrentTimeToCompleteLevel > timeToCompleteLevel)
             gradeLevel -= 1;
 
-        if(gradeLevel < 0)
+        if (gradeLevel < 0)
         {
             Debug.LogError($"gradeLevel should not be lower than 0, current gradeLevel: {gradeLevel}");
         }

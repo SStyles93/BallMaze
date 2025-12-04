@@ -1,11 +1,15 @@
+using System;
 using UnityEngine;
 
 public class CurrencyManager : MonoBehaviour
 {
-    [SerializeField] public int currencyValue = 0;
+    [SerializeField] private int currencyValue = 0;
+
+    public event Action<int> OnCurrencyChanged;
 
     #region Singleton
     public static CurrencyManager Instance { get; private set; }
+    public int CurrencyValue { get => currencyValue; }
 
     private void Awake()
     {
@@ -14,4 +18,22 @@ public class CurrencyManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
     }
     #endregion
+
+    public void IncreaseCurrency(int amount)
+    {
+        currencyValue += amount;
+        OnCurrencyChanged?.Invoke(currencyValue);
+    }
+    public void SetCurrencyValue(int value)
+    {
+        currencyValue = value;
+        OnCurrencyChanged?.Invoke(currencyValue);
+    }
+
+    public void ReduceCurrency(int amount)
+    {
+        currencyValue -= amount;
+        OnCurrencyChanged?.Invoke(currencyValue);
+    }
+
 }

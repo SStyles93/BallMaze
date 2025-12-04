@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkinData_SO
   playerMaterial: {fileID: 2100000, guid: 2123846a701b0d24d917b4567c4a5f3a, type: 2}
   playerColor: {r: 1, g: 1, b: 1, a: 1}
+  playerMaterialIndex: 0
+  playerColorIndex: 0

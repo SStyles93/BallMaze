@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class SavingManager : MonoBehaviour
@@ -39,6 +40,10 @@ public class SavingManager : MonoBehaviour
         CaptureShopData();
 
         SaveFile("Session");
+
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
     }
 
     /// <summary>
@@ -54,7 +59,7 @@ public class SavingManager : MonoBehaviour
 
         PlayerData playerSaveData = new PlayerData
         {
-            currency = CurrencyManager.Instance.currencyValue,
+            currency = CurrencyManager.Instance.CurrencyValue,
             colorIndex = ShopManager.Instance.skinData_SO.playerColorIndex,
             materialIndex = ShopManager.Instance.skinData_SO.playerMaterialIndex
         };
@@ -152,7 +157,7 @@ public class SavingManager : MonoBehaviour
             currentGameData.playerData = playerData;
         }
 
-        CurrencyManager.Instance.currencyValue = currentGameData.playerData.currency;
+        CurrencyManager.Instance.SetCurrencyValue(currentGameData.playerData.currency);
 
         ShopManager shopManager = ShopManager.Instance;
         shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentGameData.playerData.colorIndex].color;
@@ -170,7 +175,7 @@ public class SavingManager : MonoBehaviour
 
         if(currentGameData.levelsData == null)
         {
-            LevelData levelsData = new LevelData(){};
+            LevelData levelsData = new LevelData();
 
             Debug.Log("Current Session Data does not exist, creating new levelsData");
         }

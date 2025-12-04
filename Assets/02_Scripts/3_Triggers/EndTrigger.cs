@@ -2,6 +2,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class EndTrigger : MonoBehaviour
 {
+    bool wasLevelProcessed = false;
+
+    private void Start()
+    {
+        wasLevelProcessed = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
@@ -12,8 +19,13 @@ public class EndTrigger : MonoBehaviour
             manager.SetLifeLeftOnLevel(LifeManager.Instance.CurrentLife);
             
             // TODO: CREATE TIME SYSTEM TO CORRECTLY INJECT HERE
-            manager.SetTimeValueOnLevel(0);
-            manager.ProcessLevelData();
+            manager.SetTimeValueOnLevel(30);
+
+            if (!wasLevelProcessed)
+            {
+                manager.ProcessLevelData();
+                wasLevelProcessed = true;
+            }
 
 
             // --- Time Def ---

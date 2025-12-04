@@ -93,12 +93,19 @@ public class PcgData_SO : ScriptableObject
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(PcgData_SO))]
-    public class PcgData_SO_CUstomInspector : Editor
+    public class PcgData_SO_CustomInspector : Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
             PcgData_SO _target = (PcgData_SO)target;
+
+            if (GUILayout.Button("Save Data"))
+            {
+                EditorUtility.SetDirty(_target);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
 
             if (GUILayout.Button("Delete Auto Generated Data"))
             {

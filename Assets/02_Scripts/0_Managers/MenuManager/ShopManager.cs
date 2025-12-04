@@ -32,7 +32,7 @@ public class ShopManager : MonoBehaviour
 
     public bool ValidatePurchase()
     {
-        if(CurrencyManager.Instance.currencyValue < currentOption.price)
+        if(CurrencyManager.Instance.CurrencyValue < currentOption.price)
         {
             return false;
         }
@@ -51,7 +51,7 @@ public class ShopManager : MonoBehaviour
 
     private void DeductPurchaseFromCurrency(int price)
     {
-        CurrencyManager.Instance.currencyValue -= price;
+        CurrencyManager.Instance.ReduceCurrency(price);
     }
 
     /// <summary>
