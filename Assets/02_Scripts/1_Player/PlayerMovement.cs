@@ -17,16 +17,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask groundedLayerMask;
 
     private bool isGrounded = false;
+    private Vector3 movementValue;
 
     private void OnEnable()
     {
-        PlayerControler.OnMovePerfromed += Move;
+        PlayerControler.OnMovePerfromed += GetMovementValue;
         PlayerControler.OnJumpPerformed += Jump;
     }
 
     private void OnDisable()
     {
-        PlayerControler.OnMovePerfromed -= Move;
+        PlayerControler.OnMovePerfromed -= GetMovementValue;
         PlayerControler.OnJumpPerformed -= Jump;
     }
 
@@ -53,24 +54,27 @@ public class PlayerMovement : MonoBehaviour
         // Updates the gravity for a better fall
         Vector3 gravity = Physics.gravity.y * gravityScale * Vector3.up;
         playerRigidbody.AddForce(gravity, ForceMode.Acceleration);
+
+        // Apply movement with force
+        playerRigidbody.AddForce(movementValue * movementForce * Time.deltaTime, movementForceMode);
+
+        //Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
     }
 
     /// <summary>
-    /// Used to move the player in the given direction
+    /// Used to get the movement direction
     /// </summary>
     /// <param name="movementDirection">Movement direction (Vector2)</param>
-    private void Move(Vector2 movementDirection)
+    private void GetMovementValue(Vector2 movementDirection)
     {
-        if (!isGrounded) return;
 
+        if (!isGrounded)
+        {
+            movementValue = Vector3.zero;
+            return;
+        }
         // Correct movement for x/z directions
-        Vector3 movement = new Vector3(movementDirection.x, 0, movementDirection.y);
-
-        // Apply movement with force
-        //playerRigidbody.linearDamping = 2;
-        playerRigidbody.AddForce(movement * movementForce * Time.deltaTime, movementForceMode);
-
-        //Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
+        movementValue = new Vector3(movementDirection.x, 0, movementDirection.y);
     }
 
     /// <summary>

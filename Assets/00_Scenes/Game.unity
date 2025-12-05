@@ -607,28 +607,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 407222891}
-  - component: {fileID: 407222890}
+  - component: {fileID: 407222892}
   m_Layer: 0
-  m_Name: LevelTimeDefinition
+  m_Name: TimeManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &407222890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 407222889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d93da57956741f34f9c4c484c2266754, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  pcgData: {fileID: 11400000, guid: c78b11adcb1b42f43951254aa7e8c352, type: 2}
-  timerText: {fileID: 1511034962}
 --- !u!4 &407222891
 Transform:
   m_ObjectHideFlags: 0
@@ -645,6 +631,20 @@ Transform:
   - {fileID: 216552672}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &407222892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407222889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a2481b9381169c48bf31c963a7a004d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TimeManager
+  pcgData: {fileID: 11400000, guid: c78b11adcb1b42f43951254aa7e8c352, type: 2}
+  timerText: {fileID: 1511034962}
 --- !u!1001 &624674641
 PrefabInstance:
   m_ObjectHideFlags: 0

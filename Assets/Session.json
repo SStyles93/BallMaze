@@ -1,0 +1,24 @@
+{
+  "timestamp": "2025-12-05T09:50:36.5574955-08:00",
+  "playerData": {
+    "currency": 0,
+    "colorIndex": 0,
+    "materialIndex": 0
+  },
+  "levelsData": {},
+  "shopData": {
+    "colorsLockedState": [
+      false,
+      true,
+      true,
+      true,
+      true
+    ],
+    "materialsLockedState": [
+      false,
+      true,
+      true
+    ]
+  },
+  "lastUnlockedScene": null
+}

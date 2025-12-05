@@ -29,8 +29,8 @@ public class EndTrigger : MonoBehaviour
 
 
             // --- Time Def ---
-            TimeDefinitionSaver.IsTimeUpdated = false;
-            FindFirstObjectByType<TimeDefinitionSaver>().SaveTimeForLevel();
+            TimeManager.IsTimeUpdated = false;
+            FindFirstObjectByType<TimeManager>().SaveTimeForLevel();
 
             SavingManager.Instance.SaveSession();
 

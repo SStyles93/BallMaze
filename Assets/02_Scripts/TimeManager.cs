@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
-public class TimeDefinitionSaver : MonoBehaviour
+
+public class TimeManager : MonoBehaviour
 {
     [SerializeField] PcgData_SO pcgData;
     public static float levelTime = 0.0f;

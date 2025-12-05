@@ -50,7 +50,7 @@ public class DeadZone : MonoBehaviour
                 rb.isKinematic = false; // Unblock player
 
                 //--- Time Def. ---
-                TimeDefinitionSaver.levelTime = 0.0f;
+                TimeManager.levelTime = 0.0f;
             }
         }
     }

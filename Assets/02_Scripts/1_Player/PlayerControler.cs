@@ -52,24 +52,18 @@ public class PlayerControler : MonoBehaviour
         if(playerInput == null)
         playerInput = GetComponent<PlayerInput>();
     }
-
-    private void Update()
-    {
-        if (isMoving) OnMovePerfromed?.Invoke(movementDirection);
-    }
-
     public void OnMove(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
         {
-            isMoving = true;
             movementDirection = ctx.ReadValue<Vector2>();
-            OnMovePerfromed?.Invoke(movementDirection);
+            // Calls the event for the PlayerMovement
+            OnMovePerfromed?.Invoke(movementDirection.normalized);
             //Debug.Log(ctx.ReadValue<Vector2>());
         }
         if (ctx.canceled)
         {
-            isMoving = false;
+            OnMovePerfromed?.Invoke(Vector3.zero);
         }
     }
 
