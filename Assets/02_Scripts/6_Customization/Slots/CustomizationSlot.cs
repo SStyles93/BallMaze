@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CustomizationSlot : BaseUISlot
 {
@@ -41,11 +42,10 @@ public class CustomizationSlot : BaseUISlot
         if (isLocked)
         {
             priceText.enabled = true;
-            
-            //Reduce Visibility of the Lock
-            Color tmpColor = lockImage.color;
-            tmpColor.a = .5f;
-            lockImage.color = tmpColor;
+
+            //Reduce Visibility of the Lock & Slot
+            ChangeImageVisibility(slotImage, .3f);
+            ChangeImageVisibility(lockImage, .5f);
             
             return;
         }
@@ -59,9 +59,8 @@ public class CustomizationSlot : BaseUISlot
         {
             priceText.enabled = false;
 
-            Color tmpColor = lockImage.color;
-            tmpColor.a = 1f;
-            lockImage.color = tmpColor;
+            ChangeImageVisibility(slotImage, 1f);
+            ChangeImageVisibility(lockImage, 1f);
 
             return;
         }
@@ -70,5 +69,17 @@ public class CustomizationSlot : BaseUISlot
         //slotBackground.color = slotColor;
 
         //Debug.Log($"PointerExit of {this.gameObject.name}");
+    }
+
+    /// <summary>
+    /// Modifies the alpha value of a color
+    /// </summary>
+    /// <param name="slotImage">The image to change</param>
+    /// <param name="alphaValue">the desired alpha value [0.0f - 1.0f]</param>
+    private void ChangeImageVisibility(Image slotImage, float alphaValue)
+    {
+        Color tmpColor = slotImage.color;
+        tmpColor.a = alphaValue;
+        slotImage.color = tmpColor;
     }
 }

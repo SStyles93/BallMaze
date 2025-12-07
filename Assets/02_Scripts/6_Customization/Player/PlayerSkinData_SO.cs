@@ -4,10 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerSkin", menuName = "Customization/PlayerSkin")]
 public class PlayerSkinData_SO : ScriptableObject
 {
-    public Material playerMaterial;
-    public Color playerColor;
-    public int playerMaterialIndex;
-    public int playerColorIndex;
+    [SerializeField] public Material playerMaterial;
+    [SerializeField] public Color playerColor;
+    [SerializeField] public int playerMaterialIndex;
+    [SerializeField] public int playerColorIndex;
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(PlayerSkinData_SO))]

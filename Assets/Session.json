@@ -1,14 +1,22 @@
 {
-  "timestamp": "2025-12-05T09:50:36.5574955-08:00",
+  "timestamp": "2025-12-07T12:11:47.1565065-08:00",
   "playerData": {
-    "currency": 0,
+    "currency": 200,
     "colorIndex": 0,
     "materialIndex": 0
   },
-  "levelsData": {},
+  "levelsData": {
+    "0": {
+      "levelGrade": 2,
+      "levelScore": 190,
+      "currencyLeftToEarn": 100
+    }
+  },
   "shopData": {
     "colorsLockedState": [
       false,
+      true,
+      true,
       true,
       true,
       true,
@@ -16,6 +24,8 @@
     ],
     "materialsLockedState": [
       false,
+      true,
+      true,
       true,
       true
     ]

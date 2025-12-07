@@ -32,25 +32,16 @@ public class DeadZone : MonoBehaviour
                 // Block Player
                 rb.isKinematic = true;
 
-                // Remove Level Data from saving
-                LevelManager.Instance.RemoveCurrentLevelData();
-
-                // Save Session
-                SavingManager.Instance.SaveSession();
-
-                // Open EndPannel
-                SceneController.Instance.NewTransition()
-                    .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
-                    .Perform();
+                TimeManager.IsTimeUpdated = false;
             }
             else
             {
-                rb.isKinematic = true; // Block player
-                collision.gameObject.transform.position = spawnPosition; // Replace player
-                rb.isKinematic = false; // Unblock player
+                //Block, respawn and Unblock player
+                rb.isKinematic = true;
+                collision.gameObject.transform.position = spawnPosition;
+                rb.isKinematic = false;
 
-                //--- Time Def. ---
-                TimeManager.levelTime = 0.0f;
+                TimeManager.currentElapsedTime = 0.0f;
             }
         }
     }

@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    // --- Singleton ---
+    
     #region Singleton
     public static SceneController Instance;
 
@@ -21,15 +23,14 @@ public class SceneController : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] private LoadingOverlay loadingOverlay;
 
-    // Changed to track scenes by their actual name, as SessionManager will provide names
+    // --- Variables --- 
+
+    [SerializeField] private LoadingOverlay loadingOverlay;
     private Dictionary<string, string> loadedSceneBySlot = new();
     private bool isBusy = false;
 
-    public event Action OnSceneLoadComplete;
-
-    // API
+    // --- API ---
 
     public SceneTransitionPlan NewTransition()
     {
@@ -164,7 +165,8 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    // Transition Plan Class
+    
+    // --- Transition Plan Class ---
     public class SceneTransitionPlan
     {
         // Key is slotName (string), Value is SceneDatabase.Scenes enum (for internal tracking if needed)
@@ -213,7 +215,8 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    // Helper to get scene name from enum (assuming SceneDatabase.Scenes is an enum of scene names)
+    // --- Helper ---
+    // to get scene name from enum (assuming SceneDatabase.Scenes is an enum of scene names)
     private string GetSceneNameFromEnum(SceneDatabase.Scenes sceneEnum)
     {
         return sceneEnum.ToString();

@@ -15,7 +15,7 @@ public class ColorSlot : CustomizationSlot
         slotImage.color = option.color;
 
         m_lockedColor = colorOption.color;
-        m_lockedColor.a = 50f;
+        m_lockedColor.a = .5f;
     }
 
     public override void OnPointerUp(PointerEventData eventData)

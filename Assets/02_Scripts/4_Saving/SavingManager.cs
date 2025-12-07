@@ -51,7 +51,7 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void CapturePlayerData()
     {
-        if(CurrencyManager.Instance == null)
+        if (CurrencyManager.Instance == null)
         {
             Debug.Log("No CurrencyManager instance available");
             return;
@@ -78,7 +78,7 @@ public class SavingManager : MonoBehaviour
             return;
         }
 
-        foreach (var kvp in LevelManager.Instance.KvpLevelData)
+        foreach (var kvp in LevelManager.Instance.LevelDataDictionnary)
         {
             if (currentGameData.levelsData.ContainsKey(kvp.Key))
                 currentGameData.levelsData[kvp.Key] = kvp.Value;
@@ -144,7 +144,7 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void RestorePlayerData()
     {
-        if(currentGameData.playerData == null)
+        if (currentGameData.playerData == null)
         {
             PlayerData playerData = new PlayerData()
             {
@@ -162,6 +162,8 @@ public class SavingManager : MonoBehaviour
         ShopManager shopManager = ShopManager.Instance;
         shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentGameData.playerData.colorIndex].color;
         shopManager.skinData_SO.playerMaterial = shopManager.customizationData_SO.materials[currentGameData.playerData.materialIndex].material;
+        shopManager.skinData_SO.playerColorIndex = currentGameData.playerData.colorIndex;
+        shopManager.skinData_SO.playerMaterialIndex = currentGameData.playerData.materialIndex;
     }
 
     /// <summary>
@@ -170,10 +172,10 @@ public class SavingManager : MonoBehaviour
     private void RestoreLevelsData()
     {
         if (LevelManager.Instance == null) return;
-        
-        LevelManager.Instance.KvpLevelData.Clear();
 
-        if(currentGameData.levelsData == null)
+        LevelManager.Instance.LevelDataDictionnary.Clear();
+
+        if (currentGameData.levelsData == null)
         {
             LevelData levelsData = new LevelData();
 
@@ -183,7 +185,7 @@ public class SavingManager : MonoBehaviour
         {
             foreach (var kvp in currentGameData.levelsData)
             {
-                LevelManager.Instance.KvpLevelData[kvp.Key] = kvp.Value;
+                LevelManager.Instance.LevelDataDictionnary[kvp.Key] = kvp.Value;
             }
         }
     }

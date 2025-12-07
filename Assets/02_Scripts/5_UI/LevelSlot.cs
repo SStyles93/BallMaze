@@ -7,12 +7,13 @@ using UnityEngine.UI;
 public class LevelSlot : BaseUISlot
 {
     [SerializeField] private TMP_Text slotText;
+    [SerializeField] private Image[] starImages;
 
     private int slotIndex;
 
-    public void InitializeLevelSlot(int level, bool isLocked = false)
+    public void InitializeLevelSlot(int levelIndex, bool isLocked = false)
     {
-        slotIndex = level;
+        slotIndex = levelIndex;
         this.isLocked = isLocked;
 
         if (this.isLocked)
@@ -23,7 +24,16 @@ public class LevelSlot : BaseUISlot
         else
         {
             lockImage.enabled = false;
-            slotText.text = level.ToString();
+            slotText.text = levelIndex.ToString();
+
+            foreach (var image in starImages)
+                image.enabled = true;
+
+            int grade = LevelManager.Instance.GetGradeForLevelAtIndex(levelIndex);
+            for (int i = 0; i < grade; i++)
+            {
+                starImages[i].color = Color.white;
+            }
         }
     }
 

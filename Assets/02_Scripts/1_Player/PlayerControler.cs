@@ -9,7 +9,6 @@ public class PlayerControler : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
 
-    private bool isMoving = false;
     private Vector2 movementDirection = Vector2.zero;
 
     #region Touch
@@ -58,7 +57,7 @@ public class PlayerControler : MonoBehaviour
         {
             movementDirection = ctx.ReadValue<Vector2>();
             // Calls the event for the PlayerMovement
-            OnMovePerfromed?.Invoke(movementDirection.normalized);
+            OnMovePerfromed?.Invoke(movementDirection);
             //Debug.Log(ctx.ReadValue<Vector2>());
         }
         if (ctx.canceled)

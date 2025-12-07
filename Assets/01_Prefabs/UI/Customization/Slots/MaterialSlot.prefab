@@ -74,8 +74,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278228479
-  m_fontColor: {r: 1, g: 0.58562595, b: 0, a: 1}
+    rgba: 4278246655
+  m_fontColor: {r: 1, g: 0.8627451, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -305,3 +305,9 @@ MonoBehaviour:
   lockImage: {fileID: 7267505220961300553}
   lockSprite: {fileID: 21300000, guid: 6d90ed7e46bc33a4db0979f71069e102, type: 3}
   lockColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  index: 0
+  skinData:
+    isLocked: 0
+    price: 0
+    material: {fileID: 0}
+    sprite: {fileID: 0}

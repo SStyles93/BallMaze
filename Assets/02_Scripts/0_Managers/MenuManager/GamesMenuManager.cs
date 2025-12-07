@@ -26,10 +26,10 @@ public class GamesMenuManager : MonoBehaviour
     {
         SavingManager.Instance.LoadSession();
 
-        int levelManagerCount = LevelManager.Instance.KvpLevelData.Count;
+        int levelManagerCount = LevelManager.Instance.LevelDataDictionnary.Count;
         if (levelManagerCount % 10 == 0 || levelManagerCount <= 0 || levelManagerCount > numberOfLevels)
         {
-            numberOfLevels = LevelManager.Instance.KvpLevelData.Count + 10;
+            numberOfLevels = LevelManager.Instance.LevelDataDictionnary.Count + 10;
         }
         InitializeSlots(numberOfLevels);
 
@@ -39,7 +39,7 @@ public class GamesMenuManager : MonoBehaviour
 
     private void InitializeSlots(int numberOfLevels)
     {
-        int levelManagerCount = LevelManager.Instance.KvpLevelData.Count;
+        int levelManagerCount = LevelManager.Instance.LevelDataDictionnary.Count;
 
         for (int i = 0; i < numberOfLevels; i++)
         {

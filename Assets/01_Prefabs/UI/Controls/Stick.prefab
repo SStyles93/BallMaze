@@ -32,10 +32,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 224091927000801720}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 2, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 192, y: 162}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &222676770552705204
 CanvasRenderer:
@@ -67,11 +67,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 35
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
-    m_MaxSize: 40
+    m_MaxSize: 282
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 224091927000801720}
   - component: {fileID: 222418917327610168}
   - component: {fileID: 114144114248384442}
-  - component: {fileID: 114480945186419424}
+  - component: {fileID: 3224856759868362408}
   m_Layer: 5
   m_Name: Stick
   m_TagString: Untagged
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &114480945186419424
+--- !u!114 &3224856759868362408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,17 +167,17 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9d677f1681015749b15c436eec6d880, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  m_MovementRange: 100
-  m_DynamicOriginRange: 750
-  m_ControlPath: <Gamepad>/rightStick
-  m_Behaviour: 2
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.OnScreen.OnScreenStick
+  m_MovementRange: 150
+  m_DynamicOriginRange: 541.8
+  m_ControlPath: <Gamepad>/leftStick
+  m_Behaviour: 0
   m_UseIsolatedInputActions: 0
   m_PointerDownAction:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 1b074f2d-fa95-46ca-9380-393b7fc5018b
+    m_Id: a8c27f3d-f5c5-4a89-801d-9daff6e09829
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -186,7 +186,7 @@ MonoBehaviour:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 9dfc7678-7951-478c-bcd0-9adac30239e6
+    m_Id: 0d3ea468-001d-49a9-bd88-783531a35965
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []

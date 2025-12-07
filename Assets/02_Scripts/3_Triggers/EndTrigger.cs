@@ -18,8 +18,7 @@ public class EndTrigger : MonoBehaviour
             LevelManager manager = LevelManager.Instance;
             manager.SetLifeLeftOnLevel(LifeManager.Instance.CurrentLife);
             
-            // TODO: CREATE TIME SYSTEM TO CORRECTLY INJECT HERE
-            manager.SetTimeValueOnLevel(30);
+            manager.SetTimeValueOnLevel(TimeManager.currentElapsedTime);
 
             if (!wasLevelProcessed)
             {

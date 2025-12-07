@@ -29,6 +29,8 @@ public class LevelParameters
 [CreateAssetMenu(fileName = "LevelsPcgData", menuName = "Procedural Generation/PCG Data")]
 public class PcgData_SO : ScriptableObject
 {
+    public bool TIME_DEFINITION_IS_ACTIVE = true;
+
     public List<LevelParameters> levelParameters = new List<LevelParameters>();
 
     public void DeleteAutoGenData()

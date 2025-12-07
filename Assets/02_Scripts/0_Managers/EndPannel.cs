@@ -18,21 +18,29 @@ public class EndPannel : MonoBehaviour
     {
         levelManager = LevelManager.Instance;
 
+        // lvl n°
         levelText.text = $"Level {levelManager.CurrentLevelIndex}";
-        for (int i = 0; i < levelManager.CurrentLevelData.levelGrade; i++) 
+
+        //stars ( * * * )
+        int levelGrade = levelManager.CurrentLevelData.levelGrade;
+        for (int i = 0; i < levelGrade; i++) 
         {
             starImages[i].enabled = true;
         }
-        scoreText.text = "???"; //TODO: max score - time & lost life
-        //scoreText.text = levelManager.CurrentLevelData.levelTime.ToString();
 
-        if (!levelManager.KvpLevelData.ContainsKey(levelManager.CurrentLevelIndex))
+        // score text
+        scoreText.text = $"{levelManager.CurrentLevelData.levelScore}";
+
+
+        if (levelGrade == 0 || LifeManager.Instance.CurrentLife == 0)
         {
+            //Loads the current scene
             retryButton.SetActive(true);
             continueButton.SetActive(false);
         }
         else
         {
+            //Loads the next scene
             continueButton.SetActive(true);
             retryButton.SetActive(false);
         }

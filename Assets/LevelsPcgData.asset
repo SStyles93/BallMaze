@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72d4bfaef8b7e24b9753009aec88ba6, type: 3}
   m_Name: LevelsPcgData
   m_EditorClassIdentifier: 
+  TIME_DEFINITION_IS_ACTIVE: 0
   levelParameters:
   - Seed: -2047236694
     Spacing: 10
@@ -21,7 +22,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 40
-    timeToComplete: 6.6281395
+    timeToComplete: 12.093045
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -2047236694
@@ -32,7 +33,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 40
-    timeToComplete: 4.87957
+    timeToComplete: 10.206765
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -2047236694
@@ -43,7 +44,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 40
-    timeToComplete: 5.9465795
+    timeToComplete: 20.874418
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: 643120977
@@ -54,7 +55,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 40
-    timeToComplete: 8.219723
+    timeToComplete: 9.096569
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -886148422
@@ -65,7 +66,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 40
-    timeToComplete: 6.5231533
+    timeToComplete: 24.97245
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -780869265
@@ -76,7 +77,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 60
-    timeToComplete: 9.028738
+    timeToComplete: 12.453663
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -670566623
@@ -87,7 +88,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 60
-    timeToComplete: 30
+    timeToComplete: 16.44515
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -591283493
@@ -98,7 +99,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 60
-    timeToComplete: 30
+    timeToComplete: 11.620869
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -558701304
@@ -109,7 +110,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 60
-    timeToComplete: 30
+    timeToComplete: 8.782073
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -431999954
@@ -120,7 +121,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 70
-    timeToComplete: 30
+    timeToComplete: 9.164391
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -408432920
@@ -131,7 +132,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 70
-    timeToComplete: 30
+    timeToComplete: 14.134396
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -367980582
@@ -142,7 +143,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 70
-    timeToComplete: 30
+    timeToComplete: 15.466925
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -300376109
@@ -153,7 +154,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 70
-    timeToComplete: 30
+    timeToComplete: 8.241544
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -251336902
@@ -164,7 +165,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 70
-    timeToComplete: 30
+    timeToComplete: 7.7195086
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: -95764266
@@ -175,7 +176,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 70
-    timeToComplete: 30
+    timeToComplete: 9.861587
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: 9580449
@@ -186,7 +187,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 80
-    timeToComplete: 30
+    timeToComplete: 19.144333
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: 67222999
@@ -197,7 +198,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 80
-    timeToComplete: 30
+    timeToComplete: 9.813181
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: 176445194
@@ -208,7 +209,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 80
-    timeToComplete: 30
+    timeToComplete: 4.6192875
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: 200457977
@@ -219,7 +220,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 80
-    timeToComplete: 30
+    timeToComplete: 11.040792
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: 284366630
@@ -230,7 +231,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 100
-    timeToComplete: 30
+    timeToComplete: 3.265516
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: 320891756
@@ -241,7 +242,7 @@ MonoBehaviour:
     AllowBranching: 0
     MaxX: 40
     MaxZ: 100
-    timeToComplete: 30
+    timeToComplete: 7.4877357
     currencyToEarn: 300
     GeneratedAutomatically: 0
   - Seed: 176445194

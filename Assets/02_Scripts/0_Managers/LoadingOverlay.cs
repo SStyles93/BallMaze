@@ -5,7 +5,7 @@ public class LoadingOverlay : MonoBehaviour
 {
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private float fadeInTime = 1.0f;
-    [SerializeField] private float fadeOutTime = 1.0f;
+    [SerializeField] private float fadeOutTime = .5f;
 
     public IEnumerator FadeInBlack()
     {
@@ -21,7 +21,7 @@ public class LoadingOverlay : MonoBehaviour
     {
         float startAlpha = canvasGroup.alpha;
         float elapsed = 0f;
-        while (elapsed < fadeInTime)
+        while (elapsed < (duration*0.5))
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);

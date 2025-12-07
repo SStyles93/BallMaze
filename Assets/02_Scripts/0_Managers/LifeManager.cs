@@ -26,11 +26,32 @@ public class LifeManager : MonoBehaviour
         {
             currentLife--;
         }
+
         OnRemoveLife?.Invoke();
+
+        if (currentLife <= 0)
+            KillPlayer();
     }
 
     public void ResetLife()
     {
         currentLife = 3;
+    }
+
+    private void KillPlayer()
+    {
+        LevelManager levelManager = LevelManager.Instance;
+
+        // Remove Level Data from saving
+        if (levelManager.PreviousGrade == 0 && levelManager.PreviousScore == 0)
+            LevelManager.Instance.RemoveCurrentLevelData();
+
+        // Save Session
+        SavingManager.Instance.SaveSession();
+
+        // Open EndPannel
+        SceneController.Instance.NewTransition()
+            .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
+            .Perform();
     }
 }
