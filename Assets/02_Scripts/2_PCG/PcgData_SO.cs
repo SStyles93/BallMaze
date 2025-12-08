@@ -19,7 +19,6 @@ public class LevelParameters
     public int MaxZ = 20;
 
     [Header("Level Settings")]
-    public float timeToComplete = 10;
     public int currencyToEarn = 300;
 
     [Space(10)]
@@ -29,8 +28,6 @@ public class LevelParameters
 [CreateAssetMenu(fileName = "LevelsPcgData", menuName = "Procedural Generation/PCG Data")]
 public class PcgData_SO : ScriptableObject
 {
-    public bool TIME_DEFINITION_IS_ACTIVE = true;
-
     public List<LevelParameters> levelParameters = new List<LevelParameters>();
 
     public void DeleteAutoGenData()
@@ -60,8 +57,7 @@ public class PcgData_SO : ScriptableObject
             PathWidth = gen.PathWidth,
             AllowBranching = gen.AllowBranching,
             MaxX = gen.MaxX,
-            MaxZ = gen.MaxZ,
-            timeToComplete = 10.0f
+            MaxZ = gen.MaxZ
         };
 
         if (indexOfDataToWrite == -1)

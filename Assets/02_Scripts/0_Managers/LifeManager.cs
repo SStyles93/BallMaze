@@ -43,7 +43,7 @@ public class LifeManager : MonoBehaviour
         LevelManager levelManager = LevelManager.Instance;
 
         // Remove Level Data from saving
-        if (levelManager.PreviousGrade == 0 && levelManager.PreviousScore == 0)
+        if (levelManager.PreviousNumberOfStars == 0 && levelManager.WasGamePreviouslyFinished == false)
             LevelManager.Instance.RemoveCurrentLevelData();
 
         // Save Session

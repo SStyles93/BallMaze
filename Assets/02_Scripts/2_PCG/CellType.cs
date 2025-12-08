@@ -6,5 +6,6 @@ public enum CellType
     Wall,
     Path,
     Start,
-    End
+    End,
+    Star
 }

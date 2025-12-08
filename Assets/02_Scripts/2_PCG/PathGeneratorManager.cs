@@ -12,6 +12,7 @@ public class PathGeneratorManager : MonoBehaviour
     public GameObject wallPrefab;
     public GameObject startPrefab;
     public GameObject endPrefab;
+    public GameObject starPrefab;
 
     private List<GameObject> spawnedObjects = new List<GameObject>();
 
@@ -74,6 +75,10 @@ public class PathGeneratorManager : MonoBehaviour
                     case CellType.End:
                         // Generate End Prefab
                         spawnedObjects.Add(Instantiate(endPrefab, new Vector3(x, 1, y), Quaternion.identity));
+                        spawnedObjects.Add(Instantiate(floor, new Vector3(x, -(generationParams.MapDepth / 2) + 0.5f, y), Quaternion.identity));
+                        break;
+                    case CellType.Star:
+                        spawnedObjects.Add(Instantiate(starPrefab, new Vector3(x, 1, y), Quaternion.identity));
                         spawnedObjects.Add(Instantiate(floor, new Vector3(x, -(generationParams.MapDepth / 2) + 0.5f, y), Quaternion.identity));
                         break;
 

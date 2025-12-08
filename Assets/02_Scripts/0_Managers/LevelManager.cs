@@ -9,22 +9,20 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GenerationParamameters_SO generationParamameters;
 
     private LevelData currentLevelData = null;
-    private float currentTimeToCompleteLevel = 0;
-    private float timeToCompleteLevel = 0;
+    private int currentStarNumber = 0;
     private int currentLevelIndex = 0;
-    private int lifeLeftOnLevel = 0;
     private int currencyToEarn = 0;
-    private int previousGrade = 0;
-    private int previousScore = 0;
+    private int previousNumberOfStarts = 0;
+    private bool wasGamePreviouslyFinished = false;
 
 
     #region Singleton
     public static LevelManager Instance { get; private set; }
     public int CurrentLevelIndex { get => currentLevelIndex; }
     public LevelData CurrentLevelData { get => currentLevelData; }
-    public int PreviousGrade  => previousGrade;
-    public int PreviousScore => previousScore;
-    public float CurrentTimeToCompleteLevel => currentTimeToCompleteLevel;
+    public int PreviousNumberOfStars  => previousNumberOfStarts;
+    public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
+    public int CurrentStarNumber => currentStarNumber;
 
     private void Awake()
     {
@@ -43,7 +41,7 @@ public class LevelManager : MonoBehaviour
     public int GetGradeForLevelAtIndex(int levelIndex)
     {
         if(LevelDataDictionnary.ContainsKey(levelIndex))
-        return LevelDataDictionnary[levelIndex].levelGrade;
+        return LevelDataDictionnary[levelIndex].numberOfStars;
         else return 0;
     }
 
@@ -60,16 +58,16 @@ public class LevelManager : MonoBehaviour
         // Now that we're sure the parameters exist at 'index', we can safely access them.
         SetGenerationParameters(index);
 
-        currentLevelIndex = index;
-
         // If no LevelData is present, create one with initial values
         InitializeCurrentLevelData(index);
 
+        currentLevelIndex = index;
+        currentStarNumber = 0;
+
         // Get the values of time and currency to earn from the SO
-        timeToCompleteLevel = pcgData.levelParameters[index].timeToComplete;
         currencyToEarn = pcgData.levelParameters[index].currencyToEarn;
-        previousGrade = LevelDataDictionnary[index].levelGrade;
-        previousScore = LevelDataDictionnary[index].levelScore;
+        previousNumberOfStarts = LevelDataDictionnary[index].numberOfStars;
+        wasGamePreviouslyFinished = LevelDataDictionnary[index].wasLevelFinished;
     }
 
     /// <summary>
@@ -77,16 +75,12 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public void ProcessLevelData()
     {
+        currentLevelData.wasLevelFinished = true;
 
-        int grade = CalculateGradeFromData(lifeLeftOnLevel, currentTimeToCompleteLevel);
-        if(currentLevelData.levelGrade < grade)
-        currentLevelData.levelGrade = grade;
+        if (currentStarNumber > previousNumberOfStarts)
+            currentLevelData.numberOfStars = currentStarNumber;
 
-        int score = CalulateScoreFromData(grade, currentTimeToCompleteLevel);
-        if(currentLevelData.levelScore < score)
-        currentLevelData.levelScore = score;
-
-        int currencyEarned = CalculateCurrencyEarnedFromGrade(grade);
+        int currencyEarned = CalculateCurrencyEarnedFromGrade(currentStarNumber);
         if (currencyEarned <= 0)
             return;
 
@@ -114,21 +108,12 @@ public class LevelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the lifeLeftOnLevel
-    /// </summary>
-    /// <param name="lifeLeft">value of life</param>
-    public void SetLifeLeftOnLevel(int lifeLeft)
-    {
-        lifeLeftOnLevel = lifeLeft;
-    }
-
-    /// <summary>
     /// Sets the currentTimeToCompleteLevel
     /// </summary>
     /// <param name="timeValue">Time value (float)</param>
-    public void SetTimeValueOnLevel(float timeValue)
+    public void IncreaseNumberOfStars()
     {
-        currentTimeToCompleteLevel = timeValue;
+        currentStarNumber++;
     }
 
     #region PRIVATE FUNCTIONS
@@ -141,46 +126,10 @@ public class LevelManager : MonoBehaviour
     {
         int currencyToReturn = currencyToEarn;
         currencyToReturn /= 3;
-        currencyToReturn *= (grade - previousGrade);
+        currencyToReturn *= (grade - previousNumberOfStarts);
         currencyToReturn = Mathf.RoundToInt(currencyToReturn);
 
         return currencyToReturn;
-    }
-
-    /// <summary>
-    /// Gets the grade of the level according to life and time
-    /// </summary>
-    /// <param name="lifeLeft">Life left on the player when the level ended</param>
-    /// <param name="elapsedTime">Time to complete the level</param>
-    /// <returns>a grade level [0-3]</returns>
-    private int CalculateGradeFromData(int lifeLeft, float elapsedTime)
-    {
-        int gradeLevel = 3;
-
-        gradeLevel -= (3 - lifeLeft);
-
-        if (elapsedTime > timeToCompleteLevel)
-            gradeLevel -= 1;
-
-        if (gradeLevel < 0)
-        {
-            Debug.LogError($"gradeLevel should not be lower than 0, current gradeLevel: {gradeLevel}");
-        }
-
-        return gradeLevel;
-    }
-
-    /// <summary>
-    /// Calculates the score for the game using the grade and the time
-    /// </summary>
-    /// <param name="grade">Grade [0-3]</param>
-    /// <param name="time">Time value (float)</param>
-    /// <returns>A score (int)</returns>
-    private int CalulateScoreFromData(int grade, float time)
-    {
-        if (time <= 0) return 0;
-
-        return Mathf.RoundToInt(1/time * (grade+1) * 1000);
     }
 
     /// <summary>
@@ -210,9 +159,9 @@ public class LevelManager : MonoBehaviour
         {
             currentLevelData = new LevelData()
             {
-                levelGrade = 0,
-                levelScore = 0,
-                currencyLeftToEarn = pcgData.levelParameters[index].currencyToEarn
+                numberOfStars = 0,
+                currencyLeftToEarn = pcgData.levelParameters[index].currencyToEarn,
+                wasLevelFinished = false
             };
             LevelDataDictionnary.Add(index, currentLevelData);
         }
@@ -220,6 +169,7 @@ public class LevelManager : MonoBehaviour
         {
             currentLevelData = LevelDataDictionnary[index];
         }
+        // Reset the number of stars at each level start
     }
 
     /// <summary>

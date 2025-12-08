@@ -423,6 +423,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingOverlay: {fileID: 332380844}
+--- !u!1 &1192641768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1192641769}
+  - component: {fileID: 1192641770}
+  m_Layer: 0
+  m_Name: VibrationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1192641769
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192641768}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1441058359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1192641770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192641768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10d38a9469e031d4ca5c20125766b46e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VibrationManager
 --- !u!1 &1230751198
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,12 +513,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pcgData: {fileID: 11400000, guid: c78b11adcb1b42f43951254aa7e8c352, type: 2}
   generationParamameters: {fileID: 11400000, guid: a5105104f3b6fd94baab9a19ee5448aa, type: 2}
-  CurrentLevelIndex: 0
-  CurrentLevelData:
-    levelGrade: 0
-    levelScore: 0
-    currencyLeftToEarn: 0
-  CurrentLevelTimeToComplete: 0
 --- !u!1 &1333845251
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +628,7 @@ Transform:
   - {fileID: 2109442887}
   - {fileID: 1179760690}
   - {fileID: 1445328149}
+  - {fileID: 1192641769}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1441120720
@@ -836,6 +875,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2c772e122bb564e9d1213a4404a558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentGameData:
+    playerData:
+      currency: 0
+      colorIndex: 0
+      materialIndex: 0
+    shopData:
+      colorsLockedState: 
+      materialsLockedState: 
+    lastUnlockedScene: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

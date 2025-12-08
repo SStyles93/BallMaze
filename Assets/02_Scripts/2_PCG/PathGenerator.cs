@@ -11,7 +11,6 @@ public class PathGenerator
     private Vector2Int startPos;
     private Vector2Int endPos;
     private CellType[,] grid;
-    //private System.Random random;
 
     // --- Main Public Method ---
     public CellType[,] Generate(GenerationParamameters_SO parameters)
@@ -87,14 +86,76 @@ public class PathGenerator
             grid[endPos.x, endPos.y] = CellType.End;
         }
 
+        int numberOfStars = 3;
+        float minStarDistance = ((gridSize.x * gridSize.y)/(gridSize.x + gridSize.y))/numberOfStars;
+        PlaceStarsWithMinDistance(numberOfStars, minStarDistance);
+
         // --- MODIFIED: Restore Unity's original random state. ---
         Random.state = originalRandomState;
 
         return grid;
     }
 
-    // --- Core Path Generation Methods (Unchanged) ---
-    // --- Core Path Generation Methods (Calls to random updated) ---
+    // --- Private Methods ---
+    private void AddDeadEndBranches()
+    {
+        var pathCells = GetAllCellsOfType(CellType.Path, CellType.Start);
+        if (pathCells.Count == 0) return;
+        int branchesToAttempt = Mathf.FloorToInt(pathCells.Count * 0.25f);
+        Shuffle(pathCells);
+        for (int i = 0; i < branchesToAttempt; i++)
+        {
+            var cell = pathCells[i];
+            var neighbors = GetValidNeighbors(cell, allowOccupied: false);
+            if (neighbors.Count > 0)
+            {
+                // --- MODIFIED: Use Random.Range ---
+                var branchTo = neighbors[Random.Range(0, neighbors.Count)];
+                // --- MODIFIED: Use Random.Range ---
+                int branchLength = Random.Range(1, 4) * step;
+                var current = cell;
+                for (int j = 0; j < branchLength && IsWithinBounds(branchTo); j += step)
+                {
+                    if (grid[branchTo.x, branchTo.y] != CellType.Wall) break;
+                    CarvePathBetween(current, branchTo);
+                    current = branchTo;
+                    var nextNeighbors = GetValidNeighbors(current, false);
+                    if (nextNeighbors.Count == 0) break;
+                    // --- MODIFIED: Use Random.Range ---
+                    branchTo = nextNeighbors[Random.Range(0, nextNeighbors.Count)];
+                }
+            }
+        }
+    }
+
+    private void GenerateFillerPaths()
+    {
+        var allCarvedCells = GetAllCellsOfType(CellType.Path, CellType.Start);
+        if (allCarvedCells.Count == 0) return;
+        int maxCells = (gridSize.x / step) * (gridSize.y / step);
+        int targetCellCount = Mathf.RoundToInt(maxCells * (p.PathDensity / 100.0f));
+        int cellsToCarve = targetCellCount - allCarvedCells.Count;
+        Shuffle(allCarvedCells);
+        var frontier = new List<Vector2Int>(allCarvedCells);
+        while (cellsToCarve > 0 && frontier.Count > 0)
+        {
+            var current = frontier.Last();
+            var neighbors = GetValidNeighbors(current, allowOccupied: false);
+            if (neighbors.Count > 0)
+            {
+                // --- MODIFIED: Use Random.Range ---
+                var next = neighbors[Random.Range(0, neighbors.Count)];
+                CarvePathBetween(current, next);
+                frontier.Add(next);
+                cellsToCarve -= (step > 0 ? step : 1);
+            }
+            else { frontier.RemoveAt(frontier.Count - 1); }
+        }
+    }
+
+    /// <summary>
+    /// Core Path Generation Methods (Calls to random updated)
+    /// </summary>
     private void GenerateRandomizedSolutionPath()
     {
         var current = startPos;
@@ -132,63 +193,9 @@ public class PathGenerator
         }
     }
 
-    private void GenerateFillerPaths()
-    {
-        var allCarvedCells = GetAllCellsOfType(CellType.Path, CellType.Start);
-        if (allCarvedCells.Count == 0) return;
-        int maxCells = (gridSize.x / step) * (gridSize.y / step);
-        int targetCellCount = Mathf.RoundToInt(maxCells * (p.PathDensity / 100.0f));
-        int cellsToCarve = targetCellCount - allCarvedCells.Count;
-        Shuffle(allCarvedCells);
-        var frontier = new List<Vector2Int>(allCarvedCells);
-        while (cellsToCarve > 0 && frontier.Count > 0)
-        {
-            var current = frontier.Last();
-            var neighbors = GetValidNeighbors(current, allowOccupied: false);
-            if (neighbors.Count > 0)
-            {
-                // --- MODIFIED: Use Random.Range ---
-                var next = neighbors[Random.Range(0, neighbors.Count)];
-                CarvePathBetween(current, next);
-                frontier.Add(next);
-                cellsToCarve -= (step > 0 ? step : 1);
-            }
-            else { frontier.RemoveAt(frontier.Count - 1); }
-        }
-    }
-
-    private void AddDeadEndBranches()
-    {
-        var pathCells = GetAllCellsOfType(CellType.Path, CellType.Start);
-        if (pathCells.Count == 0) return;
-        int branchesToAttempt = Mathf.FloorToInt(pathCells.Count * 0.25f);
-        Shuffle(pathCells);
-        for (int i = 0; i < branchesToAttempt; i++)
-        {
-            var cell = pathCells[i];
-            var neighbors = GetValidNeighbors(cell, allowOccupied: false);
-            if (neighbors.Count > 0)
-            {
-                // --- MODIFIED: Use Random.Range ---
-                var branchTo = neighbors[Random.Range(0, neighbors.Count)];
-                // --- MODIFIED: Use Random.Range ---
-                int branchLength = Random.Range(1, 4) * step;
-                var current = cell;
-                for (int j = 0; j < branchLength && IsWithinBounds(branchTo); j += step)
-                {
-                    if (grid[branchTo.x, branchTo.y] != CellType.Wall) break;
-                    CarvePathBetween(current, branchTo);
-                    current = branchTo;
-                    var nextNeighbors = GetValidNeighbors(current, false);
-                    if (nextNeighbors.Count == 0) break;
-                    // --- MODIFIED: Use Random.Range ---
-                    branchTo = nextNeighbors[Random.Range(0, nextNeighbors.Count)];
-                }
-            }
-        }
-    }
-
-    // --- End Point Placement & Connection Methods (Unchanged) ---
+    /// <summary>
+    /// End Point Placement Connection Methods
+    /// </summary> 
     private void PlaceEndAtFurthestPoint()
     {
         var allPathCells = GetAllCellsOfType(CellType.Path);
@@ -216,65 +223,10 @@ public class PathGenerator
         }
     }
 
-    private void ConnectToManualEndPoint()
-    {
-        if (!IsWithinBounds(endPos) || grid[endPos.x, endPos.y] != CellType.Wall) return;
-        var allPathCells = GetAllCellsOfType(CellType.Path, CellType.Start);
-        if (allPathCells.Count == 0) return;
-        Vector2Int closestCell = allPathCells.OrderBy(cell => Vector2.Distance(cell, endPos)).First();
-        var current = closestCell;
-        while (current != endPos)
-        {
-            var next = current;
-            if (Mathf.Abs(endPos.x - current.x) > Mathf.Abs(endPos.y - current.y)) next.x += (endPos.x > current.x ? step : -step);
-            else next.y += (endPos.y > current.y ? step : -step);
-            CarvePathBetween(current, next);
-            current = next;
-        }
-    }
-
+    
     // --- Helper & Utility Methods ---
-    private List<Vector2Int> GetValidNeighbors(Vector2Int pos, bool allowOccupied, HashSet<Vector2Int> exclude = null)
-    {
-        var neighbors = new List<Vector2Int>();
-        var directions = new[] { new Vector2Int(0, step), new Vector2Int(0, -step), new Vector2Int(step, 0), new Vector2Int(-step, 0) };
-        foreach (var dir in directions)
-        {
-            var neighbor = pos + dir;
-            if (IsWithinBounds(neighbor) && (exclude == null || !exclude.Contains(neighbor)))
-            {
-                if (allowOccupied || grid[neighbor.x, neighbor.y] == CellType.Wall) neighbors.Add(neighbor);
-            }
-        }
-        return neighbors;
-    }
-
-    private List<Vector2Int> GetAllCellsOfType(params CellType[] types)
-    {
-        var cells = new List<Vector2Int>();
-        var typeSet = new HashSet<CellType>(types);
-        for (int x = 0; x < gridSize.x; x++)
-        {
-            for (int y = 0; y < gridSize.y; y++)
-            {
-                if (typeSet.Contains(grid[x, y])) cells.Add(new Vector2Int(x, y));
-            }
-        }
-        return cells;
-    }
 
     private void CalculateGridSize() { gridSize = new Vector2Int(p.MaxX, p.MaxZ); }
-
-    private Vector2Int SanitizeCoord(Vector2Int pos)
-    {
-        int validX = Mathf.RoundToInt((float)pos.x / step) * step;
-        int validY = Mathf.RoundToInt((float)pos.y / step) * step;
-        validX = Mathf.Clamp(validX, 0, gridSize.x - 1);
-        validY = Mathf.Clamp(validY, 0, gridSize.y - 1);
-        return new Vector2Int(validX, validY);
-    }
-
-    private bool IsWithinBounds(Vector2Int pos) => pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y;
 
     // REVERTED: CarvePath now only carves a single cell.
     private void CarvePath(Vector2Int pos)
@@ -296,6 +248,100 @@ public class PathGenerator
             CarvePath(current);
             current += dir; // Move to the next cell in the line
         }
+    }
+
+    private void ConnectToManualEndPoint()
+    {
+        if (!IsWithinBounds(endPos) || grid[endPos.x, endPos.y] != CellType.Wall) return;
+        var allPathCells = GetAllCellsOfType(CellType.Path, CellType.Start);
+        if (allPathCells.Count == 0) return;
+        Vector2Int closestCell = allPathCells.OrderBy(cell => Vector2.Distance(cell, endPos)).First();
+        var current = closestCell;
+        while (current != endPos)
+        {
+            var next = current;
+            if (Mathf.Abs(endPos.x - current.x) > Mathf.Abs(endPos.y - current.y)) next.x += (endPos.x > current.x ? step : -step);
+            else next.y += (endPos.y > current.y ? step : -step);
+            CarvePathBetween(current, next);
+            current = next;
+        }
+    }
+
+    private List<Vector2Int> GetAllCellsOfType(params CellType[] types)
+    {
+        var cells = new List<Vector2Int>();
+        var typeSet = new HashSet<CellType>(types);
+        for (int x = 0; x < gridSize.x; x++)
+        {
+            for (int y = 0; y < gridSize.y; y++)
+            {
+                if (typeSet.Contains(grid[x, y])) cells.Add(new Vector2Int(x, y));
+            }
+        }
+        return cells;
+    }
+
+    private List<Vector2Int> GetValidNeighbors(Vector2Int pos, bool allowOccupied, HashSet<Vector2Int> exclude = null)
+    {
+        var neighbors = new List<Vector2Int>();
+        var directions = new[] { new Vector2Int(0, step), new Vector2Int(0, -step), new Vector2Int(step, 0), new Vector2Int(-step, 0) };
+        foreach (var dir in directions)
+        {
+            var neighbor = pos + dir;
+            if (IsWithinBounds(neighbor) && (exclude == null || !exclude.Contains(neighbor)))
+            {
+                if (allowOccupied || grid[neighbor.x, neighbor.y] == CellType.Wall) neighbors.Add(neighbor);
+            }
+        }
+        return neighbors;
+    }
+
+    private bool IsWithinBounds(Vector2Int pos) => pos.x >= 0 && pos.x < gridSize.x && pos.y >= 0 && pos.y < gridSize.y;
+
+    private void PlaceStarsWithMinDistance(int starCount, float minDistance)
+    {
+        // Collect all valid path cells (including Start but excluding End)
+        var pathCells = GetAllCellsOfType(CellType.Path);
+
+        if (pathCells.Count == 0 || starCount <= 0)
+            return;
+
+        // Shuffle so selection is random
+        Shuffle(pathCells);
+
+        var selectedStars = new List<Vector2Int>();
+
+        foreach (var cell in pathCells)
+        {
+            // Enforce minimum distance from already placed stars
+            bool tooClose = false;
+            foreach (var star in selectedStars)
+            {
+                if (Vector2.Distance(cell, star) < minDistance)
+                {
+                    tooClose = true;
+                    break;
+                }
+            }
+            if (tooClose)
+                continue;
+
+            // Place star
+            grid[cell.x, cell.y] = CellType.Star;
+            selectedStars.Add(cell);
+
+            if (selectedStars.Count >= starCount)
+                break;
+        }
+    }
+
+    private Vector2Int SanitizeCoord(Vector2Int pos)
+    {
+        int validX = Mathf.RoundToInt((float)pos.x / step) * step;
+        int validY = Mathf.RoundToInt((float)pos.y / step) * step;
+        validX = Mathf.Clamp(validX, 0, gridSize.x - 1);
+        validY = Mathf.Clamp(validY, 0, gridSize.y - 1);
+        return new Vector2Int(validX, validY);
     }
 
     private void Shuffle<T>(List<T> list)

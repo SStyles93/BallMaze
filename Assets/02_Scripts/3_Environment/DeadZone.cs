@@ -31,8 +31,6 @@ public class DeadZone : MonoBehaviour
             {
                 // Block Player
                 rb.isKinematic = true;
-
-                TimeManager.IsTimeUpdated = false;
             }
             else
             {
@@ -40,8 +38,6 @@ public class DeadZone : MonoBehaviour
                 rb.isKinematic = true;
                 collision.gameObject.transform.position = spawnPosition;
                 rb.isKinematic = false;
-
-                TimeManager.currentElapsedTime = 0.0f;
             }
         }
     }

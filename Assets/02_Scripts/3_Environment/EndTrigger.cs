@@ -15,21 +15,11 @@ public class EndTrigger : MonoBehaviour
         {
             other.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
-            LevelManager manager = LevelManager.Instance;
-            manager.SetLifeLeftOnLevel(LifeManager.Instance.CurrentLife);
-            
-            manager.SetTimeValueOnLevel(TimeManager.currentElapsedTime);
-
             if (!wasLevelProcessed)
             {
-                manager.ProcessLevelData();
+                LevelManager.Instance.ProcessLevelData();
                 wasLevelProcessed = true;
             }
-
-
-            // --- Time Def ---
-            TimeManager.IsTimeUpdated = false;
-            FindFirstObjectByType<TimeManager>().SaveTimeForLevel();
 
             SavingManager.Instance.SaveSession();
 

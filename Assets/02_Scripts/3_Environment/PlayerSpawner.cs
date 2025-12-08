@@ -20,8 +20,6 @@ public class PlayerSpawner : MonoBehaviour
     {
         spawnPosition = this.transform.position + Vector3.up * offset;
         GameObject player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
-
-        TimeManager.IsTimeUpdated = true;
     }
     private void OnDrawGizmos()
     {

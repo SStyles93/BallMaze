@@ -22,17 +22,13 @@ public class EndPannel : MonoBehaviour
         levelText.text = $"Level {levelManager.CurrentLevelIndex}";
 
         //stars ( * * * )
-        int levelGrade = levelManager.CurrentLevelData.levelGrade;
-        for (int i = 0; i < levelGrade; i++) 
+        int numberOfStars = levelManager.CurrentLevelData.numberOfStars;
+        for (int i = 0; i < numberOfStars; i++) 
         {
             starImages[i].enabled = true;
         }
 
-        // score text
-        scoreText.text = $"{levelManager.CurrentLevelData.levelScore}";
-
-
-        if (levelGrade == 0 || LifeManager.Instance.CurrentLife == 0)
+        if (numberOfStars == 0 || LifeManager.Instance.CurrentLife == 0)
         {
             //Loads the current scene
             retryButton.SetActive(true);

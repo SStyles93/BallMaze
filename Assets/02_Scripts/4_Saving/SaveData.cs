@@ -18,9 +18,9 @@ public class PlayerData
 [System.Serializable]
 public class LevelData
 {
-    public int levelGrade;
-    public int levelScore;
+    public int numberOfStars;
     public int currencyLeftToEarn;
+    public bool wasLevelFinished = false;
 }
 
 /// <summary>
