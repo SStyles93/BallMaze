@@ -7,8 +7,6 @@ public class EndPannel : MonoBehaviour
 {
     [Header("Object Reference")]
     [SerializeField] private TMP_Text levelText;
-    [SerializeField] private List<Image> starImages = new List<Image>();
-    [SerializeField] private TMP_Text scoreText;
     [SerializeField] private GameObject continueButton;
     [SerializeField] private GameObject retryButton;
 
@@ -22,13 +20,7 @@ public class EndPannel : MonoBehaviour
         levelText.text = $"Level {levelManager.CurrentLevelIndex}";
 
         //stars ( * * * )
-        int numberOfStars = levelManager.CurrentLevelData.numberOfStars;
-        for (int i = 0; i < numberOfStars; i++) 
-        {
-            starImages[i].enabled = true;
-        }
-
-        if (numberOfStars == 0 || LifeManager.Instance.CurrentLife == 0)
+        if (levelManager.CurrentLevelData.numberOfStars == 0 || LifeManager.Instance.CurrentLife == 0)
         {
             //Loads the current scene
             retryButton.SetActive(true);
@@ -89,4 +81,6 @@ public class EndPannel : MonoBehaviour
             .WithClearUnusedAssets()
             .Perform();
     }
+
+
 }
