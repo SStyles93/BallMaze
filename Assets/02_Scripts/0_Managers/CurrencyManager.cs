@@ -10,6 +10,7 @@ public class CurrencyManager : MonoBehaviour
     #region Singleton
     public static CurrencyManager Instance { get; private set; }
     public int CurrencyValue { get => currencyValue; }
+    public int PreviousCurrencyValue;
 
     private void Awake()
     {
@@ -21,6 +22,7 @@ public class CurrencyManager : MonoBehaviour
 
     public void IncreaseCurrency(int amount)
     {
+        PreviousCurrencyValue = currencyValue;
         currencyValue += amount;
         OnCurrencyChanged?.Invoke(currencyValue);
     }
