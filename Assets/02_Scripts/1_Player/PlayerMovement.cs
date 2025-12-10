@@ -85,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.AddForce(Vector3.up * jumpForce, jumpForceMode);
         //Debug.Log($"Force Applied up with {jumpForce} force, and {movementForceMode.ToString()}");
         VibrationManager.Instance?.Pop();
+        AudioManager.Instance?.Jump();
     }
 
     /// <summary>
