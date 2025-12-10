@@ -6,6 +6,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (SavingManager.Instance != null)
             SavingManager.Instance.LoadSession();
+        AudioManager.Instance?.PlayMusic();
     }
 
     public void OpenGamesMenu()

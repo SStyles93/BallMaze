@@ -7,7 +7,8 @@ public class StarTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             LevelManager.Instance?.IncreaseNumberOfStars();
-            VibrationManager.Instance.MultiPop(3);
+            VibrationManager.Instance?.MultiPop(3);
+            AudioManager.Instance?.PlayStarSound();
 
             gameObject.SetActive(false);
         }

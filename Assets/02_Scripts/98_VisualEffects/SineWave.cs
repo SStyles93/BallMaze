@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SineWave : MonoBehaviour
 {
@@ -25,6 +24,13 @@ public class SineWave : MonoBehaviour
         return sineWaveValue;
     }
 
+    /// <summary>
+    /// Returns a value between minValue and maxValue
+    /// </summary>
+    /// <param name="period">The period of a revolution (min-max-min)</param>
+    /// <param name="minValue">Minimum value of the sine</param>
+    /// <param name="maxValue">Maximum value of the sine</param>
+    /// <returns></returns>
     public static float SineWaveEffect(float period, float minValue, float maxValue)
     {
         if (period <= Mathf.Epsilon)
@@ -41,6 +47,33 @@ public class SineWave : MonoBehaviour
 
         // Convert from 0..1 → minValue..maxValue
         float mappedSineWaveValue = Mathf.Lerp(minValue, maxValue, normalized);
+
+        return mappedSineWaveValue;
+    }
+
+    /// <summary>
+    /// Returns a value between minValue and maxValue
+    /// </summary>
+    /// <param name="period">The period of a revolution (min-max-min)</param>
+    /// <param name="minValue">Minimum value of the sine</param>
+    /// <param name="maxValue">Maximum value of the sine</param>
+    /// <returns></returns>
+    public static float SineWaveEffect(float period, Vector2 minMaxValues)
+    {
+        if (period <= Mathf.Epsilon)
+            return minMaxValues.x;
+
+        float cycle = Time.time / period;
+        const float tau = Mathf.PI * 2.0f;
+
+        // Normal sine wave from -1..1
+        float sine = Mathf.Sin(cycle * tau);
+
+        // Convert from -1..1 → 0..1
+        float normalized = (sine + 1f) * 0.5f;
+
+        // Convert from 0..1 → minValue..maxValue
+        float mappedSineWaveValue = Mathf.Lerp(minMaxValues.x, minMaxValues.y, normalized);
 
         return mappedSineWaveValue;
     }

@@ -38,4 +38,8 @@ public class CurrencyManager : MonoBehaviour
         OnCurrencyChanged?.Invoke(currencyValue);
     }
 
+    public void LevelPreviousAndCurrentCurrency()
+    {
+        PreviousCurrencyValue = CurrencyValue;
+    }
 }

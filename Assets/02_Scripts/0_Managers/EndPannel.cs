@@ -31,6 +31,8 @@ public class EndPannel : MonoBehaviour
             //Loads the next scene
             continueButton.SetActive(true);
             retryButton.SetActive(false);
+
+            AudioManager.Instance?.PlayWinSound();
         }
     }
 
@@ -60,6 +62,8 @@ public class EndPannel : MonoBehaviour
 
         LifeManager.Instance.ResetLife();
 
+        CurrencyManager.Instance.LevelPreviousAndCurrentCurrency();
+
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
             .Unload(SceneDatabase.Scenes.Game)
@@ -72,6 +76,8 @@ public class EndPannel : MonoBehaviour
     public void ReturnToGamesMenu()
     {
         LifeManager.Instance.ResetLife();
+
+        CurrencyManager.Instance.LevelPreviousAndCurrentCurrency();
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
