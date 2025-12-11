@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-12-10T18:09:38.7547338-08:00",
+  "timestamp": "2025-12-10T19:27:04.580423-08:00",
   "playerData": {
-    "currency": 1700,
+    "currency": 1800,
     "colorIndex": 0,
     "materialIndex": 0
   },
@@ -34,6 +34,11 @@
     "5": {
       "numberOfStars": 2,
       "currencyLeftToEarn": 100,
+      "wasLevelFinished": true
+    },
+    "6": {
+      "numberOfStars": 1,
+      "currencyLeftToEarn": 200,
       "wasLevelFinished": true
     }
   },
