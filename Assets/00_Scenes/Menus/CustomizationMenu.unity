@@ -1924,6 +1924,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 245097481670393132, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_Name
+      value: ColorButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 1444215720301566591, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_Name
+      value: SkinButton
+      objectReference: {fileID: 0}
     - target: {fileID: 5378514989699315119, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

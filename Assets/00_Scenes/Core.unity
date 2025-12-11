@@ -596,6 +596,8 @@ MonoBehaviour:
   environmentSfxAudioSource: {fileID: 849186764}
   musicClip: {fileID: 8300000, guid: 02f8a67d81fd7d1448cf0b2213796b97, type: 3}
   jumpClip: {fileID: 8300000, guid: b5d138cf3c10ee345aa3b6108fdffb94, type: 3}
+  clickClip: {fileID: 8300000, guid: 43388645cce375a42a77c0867acc79fd, type: 3}
+  validateClip: {fileID: 8300000, guid: e7782d87603539140b19b1940d0abad7, type: 3}
   starClip: {fileID: 8300000, guid: e796479239d7e00448c88b8aa152bfeb, type: 3}
   winClip: {fileID: 8300000, guid: f8e03807babc29149bb2e97acbd24834, type: 3}
 --- !u!1 &849186763
