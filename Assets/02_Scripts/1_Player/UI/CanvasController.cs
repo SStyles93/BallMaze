@@ -24,7 +24,9 @@ public class CanvasController : MonoBehaviour
     private void AssignControlScheme(string controlScheme)
     {
         currentControlScheme = controlScheme;
-        //if (currentControlScheme == "Keyboard&Mouse") canvasGroup.alpha = 0.0f;
-        //else canvasGroup.alpha = 1.0f;
+#if UNITY_WEBGL
+        if (currentControlScheme == "Keyboard&Mouse") canvasGroup.alpha = 0.0f;
+        else canvasGroup.alpha = 1.0f;
+#endif
     }
 }
