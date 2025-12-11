@@ -7,7 +7,7 @@ public class MaterialPannelInitializer : MonoBehaviour
     // Reference to the player customization
     [SerializeField] PlayerCustomization playerCustomization;
 
-    [SerializeField] private GameObject materialPannel;
+    [SerializeField] private GameObject materialSlotsContainer;
     [SerializeField] private GameObject materialSlotPrefab;
 
     [SerializeField] private CustomizationData_SO customizationData_SO;
@@ -16,7 +16,7 @@ public class MaterialPannelInitializer : MonoBehaviour
     {
         for (int i = 0; i < customizationData_SO.materials.Length; i++)
         {
-            GameObject materialSlot = Instantiate(materialSlotPrefab, materialPannel.transform);
+            GameObject materialSlot = Instantiate(materialSlotPrefab, materialSlotsContainer.transform);
             materialSlot.GetComponent<MaterialSlot>().InitializeMaterialSlot(customizationData_SO.materials[i], i, playerCustomization);
         }
     }

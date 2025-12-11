@@ -17,19 +17,19 @@ MonoBehaviour:
     price: 0
     material: {fileID: 2100000, guid: c6b7e45968c0d1e43a3e1c24d21eb908, type: 2}
     sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
-  - isLocked: 0
+  - isLocked: 1
     price: 600
     material: {fileID: 2100000, guid: 2123846a701b0d24d917b4567c4a5f3a, type: 2}
     sprite: {fileID: 21300000, guid: 2f5bec16db7d00a4b877c9ba02d0ad20, type: 3}
-  - isLocked: 0
+  - isLocked: 1
     price: 1000
     material: {fileID: 2100000, guid: b23288f664a6edb40a1ffe636d311dd3, type: 2}
     sprite: {fileID: 21300000, guid: 7a842f81754570542bf8e8930676455d, type: 3}
-  - isLocked: 0
+  - isLocked: 1
     price: 2000
     material: {fileID: 2100000, guid: b976ae8913e90a344bffb75d87f5d62c, type: 2}
     sprite: {fileID: 21300000, guid: 039130ee79cad1048892bec028743b50, type: 3}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     material: {fileID: 2100000, guid: a38b88f3861292b4aac51ff067a95bc6, type: 2}
     sprite: {fileID: 21300000, guid: 95bb74554d598404584adcd6a4cbfcca, type: 3}
@@ -38,71 +38,71 @@ MonoBehaviour:
     price: 0
     name: White
     color: {r: 1, g: 1, b: 1, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 200
     name: Red
     color: {r: 1, g: 0, b: 0, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 300
     name: Green
     color: {r: 0, g: 1, b: 0, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 600
     name: Blue
     color: {r: 0, g: 0, b: 1, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 1000
     name: Orange
     color: {r: 1, g: 0.568441, b: 0, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 2000
     name: Silver
     color: {r: 0.7607843, g: 0.78431374, b: 0.81960785, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 4000
     name: Golden
     color: {r: 0.83137256, g: 0.627451, b: 0.09019608, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 4000
     name: Deep Copper
     color: {r: 0.7058824, g: 0.40784314, b: 0.18039216, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Rose Gold
     color: {r: 0.9647059, g: 0.75686276, b: 0.75686276, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Iridescent Teal
     color: {r: 0.22745098, g: 1, b: 0.8156863, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Electric Cyan
     color: {r: 0, g: 0.9647059, b: 1, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Neon Pink
     color: {r: 1, g: 0.17254902, b: 0.8745098, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Lime Neon
     color: {r: 0.65882355, g: 1, b: 0.039215688, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Toxic Green
     color: {r: 0.22352941, g: 1, b: 0.078431375, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Hot Orange
     color: {r: 1, g: 0.41960785, b: 0.039215688, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Cosminc Blue
     color: {r: 0.2901961, g: 0.8862745, b: 1, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Void Purple
     color: {r: 0.8235294, g: 0.54901963, b: 1, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price: 5000
     name: Glacial Mint
     color: {r: 0.62352943, g: 1, b: 0.8784314, a: 1}

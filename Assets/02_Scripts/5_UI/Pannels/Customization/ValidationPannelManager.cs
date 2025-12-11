@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -69,6 +70,6 @@ public class ValidationPannelManager : MonoBehaviour
 
     private void InitializeText()
     {
-        validationText.text = $"You are going to purchase {optionName} from the Store for {selectedOption.price} $.\n\nAre you sure ?";
+        validationText.text = $"Purchase {optionName} for {selectedOption.price} <sprite index=0> ?";
     }
 }

@@ -74,16 +74,4 @@ public class CustomizationSlot : BaseUISlot
 
         //Debug.Log($"PointerExit of {this.gameObject.name}");
     }
-
-    /// <summary>
-    /// Modifies the alpha value of a color
-    /// </summary>
-    /// <param name="slotImage">The image to change</param>
-    /// <param name="alphaValue">the desired alpha value [0.0f - 1.0f]</param>
-    private void ChangeImageVisibility(Image slotImage, float alphaValue)
-    {
-        Color tmpColor = slotImage.color;
-        tmpColor.a = alphaValue;
-        slotImage.color = tmpColor;
-    }
 }

@@ -24,6 +24,10 @@ public class PlayerSkinData_SO : ScriptableObject
                 _target.playerColor = Color.white;
                 _target.playerMaterialIndex = 0;
                 _target.playerColorIndex = 0;
+
+                EditorUtility.SetDirty(_target);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
         }
     }

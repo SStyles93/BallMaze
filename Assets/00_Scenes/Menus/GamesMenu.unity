@@ -918,7 +918,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2075890695750127537, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 600
+      value: 780
       objectReference: {fileID: 0}
     - target: {fileID: 2075890695750127537, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1522,7 +1522,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1997916365
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1564,8 +1564,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Levels
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0b9a94f59b1cfdc408cec57dd7b076ee, type: 2}
+  m_sharedMaterial: {fileID: -5643640150379989226, guid: 0b9a94f59b1cfdc408cec57dd7b076ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1589,13 +1589,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 190
-  m_fontSizeBase: 190
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1720,27 +1720,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -2304
+      value: 1536
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -648
+      value: 1512
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1776,7 +1776,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -108
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1833,6 +1833,22 @@ PrefabInstance:
     - target: {fileID: 6789801073319472216, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_Name
       value: Level Scroll View
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001944929128180580, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Color.a
+      value: 0.52156866
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001944929128180580, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Color.b
+      value: 0.21176471
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001944929128180580, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Color.g
+      value: 0.14117648
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001944929128180580, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Color.r
+      value: 0.078431375
       objectReference: {fileID: 0}
     - target: {fileID: 7433119119640757087, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMax.y

@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -73,14 +72,14 @@ public class LevelSlot : BaseUISlot
     {
         base.OnPointerDown(eventData);
         if (isLocked) return;
-        lockImage.color = new Color(1, 1, 1, 0.5f);
+        ChangeImageVisibility(lockImage, .5f);
         //Debug.Log($"PointerDown on {this.gameObject.name}");
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
     {
         isMouseOver = true;
-        slotImage.color = Color.gray;
+        ChangeImageVisibility(slotImage, .3f);
     }
 
     public override void OnPointerExit(PointerEventData eventData)
@@ -91,7 +90,6 @@ public class LevelSlot : BaseUISlot
         {
             lockImage.color = lockColor;
         }
-
-        slotImage.color = Color.white;
+        ChangeImageVisibility(slotImage, 1f);
     }
 }

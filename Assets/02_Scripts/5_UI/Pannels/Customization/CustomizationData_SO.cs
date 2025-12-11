@@ -47,6 +47,10 @@ public class CustomizationData_SO_CustomInspectior : Editor
             {
                 _target.colors[i].isLocked = true;
             }
+
+            EditorUtility.SetDirty(_target);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 }
