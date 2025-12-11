@@ -79,6 +79,8 @@ public class LevelManager : MonoBehaviour
 
         if (currentStarCount > previousNumberOfStarts)
             currentLevelData.numberOfStars = currentStarCount;
+        else
+            currentStarCount = previousNumberOfStarts;
 
         int currencyEarned = CalculateCurrencyEarnedFromGrade(currentStarCount);
         if (currencyEarned <= 0)

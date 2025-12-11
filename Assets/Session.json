@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-12-10T19:27:04.580423-08:00",
+  "timestamp": "2025-12-10T20:07:56.7647707-08:00",
   "playerData": {
-    "currency": 1800,
-    "colorIndex": 0,
-    "materialIndex": 0
+    "currency": 600,
+    "colorIndex": 4,
+    "materialIndex": 1
   },
   "levelsData": {
     "0": {
@@ -40,15 +40,25 @@
       "numberOfStars": 1,
       "currencyLeftToEarn": 200,
       "wasLevelFinished": true
+    },
+    "7": {
+      "numberOfStars": 3,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "8": {
+      "numberOfStars": 3,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
     }
   },
   "shopData": {
     "colorsLockedState": [
       false,
+      false,
       true,
       true,
-      true,
-      true,
+      false,
       true,
       true,
       true,
@@ -65,7 +75,7 @@
     ],
     "materialsLockedState": [
       false,
-      true,
+      false,
       true,
       true,
       true
