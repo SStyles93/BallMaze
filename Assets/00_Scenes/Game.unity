@@ -286,7 +286,7 @@ GameObject:
   - component: {fileID: 313505053}
   - component: {fileID: 313505056}
   m_Layer: 5
-  m_Name: ExitButton
+  m_Name: HomeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,7 +388,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 813c6e345fc8b3148b2698d2cc1dbc02, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -913,7 +913,7 @@ GameObject:
   - component: {fileID: 1690082478}
   - component: {fileID: 1690082477}
   m_Layer: 5
-  m_Name: ExitTextImage
+  m_Name: HomeTextImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -958,7 +958,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9f4eccbc9346d1a41a7384d7d6e9db78, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4cb88cdee1972834e81dba95ece43033, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

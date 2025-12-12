@@ -194,14 +194,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.66437894, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6d90ed7e46bc33a4db0979f71069e102, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 25423d27475f41941a5065a6a6a779ad, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -303,8 +303,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MaterialSlot
   slotImage: {fileID: 8347848060664916963}
   lockImage: {fileID: 7267505220961300553}
-  lockSprite: {fileID: 21300000, guid: 6d90ed7e46bc33a4db0979f71069e102, type: 3}
-  lockColor: {r: 1, g: 0.6470588, b: 0, a: 1}
+  lockSprite: {fileID: 21300000, guid: 25423d27475f41941a5065a6a6a779ad, type: 3}
+  lockColor: {r: 1, g: 1, b: 1, a: 1}
   index: 0
   skinData:
     isLocked: 0
