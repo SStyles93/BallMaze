@@ -5,19 +5,27 @@ using UnityEngine;
 public class ValidationPannelManager : MonoBehaviour
 {
     [SerializeField] private GameObject validationPannel;
+    [SerializeField] private GameObject buyButton;
+    [SerializeField] private TMP_Text buyButtonText = null;
     [SerializeField] private TMP_Text validationText;
 
+    
     [SerializeField] private CustomizationOption selectedOption = null;
     private string optionName;
 
     private void OnEnable()
     {
-        ShopManager.Instance.OnOptionChanged += InitializePannelWithOption;
+        ShopManager.Instance.OnOptionChanged += SetSelectedOption;
     }
-
     private void OnDisable()
     {
-        ShopManager.Instance.OnOptionChanged -= InitializePannelWithOption;
+        ShopManager.Instance.OnOptionChanged -= SetSelectedOption;
+    }
+
+    private void Awake()
+    {
+        if(buyButton != null && buyButtonText == null)
+            buyButtonText = buyButton.GetComponent<TMP_Text>();
     }
 
     private void Start()
@@ -25,28 +33,13 @@ public class ValidationPannelManager : MonoBehaviour
         validationPannel.SetActive(false);
     }
 
-    public void InitializePannelWithOption(CustomizationOption option)
+    /// <summary>
+    /// Initializes the Validation Pannel with the selected Option
+    /// </summary>
+    /// <remarks>Method called from the "BUY" button in the customization scene</remarks>
+    public void OnBuyButtonClicked()
     {
-        validationPannel.SetActive(true);
-        selectedOption = option;
-
-        if(option is ColorOption col)
-        {
-            optionName = col.name;
-        }
-        if(option is MaterialOption mat)
-        {
-            optionName = mat.material.name;
-        }
-
-        InitializeText();
-    }
-
-    public void ClosePannel()
-    {
-        validationPannel.SetActive(false);
-        selectedOption = null;
-        optionName = null;
+        InitializePannelWithOption(selectedOption);
     }
 
     public void ValidatePurchase()
@@ -54,22 +47,54 @@ public class ValidationPannelManager : MonoBehaviour
         if (ShopManager.Instance.ValidatePurchase())
         {
             // Close pannel and reset pannel values when purchase is successful
-            validationPannel.SetActive(false);
-            selectedOption = null;
-            optionName = null;
+            ClosePannel();
         }
         else
         {
-            validationPannel.SetActive(false);
-            selectedOption = null;
-            optionName = null;
+            ClosePannel();
 
-            // Activate an "Insufficient funds" pannel
+            //TODO: Activate an "Insufficient funds" pannel
         }
+    }
+
+    // --- PRIVATE METHODS ---
+    private void ClosePannel()
+    {
+        validationPannel.SetActive(false);
+        selectedOption = null;
+        optionName = null;
+    }
+
+    private void InitializePannelWithOption(CustomizationOption option)
+    {
+        validationPannel.SetActive(true);
+        selectedOption = option;
+
+        if (option is ColorOption col)
+        {
+            optionName = col.name;
+        }
+        if (option is MaterialOption mat)
+        {
+            optionName = mat.material.name;
+        }
+
+        InitializeText();
     }
 
     private void InitializeText()
     {
         validationText.text = $"Purchase {optionName} for {selectedOption.price} <sprite index=0> ?";
+    }
+
+    private void SetSelectedOption(CustomizationOption option)
+    {
+        selectedOption = option;
+    }
+
+    private void SetBuyButton(CustomizationOption option)
+    {
+        bool enabled = option.isLocked ? false : true;
+        
     }
 }

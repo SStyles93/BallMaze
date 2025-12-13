@@ -5,38 +5,17 @@ public class MaterialSlot : CustomizationSlot
 {
     public MaterialOption skinData;
 
+    /// <summary>
+    /// Initializes the Material Slot with it's options, index and a ref to the playerCustomization
+    /// </summary>
+    /// <param name="option">The MaterialOption passed</param>
+    /// <param name="optionIndex">The index of the material</param>
+    /// <param name="playerCustomization">Ref to the PlayerCustomization script</param>
     public void InitializeMaterialSlot(MaterialOption option, int optionIndex, PlayerCustomization playerCustomization)
     {
         InitializeSlot(option, optionIndex, playerCustomization);
 
         skinData = option;
         slotImage.sprite = option.sprite;
-    }
-
-    public override void OnPointerUp(PointerEventData eventData)
-    {
-        base.OnPointerUp(eventData);
-
-        if (eventData.dragging)
-        {
-            if (isLocked)
-            {
-                lockImage.color = lockColor;
-                return;
-            }
-
-            //Debug.Log($"Pointer was dragged on {this.gameObject.name}");
-        }
-        else if(isMouseOver)// when the element is not dragged
-        {
-            if (isLocked)
-            {
-                ShopManager.Instance.SetCurrentCustomizationSlot(this);
-                return;
-            }
-            playerCustomization.AssignMaterial(skinData.material);
-            playerCustomization.AssignMaterialIndex(index);
-            //Debug.Log($"PointerUp on {this.gameObject.name}");
-        }
     }
 }

@@ -17,7 +17,7 @@ MonoBehaviour:
     price: 0
     material: {fileID: 2100000, guid: c6b7e45968c0d1e43a3e1c24d21eb908, type: 2}
     sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
-  - isLocked: 1
+  - isLocked: 0
     price: 600
     material: {fileID: 2100000, guid: 2123846a701b0d24d917b4567c4a5f3a, type: 2}
     sprite: {fileID: 21300000, guid: 2f5bec16db7d00a4b877c9ba02d0ad20, type: 3}
@@ -50,7 +50,7 @@ MonoBehaviour:
     price: 600
     name: Blue
     color: {r: 0, g: 0, b: 1, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price: 1000
     name: Orange
     color: {r: 1, g: 0.568441, b: 0, a: 1}

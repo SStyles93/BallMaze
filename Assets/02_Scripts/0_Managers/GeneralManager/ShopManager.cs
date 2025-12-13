@@ -13,6 +13,7 @@ public class ShopManager : MonoBehaviour
     private int currentOptionIndex = 0;
 
     public event Action<CustomizationOption> OnOptionChanged;
+    public event Action OnUpdatePlayerOption;
 
     private void Awake()
     {
@@ -21,12 +22,17 @@ public class ShopManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
     }
 
+    /// <summary>
+    /// Sets the current option for the shop manager
+    /// </summary>
+    /// <param name="slot"></param>
     public void SetCurrentCustomizationSlot(CustomizationSlot slot)
     {
         currentSlot = slot;
         currentOption = slot.option;
         currentOptionIndex = slot.index;
-        // This will call the validation pannel to be initialized with the current option
+
+        // This will call the PreviewOption() method on the PlayerCustomization.cs
         OnOptionChanged?.Invoke(currentOption);
     }
 
@@ -38,7 +44,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            DeductPurchaseFromCurrency(currentOption.price);
+            DeductValueFromCurrency(currentOption.price);
             UnlockOption(currentOption, currentOptionIndex);
 
             // TODO: Validation (V+S FX)
@@ -50,9 +56,9 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    private void DeductPurchaseFromCurrency(int price)
+    private void DeductValueFromCurrency(int value)
     {
-        CurrencyManager.Instance.ReduceCurrency(price);
+        CurrencyManager.Instance.ReduceCurrency(value);
     }
 
     /// <summary>
@@ -79,17 +85,22 @@ public class ShopManager : MonoBehaviour
     /// <param name="option">the current option to be passed to the SkinData</param>
     private void UpdatePlayerOption(CustomizationOption option)
     {
-        if (option is ColorOption colorOption)
+        switch (option)
         {
-            skinData_SO.playerColor = colorOption.color;
-            skinData_SO.playerColorIndex = currentOptionIndex;
-        }
-        if (option is MaterialOption matOption)
-        {
-            skinData_SO.playerMaterial = matOption.material;
-            skinData_SO.playerMaterialIndex = currentOptionIndex;
-        }
-        
-    }
+            case ColorOption colorOpt:
+                skinData_SO.playerColor = colorOpt.color;
+                skinData_SO.playerColorIndex = currentOptionIndex;
+                break;
 
+            case MaterialOption materialOpt:
+                skinData_SO.playerMaterial = materialOpt.material;
+                skinData_SO.playerMaterialIndex = currentOptionIndex;
+                break;
+
+            default:
+                return;
+        }
+
+        OnUpdatePlayerOption?.Invoke();
+    }
 }

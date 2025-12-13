@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class CustomizationSlot : BaseUISlot
 {
@@ -73,5 +72,36 @@ public class CustomizationSlot : BaseUISlot
         //slotBackground.color = slotColor;
 
         //Debug.Log($"PointerExit of {this.gameObject.name}");
+    }
+
+    public override void OnPointerUp(PointerEventData eventData)
+    {
+        base.OnPointerUp(eventData);
+
+        // If click released when pointer is dragged
+        if (eventData.dragging)
+        {
+            if (isLocked)
+            {
+                lockImage.color = lockColor;
+                return;
+            }
+
+            //Debug.Log($"Pointer was dragged on {this.gameObject.name}");
+        }
+        // If the click released when over the slot
+        else if (isMouseOver)
+        {
+            // Material is given to shop manager (not yet unlocked)
+            if (isLocked)
+            {
+                ShopManager.Instance.SetCurrentCustomizationSlot(this);
+                return;
+            }
+
+            // Option is assigned to the player (is unlocked)
+            playerCustomization.AssignOption(this.option, index);
+            //Debug.Log($"PointerUp on {this.gameObject.name}");
+        }
     }
 }

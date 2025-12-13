@@ -26,25 +26,11 @@ public class ColorSlot : CustomizationSlot
         {
             if (isLocked)
             {
-                lockImage.color = lockColor;
                 slotImage.color = m_lockedColor;
                 return;
             }
-
             slotImage.color = colorOption.color;
             //Debug.Log($"Pointer was dragged on {this.gameObject.name}");
-        }
-        else if(isMouseOver) // when the element is not dragged
-        {
-            if (isLocked)
-            {
-                ShopManager.Instance.SetCurrentCustomizationSlot(this);
-                return;
-            }
-
-            playerCustomization.AssignColor(colorOption.color);
-            playerCustomization.AssignColorIndex(index);
-            //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
     }
 

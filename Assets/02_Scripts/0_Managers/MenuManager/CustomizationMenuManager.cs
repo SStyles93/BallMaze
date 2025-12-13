@@ -9,6 +9,8 @@ public class CustomizationMenuManager : MonoBehaviour
 
     public void OpenGamesMenu()
     {
+        SaveSession();
+
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
@@ -18,6 +20,8 @@ public class CustomizationMenuManager : MonoBehaviour
     }
     public void OpenShopMenu()
     {
+        SaveSession();
+
         //SceneController.Instance
         //    .NewTransition()
         //    .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu)
