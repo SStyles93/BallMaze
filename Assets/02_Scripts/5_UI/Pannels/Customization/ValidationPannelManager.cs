@@ -90,11 +90,13 @@ public class ValidationPannelManager : MonoBehaviour
     private void SetSelectedOption(CustomizationOption option)
     {
         selectedOption = option;
+        SetBuyButton(option);
     }
 
     private void SetBuyButton(CustomizationOption option)
     {
-        bool enabled = option.isLocked ? false : true;
-        
+        // Enable the button if locked
+        buyButton.gameObject.SetActive(option.isLocked);
+        buyButtonText.text = $"{selectedOption.price} <sprite index=0>";
     }
 }

@@ -101,6 +101,7 @@ public class CustomizationSlot : BaseUISlot
 
             // Option is assigned to the player (is unlocked)
             playerCustomization.AssignOption(this.option, index);
+            ShopManager.Instance.SetCurrentCustomizationSlot(this);
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
     }

@@ -15,29 +15,65 @@ MonoBehaviour:
   materials:
   - isLocked: 0
     price: 0
-    material: {fileID: 2100000, guid: c6b7e45968c0d1e43a3e1c24d21eb908, type: 2}
+    material: {fileID: 2100000, guid: fffa77d3caab66a47988762de62a9d51, type: 2}
     sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
   - isLocked: 0
-    price: 600
-    material: {fileID: 2100000, guid: 2123846a701b0d24d917b4567c4a5f3a, type: 2}
-    sprite: {fileID: 21300000, guid: 2f5bec16db7d00a4b877c9ba02d0ad20, type: 3}
+    price: 0
+    material: {fileID: 2100000, guid: b04528b585c20e840ab1e704b212ee2c, type: 2}
+    sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
   - isLocked: 1
-    price: 1000
-    material: {fileID: 2100000, guid: b23288f664a6edb40a1ffe636d311dd3, type: 2}
-    sprite: {fileID: 21300000, guid: 7a842f81754570542bf8e8930676455d, type: 3}
+    price: 0
+    material: {fileID: 2100000, guid: b7062c465af3e3c45804c739f82b2a19, type: 2}
+    sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
   - isLocked: 1
-    price: 2000
-    material: {fileID: 2100000, guid: b976ae8913e90a344bffb75d87f5d62c, type: 2}
-    sprite: {fileID: 21300000, guid: 039130ee79cad1048892bec028743b50, type: 3}
+    price: 0
+    material: {fileID: 2100000, guid: 9a33912de08bc5343985758dc0eaa9a7, type: 2}
+    sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
   - isLocked: 1
-    price: 5000
-    material: {fileID: 2100000, guid: a38b88f3861292b4aac51ff067a95bc6, type: 2}
-    sprite: {fileID: 21300000, guid: 95bb74554d598404584adcd6a4cbfcca, type: 3}
+    price: 0
+    material: {fileID: 2100000, guid: 1c96e7fda94e2a648afe853a9d2bb995, type: 2}
+    sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: 41ae231139cc07f458258948079693b4, type: 2}
+    sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: 3d2776ad8bf9b694bb91e37a6e3350d2, type: 2}
+    sprite: {fileID: 0}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: 32a7f25df68b7a045bc159c3be07d7ff, type: 2}
+    sprite: {fileID: 0}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: 2cb07259c129b9544b1ff0a43f0f6f71, type: 2}
+    sprite: {fileID: 0}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: d81ccbb8958d7334e82ac15ad038f6fe, type: 2}
+    sprite: {fileID: 0}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: af3b57d23c7f2d747bf06afc55532396, type: 2}
+    sprite: {fileID: 0}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: 577bc812fa6e8d44a80ff8d8bb2cd520, type: 2}
+    sprite: {fileID: 0}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: 538055a2f73ae4740ac439a5d80ef578, type: 2}
+    sprite: {fileID: 0}
+  - isLocked: 0
+    price: 0
+    material: {fileID: 2100000, guid: e01d898cf95fdd940ba825baab1df72a, type: 2}
+    sprite: {fileID: 0}
   colors:
   - isLocked: 0
     price: 0
-    name: White
-    color: {r: 1, g: 1, b: 1, a: 1}
+    name: None
+    color: {r: 1, g: 1, b: 1, a: 0}
   - isLocked: 1
     price: 200
     name: Red
