@@ -24,7 +24,10 @@ public class GamesMenuManager : MonoBehaviour
 
     private void Start()
     {
-        SavingManager.Instance.LoadSession();
+        if (SavingManager.Instance == null) 
+            Debug.Log("Saving Manager does not exist");    
+        SavingManager.Instance?.LoadSession();
+        AudioManager.Instance?.PlayMusic();
 
         int levelManagerCount = LevelManager.Instance.LevelDataDictionnary.Count;
         if (levelManagerCount % 10 == 0 || levelManagerCount <= 0 || levelManagerCount > numberOfLevels)
@@ -55,20 +58,28 @@ public class GamesMenuManager : MonoBehaviour
         }
     }
 
-    public void ReturnToMainMenu()
+    public void OpenShopMenu()
     {
         SaveScrollbarValues();
 
-        SceneController.Instance
-            .NewTransition()
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu)
-            .Unload(SceneDatabase.Scenes.GamesMenu)
-            .WithOverlay()
-            .Perform();
+        //SceneController.Instance
+        //    .NewTransition()
+        //    .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.Shop)
+        //    .Unload(SceneDatabase.Scenes.GamesMenu)
+        //    .WithOverlay()
+        //    .Perform();
+    }
+
+    public void OpenSettingsMenu()
+    {
+        SaveScrollbarValues();
+
     }
 
     public void OpenCustomizationMenu()
     {
+        SaveScrollbarValues();
+
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.CustomizationMenu)

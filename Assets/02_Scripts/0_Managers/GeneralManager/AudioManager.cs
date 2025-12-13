@@ -18,7 +18,6 @@ public class AudioManager : MonoBehaviour
     [Header("Environment SFX")]
     [SerializeField] private AudioClip starClip;
     [SerializeField] private AudioClip winClip;
-    private int starCount = 0;
 
     public static AudioManager Instance { get; private set; }
 

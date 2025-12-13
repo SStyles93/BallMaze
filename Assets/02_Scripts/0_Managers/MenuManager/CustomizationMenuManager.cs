@@ -16,14 +16,14 @@ public class CustomizationMenuManager : MonoBehaviour
             .WithOverlay()
             .Perform();
     }
-    public void OpenMainMenu()
+    public void OpenShopMenu()
     {
-        SceneController.Instance
-            .NewTransition()
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu)
-            .Unload(SceneDatabase.Scenes.CustomizationMenu)
-            .WithOverlay()
-            .Perform();
+        //SceneController.Instance
+        //    .NewTransition()
+        //    .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu)
+        //    .Unload(SceneDatabase.Scenes.CustomizationMenu)
+        //    .WithOverlay()
+        //    .Perform();
     }
 
     public void SaveSession()
