@@ -1,22 +1,22 @@
 {
-  "timestamp": "2025-12-13T16:29:33.0727719-08:00",
+  "timestamp": "2025-12-13T17:52:13.5406787-08:00",
   "playerData": {
     "currency": 0,
-    "colorIndex": 8,
-    "materialIndex": 13
+    "colorIndex": 0,
+    "materialIndex": 0
   },
   "levelsData": {},
   "shopData": {
     "colorsLockedState": [
-      false,
-      false,
-      false,
       true,
       true,
       true,
       true,
       true,
-      false,
+      true,
+      true,
+      true,
+      true,
       true,
       true,
       true,
@@ -36,18 +36,18 @@
     "materialsLockedState": [
       false,
       false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
       true,
       true,
       true,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ]
   },
   "lastUnlockedScene": null

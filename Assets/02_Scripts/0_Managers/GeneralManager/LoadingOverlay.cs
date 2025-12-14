@@ -21,7 +21,7 @@ public class LoadingOverlay : MonoBehaviour
     {
         float startAlpha = canvasGroup.alpha;
         float elapsed = 0f;
-        while (elapsed < (duration*0.5))
+        while (elapsed < (duration/**0.5*/))
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
