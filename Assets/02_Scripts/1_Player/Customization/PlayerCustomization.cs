@@ -36,8 +36,17 @@ public class PlayerCustomization : MonoBehaviour
     /// </summary>
     public void UpdateAppearence()
     {
+        // Assigne the saved material
         m_meshRenderer.material = playerSkinData_SO.playerMaterial;
-        m_meshRenderer.material.color = playerSkinData_SO.playerColor;
+
+        // if idx is 0 assign material colour
+        if (playerSkinData_SO.playerColorIndex == 0)
+            m_meshRenderer.material.color = playerSkinData_SO.playerMaterial.color;
+        // Otherwise assign selected colour
+        else
+            m_meshRenderer.material.color = playerSkinData_SO.playerColor;
+
+
     }
 
     /// <summary>
@@ -77,8 +86,20 @@ public class PlayerCustomization : MonoBehaviour
             case MaterialOption materialOpt:
                 AssignMaterial(materialOpt.material);
                 AssignMaterialIndex(index);
+                AssignColor(materialOpt.material.color);
+                AssignColorIndex(0);
                 break;
         }
+    }
+
+    /// <summary>
+    /// Assign the original color of the material
+    /// </summary>
+    public void AssignOriginalColor()
+    {
+        playerSkinData_SO.playerColor = playerSkinData_SO.playerMaterial.color;
+        playerSkinData_SO.playerColorIndex = 0;
+        UpdateAppearence();
     }
 
     // --- PRIVATE METHODS ---
@@ -95,10 +116,8 @@ public class PlayerCustomization : MonoBehaviour
 
     private void AssignMaterial(Material material)
     {
-        Color currentColor = m_meshRenderer.material.color; 
         m_meshRenderer.sharedMaterial = material;
-        m_meshRenderer.material.color = currentColor;
-        playerSkinData_SO.playerMaterial = material;      
+        playerSkinData_SO.playerMaterial = material;
     }
     private void AssignMaterialIndex(int index)
     {

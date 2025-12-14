@@ -48,6 +48,9 @@ public class ValidationPannelManager : MonoBehaviour
         {
             // Close pannel and reset pannel values when purchase is successful
             ClosePannel();
+            // Disables the Buy button
+            buyButton.gameObject.SetActive(false);
+
         }
         else
         {

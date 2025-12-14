@@ -21,15 +21,15 @@ MonoBehaviour:
     price: 0
     material: {fileID: 2100000, guid: b04528b585c20e840ab1e704b212ee2c, type: 2}
     sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
-  - isLocked: 1
+  - isLocked: 0
     price: 0
     material: {fileID: 2100000, guid: b7062c465af3e3c45804c739f82b2a19, type: 2}
     sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
-  - isLocked: 1
+  - isLocked: 0
     price: 0
     material: {fileID: 2100000, guid: 9a33912de08bc5343985758dc0eaa9a7, type: 2}
     sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
-  - isLocked: 1
+  - isLocked: 0
     price: 0
     material: {fileID: 2100000, guid: 1c96e7fda94e2a648afe853a9d2bb995, type: 2}
     sprite: {fileID: 21300000, guid: 05f5bc04a9eb5b24a80676802a7bf546, type: 3}
@@ -49,19 +49,19 @@ MonoBehaviour:
     price: 0
     material: {fileID: 2100000, guid: 2cb07259c129b9544b1ff0a43f0f6f71, type: 2}
     sprite: {fileID: 0}
-  - isLocked: 0
+  - isLocked: 1
     price: 0
     material: {fileID: 2100000, guid: d81ccbb8958d7334e82ac15ad038f6fe, type: 2}
     sprite: {fileID: 0}
-  - isLocked: 0
+  - isLocked: 1
     price: 0
     material: {fileID: 2100000, guid: af3b57d23c7f2d747bf06afc55532396, type: 2}
     sprite: {fileID: 0}
-  - isLocked: 0
+  - isLocked: 1
     price: 0
     material: {fileID: 2100000, guid: 577bc812fa6e8d44a80ff8d8bb2cd520, type: 2}
     sprite: {fileID: 0}
-  - isLocked: 0
+  - isLocked: 1
     price: 0
     material: {fileID: 2100000, guid: 538055a2f73ae4740ac439a5d80ef578, type: 2}
     sprite: {fileID: 0}
@@ -72,73 +72,97 @@ MonoBehaviour:
   colors:
   - isLocked: 0
     price: 0
-    name: None
-    color: {r: 1, g: 1, b: 1, a: 0}
-  - isLocked: 1
-    price: 200
-    name: Red
-    color: {r: 1, g: 0, b: 0, a: 1}
-  - isLocked: 1
-    price: 300
-    name: Green
-    color: {r: 0, g: 1, b: 0, a: 1}
-  - isLocked: 1
-    price: 600
-    name: Blue
-    color: {r: 0, g: 0, b: 1, a: 1}
+    name: 
+    color: {r: 1, g: 0.81960785, b: 0.8627451, a: 1}
   - isLocked: 0
-    price: 1000
-    name: Orange
-    color: {r: 1, g: 0.568441, b: 0, a: 1}
+    price: 0
+    name: 
+    color: {r: 0.65882355, g: 0.9019608, b: 0.8117647, a: 1}
   - isLocked: 1
-    price: 2000
-    name: Silver
-    color: {r: 0.7607843, g: 0.78431374, b: 0.81960785, a: 1}
+    price: 0
+    name: 
+    color: {r: 1, g: 0.9098039, b: 0.6313726, a: 1}
   - isLocked: 1
-    price: 4000
-    name: Golden
-    color: {r: 0.83137256, g: 0.627451, b: 0.09019608, a: 1}
+    price: 0
+    name: 
+    color: {r: 0.7019608, g: 0.8175039, b: 1, a: 1}
   - isLocked: 1
-    price: 4000
-    name: Deep Copper
-    color: {r: 0.7058824, g: 0.40784314, b: 0.18039216, a: 1}
+    price: 0
+    name: 
+    color: {r: 1, g: 0, b: 0.36078432, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Rose Gold
-    color: {r: 0.9647059, g: 0.75686276, b: 0.75686276, a: 1}
+    price: 0
+    name: 
+    color: {r: 0, g: 1, b: 0.68235296, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Iridescent Teal
-    color: {r: 0.22745098, g: 1, b: 0.8156863, a: 1}
+    price: 0
+    name: 
+    color: {r: 1, g: 0.6666667, b: 0, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Electric Cyan
-    color: {r: 0, g: 0.9647059, b: 1, a: 1}
+    price: 0
+    name: 
+    color: {r: 0.54901963, g: 0, b: 1, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Neon Pink
-    color: {r: 1, g: 0.17254902, b: 0.8745098, a: 1}
+    price: 0
+    name: 
+    color: {r: 0, g: 1, b: 0.96862745, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Lime Neon
-    color: {r: 0.65882355, g: 1, b: 0.039215688, a: 1}
+    price: 0
+    name: 
+    color: {r: 1, g: 0.84313726, b: 0, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Toxic Green
+    price: 0
+    name: 
+    color: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
+    color: {r: 1, g: 0.43529412, b: 0.8117647, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
+    color: {r: 0.74509805, g: 0.15686275, b: 0.101960786, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
+    color: {r: 0, g: 1, b: 0.78431374, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
+    color: {r: 1, g: 0.23921569, b: 0, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
     color: {r: 0.22352941, g: 1, b: 0.078431375, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Hot Orange
-    color: {r: 1, g: 0.41960785, b: 0.039215688, a: 1}
+    price: 0
+    name: 
+    color: {r: 0, g: 1, b: 1, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Cosminc Blue
-    color: {r: 0.2901961, g: 0.8862745, b: 1, a: 1}
+    price: 0
+    name: 
+    color: {r: 0.70980394, g: 0, b: 1, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Void Purple
-    color: {r: 0.8235294, g: 0.54901963, b: 1, a: 1}
+    price: 0
+    name: 
+    color: {r: 1, g: 1, b: 0.24705882, a: 1}
   - isLocked: 1
-    price: 5000
-    name: Glacial Mint
-    color: {r: 0.62352943, g: 1, b: 0.8784314, a: 1}
+    price: 0
+    name: 
+    color: {r: 1, g: 0.8509804, b: 0.4, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
+    color: {r: 0.95686275, g: 0.96862745, b: 1, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
+    color: {r: 0, g: 1, b: 0.6156863, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
+    color: {r: 1, g: 0.36078432, b: 0.23137255, a: 1}
+  - isLocked: 1
+    price: 0
+    name: 
+    color: {r: 1, g: 0.078431375, b: 0.5764706, a: 1}
