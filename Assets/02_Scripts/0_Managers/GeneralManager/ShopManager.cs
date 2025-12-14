@@ -95,6 +95,8 @@ public class ShopManager : MonoBehaviour
             case MaterialOption materialOpt:
                 skinData_SO.playerMaterial = materialOpt.material;
                 skinData_SO.playerMaterialIndex = currentOptionIndex;
+                skinData_SO.playerColor = materialOpt.material.color;
+                skinData_SO.playerColorIndex = 0;
                 break;
 
             default:

@@ -17,7 +17,7 @@ public class ColorPannelInitializer : MonoBehaviour
         for (int i = 0; i < customizationData_SO.colors.Length; i++)
         {
             GameObject colorSlot = Instantiate(colorSlotPrefab, colorSlotContainer.transform);
-            colorSlot.GetComponent<ColorSlot>().InitializeColorSlot(customizationData_SO.colors[i], i, playerCustomization);
+            colorSlot.GetComponent<ColorSlot>().InitializeColorSlot(customizationData_SO.colors[i], i+1, playerCustomization);
         }
     }
 }
