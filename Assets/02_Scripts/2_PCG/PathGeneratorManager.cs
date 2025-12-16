@@ -68,13 +68,24 @@ public class PathGeneratorManager : MonoBehaviour
                         {
                             wasStartInstanced = true;
                             // Generate Start Prefab
-                            spawnedObjects.Add(Instantiate(startPrefab, new Vector3(x, 1, y), Quaternion.identity));
+                            GameObject startTile = Instantiate(startPrefab, new Vector3(x, 1, y), Quaternion.identity);
+                            Vector3 startTileScale = startTile.transform.localScale;
+                            startTileScale.x = scale.x / 2;
+                            startTileScale.z = scale.z / 2;
+                            startTile.transform.localScale = startTileScale;
+
+                            spawnedObjects.Add(startTile);
                             spawnedObjects.Add(Instantiate(floor, new Vector3(x, -(generationParams.MapDepth / 2) + 0.5f, y), Quaternion.identity));
                         }
                         break;
                     case CellType.End:
                         // Generate End Prefab
-                        spawnedObjects.Add(Instantiate(endPrefab, new Vector3(x, 1, y), Quaternion.identity));
+                        GameObject endTile = Instantiate(endPrefab, new Vector3(x, 1, y), Quaternion.identity);
+                        Vector3 endTileScale = endTile.transform.localScale;
+                        endTileScale.x = scale.x / 2;
+                        endTileScale.z = scale.z / 2;
+                        endTile.transform.localScale = endTileScale;   
+                        spawnedObjects.Add(endTile);
                         spawnedObjects.Add(Instantiate(floor, new Vector3(x, -(generationParams.MapDepth / 2) + 0.5f, y), Quaternion.identity));
                         break;
                     case CellType.Star:

@@ -23,7 +23,7 @@ public class PlayerSpawner : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(spawnPosition, 1.0f);
+        //Gizmos.color = Color.green;
+        //Gizmos.DrawSphere(spawnPosition, 1.0f);
     }
 }
