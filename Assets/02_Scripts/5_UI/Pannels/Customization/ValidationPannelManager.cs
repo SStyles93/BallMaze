@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class ValidationPannelManager : MonoBehaviour
 {
+    [Header("Validation Pannel")]
     [SerializeField] private GameObject validationPannel;
     [SerializeField] private GameObject buyButton;
     [SerializeField] private TMP_Text buyButtonText = null;
     [SerializeField] private TMP_Text validationText;
 
-    
+    [Header("Insufficient Funds Pannel")]
+    [SerializeField] private GameObject insufficientFundsPannel;
+
+
     [SerializeField] private CustomizationOption selectedOption = null;
     private string optionName;
 
@@ -56,7 +60,7 @@ public class ValidationPannelManager : MonoBehaviour
         {
             ClosePannel();
 
-            //TODO: Activate an "Insufficient funds" pannel
+            insufficientFundsPannel.SetActive(true);
         }
     }
 

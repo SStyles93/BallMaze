@@ -1,0 +1,66 @@
+{
+  "timestamp": "2025-12-15T18:32:01.894228-08:00",
+  "playerData": {
+    "currency": 500,
+    "colorIndex": 0,
+    "materialIndex": 13
+  },
+  "levelsData": {
+    "0": {
+      "numberOfStars": 2,
+      "currencyLeftToEarn": 100,
+      "wasLevelFinished": true
+    },
+    "1": {
+      "numberOfStars": 3,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    }
+  },
+  "shopData": {
+    "colorsLockedState": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "materialsLockedState": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
+  },
+  "lastUnlockedScene": null
+}

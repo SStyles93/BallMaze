@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
+  m_fontSize: 150
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -293,7 +293,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: ef4ec82c7b8e4824c93a3bc8ee109f6b, type: 3}
+  m_Texture: {fileID: 2800000, guid: 469eb7ea89b8ea6458e2bff230e8d24c, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -408,13 +408,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShopButton
       objectReference: {fileID: 0}
+    - target: {fileID: 6376088634615528062, guid: af7bc93ba6c69f842b2d9272ce1cd30d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8297259213095750613, guid: af7bc93ba6c69f842b2d9272ce1cd30d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OpenShopMenu
       objectReference: {fileID: 0}
     - target: {fileID: 8297259213095750613, guid: af7bc93ba6c69f842b2d9272ce1cd30d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GamesMenuManager, Assembly-CSharp
+      value: CustomizationMenuManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8421742441683425354, guid: af7bc93ba6c69f842b2d9272ce1cd30d, type: 3}
       propertyPath: m_SizeDelta.x

@@ -21,7 +21,7 @@ MonoBehaviour:
     price: 0
     material: {fileID: 2100000, guid: b04528b585c20e840ab1e704b212ee2c, type: 2}
     sprite: {fileID: 21300000, guid: d366c5da8dbe6094480da901c2bb1e5d, type: 3}
-  - isLocked: 1
+  - isLocked: 0
     price: 0
     material: {fileID: 2100000, guid: b7062c465af3e3c45804c739f82b2a19, type: 2}
     sprite: {fileID: 21300000, guid: 545acbf02d66cb14a85ab086cdf7544a, type: 3}
@@ -70,11 +70,15 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: e01d898cf95fdd940ba825baab1df72a, type: 2}
     sprite: {fileID: 21300000, guid: 4a727636854f65e4e9e050cd318b2fc7, type: 3}
   colors:
-  - isLocked: 1
+  - isLocked: 0
+    price: 0
+    name: NONE
+    color: {r: 0, g: 0, b: 0, a: 0}
+  - isLocked: 0
     price: 0
     name: 
     color: {r: 1, g: 0.81960785, b: 0.8627451, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price: 0
     name: 
     color: {r: 0.65882355, g: 0.9019608, b: 0.8117647, a: 1}
