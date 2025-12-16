@@ -62,18 +62,22 @@ public class GamesMenuManager : MonoBehaviour
     {
         SaveScrollbarValues();
 
-        //SceneController.Instance
-        //    .NewTransition()
-        //    .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.Shop)
-        //    .Unload(SceneDatabase.Scenes.GamesMenu)
-        //    .WithOverlay()
-        //    .Perform();
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.ShopMenu)
+            .Unload(SceneDatabase.Scenes.GamesMenu)
+            .WithOverlay()
+            .Perform();
     }
 
-    public void OpenSettingsMenu()
+    public void OpenSettingsPannel()
     {
         SaveScrollbarValues();
 
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.SettingsPannel)
+            .Perform();
     }
 
     public void OpenCustomizationMenu()

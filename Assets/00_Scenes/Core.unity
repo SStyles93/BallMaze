@@ -247,14 +247,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3806060667020401367, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
-      propertyPath: fadeInTime
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3806060667020401367, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
-      propertyPath: fadeOutTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5859331124148711047, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
       propertyPath: m_Name
       value: LoadingOverlay

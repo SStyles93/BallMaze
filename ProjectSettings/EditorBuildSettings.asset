@@ -15,11 +15,17 @@ EditorBuildSettings:
     path: Assets/00_Scenes/Game.unity
     guid: 01978b206e52dd346b44ae7588f35db8
   - enabled: 1
-    path: Assets/00_Scenes/EndPannel.unity
+    path: Assets/00_Scenes/Pannels/EndPannel.unity
     guid: 97d530ac31debda4290054dba1334c84
   - enabled: 1
     path: Assets/00_Scenes/Menus/CustomizationMenu.unity
     guid: e66eed51eaac0f54f813270d7bad9097
+  - enabled: 1
+    path: Assets/00_Scenes/Pannels/SettingsPannel.unity
+    guid: 3dbbed198949f4c41ac7dec1f206b958
+  - enabled: 1
+    path: Assets/00_Scenes/Menus/ShopMenu.unity
+    guid: ac310877dec0e83458add8b5cfc62513
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b369852d9e5a62c42aaedf664ffbd4ec, type: 2}
   m_UseUCBPForAssetBundles: 0

@@ -1218,6 +1218,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+--- !u!114 &1173194019 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4714005136286433157, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+  m_PrefabInstance: {fileID: 1173194018}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ca91241d25de148ad90e03eb516e0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1257622665
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,7 +1434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f780b5d16e56dec49924807f18ca3044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaterialPannelInitializer
-  playerCustomization: {fileID: 0}
+  playerCustomization: {fileID: 1173194019}
   materialSlotsContainer: {fileID: 1026635658}
   materialSlotPrefab: {fileID: 7729237570373966067, guid: 2e84213cd8a3eeb41bc641a6e024bdbe, type: 3}
   customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
@@ -1439,7 +1450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36797025b05fc84ba070be91600473c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ColorPannelInitializer
-  playerCustomization: {fileID: 0}
+  playerCustomization: {fileID: 1173194019}
   colorSlotContainer: {fileID: 1056458414}
   colorSlotPrefab: {fileID: 7729237570373966067, guid: c1f46aca9e0b27d4ea4b7eb7a60db808, type: 3}
   customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
@@ -1598,6 +1609,58 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2075890695750127537, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_fontSize
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 5c06ea7d38a289e4bbcdfe699600ab6b, type: 2}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -8206984325510986594, guid: 5c06ea7d38a289e4bbcdfe699600ab6b, type: 2}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294506744
+      objectReference: {fileID: 0}
+    - target: {fileID: 3733378538290545897, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5395266218620933870, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1944165807}
+    - target: {fileID: 5395266218620933870, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenShopMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 5395266218620933870, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CustomizationMenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7027433554368915269, guid: ec93e75e563919c47a1752da29c6a5e7, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
