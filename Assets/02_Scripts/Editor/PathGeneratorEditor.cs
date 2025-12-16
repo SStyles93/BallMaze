@@ -20,7 +20,7 @@ public class PathGeneratorEditor : EditorWindow
 
     private int indexOfSoData;
 
-    [MenuItem("Tools/Path Generator")]
+    [MenuItem("Tools/PxP/Path Generator")]
     public static void ShowWindow()
     {
         GetWindow<PathGeneratorEditor>("Path Generator");

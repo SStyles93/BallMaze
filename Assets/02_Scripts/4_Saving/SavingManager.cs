@@ -11,6 +11,14 @@ public class SavingManager : MonoBehaviour
     private IDataService dataService;
 
     public GameData currentGameData = null;
+    public PlayerData currentPlayerData = null;
+    public ShopData currentShopData = null;
+    public SettingsData currentSettingsData = null;
+
+    const string GameDataFileName = "GameData";
+    const string PlayerDataFileName = "PlayerData";
+    const string ShopDataFileName = "ShopData";
+    const string SettingsDataFileName = "SettingsData";
 
     private void Awake()
     {
@@ -28,28 +36,59 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     public void SaveSession()
     {
-        currentGameData = new GameData
-        {
-            timestamp = DateTime.Now,
-        };
+        SaveGameDataInFile(GameDataFileName);
 
-        CapturePlayerData();
+        SavePlayerDataInFile(PlayerDataFileName);
 
-        CaptureLevelsData();
+        SaveShopDataInFile(ShopDataFileName);
 
-        CaptureShopData();
-
-        SaveFile("Session");
+        SaveSettingsDataInFile(SettingsDataFileName);
 
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
     }
 
+
+
+    /// <summary>
+    /// Saves the TimeStamp & Levels in a "GameData.json" files
+    /// </summary>
+    private void SaveGameDataInFile(string fileName)
+    {
+        currentGameData = new GameData
+        {
+            timestamp = DateTime.Now,
+        };
+        SaveLevelsDataInGameData(currentGameData);
+
+        SaveDataInFile(currentGameData, fileName);
+    }
+
+    /// <summary>
+    /// Captures the data of all levels (lvl n° (int), grade (int), score (int))
+    /// </summary>
+    private void SaveLevelsDataInGameData(GameData gameData)
+    {
+        if (LevelManager.Instance == null)
+        {
+            Debug.Log("No LevelManager instance available");
+            return;
+        }
+
+        foreach (var kvp in LevelManager.Instance.LevelDataDictionnary)
+        {
+            if (gameData.levelsData.ContainsKey(kvp.Key))
+                gameData.levelsData[kvp.Key] = kvp.Value;
+            else
+                gameData.levelsData.Add(kvp.Key, kvp.Value);
+        }
+    }
+
     /// <summary>
     /// Captures the player's data (currency (int), colorIndex(int), materialIndex(int))
     /// </summary>
-    private void CapturePlayerData()
+    private void SavePlayerDataInFile(string fileName)
     {
         if (CurrencyManager.Instance == null)
         {
@@ -64,33 +103,45 @@ public class SavingManager : MonoBehaviour
             materialIndex = ShopManager.Instance.skinData_SO.playerMaterialIndex
         };
 
-        currentGameData.playerData = playerSaveData;
+        currentPlayerData = playerSaveData;
+
+        SaveDataInFile(currentPlayerData, fileName);
     }
 
     /// <summary>
-    /// Captures the data of all levels (lvl n° (int), grade (int), score (int))
+    /// Method to capture the state of settings
     /// </summary>
-    private void CaptureLevelsData()
+    /// <param name="fileName"></param>
+    private void SaveSettingsDataInFile(string fileName)
     {
-        if (LevelManager.Instance == null)
+        SettingsData settingsData = new SettingsData()
         {
-            Debug.Log("No LevelManager instance available");
-            return;
+            isMusicOn = true,
+            isAudioOn = true,
+            isVibrationOn = true,
+        };
+
+        if (AudioManager.Instance != null)
+        {
+            // Gets the state of Music, Environment & SFX
+            settingsData.isAudioOn = AudioManager.Instance.IsAudioEnabled;
+            // State of Music Only
+            settingsData.isMusicOn = AudioManager.Instance.IsMusicEnabled;
+        }
+        if (VibrationManager.Instance != null)
+        {
+            settingsData.isVibrationOn = VibrationManager.Instance.IsVibrationActive;
         }
 
-        foreach (var kvp in LevelManager.Instance.LevelDataDictionnary)
-        {
-            if (currentGameData.levelsData.ContainsKey(kvp.Key))
-                currentGameData.levelsData[kvp.Key] = kvp.Value;
-            else
-                currentGameData.levelsData.Add(kvp.Key, kvp.Value);
-        }
+        currentSettingsData = settingsData;
+
+        SaveDataInFile(currentSettingsData, fileName);
     }
 
     /// <summary>
     /// Method to capture the state of customization options
     /// </summary>
-    private void CaptureShopData()
+    private void SaveShopDataInFile(string fileName)
     {
         if (ShopManager.Instance == null) return;
 
@@ -114,8 +165,11 @@ public class SavingManager : MonoBehaviour
             shopData.materialsLockedState.Add(materialOption.isLocked);
         }
 
-        currentGameData.shopData = shopData;
+        currentShopData = shopData;
+
+        SaveDataInFile(currentShopData, fileName);
     }
+
 
 
     // ---------------- LOAD ----------------
@@ -125,26 +179,83 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     public void LoadSession()
     {
-        currentGameData = LoadFile("Session");
+        RestoreGameDataFromFile(GameDataFileName);
+
+        RestorePlayerDataFromFile(PlayerDataFileName);
+
+        RestoreShopDataFromFile(ShopDataFileName);
+
+        RestoreSettingsDataFromFile(SettingsDataFileName);
+    }
+
+
+
+    /// <summary>
+    /// Loads the Game Data and Levels Data
+    /// </summary>
+    /// <param name="fileName"></param>
+    private void RestoreGameDataFromFile(string fileName)
+    {
+        currentGameData = LoadFile<GameData>(fileName);
         if (currentGameData == null)
         {
-            Debug.Log("Current Session Data does not exist, creating new GameData");
+            Debug.Log($"file {fileName} does not exist, creating new GameData");
             currentGameData = new GameData();
         }
 
-        RestorePlayerData();
+        RestoreLevelsDataFromGameData(currentGameData);
+    }
 
-        RestoreLevelsData();
+    /// <summary>
+    /// Restores the data for all levels (lvl n°, grade(int), score(int)
+    /// </summary>
+    private void RestoreLevelsDataFromGameData(GameData gameData)
+    {
+        if (LevelManager.Instance == null) return;
 
-        RestoreShopData();
+        LevelManager.Instance.LevelDataDictionnary.Clear();
+
+        if (gameData.levelsData == null)
+        {
+            LevelData levelsData = new LevelData();
+
+            Debug.Log("Current Session Data does not exist, creating new levelsData");
+        }
+        else
+        {
+            // --- DEBUG: Creates "finished" leveldata for all levels
+            if (CoreManager.Instance.unlockAllLevels)
+            {
+                LevelData levelData = new LevelData()
+                {
+                    numberOfStars = 3,
+                    currencyLeftToEarn = 0,
+                    wasLevelFinished = true
+                };
+                for (int i = 0; i <= CoreManager.Instance.numberOfLevels; i++)
+                {
+                    LevelManager.Instance.LevelDataDictionnary.Add(i, levelData);
+                }
+            }
+            else
+            {
+                // Retrieves the LevelDatas and sets them in the LevelManager
+                foreach (var kvp in gameData.levelsData)
+                {
+                    LevelManager.Instance.LevelDataDictionnary[kvp.Key] = kvp.Value;
+                }
+            }
+        }
     }
 
     /// <summary>
     /// Restores the data for the player (currency (int))
     /// </summary>
-    private void RestorePlayerData()
+    private void RestorePlayerDataFromFile(string fileName)
     {
-        if (currentGameData.playerData == null)
+        currentPlayerData = LoadFile<PlayerData>(PlayerDataFileName);
+
+        if (currentPlayerData == null)
         {
             PlayerData playerData = new PlayerData()
             {
@@ -154,55 +265,62 @@ public class SavingManager : MonoBehaviour
 
             };
             Debug.Log("Current Session Data does not exist, creating new PlayerData");
-            currentGameData.playerData = playerData;
+            currentPlayerData = playerData;
         }
 
-        CurrencyManager.Instance.SetCurrencyValue(currentGameData.playerData.currency);
+        CurrencyManager.Instance.SetCurrencyValue(currentPlayerData.currency);
 
         ShopManager shopManager = ShopManager.Instance;
-        shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentGameData.playerData.colorIndex].color;
-        shopManager.skinData_SO.playerMaterial = shopManager.customizationData_SO.materials[currentGameData.playerData.materialIndex].material;
-        shopManager.skinData_SO.playerColorIndex = currentGameData.playerData.colorIndex;
-        shopManager.skinData_SO.playerMaterialIndex = currentGameData.playerData.materialIndex;
+        shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentPlayerData.colorIndex].color;
+        shopManager.skinData_SO.playerMaterial = shopManager.customizationData_SO.materials[currentPlayerData.materialIndex].material;
+        shopManager.skinData_SO.playerColorIndex = currentPlayerData.colorIndex;
+        shopManager.skinData_SO.playerMaterialIndex = currentPlayerData.materialIndex;
     }
 
     /// <summary>
-    /// Restores the data for all levels (lvl n°, grade(int), score(int)
+    /// Restore the values of settings from the SettingsData
     /// </summary>
-    private void RestoreLevelsData()
+    /// <param name="fileName"></param>
+    private void RestoreSettingsDataFromFile(string fileName)
     {
-        if (LevelManager.Instance == null) return;
+        currentSettingsData = LoadFile<SettingsData>(fileName);
 
-        LevelManager.Instance.LevelDataDictionnary.Clear();
-
-        if (currentGameData.levelsData == null)
+        if (currentSettingsData == null)
         {
-            LevelData levelsData = new LevelData();
-
-            Debug.Log("Current Session Data does not exist, creating new levelsData");
+            Debug.Log("Current SettingsData does not exist, creating a new one");
+            currentSettingsData = new SettingsData();
+            return;
         }
-        else
+
+        AudioManager audioManager = AudioManager.Instance;
+        if (audioManager != null)
         {
-            foreach (var kvp in currentGameData.levelsData)
-            {
-                LevelManager.Instance.LevelDataDictionnary[kvp.Key] = kvp.Value;
-            }
+            audioManager.SetGeneralAudioState(currentSettingsData.isAudioOn);
+            audioManager.SetMusicState(currentSettingsData.isMusicOn);
+        }
+
+        VibrationManager vibrationManager = VibrationManager.Instance;
+        if (vibrationManager != null)
+        {
+            vibrationManager.SetVibrationManagerState(currentSettingsData.isVibrationOn);
         }
     }
 
     /// <summary>
     /// Restores all the customization states from the ShopData (color.isLocked & material.isLocked)
     /// </summary>
-    private void RestoreShopData()
+    private void RestoreShopDataFromFile(string fileName)
     {
         if (ShopManager.Instance == null) return;
 
+        currentShopData = LoadFile<ShopData>(ShopDataFileName);
+
         var dataSO = ShopManager.Instance.customizationData_SO;
 
-        if (currentGameData?.shopData == null)
+        if (currentShopData == null)
         {
             Debug.Log("Current ShopData does not exist, creating a new one");
-            currentGameData.shopData = new ShopData();
+            currentShopData = new ShopData();
             return;
         }
 
@@ -210,48 +328,48 @@ public class SavingManager : MonoBehaviour
         for (int i = 0; i < dataSO.colors.Count(); i++)
         {
             // Ensure saved list has the same size
-            if (i < currentGameData.shopData.colorsLockedState.Count)
-                dataSO.colors[i].isLocked = currentGameData.shopData.colorsLockedState[i];
+            if (i < currentShopData.colorsLockedState.Count)
+                dataSO.colors[i].isLocked = currentShopData.colorsLockedState[i];
         }
 
         // Restore materials state (un-locked)
         for (int i = 0; i < dataSO.materials.Count(); i++)
         {
-            if (i < currentGameData.shopData.materialsLockedState.Count)
-                dataSO.materials[i].isLocked = currentGameData.shopData.materialsLockedState[i];
+            if (i < currentShopData.materialsLockedState.Count)
+                dataSO.materials[i].isLocked = currentShopData.materialsLockedState[i];
         }
     }
 
 
     // ------------ Helper functions ------------
 
-    private GameData LoadFile(string sessionID)
+    private T LoadFile<T>(string fileName) where T : SaveableData
     {
-        if (string.IsNullOrEmpty(sessionID))
+        if (string.IsNullOrEmpty(fileName))
         {
             Debug.LogError("Session name cannot be empty.");
             return null;
         }
 
-        GameData loadedData = dataService.Load<GameData>(sessionID);
+        T loadedData = dataService.Load<T>(fileName);
         if (loadedData == null)
         {
-            Debug.LogWarning($"No session \'{sessionID}\' found.");
+            Debug.LogWarning($"No file named \'{fileName}\' found.");
             return null;
         }
 
         return loadedData;
     }
 
-    private void SaveFile(string sessionName, bool writeOverride = true)
+    private void SaveDataInFile(SaveableData data, string fileName, bool writeOverride = true)
     {
-        if (dataService.Save(currentGameData, sessionName, writeOverride))
+        if (dataService.Save(data, fileName, writeOverride))
         {
-            Debug.Log($"Session \'{sessionName}\' saved successfully.");
+            Debug.Log($"\'{fileName}\' saved successfully.");
         }
         else
         {
-            Debug.LogError($"Failed to save session \'{sessionName}\'\n");
+            Debug.LogError($"Failed to save \'{fileName}\'\n");
         }
     }
 }

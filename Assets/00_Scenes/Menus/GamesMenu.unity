@@ -1434,7 +1434,7 @@ MonoBehaviour:
   scrollbar: {fileID: 4710719528390126958}
   scrollbarData: {fileID: 11400000, guid: a87b144f2210efa4fb6e1ea9e9ba7d25, type: 2}
   slotPrefab: {fileID: 6114339248805080769, guid: 71d0ff4a681cf544eb37a85bffdf14dc, type: 3}
-  numberOfLevels: 30
+  numberOfLevels: 25
 --- !u!1 &1948236508
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,7 +2112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -160
+      value: -80
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2162,9 +2162,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5879663125509399522, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6621428502172383247, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6789801073319472216, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_Name
       value: Level Scroll View
+      objectReference: {fileID: 0}
+    - target: {fileID: 6912385403538302960, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7433119119640757087, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2180,6 +2192,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8775796761239370178, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966103540954835052, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

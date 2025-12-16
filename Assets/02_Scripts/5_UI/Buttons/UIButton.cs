@@ -3,24 +3,28 @@ using UnityEngine.UI;
 
 public class UIButton : MonoBehaviour
 {
-    private Button button;
+    protected Button button;
 
     private void Awake()
     {
         if(button == null) button = GetComponent<Button>();
+
+        //Debug.Log($"{this.gameObject.name} Initialized");
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         button.onClick.AddListener(PlayClickSound);
+        
+        Debug.Log($"{this.gameObject.name} Started");
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         button.onClick.RemoveListener(PlayClickSound);
     }
 
-    private void PlayClickSound()
+    protected virtual void PlayClickSound()
     {
         AudioManager.Instance?.PlayClickSound();
     }

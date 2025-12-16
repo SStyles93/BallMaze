@@ -8,4 +8,11 @@ public class SettingsPannelManager : MonoBehaviour
           .Unload(SceneDatabase.Scenes.SettingsPannel)
           .Perform();
     }
+
+    public void OpenCreditsMenu()
+    {
+        //SceneController.Instance.NewTransition()
+        //  .Unload(SceneDatabase.Scenes.SettingsPannel)
+        //  .Perform();
+    }
 }

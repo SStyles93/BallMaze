@@ -1,7 +1,12 @@
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class AudioManager : MonoBehaviour
 {
+    [Header("Mixer")]
+    [SerializeField] private AudioMixer mixer;
+
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioSource playerSfxAudioSource;
@@ -19,7 +24,15 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip starClip;
     [SerializeField] private AudioClip winClip;
 
+    private bool isAudioEnabled = true;
+    private bool isMusicEnabled = true;
+
     public static AudioManager Instance { get; private set; }
+    public AudioSource MusicAudioSource => musicAudioSource;
+    public AudioSource PlayerSfxAudioSource => playerSfxAudioSource;
+    public AudioSource EnvironmentSfxAudioSource => environmentSfxAudioSource;
+    public bool IsAudioEnabled => isAudioEnabled;
+    public bool IsMusicEnabled => isMusicEnabled;
 
     private void Awake()
     {
@@ -33,6 +46,31 @@ public class AudioManager : MonoBehaviour
         if (playerSfxAudioSource == null) Debug.LogWarning("PlayerSfxAudioSource is null, assign it in inspector");
         if (environmentSfxAudioSource == null) Debug.LogWarning("EnvironmentSfxAudioSource is null, assign it in inspector");
     }
+
+    // --- GENERAL ---
+
+    /// <summary>
+    /// Sets all the Audio Sources to the given state
+    /// </summary>
+    /// <param name="isActive">state of the audio sources (On/Off)</param>
+    public void SetGeneralAudioState(bool isActive)
+    {
+        float volume = isActive ? 0.0f : -80.0f;
+        mixer.SetFloat("MasterVolume", volume);
+        isAudioEnabled = isActive;
+    }
+
+    /// <summary>
+    /// Sets the Music Source to the given state
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void SetMusicState(bool isActive)
+    {
+        float volume = isActive ? 0.0f : -80.0f;
+        mixer.SetFloat("MusicVolume", volume);
+        isMusicEnabled = isActive;
+    }
+
 
     // --- MUSIC ---
     public void PlayMusic()
@@ -119,6 +157,11 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning($"Clip {clip.name} is null");
 
         playerSfxAudioSource.PlayOneShot(clip);
+    }
+
+    private void SetAudioSourceState(AudioSource audioSource, bool isActive)
+    {
+        audioSource.enabled = isActive;
     }
 
     #endregion

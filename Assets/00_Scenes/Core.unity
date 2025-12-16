@@ -418,6 +418,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlockAllLevels: 0
+  numberOfLevels: 200
 --- !u!1 &567788078
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,7 +461,7 @@ AudioSource:
   m_GameObject: {fileID: 567788078}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -6793780395540402772, guid: c682e0716e7d1a44dbfb4894c9308383, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -591,6 +593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8cb24066a6a804ab87507be7ebb34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  mixer: {fileID: 24100000, guid: c682e0716e7d1a44dbfb4894c9308383, type: 2}
   musicAudioSource: {fileID: 567788080}
   playerSfxAudioSource: {fileID: 1900290288}
   environmentSfxAudioSource: {fileID: 849186764}
@@ -626,7 +629,7 @@ AudioSource:
   m_GameObject: {fileID: 849186763}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2624485987641308137, guid: c682e0716e7d1a44dbfb4894c9308383, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -1133,7 +1136,7 @@ AudioSource:
   m_GameObject: {fileID: 1900290287}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2624485987641308137, guid: c682e0716e7d1a44dbfb4894c9308383, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -1361,15 +1364,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2c772e122bb564e9d1213a4404a558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentGameData:
-    playerData:
-      currency: 0
-      colorIndex: 0
-      materialIndex: 0
-    shopData:
-      colorsLockedState: 
-      materialsLockedState: 
-    lastUnlockedScene: 
+  currentPlayerData:
+    currency: 0
+    colorIndex: 0
+    materialIndex: 0
+  currentShopData:
+    colorsLockedState: 
+    materialsLockedState: 
+  currentSettingsData:
+    isAudioOn: 1
+    isMusicOn: 1
+    isVibrationOn: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

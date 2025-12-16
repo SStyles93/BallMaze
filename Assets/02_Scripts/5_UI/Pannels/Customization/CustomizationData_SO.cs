@@ -39,11 +39,11 @@ public class CustomizationData_SO_CustomInspectior : Editor
 
         if (GUILayout.Button("Reset Data"))
         {
-            for (int i = 0; i < _target.materials.Length; i++)
+            for (int i = 1; i < _target.materials.Length; i++)
             {
                 _target.materials[i].isLocked = true;
             }
-            for (int i = 0; i < _target.colors.Length; i++)
+            for (int i = 1; i < _target.colors.Length; i++)
             {
                 _target.colors[i].isLocked = true;
             }

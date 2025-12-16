@@ -1,16 +1,29 @@
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
-using UnityEditor;
 
 public class JsonDataService : IDataService
 {
     public bool Save<T>(T data, string fileName, bool overwrite)
     {
-        string path = GetPath(fileName);
+        string path = GetFilePath(fileName);
+
+        if (Directory.Exists(GetFolderPath("Data")))
+        {
+            // The folder exists
+            Debug.Log("Folder found: " + GetFolderPath("Data"));
+        }
+        else
+        {
+            // The folder does not exist
+            Debug.Log("Folder not found: " + GetFolderPath("Data"));
+            // You can create it if needed:
+            Directory.CreateDirectory(GetFolderPath("Data"));
+        }
+
         try
         {
+
             if (File.Exists(path) && !overwrite)
             {
                 Debug.LogError($"File already exists and overwrite is false: {path}");
@@ -34,7 +47,7 @@ public class JsonDataService : IDataService
 
     public T Load<T>(string fileName)
     {
-        string path = GetPath(fileName);
+        string path = GetFilePath(fileName);
         try
         {
             if (!File.Exists(path))
@@ -56,7 +69,7 @@ public class JsonDataService : IDataService
 
     public void Delete(string fileName)
     {
-        string path = GetPath(fileName);
+        string path = GetFilePath(fileName);
         try
         {
             if (File.Exists(path))
@@ -75,12 +88,21 @@ public class JsonDataService : IDataService
         Debug.LogWarning("ClearAllData not fully implemented. Implement with caution.");
     }
 
-    private string GetPath(string fileName)
+    private string GetFilePath(string fileName)
     {
 #if UNITY_EDITOR
-        return Path.Combine(Application.dataPath, $"{fileName}.json");
+        return Path.Combine(GetFolderPath("Data"), $"{fileName}.json");
 #else
-        return Path.Combine(Application.persistentDataPath, $"{fileName}.json");
+        return Path.Combine(GetFolderPath("Data"), $"{fileName}.json");
+#endif
+    }
+
+    private string GetFolderPath(string folderName)
+    {
+#if UNITY_EDITOR
+        return Path.Combine(Application.dataPath, folderName);
+#else
+        return Path.Combine(Application.persistentDataPath, folderName);
 #endif
     }
 }

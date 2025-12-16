@@ -1,14 +1,17 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GamesMenuManager : MonoBehaviour
 {
+    [Header("Object References")]
     [SerializeField] private GameObject scrollViewContent;
     [SerializeField] private Scrollbar scrollbar;
     [SerializeField] private ScrollbarData_SO scrollbarData;
     [SerializeField] private GameObject slotPrefab;
 
-    [SerializeField] private int numberOfLevels = 10;
+    [Header("Variables")]
+    [SerializeField] private int numberOfLevels = 50;
 
     #region Singleton
     public static GamesMenuManager Instance { get; private set; }
@@ -29,10 +32,11 @@ public class GamesMenuManager : MonoBehaviour
         SavingManager.Instance?.LoadSession();
         AudioManager.Instance?.PlayMusic();
 
+
         int levelManagerCount = LevelManager.Instance.LevelDataDictionnary.Count;
-        if (levelManagerCount % 10 == 0 || levelManagerCount <= 0 || levelManagerCount > numberOfLevels)
+        if (levelManagerCount % numberOfLevels == 0 || levelManagerCount <= 0 || levelManagerCount > numberOfLevels)
         {
-            numberOfLevels = LevelManager.Instance.LevelDataDictionnary.Count + 10;
+            numberOfLevels = LevelManager.Instance.LevelDataDictionnary.Count + numberOfLevels;
         }
         InitializeSlots(numberOfLevels);
 
@@ -49,11 +53,15 @@ public class GamesMenuManager : MonoBehaviour
             GameObject currentSlot = Instantiate(slotPrefab, scrollViewContent.transform);
             if (i > levelManagerCount)
             {
-                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i, true);
+                bool lockLevel = true;
+#if UNITY_EDITOR
+                if (CoreManager.Instance.unlockAllLevels) lockLevel = false;
+#endif
+                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i+1, lockLevel);
             }
             else
             {
-                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i);
+                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i+1);
             }
         }
     }
