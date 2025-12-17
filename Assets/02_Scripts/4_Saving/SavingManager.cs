@@ -29,7 +29,7 @@ public class SavingManager : MonoBehaviour
         dataService = new JsonDataService(); // Or any other IDataService implementation
     }
 
-    // ---------------- SAVE ----------------
+    // --- SAVE ---
 
     /// <summary>
     /// Saves the session in a Session.Json file
@@ -49,6 +49,35 @@ public class SavingManager : MonoBehaviour
 #endif
     }
 
+
+    public void SaveGame()
+    {
+        SaveGameDataInFile(GameDataFileName);
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+    }
+    public void SavePlayer()
+    {
+        SavePlayerDataInFile(PlayerDataFileName);
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+    }
+    public void SaveShop()
+    {
+        SaveShopDataInFile(ShopDataFileName);
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+    }
+    public void SaveSettings()
+    {
+        SaveSettingsDataInFile(SettingsDataFileName);
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+    }
 
 
     /// <summary>
@@ -90,21 +119,35 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void SavePlayerDataInFile(string fileName)
     {
-        if (CurrencyManager.Instance == null)
+        PlayerData playerSaveData = new PlayerData();
+
+        // --- CURRENCY ---
+        CurrencyManager currencyManager = CurrencyManager.Instance;
+        if (currencyManager == null)
         {
             Debug.Log("No CurrencyManager instance available");
+            //in case of fail we still want to try and access the shopmanager
+            goto ShopManager;
+        }
+        playerSaveData.coins = currencyManager.CoinAmount;
+        playerSaveData.stars = currencyManager.StarAmount;
+        playerSaveData.hearts = currencyManager.HeartAmount;
+
+
+        // --- SHOP ---
+        ShopManager:
+        CustomizationManager shopManager = CustomizationManager.Instance;
+        if (shopManager == null)
+        {
+            Debug.Log("No ShopManager instance available");
             return;
         }
+        playerSaveData.colorIndex = shopManager.skinData_SO.playerColorIndex;
+        playerSaveData.materialIndex = shopManager.skinData_SO.playerMaterialIndex;
 
-        PlayerData playerSaveData = new PlayerData
-        {
-            currency = CurrencyManager.Instance.CurrencyValue,
-            colorIndex = ShopManager.Instance.skinData_SO.playerColorIndex,
-            materialIndex = ShopManager.Instance.skinData_SO.playerMaterialIndex
-        };
 
+        // --- SAVING ---
         currentPlayerData = playerSaveData;
-
         SaveDataInFile(currentPlayerData, fileName);
     }
 
@@ -143,14 +186,14 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void SaveShopDataInFile(string fileName)
     {
-        if (ShopManager.Instance == null) return;
+        if (CustomizationManager.Instance == null) return;
 
-        CustomizationData_SO currentDataSO = ShopManager.Instance.customizationData_SO;
+        CustomizationData_SO currentDataSO = CustomizationManager.Instance.customizationData_SO;
 
         ShopData shopData = new ShopData
         {
-            colorsLockedState = new List<bool>(ShopManager.Instance.customizationData_SO.colors.Length),
-            materialsLockedState = new List<bool>(ShopManager.Instance.customizationData_SO.colors.Length)
+            colorsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length),
+            materialsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length)
         };
 
         // Save colors state (un-locked
@@ -172,7 +215,7 @@ public class SavingManager : MonoBehaviour
 
 
 
-    // ---------------- LOAD ----------------
+    // --- LOAD ---
 
     /// <summary>
     /// Loads the session from a Session.Json file
@@ -188,6 +231,23 @@ public class SavingManager : MonoBehaviour
         RestoreSettingsDataFromFile(SettingsDataFileName);
     }
 
+
+    public void LoadGame()
+    {
+        RestoreGameDataFromFile(GameDataFileName);
+    }
+    public void LoadPlayer()
+    {
+        RestorePlayerDataFromFile(PlayerDataFileName);
+    }
+    public void LoadShop()
+    {
+        RestoreShopDataFromFile(ShopDataFileName);
+    }
+    public void LoadSettings()
+    {
+        RestoreSettingsDataFromFile(SettingsDataFileName);
+    }
 
 
     /// <summary>
@@ -259,18 +319,37 @@ public class SavingManager : MonoBehaviour
         {
             PlayerData playerData = new PlayerData()
             {
-                currency = 0,
+                coins = 0,
+                stars = 0,
+                hearts = 0,
                 colorIndex = 0,
                 materialIndex = 0,
 
             };
             Debug.Log("Current Session Data does not exist, creating new PlayerData");
+            playerData.hearts = CurrencyManager.Instance.InitialHeartAmount;
             currentPlayerData = playerData;
         }
 
-        CurrencyManager.Instance.SetCurrencyValue(currentPlayerData.currency);
+        // --- CURRENCY ---
+        CurrencyManager currencyManager = CurrencyManager.Instance;
+        if (currencyManager == null)
+        {
+            Debug.Log("No CurrencyManager instance available");
+            goto ShopManager;
+        }
+        currencyManager.SetCurrencyAmount(CurrencyType.COIN, currentPlayerData.coins);
+        currencyManager.SetCurrencyAmount(CurrencyType.STAR, currentPlayerData.stars);
+        currencyManager.SetCurrencyAmount(CurrencyType.HEART, currentPlayerData.hearts);
 
-        ShopManager shopManager = ShopManager.Instance;
+        // --- SHOP ---
+        ShopManager:
+        CustomizationManager shopManager = CustomizationManager.Instance;
+        if (shopManager == null)
+        {
+            Debug.Log("No ShopManager instance available");
+            return;
+        }
         shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentPlayerData.colorIndex].color;
         shopManager.skinData_SO.playerMaterial = shopManager.customizationData_SO.materials[currentPlayerData.materialIndex].material;
         shopManager.skinData_SO.playerColorIndex = currentPlayerData.colorIndex;
@@ -311,11 +390,11 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void RestoreShopDataFromFile(string fileName)
     {
-        if (ShopManager.Instance == null) return;
+        if (CustomizationManager.Instance == null) return;
 
         currentShopData = LoadFile<ShopData>(ShopDataFileName);
 
-        var dataSO = ShopManager.Instance.customizationData_SO;
+        var dataSO = CustomizationManager.Instance.customizationData_SO;
 
         if (currentShopData == null)
         {
@@ -341,7 +420,7 @@ public class SavingManager : MonoBehaviour
     }
 
 
-    // ------------ Helper functions ------------
+    // --- Helper functions ---
 
     private T LoadFile<T>(string fileName) where T : SaveableData
     {
@@ -360,7 +439,6 @@ public class SavingManager : MonoBehaviour
 
         return loadedData;
     }
-
     private void SaveDataInFile(SaveableData data, string fileName, bool writeOverride = true)
     {
         if (dataService.Save(data, fileName, writeOverride))

@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-public class ShopManager : MonoBehaviour
+public class CustomizationManager : MonoBehaviour
 {
-    public static ShopManager Instance { get; private set; }
+    public static CustomizationManager Instance { get; private set; }
 
     public CustomizationData_SO customizationData_SO;
     public PlayerSkinData_SO skinData_SO;
@@ -38,8 +38,10 @@ public class ShopManager : MonoBehaviour
 
     public bool ValidatePurchase()
     {
-        if(CurrencyManager.Instance.CurrencyValue < currentOption.price)
+        if(CurrencyManager.Instance.CoinAmount < currentOption.price)
         {
+            // TODO: AudioPlay error sound
+
             return false;
         }
         else
@@ -58,7 +60,7 @@ public class ShopManager : MonoBehaviour
 
     private void DeductValueFromCurrency(int value)
     {
-        CurrencyManager.Instance.ReduceCurrency(value);
+        CurrencyManager.Instance.ReduceCurrencyAmount(CurrencyType.COIN,value);
     }
 
     /// <summary>

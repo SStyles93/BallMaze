@@ -16,7 +16,7 @@ public class UIButton : MonoBehaviour
     {
         button.onClick.AddListener(PlayClickSound);
         
-        Debug.Log($"{this.gameObject.name} Started");
+        //Debug.Log($"{this.gameObject.name} Started");
     }
 
     protected virtual void OnDestroy()

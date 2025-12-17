@@ -1,18 +1,18 @@
 using TMPro;
 using UnityEngine;
 
-public class CurrencyPannel : MonoBehaviour
+public class StarPannel : MonoBehaviour
 {
     [SerializeField] private TMP_Text currencyText;
 
     private void OnEnable()
     {
-        CurrencyManager.Instance.OnCurrencyChanged += UpdateCurrencyValue;
+        CurrencyManager.Instance.OnStarAmountChanged += UpdateCurrencyValue;
     }
 
     private void OnDisable()
     {
-        CurrencyManager.Instance.OnCurrencyChanged -= UpdateCurrencyValue;
+        CurrencyManager.Instance.OnStarAmountChanged -= UpdateCurrencyValue;
     }
 
     private void UpdateCurrencyValue(int value)

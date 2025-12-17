@@ -465,7 +465,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 0.9
   Loop: 1
   Mute: 0
@@ -601,7 +601,7 @@ MonoBehaviour:
   jumpClip: {fileID: 8300000, guid: b5d138cf3c10ee345aa3b6108fdffb94, type: 3}
   clickClip: {fileID: 8300000, guid: 43388645cce375a42a77c0867acc79fd, type: 3}
   validateClip: {fileID: 8300000, guid: e7782d87603539140b19b1940d0abad7, type: 3}
-  starClip: {fileID: 8300000, guid: e796479239d7e00448c88b8aa152bfeb, type: 3}
+  starClip: {fileID: 8300000, guid: c4850539d7f313a418beb6c3ceeb7c5c, type: 3}
   winClip: {fileID: 8300000, guid: f8e03807babc29149bb2e97acbd24834, type: 3}
 --- !u!1 &849186763
 GameObject:
@@ -633,7 +633,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1030,8 +1030,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b4093a267aca0c41b0008d101a97b93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currencyValue: 0
-  PreviousCurrencyValue: 0
+  coinAmount: 0
+  PreviousCoinAmount: 0
+  starAmount: 0
+  heartAmount: 0
+  initialHeartAmount: 12
 --- !u!1 &1445328148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,7 +1368,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPlayerData:
-    currency: 0
+    coins: 0
+    stars: 0
+    hearts: 0
     colorIndex: 0
     materialIndex: 0
   currentShopData:

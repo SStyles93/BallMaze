@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 873789922600849788}
   - component: {fileID: 6292687874011946597}
   m_Layer: 5
-  m_Name: CurrencyPannel
+  m_Name: CoinPannel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

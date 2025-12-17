@@ -2,7 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class ValidationPannelManager : MonoBehaviour
+public class CustomizationValidatePannelManager : MonoBehaviour
 {
     [Header("Validation Pannel")]
     [SerializeField] private GameObject validationPannel;
@@ -19,11 +19,11 @@ public class ValidationPannelManager : MonoBehaviour
 
     private void OnEnable()
     {
-        ShopManager.Instance.OnOptionChanged += SetSelectedOption;
+        CustomizationManager.Instance.OnOptionChanged += SetSelectedOption;
     }
     private void OnDisable()
     {
-        ShopManager.Instance.OnOptionChanged -= SetSelectedOption;
+        CustomizationManager.Instance.OnOptionChanged -= SetSelectedOption;
     }
 
     private void Awake()
@@ -48,7 +48,7 @@ public class ValidationPannelManager : MonoBehaviour
 
     public void ValidatePurchase()
     {
-        if (ShopManager.Instance.ValidatePurchase())
+        if (CustomizationManager.Instance.ValidatePurchase())
         {
             // Close pannel and reset pannel values when purchase is successful
             ClosePannel();
@@ -59,7 +59,6 @@ public class ValidationPannelManager : MonoBehaviour
         else
         {
             ClosePannel();
-
             insufficientFundsPannel.SetActive(true);
         }
     }
@@ -91,7 +90,7 @@ public class ValidationPannelManager : MonoBehaviour
 
     private void InitializeText()
     {
-        validationText.text = $"Purchase {optionName} for {selectedOption.price} <sprite index=0> ?";
+        validationText.text = $"Purchase for {selectedOption.price} <sprite index=0> ?";
     }
 
     private void SetSelectedOption(CustomizationOption option)

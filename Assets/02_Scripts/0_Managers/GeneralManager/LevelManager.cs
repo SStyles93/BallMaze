@@ -77,11 +77,25 @@ public class LevelManager : MonoBehaviour
     {
         currentLevelData.wasLevelFinished = true;
 
+        // --- STARS ---
+        
+        int earnedStars = currentStarCount - previousNumberOfStarts;
+        // Make sure that the amount of stars is not negative
+        // ex: previous try:3,
+        //     current 2     ->     2-3 = -1
+        if (earnedStars < 0) earnedStars = 0;
+        
+        CurrencyManager.Instance.IncreaseCurrencyAmount(CurrencyType.STAR,earnedStars);
+
+        // Sets the StarCount for the level accounting for previously obtained stars
         if (currentStarCount > previousNumberOfStarts)
             currentLevelData.numberOfStars = currentStarCount;
         else
             currentStarCount = previousNumberOfStarts;
 
+        
+        // --- COINS ---
+        
         int currencyEarned = CalculateCurrencyEarnedFromGrade(currentStarCount);
         if (currencyEarned <= 0)
             return;
@@ -98,7 +112,7 @@ public class LevelManager : MonoBehaviour
             currentLevelData.currencyLeftToEarn -= currencyEarned;
         }
 
-        CurrencyManager.Instance.IncreaseCurrency(currencyEarned);
+        CurrencyManager.Instance.IncreaseCurrencyAmount(CurrencyType.COIN, currencyEarned);
     }
 
     /// <summary>

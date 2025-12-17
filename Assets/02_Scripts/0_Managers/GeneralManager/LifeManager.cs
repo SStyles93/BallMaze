@@ -3,15 +3,17 @@ using UnityEngine;
 
 public class LifeManager : MonoBehaviour
 {
-    public static LifeManager Instance { get; private set; }
 
-    public int CurrentLife { get => currentLife; set => currentLife = value; }
+    public int CurrentLife => currentLife;
     [SerializeField] int currentLife = 3;
-
+    
+    /// <summary>
+    /// Delegate used in the life pannel (In Game)
+    /// </summary>
     public event Action OnRemoveLife;
 
     #region Singleton
-
+    public static LifeManager Instance { get; private set; }
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -20,11 +22,17 @@ public class LifeManager : MonoBehaviour
     }
     #endregion
 
+    private void Start()
+    {
+        ResetLife();
+    }
+
     public void RemoveLife()
     {
         if(currentLife > 0)
         {
             currentLife--;
+            CurrencyManager.Instance.ReduceCurrencyAmount(CurrencyType.HEART, 1);
         }
 
         OnRemoveLife?.Invoke();
@@ -33,9 +41,18 @@ public class LifeManager : MonoBehaviour
             KillPlayer();
     }
 
+    /// <summary>
+    /// // Sets the amount of life according to the Heart currency amount
+    /// </summary>
     public void ResetLife()
     {
-        currentLife = 3;
+        CurrencyManager currencyManager = CurrencyManager.Instance;
+        // Sets the amount of life according to the Heart currency amount
+        if (currencyManager.HeartAmount >= 3)
+            //(max 3 hearts in game)
+            currentLife = 3;
+        else
+            currentLife = currencyManager.HeartAmount;
     }
 
     private void KillPlayer()

@@ -25,12 +25,14 @@ public class LevelData
 }
 
 /// <summary>
-/// Data of the player (currency)
+/// Data of the player (coins, stars, hearts, colorIndex, materialIndex)
 /// </summary>
 [System.Serializable]
 public class PlayerData : SaveableData
 {
-    public int currency;
+    public int coins;
+    public int stars;
+    public int hearts;
     public int colorIndex;
     public int materialIndex;
 }

@@ -13,7 +13,7 @@ public class UIToggle : UIButton
         base.Start();
         button.onClick.AddListener(Toggle);
 
-        Debug.Log($"{this.gameObject.name} Started");
+        //Debug.Log($"{this.gameObject.name} Started");
     }
 
     protected override void OnDestroy()

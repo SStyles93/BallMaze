@@ -11,14 +11,14 @@ public class PlayerCustomization : MonoBehaviour
 
     private void OnEnable()
     {
-        ShopManager.Instance.OnUpdatePlayerOption += UpdateAppearence;
-        ShopManager.Instance.OnOptionChanged += PreviewOption;
+        CustomizationManager.Instance.OnUpdatePlayerOption += UpdateAppearence;
+        CustomizationManager.Instance.OnOptionChanged += PreviewOption;
     }
 
     private void OnDisable()
     {
-        ShopManager.Instance.OnUpdatePlayerOption -= UpdateAppearence;
-        ShopManager.Instance.OnOptionChanged -= PreviewOption;
+        CustomizationManager.Instance.OnUpdatePlayerOption -= UpdateAppearence;
+        CustomizationManager.Instance.OnOptionChanged -= PreviewOption;
     }
 
     private void Awake()

@@ -18,6 +18,18 @@ public class LifePannel : MonoBehaviour
             LifeManager.Instance.OnRemoveLife -= RemoveLife;
     }
 
+    private void Start()
+    {
+        if(LifeManager.Instance != null)
+            for (int i = 0; i < lifeImages.Count; i++)
+            {
+                if(i < LifeManager.Instance.CurrentLife)
+                    lifeImages[i].enabled = true;
+                else 
+                    lifeImages[i].enabled = false;
+            }
+    }
+
     public void RemoveLife()
     {
         if (LifeManager.Instance != null)

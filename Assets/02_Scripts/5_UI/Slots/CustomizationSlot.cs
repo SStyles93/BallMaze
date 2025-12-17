@@ -95,13 +95,13 @@ public class CustomizationSlot : BaseUISlot
             // Material is given to shop manager (not yet unlocked)
             if (isLocked)
             {
-                ShopManager.Instance.SetCurrentCustomizationSlot(this);
+                CustomizationManager.Instance.SetCurrentCustomizationSlot(this);
                 return;
             }
 
             // Option is assigned to the player (is unlocked)
             playerCustomization.AssignOption(this.option, index);
-            ShopManager.Instance.SetCurrentCustomizationSlot(this);
+            CustomizationManager.Instance.SetCurrentCustomizationSlot(this);
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
     }

@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00_Scenes/Menus/ShopMenu.unity
     guid: ac310877dec0e83458add8b5cfc62513
+  - enabled: 1
+    path: Assets/00_Scenes/Pannels/CreditPannel.unity
+    guid: b78540bf9c3568040b1d4b6b8f0e002e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b369852d9e5a62c42aaedf664ffbd4ec, type: 2}
   m_UseUCBPForAssetBundles: 0
