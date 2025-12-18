@@ -15,6 +15,7 @@ public class LevelManager : MonoBehaviour
     private int previousNumberOfStarts = 0;
     private bool wasGamePreviouslyFinished = false;
 
+    public event Action<int> OnStarCountChanged;
 
     #region Singleton
     public static LevelManager Instance { get; private set; }
@@ -23,6 +24,7 @@ public class LevelManager : MonoBehaviour
     public int PreviousNumberOfStars  => previousNumberOfStarts;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount => currentStarCount;
+
 
     private void Awake()
     {
@@ -130,6 +132,7 @@ public class LevelManager : MonoBehaviour
     public void IncreaseStarCount()
     {
         currentStarCount++;
+        OnStarCountChanged?.Invoke(currentStarCount);
     }
 
     #region PRIVATE FUNCTIONS

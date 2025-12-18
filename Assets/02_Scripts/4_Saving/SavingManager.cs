@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -57,6 +58,9 @@ public class SavingManager : MonoBehaviour
         AssetDatabase.Refresh();
 #endif
     }
+    /// <summary>
+    /// Captures the player's data (currency (int), colorIndex(int), materialIndex(int))
+    /// </summary>
     public void SavePlayer()
     {
         SavePlayerDataInFile(PlayerDataFileName);
@@ -331,16 +335,18 @@ public class SavingManager : MonoBehaviour
             currentPlayerData = playerData;
         }
 
-        // --- CURRENCY ---
-        CoinManager currencyManager = CoinManager.Instance;
-        if (currencyManager == null)
+        // --- COINS ---
+        CoinManager coinManager = CoinManager.Instance;
+        if (coinManager == null)
         {
             Debug.Log("No CurrencyManager instance available");
             goto ShopManager;
         }
-        currencyManager.SetCurrencyAmount(CoinType.COIN, currentPlayerData.coins);
-        currencyManager.SetCurrencyAmount(CoinType.STAR, currentPlayerData.stars);
-        currencyManager.SetCurrencyAmount(CoinType.HEART, currentPlayerData.hearts);
+        coinManager.SetCurrencyAmount(CoinType.COIN, currentPlayerData.coins);
+        coinManager.SetCurrencyAmount(CoinType.STAR, currentPlayerData.stars);
+        coinManager.SetCurrencyAmount(CoinType.HEART, currentPlayerData.hearts);
+        LifeManager.Instance.ResetLife();
+        
 
         // --- SHOP ---
         ShopManager:

@@ -4,18 +4,28 @@ using UnityEngine;
 
 public class CoinManager : MonoBehaviour
 {
-    private Dictionary<CoinType, int> currencies = new Dictionary<CoinType, int>();
+    private Dictionary<CoinType, int> coins = new Dictionary<CoinType, int>();
     public int PreviousCoinAmount;
-    [SerializeField] int initialHeartAmount = 12;
+
+    [Header("Hearts Parameters")]
+    [SerializeField] int initialHeartAmount = 15;
+    [Tooltip("Time to regain a heart (in Secondd) 1m = 60")]
+    [SerializeField] private float timeToRegainHeart = 600;
+    private float currentTime = 0;
 
     /// <summary>
     /// Delegate (Action) used to notify the different pannels (LifePannel, CurrencyPannel, StarPannel)
     /// </summary>
-    public event Action<CoinType, int> OnCurrencyChanged;
+    public event Action<CoinType, int> OnCoinChanged;
 
-    public int CoinAmount => currencies[CoinType.COIN];
-    public int StarAmount => currencies[CoinType.STAR];
-    public int HeartAmount => currencies[CoinType.HEART];
+    /// <summary>
+    /// Delegate to transmit the current time to HeartPannel
+    /// </summary>
+    public event Action<float> OnTimerChanged;
+
+    public int CoinAmount => coins[CoinType.COIN];
+    public int StarAmount => coins[CoinType.STAR];
+    public int HeartAmount => coins[CoinType.HEART];
     public int InitialHeartAmount => initialHeartAmount;
     
     public static CoinManager Instance { get; private set; }
@@ -26,6 +36,17 @@ public class CoinManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        coins.Add(CoinType.COIN, 0);
+        coins.Add(CoinType.STAR, 0);
+        coins.Add(CoinType.HEART, 0);
+    }
+
+    private void Update()
+    {
+        TimeCountDown();
+    }
 
     /// <summary>
     /// Checks if the currency amount of a given type in the currency manager is sufficient for a purchase
@@ -35,7 +56,7 @@ public class CoinManager : MonoBehaviour
     /// <returns>True if there is enough of the currency type</returns>
     public bool CanAfford(CoinType type, int amount)
     {
-        return currencies[type] >= amount;
+        return coins[type] >= amount;
     }
 
     /// <summary>
@@ -46,9 +67,9 @@ public class CoinManager : MonoBehaviour
     public void IncreaseCurrencyAmount(CoinType type, int amount)
     {
         if(type == CoinType.COIN) 
-            PreviousCoinAmount = currencies[CoinType.COIN];
-        currencies[type] += amount;
-        OnCurrencyChanged?.Invoke(type, currencies[type]);
+            PreviousCoinAmount = coins[CoinType.COIN];
+        coins[type] += amount;
+        OnCoinChanged?.Invoke(type, coins[type]);
     }
 
     /// <summary>
@@ -59,9 +80,19 @@ public class CoinManager : MonoBehaviour
     public void ReduceCurrencyAmount(CoinType type, int amount)
     {
         if (type == CoinType.COIN)
-            PreviousCoinAmount = currencies[CoinType.COIN];
-        currencies[type] -= amount;
-        OnCurrencyChanged?.Invoke(type, currencies[type]);
+            PreviousCoinAmount = coins[CoinType.COIN];
+                
+        coins[type] -= amount;
+
+        if (type == CoinType.HEART)
+            // Check if a heart was lost && checks if the timer was not already set
+            if (coins[CoinType.HEART] < initialHeartAmount && currentTime <= 0)
+            {
+                //Sets the current timer
+                currentTime = timeToRegainHeart;
+            }
+
+        OnCoinChanged?.Invoke(type, coins[type]);
     }
 
     /// <summary>
@@ -72,9 +103,9 @@ public class CoinManager : MonoBehaviour
     public void SetCurrencyAmount(CoinType type, int value)
     {
         if (type == CoinType.COIN)
-            PreviousCoinAmount = currencies[CoinType.COIN];
-        currencies[type] = value;
-        OnCurrencyChanged?.Invoke(type, currencies[type]);
+            PreviousCoinAmount = coins[CoinType.COIN];
+        coins[type] = value;
+        OnCoinChanged?.Invoke(type, coins[type]);
     }
 
     /// <summary>
@@ -82,6 +113,20 @@ public class CoinManager : MonoBehaviour
     /// </summary>
     public void UpdatePreviousCoinAmount()
     {
-        PreviousCoinAmount = currencies[CoinType.COIN];
+        PreviousCoinAmount = coins[CoinType.COIN];
+    }
+
+
+    private void TimeCountDown()
+    {
+        if (currentTime <= 0)
+        {
+
+            coins[CoinType.HEART]++;
+            OnCoinChanged?.Invoke(CoinType.HEART, coins[CoinType.HEART]);
+            currentTime = 0;
+            return;
+        }
+        currentTime -= Time.deltaTime;
     }
 }

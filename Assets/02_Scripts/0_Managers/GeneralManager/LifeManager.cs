@@ -5,7 +5,7 @@ public class LifeManager : MonoBehaviour
 {
     public int CurrentLife => currentLife;
     [SerializeField] int currentLife = 3;
-    
+
     /// <summary>
     /// Delegate used in the life pannel (In Game)
     /// </summary>

@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class UITabButton : MonoBehaviour
 {
     [SerializeField] Image image;
-    [SerializeField] Color selectedColor = PxP.Color.BlueLight;
-    [SerializeField] Color unselectedColor = PxP.Color.BlueDark;
+    [SerializeField] Color selectedColor = PxP.BallMaze.Color.BlueLight;
+    [SerializeField] Color unselectedColor = PxP.BallMaze.Color.BlueDark;
 
     private void Awake()
     {

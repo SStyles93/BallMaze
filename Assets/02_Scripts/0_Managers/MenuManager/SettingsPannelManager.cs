@@ -4,15 +4,19 @@ public class SettingsPannelManager : MonoBehaviour
 {
     public void CloseSettingsPannel()
     {
-        SceneController.Instance.NewTransition()
+        SavingManager.Instance?.SaveSettings();
+
+        SceneController.Instance?.NewTransition()
           .Unload(SceneDatabase.Scenes.SettingsPannel)
           .Perform();
     }
 
     public void OpenCreditsMenu()
     {
-        //SceneController.Instance.NewTransition()
-        //  .Unload(SceneDatabase.Scenes.SettingsPannel)
-        //  .Perform();
+        SavingManager.Instance?.SaveSettings();
+
+        SceneController.Instance.NewTransition()
+          .Unload(SceneDatabase.Scenes.CreditsPannel)
+          .Perform();
     }
 }

@@ -1,3 +1,4 @@
+using PxP.Draw;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -14,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float gravityScale = 2.0f;
     [SerializeField] float groundCheckDistance = 1.1f;
+    [SerializeField] float groundDetectionRadius = 0.35f;
     [SerializeField] LayerMask groundedLayerMask;
 
     [SerializeField] private bool isGrounded = false;
@@ -67,10 +69,21 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private bool CheckIfPlayerIsGrounded()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, groundCheckDistance))
+        Ray ray = new Ray(transform.position, Vector3.down);
+        if (Physics.SphereCast(ray, groundDetectionRadius, groundCheckDistance, groundedLayerMask))
+        {
+#if UNITY_EDITOR
+            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.green);
+#endif
             return true;
+        }
         else
+        {
+#if UNITY_EDITOR
+            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.red);
+#endif
             return false;
+        }
     }
 
     /// <summary>

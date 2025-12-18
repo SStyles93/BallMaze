@@ -7,12 +7,12 @@ public class StarPannel : MonoBehaviour
 
     private void OnEnable()
     {
-        CoinManager.Instance.OnCurrencyChanged += UpdateCurrencyValue;
+        CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
     }
 
     private void OnDisable()
     {
-        CoinManager.Instance.OnCurrencyChanged -= UpdateCurrencyValue;
+        CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
     }
 
     private void UpdateCurrencyValue(CoinType type, int value)

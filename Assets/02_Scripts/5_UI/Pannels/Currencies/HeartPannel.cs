@@ -3,21 +3,28 @@ using UnityEngine;
 
 public class HeartPannel : MonoBehaviour
 {
-    [SerializeField] private TMP_Text currencyText;
+    [Header("Timer")]
+    [SerializeField] private GameObject timerPannel;
+    [SerializeField] private TMP_Text timerText;
+
+    [Header("Heart")]
+    [SerializeField] private TMP_Text heartAmountText;
+    [SerializeField] private GameObject shopButton;
+
 
     private void OnEnable()
     {
-        CoinManager.Instance.OnCurrencyChanged += UpdateCurrencyValue;
+        CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
     }
 
     private void OnDisable()
     {
-        CoinManager.Instance.OnCurrencyChanged -= UpdateCurrencyValue;
+        CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
     }
 
     private void UpdateCurrencyValue(CoinType type, int value)
     {
         if(type == CoinType.HEART)
-        currencyText.text = $"{value.ToString()}";
+        heartAmountText.text = $"{value.ToString()}";
     }
 }

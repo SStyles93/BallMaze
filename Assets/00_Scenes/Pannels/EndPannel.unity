@@ -389,6 +389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScorePannel
       objectReference: {fileID: 0}
+    - target: {fileID: 7292594689442888054, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
