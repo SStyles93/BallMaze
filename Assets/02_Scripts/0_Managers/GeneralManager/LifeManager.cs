@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class LifeManager : MonoBehaviour
 {
-
     public int CurrentLife => currentLife;
     [SerializeField] int currentLife = 3;
     
@@ -32,7 +31,7 @@ public class LifeManager : MonoBehaviour
         if(currentLife > 0)
         {
             currentLife--;
-            CurrencyManager.Instance.ReduceCurrencyAmount(CurrencyType.HEART, 1);
+            CoinManager.Instance.ReduceCurrencyAmount(CoinType.HEART, 1);
         }
 
         OnRemoveLife?.Invoke();
@@ -46,7 +45,7 @@ public class LifeManager : MonoBehaviour
     /// </summary>
     public void ResetLife()
     {
-        CurrencyManager currencyManager = CurrencyManager.Instance;
+        CoinManager currencyManager = CoinManager.Instance;
         // Sets the amount of life according to the Heart currency amount
         if (currencyManager.HeartAmount >= 3)
             //(max 3 hearts in game)

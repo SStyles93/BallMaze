@@ -38,7 +38,7 @@ public class CustomizationManager : MonoBehaviour
 
     public bool ValidatePurchase()
     {
-        if(CurrencyManager.Instance.CoinAmount < currentOption.price)
+        if (CoinManager.Instance.CanAfford(currentOption.price.CoinType, currentOption.price.Amount))
         {
             // TODO: AudioPlay error sound
 
@@ -46,7 +46,7 @@ public class CustomizationManager : MonoBehaviour
         }
         else
         {
-            DeductValueFromCurrency(currentOption.price);
+            CoinManager.Instance.ReduceCurrencyAmount(currentOption.price.CoinType, currentOption.price.Amount);
             UnlockOption(currentOption, currentOptionIndex);
 
             // TODO: Validation (V+S FX)
@@ -56,11 +56,6 @@ public class CustomizationManager : MonoBehaviour
 
             return true;
         }
-    }
-
-    private void DeductValueFromCurrency(int value)
-    {
-        CurrencyManager.Instance.ReduceCurrencyAmount(CurrencyType.COIN,value);
     }
 
     /// <summary>

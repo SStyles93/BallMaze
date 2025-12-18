@@ -2,7 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class CustomizationValidatePannelManager : MonoBehaviour
+public class ValidationPannelManager : MonoBehaviour
 {
     [Header("Validation Pannel")]
     [SerializeField] private GameObject validationPannel;
@@ -15,7 +15,7 @@ public class CustomizationValidatePannelManager : MonoBehaviour
 
 
     [SerializeField] private CustomizationOption selectedOption = null;
-    private string optionName;
+    private GameObject optionObject;
 
     private void OnEnable()
     {
@@ -38,14 +38,18 @@ public class CustomizationValidatePannelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Initializes the Validation Pannel with the selected Option
+    /// Opens and Initializes the Validation Pannel with the selected Option
     /// </summary>
     /// <remarks>Method called from the "BUY" button in the customization scene</remarks>
     public void OnBuyButtonClicked()
     {
+        validationPannel.SetActive(true);
         InitializePannelWithOption(selectedOption);
     }
 
+    /// <summary>
+    /// Tryies to validate the current purchase
+    /// </summary>
     public void ValidatePurchase()
     {
         if (CustomizationManager.Instance.ValidatePurchase())
@@ -68,38 +72,30 @@ public class CustomizationValidatePannelManager : MonoBehaviour
     {
         validationPannel.SetActive(false);
         selectedOption = null;
-        optionName = null;
+        optionObject = null;
     }
 
     private void InitializePannelWithOption(CustomizationOption option)
     {
-        validationPannel.SetActive(true);
         selectedOption = option;
 
-        if (option is ColorOption col)
-        {
-            optionName = col.name;
-        }
-        if (option is MaterialOption mat)
-        {
-            optionName = mat.material.name;
-        }
+       //TODO: OptionObject has to be passed here
 
-        InitializeText();
+        InitializeText(option);
     }
 
-    private void InitializeText()
+    private void InitializeText(CustomizationOption option)
     {
-        validationText.text = $"Purchase for {selectedOption.price} <sprite index=0> ?";
+        validationText.text = $"Purchase for {option.price} <sprite index=0> ?";
     }
 
     private void SetSelectedOption(CustomizationOption option)
     {
         selectedOption = option;
-        SetBuyButton(option);
+        SetBuyButtonText(option);
     }
 
-    private void SetBuyButton(CustomizationOption option)
+    private void SetBuyButtonText(CustomizationOption option)
     {
         // Enable the button if locked
         buyButton.gameObject.SetActive(option.isLocked);

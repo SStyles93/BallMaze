@@ -7,16 +7,17 @@ public class CurrencyPannel : MonoBehaviour
 
     private void OnEnable()
     {
-        CurrencyManager.Instance.OnCoinAmountChanged += UpdateCurrencyValue;
+        CoinManager.Instance.OnCurrencyChanged += UpdateCurrencyValue;
     }
 
     private void OnDisable()
     {
-        CurrencyManager.Instance.OnCoinAmountChanged -= UpdateCurrencyValue;
+        CoinManager.Instance.OnCurrencyChanged -= UpdateCurrencyValue;
     }
 
-    private void UpdateCurrencyValue(int value)
+    private void UpdateCurrencyValue(CoinType type, int value)
     {
+        if(type == CoinType.COIN)
         currencyText.text = $"{value.ToString()}";
     }
 }

@@ -12,7 +12,7 @@ public class SavingManager : MonoBehaviour
 
     public GameData currentGameData = null;
     public PlayerData currentPlayerData = null;
-    public ShopData currentShopData = null;
+    public CustomizationShopData currentShopData = null;
     public SettingsData currentSettingsData = null;
 
     const string GameDataFileName = "GameData";
@@ -40,7 +40,7 @@ public class SavingManager : MonoBehaviour
 
         SavePlayerDataInFile(PlayerDataFileName);
 
-        SaveShopDataInFile(ShopDataFileName);
+        SaveCustomizationShopDataInFile(ShopDataFileName);
 
         SaveSettingsDataInFile(SettingsDataFileName);
 
@@ -66,7 +66,7 @@ public class SavingManager : MonoBehaviour
     }
     public void SaveShop()
     {
-        SaveShopDataInFile(ShopDataFileName);
+        SaveCustomizationShopDataInFile(ShopDataFileName);
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
@@ -122,7 +122,7 @@ public class SavingManager : MonoBehaviour
         PlayerData playerSaveData = new PlayerData();
 
         // --- CURRENCY ---
-        CurrencyManager currencyManager = CurrencyManager.Instance;
+        CoinManager currencyManager = CoinManager.Instance;
         if (currencyManager == null)
         {
             Debug.Log("No CurrencyManager instance available");
@@ -184,19 +184,19 @@ public class SavingManager : MonoBehaviour
     /// <summary>
     /// Method to capture the state of customization options
     /// </summary>
-    private void SaveShopDataInFile(string fileName)
+    private void SaveCustomizationShopDataInFile(string fileName)
     {
         if (CustomizationManager.Instance == null) return;
 
         CustomizationData_SO currentDataSO = CustomizationManager.Instance.customizationData_SO;
 
-        ShopData shopData = new ShopData
+        CustomizationShopData shopData = new CustomizationShopData
         {
             colorsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length),
             materialsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length)
         };
 
-        // Save colors state (un-locked
+        // Save colors state (un-locked)
         foreach (var colorOption in currentDataSO.colors)
         {
             shopData.colorsLockedState.Add(colorOption.isLocked);
@@ -327,20 +327,20 @@ public class SavingManager : MonoBehaviour
 
             };
             Debug.Log("Current Session Data does not exist, creating new PlayerData");
-            playerData.hearts = CurrencyManager.Instance.InitialHeartAmount;
+            playerData.hearts = CoinManager.Instance.InitialHeartAmount;
             currentPlayerData = playerData;
         }
 
         // --- CURRENCY ---
-        CurrencyManager currencyManager = CurrencyManager.Instance;
+        CoinManager currencyManager = CoinManager.Instance;
         if (currencyManager == null)
         {
             Debug.Log("No CurrencyManager instance available");
             goto ShopManager;
         }
-        currencyManager.SetCurrencyAmount(CurrencyType.COIN, currentPlayerData.coins);
-        currencyManager.SetCurrencyAmount(CurrencyType.STAR, currentPlayerData.stars);
-        currencyManager.SetCurrencyAmount(CurrencyType.HEART, currentPlayerData.hearts);
+        currencyManager.SetCurrencyAmount(CoinType.COIN, currentPlayerData.coins);
+        currencyManager.SetCurrencyAmount(CoinType.STAR, currentPlayerData.stars);
+        currencyManager.SetCurrencyAmount(CoinType.HEART, currentPlayerData.hearts);
 
         // --- SHOP ---
         ShopManager:
@@ -392,14 +392,14 @@ public class SavingManager : MonoBehaviour
     {
         if (CustomizationManager.Instance == null) return;
 
-        currentShopData = LoadFile<ShopData>(ShopDataFileName);
+        currentShopData = LoadFile<CustomizationShopData>(ShopDataFileName);
 
         var dataSO = CustomizationManager.Instance.customizationData_SO;
 
         if (currentShopData == null)
         {
             Debug.Log("Current ShopData does not exist, creating a new one");
-            currentShopData = new ShopData();
+            currentShopData = new CustomizationShopData();
             return;
         }
 

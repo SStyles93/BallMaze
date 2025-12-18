@@ -119,17 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &1395012 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2404492959319348948, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
-  m_PrefabInstance: {fileID: 2240801108555719385}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &69063893 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5545123743588035109, guid: 782dd9deb92c25d4d9b91bbf7b034c42, type: 3}
@@ -664,11 +653,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &812126658 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2812986162094446924, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
-  m_PrefabInstance: {fileID: 2240801108555719385}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &812126659 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7899311872010230795, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
@@ -1059,9 +1043,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1575674414}
-  - component: {fileID: 1575674417}
   - component: {fileID: 1575674419}
-  - component: {fileID: 1575674418}
   m_Layer: 0
   m_Name: PannelsManager
   m_TagString: Untagged
@@ -1084,35 +1066,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1948236509}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1575674417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1575674413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d03a0504d2580a34aa06b3f2ba40b47d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  validationPannel: {fileID: 812126658}
-  buyButton: {fileID: 0}
-  buyButtonText: {fileID: 0}
-  validationText: {fileID: 1395012}
-  insufficientFundsPannel: {fileID: 0}
---- !u!114 &1575674418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1575674413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4623d79eb8751cb4e9ffe9235e6eec47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!114 &1575674419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,6 +1078,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e6138cb14cb08498351e5f80f00d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  shopData: {fileID: 11400000, guid: dabf67849cf156f4b86d1b488e3826be, type: 2}
+  shopSlotPrefab: {fileID: 7636381603028056410, guid: d014f58c2a5ccd346b4284096b089832, type: 3}
+  shopSlotsHolder: {fileID: 911601820}
 --- !u!1 &1789736216
 GameObject:
   m_ObjectHideFlags: 0
@@ -1648,11 +1604,11 @@ PrefabInstance:
     - target: {fileID: 2996753755907348807, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1575674417}
+      objectReference: {fileID: 0}
     - target: {fileID: 3769055509008903558, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1575674417}
+      objectReference: {fileID: 0}
     - target: {fileID: 7899311872010230795, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

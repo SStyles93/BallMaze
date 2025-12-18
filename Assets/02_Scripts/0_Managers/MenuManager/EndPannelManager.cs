@@ -60,7 +60,7 @@ public class EndPannelManager : MonoBehaviour
 
         LifeManager.Instance.ResetLife();
 
-        CurrencyManager.Instance.UpdatePreviousCoinAmount();
+        CoinManager.Instance.UpdatePreviousCoinAmount();
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
@@ -75,7 +75,7 @@ public class EndPannelManager : MonoBehaviour
     {
         LifeManager.Instance.ResetLife();
 
-        CurrencyManager.Instance.UpdatePreviousCoinAmount();
+        CoinManager.Instance.UpdatePreviousCoinAmount();
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)

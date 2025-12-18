@@ -7,16 +7,17 @@ public class HeartPannel : MonoBehaviour
 
     private void OnEnable()
     {
-        CurrencyManager.Instance.OnHeartAmountChanged += UpdateCurrencyValue;
+        CoinManager.Instance.OnCurrencyChanged += UpdateCurrencyValue;
     }
 
     private void OnDisable()
     {
-        CurrencyManager.Instance.OnHeartAmountChanged -= UpdateCurrencyValue;
+        CoinManager.Instance.OnCurrencyChanged -= UpdateCurrencyValue;
     }
 
-    private void UpdateCurrencyValue(int value)
+    private void UpdateCurrencyValue(CoinType type, int value)
     {
+        if(type == CoinType.HEART)
         currencyText.text = $"{value.ToString()}";
     }
 }

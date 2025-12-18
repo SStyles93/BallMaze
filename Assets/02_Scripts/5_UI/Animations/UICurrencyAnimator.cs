@@ -11,8 +11,8 @@ public class UICurrencyAnimator : MonoBehaviour
     {
      
         AnimateCurrency(
-            CurrencyManager.Instance.PreviousCoinAmount,
-            CurrencyManager.Instance.CoinAmount,
+            CoinManager.Instance.PreviousCoinAmount,
+            CoinManager.Instance.CoinAmount,
             animationDuration);
     }
 
