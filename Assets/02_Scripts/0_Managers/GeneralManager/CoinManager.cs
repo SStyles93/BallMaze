@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,26 +9,26 @@ public class CoinManager : MonoBehaviour
     public int PreviousCoinAmount;
 
     [Header("Hearts Parameters")]
-    [SerializeField] int initialHeartAmount = 15;
+    [SerializeField] int maxHeartAmount = 15;
     [Tooltip("Time to regain a heart (in Secondd) 1m = 60")]
-    [SerializeField] private float timeToRegainHeart = 600;
-    private float currentTime = 0;
+    [SerializeField] private int timeToRegainHeartInMinutes = 10;
+    private DateTime lastHeartRefillTime;
+    Coroutine timerCoroutine;
+    bool isDataLoaded = false;
 
     /// <summary>
     /// Delegate (Action) used to notify the different pannels (LifePannel, CurrencyPannel, StarPannel)
     /// </summary>
     public event Action<CoinType, int> OnCoinChanged;
 
-    /// <summary>
-    /// Delegate to transmit the current time to HeartPannel
-    /// </summary>
-    public event Action<float> OnTimerChanged;
+    public event Action<TimeSpan> OnHeartTimerTick;
 
     public int CoinAmount => coins[CoinType.COIN];
     public int StarAmount => coins[CoinType.STAR];
     public int HeartAmount => coins[CoinType.HEART];
-    public int InitialHeartAmount => initialHeartAmount;
-    
+    public int InitialHeartAmount => maxHeartAmount;
+    public DateTime LastHeartRefillTime => lastHeartRefillTime;
+
     public static CoinManager Instance { get; private set; }
     private void Awake()
     {
@@ -45,8 +46,20 @@ public class CoinManager : MonoBehaviour
 
     private void Update()
     {
-        TimeCountDown();
+        // Update calculations & timer (visuals)
+        if (Application.isFocused)
+        {
+            RecalculateHearts();
+            if (coins[CoinType.HEART] < maxHeartAmount)
+                StartTimer();
+        }
+        else
+        {
+            // Only calculations
+            RecalculateHearts();
+        }
     }
+
 
     /// <summary>
     /// Checks if the currency amount of a given type in the currency manager is sufficient for a purchase
@@ -66,7 +79,7 @@ public class CoinManager : MonoBehaviour
     /// <param name="amount">amount to increase by</param>
     public void IncreaseCurrencyAmount(CoinType type, int amount)
     {
-        if(type == CoinType.COIN) 
+        if (type == CoinType.COIN)
             PreviousCoinAmount = coins[CoinType.COIN];
         coins[type] += amount;
         OnCoinChanged?.Invoke(type, coins[type]);
@@ -81,16 +94,17 @@ public class CoinManager : MonoBehaviour
     {
         if (type == CoinType.COIN)
             PreviousCoinAmount = coins[CoinType.COIN];
-                
+        
         coins[type] -= amount;
-
+        
         if (type == CoinType.HEART)
-            // Check if a heart was lost && checks if the timer was not already set
-            if (coins[CoinType.HEART] < initialHeartAmount && currentTime <= 0)
+        {
+            if (coins[CoinType.HEART] == maxHeartAmount - 1)
             {
-                //Sets the current timer
-                currentTime = timeToRegainHeart;
+                // Start refill timer ONLY when dropping from max
+                lastHeartRefillTime = DateTime.UtcNow;
             }
+        }
 
         OnCoinChanged?.Invoke(type, coins[type]);
     }
@@ -117,16 +131,82 @@ public class CoinManager : MonoBehaviour
     }
 
 
-    private void TimeCountDown()
-    {
-        if (currentTime <= 0)
-        {
 
-            coins[CoinType.HEART]++;
-            OnCoinChanged?.Invoke(CoinType.HEART, coins[CoinType.HEART]);
-            currentTime = 0;
+    public void SetLastHeartRefillTime(DateTime dateTime)
+    {
+        lastHeartRefillTime = dateTime;
+        isDataLoaded = true;
+    }
+    /// <summary>
+    /// Recalculates the amount of hearts to increase the saved data by
+    /// </summary>
+    private void RecalculateHearts()
+    {
+        if (coins[CoinType.HEART] >= maxHeartAmount)
+        {
             return;
         }
-        currentTime -= Time.deltaTime;
+
+        DateTime now = DateTime.UtcNow;
+        TimeSpan elapsed = now - lastHeartRefillTime;
+
+        int heartsToAdd = (int)(elapsed.TotalMinutes / timeToRegainHeartInMinutes);
+
+        if (heartsToAdd <= 0)
+            return;
+
+        int totalHeartsAmount= Mathf.Min(coins[CoinType.HEART] + heartsToAdd, maxHeartAmount);
+
+        SetCurrencyAmount(CoinType.HEART, totalHeartsAmount);
+
+        // Move the refill timestamp forward by the amount actually used
+        lastHeartRefillTime = lastHeartRefillTime.AddMinutes(
+            heartsToAdd * timeToRegainHeartInMinutes
+        );
+
+        if(isDataLoaded)
+        SavingManager.Instance?.SavePlayer();
+    }
+    private void StartTimer()
+    {
+        if (timerCoroutine != null)
+            StopCoroutine(timerCoroutine);
+
+        timerCoroutine = StartCoroutine(TimerTickRoutine());
+    }
+    IEnumerator TimerTickRoutine()
+    {
+        var wait = new WaitForSecondsRealtime(1f);
+
+        while (coins[CoinType.HEART] < maxHeartAmount)
+        {
+            TimeSpan remaining = TimeUntilNextHeart();
+
+            OnHeartTimerTick?.Invoke(remaining);
+
+            yield return wait;
+        }
+
+        // Final update when full
+        OnHeartTimerTick?.Invoke(TimeSpan.Zero);
+    }
+    public TimeSpan TimeUntilNextHeart()
+    {
+        // If already full, there is no countdown
+        if (coins[CoinType.HEART] >= maxHeartAmount)
+            return TimeSpan.Zero;
+
+        DateTime now = DateTime.UtcNow;
+
+        DateTime nextHeartTime = lastHeartRefillTime
+            .AddMinutes(timeToRegainHeartInMinutes);
+
+        TimeSpan remaining = nextHeartTime - now;
+
+        // Safety clamp (can happen on resume)
+        if (remaining < TimeSpan.Zero)
+            return TimeSpan.Zero;
+
+        return remaining;
     }
 }

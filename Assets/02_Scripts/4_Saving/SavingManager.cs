@@ -89,10 +89,11 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void SaveGameDataInFile(string fileName)
     {
-        currentGameData = new GameData
+        if(currentGameData == null)
         {
-            timestamp = DateTime.Now,
-        };
+            currentGameData = new GameData();
+        }
+
         SaveLevelsDataInGameData(currentGameData);
 
         SaveDataInFile(currentGameData, fileName);
@@ -105,7 +106,7 @@ public class SavingManager : MonoBehaviour
     {
         if (LevelManager.Instance == null)
         {
-            Debug.Log("No LevelManager instance available");
+            //Debug.Log("No LevelManager instance available");
             return;
         }
 
@@ -125,17 +126,18 @@ public class SavingManager : MonoBehaviour
     {
         PlayerData playerSaveData = new PlayerData();
 
-        // --- CURRENCY ---
-        CoinManager currencyManager = CoinManager.Instance;
-        if (currencyManager == null)
+        // --- COIN ---
+        CoinManager coinManager = CoinManager.Instance;
+        if (coinManager == null)
         {
-            Debug.Log("No CurrencyManager instance available");
+            //Debug.Log("No CurrencyManager instance available");
             //in case of fail we still want to try and access the shopmanager
             goto ShopManager;
         }
-        playerSaveData.coins = currencyManager.CoinAmount;
-        playerSaveData.stars = currencyManager.StarAmount;
-        playerSaveData.hearts = currencyManager.HeartAmount;
+        playerSaveData.coins = coinManager.CoinAmount;
+        playerSaveData.stars = coinManager.StarAmount;
+        playerSaveData.hearts = coinManager.HeartAmount;
+        playerSaveData.lastHeartRefillTime = coinManager.LastHeartRefillTime;
 
 
         // --- SHOP ---
@@ -143,7 +145,7 @@ public class SavingManager : MonoBehaviour
         CustomizationManager shopManager = CustomizationManager.Instance;
         if (shopManager == null)
         {
-            Debug.Log("No ShopManager instance available");
+            //Debug.Log("No ShopManager instance available");
             return;
         }
         playerSaveData.colorIndex = shopManager.skinData_SO.playerColorIndex;
@@ -263,8 +265,11 @@ public class SavingManager : MonoBehaviour
         currentGameData = LoadFile<GameData>(fileName);
         if (currentGameData == null)
         {
-            Debug.Log($"file {fileName} does not exist, creating new GameData");
-            currentGameData = new GameData();
+            //Debug.Log($"file {fileName} does not exist, creating new GameData");
+            currentGameData = new GameData()
+            {
+                firstTimestamp = DateTime.UtcNow
+            };
         }
 
         RestoreLevelsDataFromGameData(currentGameData);
@@ -283,7 +288,7 @@ public class SavingManager : MonoBehaviour
         {
             LevelData levelsData = new LevelData();
 
-            Debug.Log("Current Session Data does not exist, creating new levelsData");
+            //Debug.Log("Current Session Data does not exist, creating new levelsData");
         }
         else
         {
@@ -323,15 +328,15 @@ public class SavingManager : MonoBehaviour
         {
             PlayerData playerData = new PlayerData()
             {
+                lastHeartRefillTime = DateTime.UtcNow,
                 coins = 0,
                 stars = 0,
-                hearts = 0,
+                hearts = CoinManager.Instance.InitialHeartAmount,
                 colorIndex = 0,
                 materialIndex = 0,
 
             };
-            Debug.Log("Current Session Data does not exist, creating new PlayerData");
-            playerData.hearts = CoinManager.Instance.InitialHeartAmount;
+            //Debug.Log("Current Session Data does not exist, creating new PlayerData");
             currentPlayerData = playerData;
         }
 
@@ -339,12 +344,13 @@ public class SavingManager : MonoBehaviour
         CoinManager coinManager = CoinManager.Instance;
         if (coinManager == null)
         {
-            Debug.Log("No CurrencyManager instance available");
+            //Debug.Log("No CurrencyManager instance available");
             goto ShopManager;
         }
         coinManager.SetCurrencyAmount(CoinType.COIN, currentPlayerData.coins);
         coinManager.SetCurrencyAmount(CoinType.STAR, currentPlayerData.stars);
         coinManager.SetCurrencyAmount(CoinType.HEART, currentPlayerData.hearts);
+        coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
         LifeManager.Instance.ResetLife();
         
 
@@ -353,7 +359,7 @@ public class SavingManager : MonoBehaviour
         CustomizationManager shopManager = CustomizationManager.Instance;
         if (shopManager == null)
         {
-            Debug.Log("No ShopManager instance available");
+            //Debug.Log("No ShopManager instance available");
             return;
         }
         shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentPlayerData.colorIndex].color;
@@ -372,7 +378,7 @@ public class SavingManager : MonoBehaviour
 
         if (currentSettingsData == null)
         {
-            Debug.Log("Current SettingsData does not exist, creating a new one");
+            //Debug.Log("Current SettingsData does not exist, creating a new one");
             currentSettingsData = new SettingsData();
             return;
         }
@@ -404,7 +410,7 @@ public class SavingManager : MonoBehaviour
 
         if (currentShopData == null)
         {
-            Debug.Log("Current ShopData does not exist, creating a new one");
+            //Debug.Log("Current ShopData does not exist, creating a new one");
             currentShopData = new CustomizationShopData();
             return;
         }
@@ -432,14 +438,14 @@ public class SavingManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(fileName))
         {
-            Debug.LogError("Session name cannot be empty.");
+            //Debug.LogError("Session name cannot be empty.");
             return null;
         }
 
         T loadedData = dataService.Load<T>(fileName);
         if (loadedData == null)
         {
-            Debug.LogWarning($"No file named \'{fileName}\' found.");
+            //Debug.LogWarning($"No file named \'{fileName}\' found.");
             return null;
         }
 
@@ -449,11 +455,11 @@ public class SavingManager : MonoBehaviour
     {
         if (dataService.Save(data, fileName, writeOverride))
         {
-            Debug.Log($"\'{fileName}\' saved successfully.");
+            //Debug.Log($"\'{fileName}\' saved successfully.");
         }
         else
         {
-            Debug.LogError($"Failed to save \'{fileName}\'\n");
+            //Debug.LogError($"Failed to save \'{fileName}\'\n");
         }
     }
 }

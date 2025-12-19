@@ -9,7 +9,7 @@ public class SaveableData { }
 [System.Serializable]
 public class GameData : SaveableData
 {
-    public DateTime timestamp; // Date-Time at which the game was saved
+    public DateTime firstTimestamp; // Date-Time at which the game was first launched
     public Dictionary<int, LevelData> levelsData = new Dictionary<int, LevelData>(); // The dictionary holding the kvp sceneID - LevelData
 }
 
@@ -30,6 +30,7 @@ public class LevelData
 [System.Serializable]
 public class PlayerData : SaveableData
 {
+    public DateTime lastHeartRefillTime; // Date-Time at which the game was first launched
     public int coins;
     public int stars;
     public int hearts;

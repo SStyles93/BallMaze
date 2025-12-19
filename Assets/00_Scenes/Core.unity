@@ -1078,8 +1078,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
   PreviousCoinAmount: 0
-  initialHeartAmount: 15
-  heartRegainTime: 600
+  maxHeartAmount: 15
+  timeToRegainHeartInMinutes: 10
 --- !u!1 &1445328148
 GameObject:
   m_ObjectHideFlags: 0
