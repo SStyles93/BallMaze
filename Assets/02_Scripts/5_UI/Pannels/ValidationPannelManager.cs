@@ -86,7 +86,7 @@ public class ValidationPannelManager : MonoBehaviour
 
     private void InitializeText(CustomizationOption option)
     {
-        validationText.text = $"Purchase for {option.price} <sprite index=0> ?";
+        validationText.text = $"Purchase for {option.price.Amount} <sprite index=0> ?";
     }
 
     private void SetSelectedOption(CustomizationOption option)
