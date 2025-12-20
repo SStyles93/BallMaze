@@ -99,6 +99,6 @@ public class ValidationPannelManager : MonoBehaviour
     {
         // Enable the button if locked
         buyButton.gameObject.SetActive(option.isLocked);
-        buyButtonText.text = $"{selectedOption.price} <sprite index=0>";
+        buyButtonText.text = $"{selectedOption.price.Amount} <sprite index=0>";
     }
 }

@@ -20,8 +20,8 @@ MonoBehaviour:
     - CoinType: 0
       Amount: 3000
   - price:
-      currencyType: 0
-      value: 0
+      currencyType: 1
+      value: 4.99
     currencyAmountPairs:
     - CoinType: 0
-      Amount: 0
+      Amount: 6500

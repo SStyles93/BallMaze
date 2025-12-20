@@ -11,7 +11,7 @@ public class CustomizationData_SO : ScriptableObject
 public class CustomizationOption
 {
     public bool isLocked;
-    public CoinAmountPair price;
+    public CoinQuantityPair price;
 }
 
 [System.Serializable]

@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    [SerializeField] private float cameraYAxisLimit = -5;
-
     private CinemachineCamera cinemachineCam;
+    private PlayerMovement playerMovement;
 
     private void Awake()
     {
         cinemachineCam = GameObject.FindFirstObjectByType<CinemachineCamera>();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     void Start()
@@ -17,16 +17,14 @@ public class PlayerCamera : MonoBehaviour
         cinemachineCam.Follow = transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if(transform.position.y < cameraYAxisLimit)
-        {
-            cinemachineCam.Follow = null;
-        }
-        else
-        {
-            cinemachineCam.Follow = transform;
-        }
+        bool isFalling = transform.position.y < playerMovement.FallThreashold;
+        SetIsFalling(isFalling);
+    }
+
+    public void SetIsFalling(bool isFalling)
+    {
+        cinemachineCam.Follow = isFalling ? null : transform;
     }
 }

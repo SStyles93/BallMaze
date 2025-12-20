@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.04922034, g: 0.061572954, b: 0.11698109, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.032
@@ -1224,18 +1224,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4063062489096354298, guid: 07517c4b2c9669d409528bfc9ad74e7e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4063062489096354298, guid: 07517c4b2c9669d409528bfc9ad74e7e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4063062489096354298, guid: 07517c4b2c9669d409528bfc9ad74e7e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5665867690113893101, guid: 07517c4b2c9669d409528bfc9ad74e7e, type: 3}
       propertyPath: m_Name
       value: PlayerMobileUI
@@ -1382,6 +1370,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4081166865985147292, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081166865985147292, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
+      propertyPath: ShapeModule.m_Scale.y
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081166865985147292, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
+      propertyPath: ShapeModule.m_Scale.z
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081166865985147292, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5115096969302568155, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7483844068113630689, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
       propertyPath: m_Name
       value: Sky
@@ -1392,7 +1400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8914530116951114979, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.3
+      value: -27.2
       objectReference: {fileID: 0}
     - target: {fileID: 8914530116951114979, guid: 8a8c52c1d7a0e644db7bcc42daa55b2f, type: 3}
       propertyPath: m_LocalPosition.z

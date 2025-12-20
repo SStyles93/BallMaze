@@ -11,7 +11,7 @@ public class ShopData_SO : ScriptableObject
 public class ShopOption
 {
     public CurrencyValuePair price;
-    public CoinAmountPair[] currencyAmountPairs;
+    public CoinQuantityPair[] currencyAmountPairs;
 
     public float Price => price.value;
 

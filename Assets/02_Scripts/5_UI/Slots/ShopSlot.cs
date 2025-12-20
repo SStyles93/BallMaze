@@ -4,10 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ShopSlot : BaseUISlot
+public class ShopSlot : MonoBehaviour
 {
+    // Slot parameters
+    [Header("Slot Parameters")]
+    [SerializeField] protected Image slotImage;
+
     [Header("ShopSlot Parameters")]
     [SerializeField] private Sprite coinStackSprite;
+    [SerializeField] private TMP_Text coinAmountText;
     [SerializeField] private TMP_Text valueText;
 
     private ShopOption shopOption;
@@ -19,35 +24,15 @@ public class ShopSlot : BaseUISlot
         this.shopManager = shopManager;
 
         slotImage.GetComponent<Image>().sprite = coinStackSprite;
+        coinAmountText.text = shopOption.currencyAmountPairs[0].Amount.ToString();
         valueText.text = $"{shopOption.price.value} {shopOption.price.currencyType.ToString()}";
     }
 
-    public override void OnPointerUp(PointerEventData eventData)
+    public virtual void SendSlotDataToManager() 
     {
-        base.OnPointerUp(eventData);
-
-        // If click released when pointer is dragged
-        if (eventData.dragging)
+        if (shopManager != null)
         {
-            if (isLocked)
-            {
-                lockImage.color = lockColor;
-                return;
-            }
-
-            //Debug.Log($"Pointer was dragged on {this.gameObject.name}");
-        }
-        // If the click released when over the slot
-        else if (isMouseOver)
-        {
-            // Material is given to shop manager (not yet unlocked)
-            if (isLocked)
-            {
-                return;
-            }
-
-
-            //Debug.Log($"PointerUp on {this.gameObject.name}");
+            shopManager.ProcessShopOption(shopOption);
         }
     }
 }

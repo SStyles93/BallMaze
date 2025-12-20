@@ -6,7 +6,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private ShopData_SO shopData;
     [SerializeField] private GameObject shopSlotPrefab;
     [Header("Scene References")]
-    [SerializeField] private GameObject shopSlotsHolder;
+    [SerializeField] private GameObject shopSlotsContainer;
 
     public static ShopManager Instance { get; private set; }
     private void Awake()
@@ -20,6 +20,19 @@ public class ShopManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        for (int i = 0; i < shopData.shopOptions.Length; i++)
+        {
+            GameObject shopSlot = Instantiate(shopSlotPrefab, shopSlotsContainer.transform);
+            shopSlot.GetComponent<ShopSlot>().InitializeSlot(shopData.shopOptions[i], this);
+        }
+    }
 
-
+    public void ProcessShopOption(ShopOption shopOption)
+    {
+        //TODO: Process the aquired shopOption
+        Debug.Log($"ShopOption {shopOption.currencyAmountPairs[0].Amount} {shopOption.currencyAmountPairs[0].CoinType} " +
+            $"for {shopOption.price.value} {shopOption.price.currencyType} is being processed.");
+    }
 }

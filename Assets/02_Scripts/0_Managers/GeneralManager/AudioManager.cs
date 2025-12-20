@@ -10,12 +10,14 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicAudioSource;
     [SerializeField] private AudioSource playerSfxAudioSource;
+    [SerializeField] private AudioSource playerRollingAudioSource;
     [SerializeField] private AudioSource environmentSfxAudioSource;
 
     [Header("Music")]
     [SerializeField] private AudioClip musicClip;
 
     [Header("Player SFX")]
+    [SerializeField] private AudioClip rollingClip;
     [SerializeField] private AudioClip jumpClip;
     [SerializeField] private AudioClip clickClip;
     [SerializeField] private AudioClip validateClip;
@@ -45,6 +47,7 @@ public class AudioManager : MonoBehaviour
         if (musicAudioSource == null) Debug.LogWarning("MusicAudioSource is null, assign it in inspector");
         if (playerSfxAudioSource == null) Debug.LogWarning("PlayerSfxAudioSource is null, assign it in inspector");
         if (environmentSfxAudioSource == null) Debug.LogWarning("EnvironmentSfxAudioSource is null, assign it in inspector");
+        if (playerRollingAudioSource == null) Debug.LogWarning("PlayerRollingAudioSource is null, assign it in inspector");
     }
 
     // --- GENERAL ---
@@ -71,6 +74,23 @@ public class AudioManager : MonoBehaviour
         isMusicEnabled = isActive;
     }
 
+
+    public void SetRollingVolume(float value)
+    {
+        if (value <= 0.02f)
+        {
+            playerRollingAudioSource.Stop();
+            playerRollingAudioSource.volume = 0.0f;
+        }
+        else
+        {
+            if(!playerRollingAudioSource.isPlaying)
+            playerRollingAudioSource.Play();
+
+            playerRollingAudioSource.volume = value;
+        }
+
+    }
 
     // --- MUSIC ---
     public void PlayMusic()
@@ -124,7 +144,7 @@ public class AudioManager : MonoBehaviour
 
         // Star count - 1 (0,1,2)
         // for a Pitch at 0.8 -> 0.9 -> 1.0
-        environmentSfxAudioSource.pitch = 0.8f + ((manager.CurrentStarCount-1) * 0.1f);
+        environmentSfxAudioSource.pitch = 0.8f + ((manager.CurrentStarCount - 1) * 0.1f);
     }
 
     #region Helper Methods
@@ -138,7 +158,7 @@ public class AudioManager : MonoBehaviour
         if (environmentSfxAudioSource.isPlaying)
             environmentSfxAudioSource.Stop();
 
-        if (clip == null) 
+        if (clip == null)
             Debug.LogWarning($"Clip {clip.name} is null");
 
         environmentSfxAudioSource.PlayOneShot(clip);

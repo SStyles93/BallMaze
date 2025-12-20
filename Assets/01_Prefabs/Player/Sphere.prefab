@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 5788141387175152010}
   - component: {fileID: 9137505450509997439}
   - component: {fileID: 5364715522439794130}
+  - component: {fileID: 959544580089661260}
+  - component: {fileID: 2578096927877487692}
   m_Layer: 13
   m_Name: Sphere
   m_TagString: Player
@@ -322,9 +324,11 @@ MonoBehaviour:
   jumpForce: 15
   gravityScale: 2
   groundCheckDistance: 1.1
+  groundDetectionRadius: 0.35
   groundedLayerMask:
     serializedVersion: 2
     m_Bits: 32768
+  fallThreashold: -5
   isGrounded: 0
   movementValue: {x: 0, y: 0, z: 0}
 --- !u!114 &9137505450509997439
@@ -339,7 +343,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70726f693d25f7b4590e244d93d60eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
-  cameraYAxisLimit: -5
 --- !u!114 &5364715522439794130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,3 +358,28 @@ MonoBehaviour:
   playerSkinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
   m_color: {r: 0, g: 0, b: 0, a: 0}
   m_meshRenderer: {fileID: 5282394038517741061}
+--- !u!114 &959544580089661260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976364394071838964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd19af3cae08914c8633180e1e5c05d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  shrinkDuration: 1
+--- !u!114 &2578096927877487692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976364394071838964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1ccf19f2456c1e4d9f90d59b52b89b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
