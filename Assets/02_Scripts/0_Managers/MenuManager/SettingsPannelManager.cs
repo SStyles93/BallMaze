@@ -7,8 +7,8 @@ public class SettingsPannelManager : MonoBehaviour
         SavingManager.Instance?.SaveSettings();
 
         SceneController.Instance?.NewTransition()
-          .Unload(SceneDatabase.Scenes.SettingsPannel)
-          .Perform();
+            .Unload(SceneDatabase.Scenes.SettingsPannel)
+            .Perform();
     }
 
     public void OpenCreditsMenu()
@@ -16,7 +16,7 @@ public class SettingsPannelManager : MonoBehaviour
         SavingManager.Instance?.SaveSettings();
 
         SceneController.Instance.NewTransition()
-          .Unload(SceneDatabase.Scenes.CreditsPannel)
-          .Perform();
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.CreditsPannel)
+            .Perform();
     }
 }

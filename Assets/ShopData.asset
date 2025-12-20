@@ -16,12 +16,18 @@ MonoBehaviour:
   - price:
       currencyType: 1
       value: 2.99
-    currencyAmountPairs:
+    coinAmountPairs:
     - CoinType: 0
-      Amount: 3000
+      Amount: 1000
   - price:
       currencyType: 1
       value: 4.99
-    currencyAmountPairs:
+    coinAmountPairs:
     - CoinType: 0
-      Amount: 6500
+      Amount: 2500
+  - price:
+      currencyType: 1
+      value: 9.99
+    coinAmountPairs:
+    - CoinType: 0
+      Amount: 5500

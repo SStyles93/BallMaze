@@ -27,8 +27,8 @@ public class GamesMenuManager : MonoBehaviour
 
     private void Start()
     {
-        if (SavingManager.Instance == null) 
-            Debug.Log("Saving Manager does not exist");    
+        if (SavingManager.Instance == null)
+            Debug.Log("Saving Manager does not exist");
         SavingManager.Instance?.LoadSession();
         AudioManager.Instance?.PlayMusic();
 
@@ -57,11 +57,11 @@ public class GamesMenuManager : MonoBehaviour
 #if UNITY_EDITOR
                 if (CoreManager.Instance.unlockAllLevels) lockLevel = false;
 #endif
-                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i+1, lockLevel);
+                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i + 1, lockLevel);
             }
             else
             {
-                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i+1);
+                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i + 1);
             }
         }
     }
@@ -101,6 +101,18 @@ public class GamesMenuManager : MonoBehaviour
             .Unload(SceneDatabase.Scenes.GamesMenu)
             .WithOverlay()
             .Perform();
+    }
+
+    public void OpenHeartPannel()
+    {
+        SaveScrollbarValues();
+        SavingManager.Instance.SaveGame();
+
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.HeartPannel)
+            .Perform();
+
     }
 
     public void SaveScrollbarValues()

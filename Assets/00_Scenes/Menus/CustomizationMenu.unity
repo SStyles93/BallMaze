@@ -1436,21 +1436,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 958140438}
     m_Modifications:
-    - target: {fileID: 2404492959319348948, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
-      propertyPath: m_text
-      value: Purchase Color Blue for 2000 <sprite index=0>?
-      objectReference: {fileID: 0}
-    - target: {fileID: 2404492959319348948, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
-      propertyPath: m_spriteAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 24eee33ac0660f647a3dd3af32bab135, type: 2}
     - target: {fileID: 2812986162094446924, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
       propertyPath: m_Name
       value: ValidationPannel
-      objectReference: {fileID: 0}
-    - target: {fileID: 2812986162094446924, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2996753755907348807, guid: d1e8d62eace65d34a808332a5a81caa1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1856,54 +1844,22 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 293504700458090086, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 16acc39d5aef56348ba5b9c29d9ff691, type: 3}
-    - target: {fileID: 1094362967312683274, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 1094362967312683274, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 1094362967312683274, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 1094362967312683274, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2922574592955706381, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2922574592955706381, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
+    - target: {fileID: 1348098555821115004, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 9099676018412964876}
-    - target: {fileID: 2922574592955706381, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
+      objectReference: {fileID: 1944165807}
+    - target: {fileID: 1348098555821115004, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: OpenGamesMenu
       objectReference: {fileID: 0}
-    - target: {fileID: 2922574592955706381, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
+    - target: {fileID: 1348098555821115004, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: CustomizationMenuManager, Assembly-CSharp
       objectReference: {fileID: 0}
-    - target: {fileID: 2939487188256148105, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 9f4eccbc9346d1a41a7384d7d6e9db78, type: 3}
-    - target: {fileID: 3328374354602269817, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_Name
-      value: ShopTextImage
+    - target: {fileID: 3318933750172638549, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3707678333068332329, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 3e90b1a8520804648b5bccb9309bc11c, type: 3}
     - target: {fileID: 6202359863625392642, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1988,36 +1944,12 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1944165807}
-    - target: {fileID: 6819447104693623977, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OpenShopMenu
-      objectReference: {fileID: 0}
-    - target: {fileID: 6819447104693623977, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: CustomizationMenuManager, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 7493390812900522481, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
       propertyPath: m_Color.a
-      value: 0.7254902
+      value: 0.8627451
       objectReference: {fileID: 0}
     - target: {fileID: 8312839988191828188, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_Name
-      value: ShopButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 8472650192539985998, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8472650192539985998, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8472650192539985998, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8472650192539985998, guid: f4e8dc76f274824409e74fbd53e7975c, type: 3}
-      propertyPath: m_ConstrainProportionsScale
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

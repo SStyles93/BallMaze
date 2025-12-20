@@ -35,6 +35,8 @@ public class ValidationPannelManager : MonoBehaviour
     private void Start()
     {
         validationPannel.SetActive(false);
+        insufficientFundsPannel.SetActive(false);
+        buyButton.SetActive(false);
     }
 
     /// <summary>
@@ -54,26 +56,22 @@ public class ValidationPannelManager : MonoBehaviour
     {
         if (CustomizationManager.Instance.ValidatePurchase())
         {
-            // Close pannel and reset pannel values when purchase is successful
-            ClosePannel();
             // Disables the Buy button
             buyButton.gameObject.SetActive(false);
+
+            validationPannel.SetActive(false);
 
         }
         else
         {
-            ClosePannel();
             insufficientFundsPannel.SetActive(true);
+            insufficientFundsPannel.GetComponent<InsufficientFundsPannelManager>().InitializePannel(selectedOption.price.CoinType);
+
+            validationPannel.SetActive(false);
         }
     }
 
     // --- PRIVATE METHODS ---
-    private void ClosePannel()
-    {
-        validationPannel.SetActive(false);
-        selectedOption = null;
-        optionObject = null;
-    }
 
     private void InitializePannelWithOption(CustomizationOption option)
     {
