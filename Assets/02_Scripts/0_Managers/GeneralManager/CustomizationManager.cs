@@ -38,10 +38,9 @@ public class CustomizationManager : MonoBehaviour
 
     public bool ValidatePurchase()
     {
-        if (CoinManager.Instance.CanAfford(currentOption.price.CoinType, currentOption.price.Amount))
+        if (!CoinManager.Instance.CanAfford(currentOption.price.CoinType, currentOption.price.Amount))
         {
             // TODO: AudioPlay error sound
-
             return false;
         }
         else

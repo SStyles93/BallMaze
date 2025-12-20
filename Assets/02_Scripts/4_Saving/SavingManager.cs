@@ -13,12 +13,12 @@ public class SavingManager : MonoBehaviour
 
     public GameData currentGameData = null;
     public PlayerData currentPlayerData = null;
-    public CustomizationShopData currentShopData = null;
+    public SkinShopData currentSkinData = null;
     public SettingsData currentSettingsData = null;
 
     const string GameDataFileName = "GameData";
     const string PlayerDataFileName = "PlayerData";
-    const string ShopDataFileName = "ShopData";
+    const string SkinDataFileName = "ShopData";
     const string SettingsDataFileName = "SettingsData";
 
     private void Awake()
@@ -41,7 +41,7 @@ public class SavingManager : MonoBehaviour
 
         SavePlayerDataInFile(PlayerDataFileName);
 
-        SaveCustomizationShopDataInFile(ShopDataFileName);
+        SaveCustomizationShopDataInFile(SkinDataFileName);
 
         SaveSettingsDataInFile(SettingsDataFileName);
 
@@ -70,7 +70,7 @@ public class SavingManager : MonoBehaviour
     }
     public void SaveShop()
     {
-        SaveCustomizationShopDataInFile(ShopDataFileName);
+        SaveCustomizationShopDataInFile(SkinDataFileName);
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
@@ -196,7 +196,7 @@ public class SavingManager : MonoBehaviour
 
         CustomizationData_SO currentDataSO = CustomizationManager.Instance.customizationData_SO;
 
-        CustomizationShopData shopData = new CustomizationShopData
+        SkinShopData shopData = new SkinShopData
         {
             colorsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length),
             materialsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length)
@@ -214,9 +214,9 @@ public class SavingManager : MonoBehaviour
             shopData.materialsLockedState.Add(materialOption.isLocked);
         }
 
-        currentShopData = shopData;
+        currentSkinData = shopData;
 
-        SaveDataInFile(currentShopData, fileName);
+        SaveDataInFile(currentSkinData, fileName);
     }
 
 
@@ -232,7 +232,7 @@ public class SavingManager : MonoBehaviour
 
         RestorePlayerDataFromFile(PlayerDataFileName);
 
-        RestoreShopDataFromFile(ShopDataFileName);
+        RestoreSkinShopDataFromFile(SkinDataFileName);
 
         RestoreSettingsDataFromFile(SettingsDataFileName);
     }
@@ -248,7 +248,7 @@ public class SavingManager : MonoBehaviour
     }
     public void LoadShop()
     {
-        RestoreShopDataFromFile(ShopDataFileName);
+        RestoreSkinShopDataFromFile(SkinDataFileName);
     }
     public void LoadSettings()
     {
@@ -400,18 +400,18 @@ public class SavingManager : MonoBehaviour
     /// <summary>
     /// Restores all the customization states from the ShopData (color.isLocked & material.isLocked)
     /// </summary>
-    private void RestoreShopDataFromFile(string fileName)
+    private void RestoreSkinShopDataFromFile(string fileName)
     {
         if (CustomizationManager.Instance == null) return;
 
-        currentShopData = LoadFile<CustomizationShopData>(ShopDataFileName);
+        currentSkinData = LoadFile<SkinShopData>(SkinDataFileName);
 
         var dataSO = CustomizationManager.Instance.customizationData_SO;
 
-        if (currentShopData == null)
+        if (currentSkinData == null)
         {
             //Debug.Log("Current ShopData does not exist, creating a new one");
-            currentShopData = new CustomizationShopData();
+            currentSkinData = new SkinShopData();
             return;
         }
 
@@ -419,15 +419,15 @@ public class SavingManager : MonoBehaviour
         for (int i = 0; i < dataSO.colors.Count(); i++)
         {
             // Ensure saved list has the same size
-            if (i < currentShopData.colorsLockedState.Count)
-                dataSO.colors[i].isLocked = currentShopData.colorsLockedState[i];
+            if (i < currentSkinData.colorsLockedState.Count)
+                dataSO.colors[i].isLocked = currentSkinData.colorsLockedState[i];
         }
 
         // Restore materials state (un-locked)
         for (int i = 0; i < dataSO.materials.Count(); i++)
         {
-            if (i < currentShopData.materialsLockedState.Count)
-                dataSO.materials[i].isLocked = currentShopData.materialsLockedState[i];
+            if (i < currentSkinData.materialsLockedState.Count)
+                dataSO.materials[i].isLocked = currentSkinData.materialsLockedState[i];
         }
     }
 

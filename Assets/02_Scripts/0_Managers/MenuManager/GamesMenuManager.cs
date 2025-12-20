@@ -69,6 +69,7 @@ public class GamesMenuManager : MonoBehaviour
     public void OpenShopMenu()
     {
         SaveScrollbarValues();
+        SavingManager.Instance.SaveGame();
 
         SceneController.Instance
             .NewTransition()
@@ -81,6 +82,7 @@ public class GamesMenuManager : MonoBehaviour
     public void OpenSettingsPannel()
     {
         SaveScrollbarValues();
+        SavingManager.Instance.SaveGame();
 
         SceneController.Instance
             .NewTransition()
@@ -91,6 +93,7 @@ public class GamesMenuManager : MonoBehaviour
     public void OpenCustomizationMenu()
     {
         SaveScrollbarValues();
+        SavingManager.Instance.SaveGame();
 
         SceneController.Instance
             .NewTransition()

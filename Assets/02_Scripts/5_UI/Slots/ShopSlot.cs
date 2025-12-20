@@ -24,8 +24,8 @@ public class ShopSlot : MonoBehaviour
         this.shopManager = shopManager;
 
         slotImage.GetComponent<Image>().sprite = coinStackSprite;
-        coinAmountText.text = shopOption.currencyAmountPairs[0].Amount.ToString();
-        valueText.text = $"{shopOption.price.value} {shopOption.price.currencyType.ToString()}";
+        coinAmountText.text = $"{shopOption.coinAmountPairs[0].Amount}";
+        valueText.text = $"{shopOption.price.value} {shopOption.price.currencyType}";
     }
 
     public virtual void SendSlotDataToManager() 

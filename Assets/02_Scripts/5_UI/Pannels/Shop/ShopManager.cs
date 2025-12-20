@@ -22,6 +22,8 @@ public class ShopManager : MonoBehaviour
 
     private void Start()
     {
+        SavingManager.Instance.LoadSession();
+
         for (int i = 0; i < shopData.shopOptions.Length; i++)
         {
             GameObject shopSlot = Instantiate(shopSlotPrefab, shopSlotsContainer.transform);
@@ -32,7 +34,7 @@ public class ShopManager : MonoBehaviour
     public void ProcessShopOption(ShopOption shopOption)
     {
         //TODO: Process the aquired shopOption
-        Debug.Log($"ShopOption {shopOption.currencyAmountPairs[0].Amount} {shopOption.currencyAmountPairs[0].CoinType} " +
+        Debug.Log($"ShopOption {shopOption.coinAmountPairs[0].Amount} {shopOption.coinAmountPairs[0].CoinType} " +
             $"for {shopOption.price.value} {shopOption.price.currencyType} is being processed.");
     }
 }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4647984762843661553}
   - component: {fileID: 5006017779407895557}
   m_Layer: 5
-  m_Name: PriceTag
+  m_Name: PriceText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,7 +84,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
+  m_spriteAsset: {fileID: 11400000, guid: 24eee33ac0660f647a3dd3af32bab135, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 1592457873261515030}
   - component: {fileID: 7267505220961300553}
   m_Layer: 5
-  m_Name: Image
+  m_Name: LockImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,8 +163,8 @@ RectTransform:
   m_GameObject: {fileID: 5068785646569877092}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.65, y: 0.65, z: 0.65}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6398739626199816010}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.078431375, g: 0.14117648, b: 0.21176471, a: 0.64705884}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a7d7494151910d546a565ee91b2e1811, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4e6a6b0e0b559c94fa0f0b4d28506e8a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -304,10 +304,12 @@ MonoBehaviour:
   slotImage: {fileID: 8347848060664916963}
   lockImage: {fileID: 7267505220961300553}
   lockSprite: {fileID: 21300000, guid: 25423d27475f41941a5065a6a6a779ad, type: 3}
-  lockColor: {r: 1, g: 1, b: 1, a: 1}
+  lockColor: {r: 0.078431375, g: 0.14117648, b: 0.21176471, a: 1}
   index: 0
   skinData:
     isLocked: 0
-    price: 0
+    price:
+      CoinType: 0
+      Amount: 0
     material: {fileID: 0}
     sprite: {fileID: 0}

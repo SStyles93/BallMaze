@@ -159,7 +159,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
+  m_spriteAsset: {fileID: 11400000, guid: 24eee33ac0660f647a3dd3af32bab135, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901
@@ -304,10 +304,12 @@ MonoBehaviour:
   slotImage: {fileID: 8347848060664916963}
   lockImage: {fileID: 4473802698338605905}
   lockSprite: {fileID: 21300000, guid: 25423d27475f41941a5065a6a6a779ad, type: 3}
-  lockColor: {r: 1, g: 1, b: 1, a: 1}
+  lockColor: {r: 0.078431375, g: 0.14117648, b: 0.21176471, a: 1}
   index: 0
   colorOption:
     isLocked: 0
-    price: 0
+    price:
+      CoinType: 0
+      Amount: 0
     name: 
     color: {r: 0, g: 0, b: 0, a: 0}

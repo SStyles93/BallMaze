@@ -42,7 +42,7 @@ public class PlayerData : SaveableData
 /// The data of the customization menu options (locked or not)
 /// </summary>
 [System.Serializable]
-public class CustomizationShopData : SaveableData
+public class SkinShopData : SaveableData
 {
     public List<bool> colorsLockedState;
     public List<bool> materialsLockedState;

@@ -86,7 +86,7 @@ public class ValidationPannelManager : MonoBehaviour
 
     private void InitializeText(CustomizationOption option)
     {
-        validationText.text = $"Purchase for {option.price.Amount} <sprite index=0> ?";
+        validationText.text = $"Purchase for {option.price.Amount} <sprite index={(int)option.price.CoinType}> ?";
     }
 
     private void SetSelectedOption(CustomizationOption option)
@@ -99,6 +99,6 @@ public class ValidationPannelManager : MonoBehaviour
     {
         // Enable the button if locked
         buyButton.gameObject.SetActive(option.isLocked);
-        buyButtonText.text = $"{selectedOption.price.Amount} <sprite index=0>";
+        buyButtonText.text = $"{selectedOption.price.Amount} <sprite index={(int)option.price.CoinType}>";
     }
 }

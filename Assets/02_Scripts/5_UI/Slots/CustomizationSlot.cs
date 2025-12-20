@@ -22,7 +22,7 @@ public class CustomizationSlot : BaseUISlot
 
         priceText ??= transform.GetComponentInChildren<TMP_Text>();
         priceText.enabled = false;
-        priceText.text = $"{option.price.Amount} $";
+        priceText.text = $"{option.price.Amount} <sprite index={(int)option.price.CoinType}>";
 
         if (option.isLocked)
         {
