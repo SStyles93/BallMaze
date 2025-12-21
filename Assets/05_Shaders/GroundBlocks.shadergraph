@@ -1377,10 +1377,10 @@
     "m_Guid": {
         "m_GuidSerialized": "230d55fd-a32e-4df7-bd2a-771f5e95d426"
     },
-    "m_Name": "RIghtColor",
+    "m_Name": "RightColor",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "RIghtColor",
-    "m_DefaultReferenceName": "_RIghtColor",
+    "m_RefNameGeneratedByDisplayName": "RightColor",
+    "m_DefaultReferenceName": "_RightColor",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
@@ -1408,8 +1408,8 @@
     "m_ObjectId": "44b8854b7421467cafcb984ea639fd48",
     "m_Title": "Top",
     "m_Position": {
-        "x": -1790.400390625,
-        "y": -1006.400146484375
+        "x": -1790.4000244140625,
+        "y": -1006.4000854492188
     }
 }
 
@@ -2327,8 +2327,8 @@
     "m_ObjectId": "967a6a7d37aa40d8bdf1cdc612fa88c3",
     "m_Title": "RIght",
     "m_Position": {
-        "x": -1804.80029296875,
-        "y": -212.80001831054688
+        "x": -1804.800048828125,
+        "y": -212.79998779296876
     }
 }
 
@@ -2626,8 +2626,8 @@
     "m_ObjectId": "a9493994a07849eea2b62386a2173253",
     "m_Title": "Left",
     "m_Position": {
-        "x": -1808.0003662109375,
-        "y": 182.39999389648438
+        "x": -1808.0,
+        "y": 182.4000244140625
     }
 }
 
@@ -2911,8 +2911,8 @@
     "m_ObjectId": "b5b8b665b7ee42c8bf021b7e372994f0",
     "m_Title": "Front",
     "m_Position": {
-        "x": -1796.0003662109375,
-        "y": -613.60009765625
+        "x": -1796.0,
+        "y": -613.6000366210938
     }
 }
 
@@ -2981,7 +2981,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "bc646a1e35f44506bc3275eabfd9993f",
     "m_Id": 0,
-    "m_DisplayName": "RIghtColor",
+    "m_DisplayName": "RightColor",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",

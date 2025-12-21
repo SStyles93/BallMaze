@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
+
 
 public class PathGeneratorManager : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class PathGeneratorManager : MonoBehaviour
     public GameObject startPrefab;
     public GameObject endPrefab;
     public GameObject starPrefab;
+
+    [Header("EnvironmentColor")]
+    public EnvironmentColors_SO environmentColors_SO;
+    public Material groundMaterial;
 
     private List<GameObject> spawnedObjects = new List<GameObject>();
 
@@ -44,6 +49,12 @@ public class PathGeneratorManager : MonoBehaviour
     [ContextMenu("Generate Path")]
     public void GeneratePath()
     {
+        int randomIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
+        groundMaterial.SetColor("_TopColor", environmentColors_SO.Presets[randomIndex].Top);
+        groundMaterial.SetColor("_RightColor", environmentColors_SO.Presets[randomIndex].Right);
+        groundMaterial.SetColor("_LeftColor", environmentColors_SO.Presets[randomIndex].Left);
+        groundMaterial.SetColor("_FrontColor", environmentColors_SO.Presets[randomIndex].Front);
+
         cells = generator.Generate(generationParams);
 
         GameObject floor = floorPrefab;

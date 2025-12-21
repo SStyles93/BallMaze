@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc385ae10f1cfe64d941ca111cf32570, type: 3}
+  m_Name: EnvironmentColors
+  m_EditorClassIdentifier: Assembly-CSharp::EnvironmentColors
+  Presets:
+  - Top: {r: 1, g: 1, b: 1, a: 1}
+    Right: {r: 0.2528302, g: 0.2528302, b: 0.2528302, a: 1}
+    Left: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
+    Front: {r: 0.5176471, g: 0.5176471, b: 0.5176471, a: 1}
+  - Top: {r: 1, g: 0.6999999, b: 0.83892494, a: 1}
+    Right: {r: 0.7568628, g: 0.7568628, b: 0.7568628, a: 1}
+    Left: {r: 0.7584905, g: 0.7584905, b: 0.7584905, a: 1}
+    Front: {r: 0.79622644, g: 0.37708077, b: 0.5730451, a: 1}
