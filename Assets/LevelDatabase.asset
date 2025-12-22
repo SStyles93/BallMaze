@@ -13,15 +13,19 @@ MonoBehaviour:
   m_Name: LevelDatabase
   m_EditorClassIdentifier: Assembly-CSharp::LevelDatabase_SO
   levels:
-  - gridWidth: 3
+  - width: 3
+    height: 10
+    gridWidth: 3
     gridHeight: 10
     randomEnd: 0
     fixedEnd: {x: 1, y: 0}
     endMin: {x: 0, y: 0}
     endMax: {x: 20, y: 5}
-    inputSeed: -1
+    inputSeed: -160900234
     pathThickness: 0
     curvePercent: 30
+    starCount: 0
     minStarDistance: 2
     starsConnectToEnd: 1
+    gridData: 010000000300000001000000010000000100000001000000010000000400000001000000010000000100000001000000010000000400000001000000010000000100000001000000010000000400000001000000010000000100000001000000010000000100000001000000000000000200000000000000
     usedSeed: -160900234

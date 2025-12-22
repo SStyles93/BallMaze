@@ -274,14 +274,19 @@ public class PathGeneratorWindow : EditorWindow
         data.minStarDistance = parameters.minStarDistance;
         data.starsConnectToEnd = parameters.starsConnectToEnd;
 
-        // Copy grid
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
-        TileType[,] newGrid = new TileType[width, height];
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                newGrid[x, y] = grid[x, y];
-        data.grid = newGrid;
+        data.width = width;
+        data.height = height;
+        // Save grid (flattend grid for serializeation)
+        data.gridData = new TileType[width * height];
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                data.gridData[y * width + x] = grid[x, y];
+            }
+        }
 
         data.usedSeed = usedSeed;
 
@@ -304,7 +309,9 @@ public class PathGeneratorWindow : EditorWindow
         parameters.fixedEnd = data.fixedEnd;
         parameters.endMin = data.endMin;
         parameters.endMax = data.endMax;
-        parameters.inputSeed = data.inputSeed;
+
+        
+        parameters.inputSeed = data.usedSeed;
 
         parameters.pathThickness = data.pathThickness;
         parameters.curvePercent = data.curvePercent;
@@ -312,8 +319,16 @@ public class PathGeneratorWindow : EditorWindow
         parameters.minStarDistance = data.minStarDistance;
         parameters.starsConnectToEnd = data.starsConnectToEnd;
 
-        // Load grid and seed
-        grid = data.grid;
+        // Load from flattened grid (for serialization)
+        grid = new TileType[data.width, data.height];
+        for (int y = 0; y < data.height; y++)
+        {
+            for (int x = 0; x < data.width; x++)
+            {
+                grid[x, y] = data.gridData[y * data.width + x];
+            }
+        }
+
         usedSeed = data.usedSeed;
 
         Repaint();
