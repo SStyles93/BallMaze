@@ -168,6 +168,8 @@ public class PathGeneratorWindow : EditorWindow
                 Handles.DrawSolidRectangleWithOutline(cell, Color.clear, Color.black);
             }
         }
+
+        HandleGridMouseInput(rect);
     }
 
     private void Regenerate()
@@ -177,5 +179,54 @@ public class PathGeneratorWindow : EditorWindow
 
         grid = Generator.GenerateMaze(parameters, out usedSeed);
         Repaint();
+    }
+
+    private void HandleGridMouseInput(Rect gridRect)
+    {
+        Event e = Event.current;
+
+        if (e.type == EventType.MouseDown && e.button == 0) // left click
+        {
+            Vector2 localMousePos = e.mousePosition - new Vector2(gridRect.x, gridRect.y);
+
+            int x = Mathf.FloorToInt(localMousePos.x / cellSize);
+            int y = Mathf.FloorToInt(localMousePos.y / cellSize);
+
+            // Bounds check
+            if (x >= 0 && x < parameters.gridWidth && y >= 0 && y < parameters.gridHeight)
+            {
+                // Prevent changing start tile
+                Vector2Int startPos = new Vector2Int(parameters.gridWidth / 2, parameters.gridHeight - 1);
+                if (x == startPos.x && y == startPos.y)
+                    return;
+
+                // Cycle tile type
+                TileType current = grid[x, y];
+                TileType next;
+                switch (current)
+                {
+                    case TileType.Floor:
+                        next = TileType.Star;
+                        break;
+                    case TileType.Star:
+                        next = TileType.End;
+                        break;
+                    case TileType.End:
+                        next = TileType.Wall;
+                        break;
+                    case TileType.Wall:
+                        next = TileType.Floor;
+                        break;
+                    default:
+                        next = TileType.Floor;
+                        break;
+                }
+
+                grid[x, y] = next;
+
+                e.Use(); // consume event
+                Repaint();
+            }
+        }
     }
 }
