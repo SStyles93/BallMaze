@@ -9,11 +9,11 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        PathGeneratorManager.OnGenerationFinished += InstantiatePlayer;
+        //PathGeneratorManager.OnGenerationFinished += InstantiatePlayer;
     }
     private void OnDisable()
     {
-        PathGeneratorManager.OnGenerationFinished -= InstantiatePlayer;
+        //PathGeneratorManager.OnGenerationFinished -= InstantiatePlayer;
     }
 
     private void InstantiatePlayer()

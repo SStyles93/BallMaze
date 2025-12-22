@@ -5,8 +5,8 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public Dictionary<int, LevelData> LevelDataDictionnary = new Dictionary<int, LevelData>();
-    [SerializeField] private PcgData_SO pcgData;
-    [SerializeField] private GenerationParamameters_SO generationParamameters;
+    //[SerializeField] private PcgData_SO pcgData;
+    //[SerializeField] private GenerationParamameters_SO generationParamameters;
 
     private LevelData currentLevelData = null;
     private int currentStarCount = 0;
@@ -67,7 +67,7 @@ public class LevelManager : MonoBehaviour
         currentStarCount = 0;
 
         // Get the values of time and currency to earn from the SO
-        currencyToEarn = pcgData.levelParameters[index].currencyToEarn;
+        //currencyToEarn = pcgData.levelParameters[index].currencyToEarn;
         previousNumberOfStarts = LevelDataDictionnary[index].numberOfStars;
         wasGamePreviouslyFinished = LevelDataDictionnary[index].wasLevelFinished;
     }
@@ -157,15 +157,15 @@ public class LevelManager : MonoBehaviour
     /// <param name="index">target index</param>
     private void FillLevelParametersUpToIndex(int index)
     {
-        while (pcgData.levelParameters.Count <= index)
-        {
-            // Generate parameters for the next level in the sequence
-            int nextLevelIndex = pcgData.levelParameters.Count;
-            LevelParameters newParams = LevelParameterGenerator.GenerateParametersForLevel(nextLevelIndex);
+        //while (pcgData.levelParameters.Count <= index)
+        //{
+        //    // Generate parameters for the next level in the sequence
+        //    int nextLevelIndex = pcgData.levelParameters.Count;
+        //    LevelParameters newParams = LevelParameterGenerator.GenerateParametersForLevel(nextLevelIndex);
 
-            // Add the newly generated parameters to the list
-            pcgData.levelParameters.Add(newParams);
-        }
+        //    // Add the newly generated parameters to the list
+        //    pcgData.levelParameters.Add(newParams);
+        //}
     }
 
     /// <summary>
@@ -179,7 +179,7 @@ public class LevelManager : MonoBehaviour
             currentLevelData = new LevelData()
             {
                 numberOfStars = 0,
-                currencyLeftToEarn = pcgData.levelParameters[index].currencyToEarn,
+               // currencyLeftToEarn = pcgData.levelParameters[index].currencyToEarn,
                 wasLevelFinished = false
             };
             LevelDataDictionnary.Add(index, currentLevelData);
@@ -197,14 +197,14 @@ public class LevelManager : MonoBehaviour
     /// <param name="levelIndex">Index of the Level</param>
     private void SetGenerationParameters(int levelIndex)
     {
-        LevelParameters targetParams = pcgData.levelParameters[levelIndex];
+        //LevelParameters targetParams = pcgData.levelParameters[levelIndex];
 
-        generationParamameters.Seed = targetParams.Seed;
-        generationParamameters.Spacing = targetParams.Spacing;
-        generationParamameters.PathDensity = targetParams.PathDensity;
-        generationParamameters.PathTwistiness = targetParams.PathTwistiness;
-        generationParamameters.PathWidth = targetParams.PathWidth;
-        generationParamameters.AllowBranching = targetParams.AllowBranching;
+        //generationParamameters.Seed = targetParams.Seed;
+        //generationParamameters.Spacing = targetParams.Spacing;
+        //generationParamameters.PathDensity = targetParams.PathDensity;
+        //generationParamameters.PathTwistiness = targetParams.PathTwistiness;
+        //generationParamameters.PathWidth = targetParams.PathWidth;
+        //generationParamameters.AllowBranching = targetParams.AllowBranching;
     }
     #endregion
 }
