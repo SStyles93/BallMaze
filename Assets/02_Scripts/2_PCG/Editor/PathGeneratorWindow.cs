@@ -4,6 +4,8 @@ using UnityEditor;
 public class PathGeneratorWindow : EditorWindow
 {
     private GeneratorParameters_SO parameters;
+    public LevelDatabase_SO levelDatabase;
+    private int levelIndex = 0;
     private TileType[,] grid;
     private int usedSeed;
 
@@ -36,6 +38,23 @@ public class PathGeneratorWindow : EditorWindow
             );
             return;
         }
+
+        // --- Level Database GUI ---
+        levelDatabase = (LevelDatabase_SO)EditorGUILayout.ObjectField(
+            "Level Database",
+            levelDatabase,
+            typeof(LevelDatabase_SO),
+            false
+        );
+
+        levelIndex = EditorGUILayout.IntField("Level Index", levelIndex);
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Save Level")) SaveCurrentLevel();
+        if (GUILayout.Button("Load Level")) LoadLevel();
+        GUILayout.EndHorizontal();
+
+        EditorGUILayout.Space();
 
         DrawSection("Grid Settings", ref showGrid, DrawGridSettings);
         DrawSection("Path Settings", ref showPath, DrawPathSettings);
@@ -228,5 +247,76 @@ public class PathGeneratorWindow : EditorWindow
                 Repaint();
             }
         }
+    }
+
+    // --- New Save/Load Methods ---
+    private void SaveCurrentLevel()
+    {
+        if (levelDatabase == null || grid == null) return;
+
+        while (levelDatabase.levels.Count <= levelIndex)
+            levelDatabase.levels.Add(new LevelData_SO());
+
+        LevelData_SO data = levelDatabase.levels[levelIndex];
+
+        // Copy all fields from editor window / parameters
+        data.gridWidth = parameters.gridWidth;
+        data.gridHeight = parameters.gridHeight;
+        data.randomEnd = parameters.randomEnd;
+        data.fixedEnd = parameters.fixedEnd;
+        data.endMin = parameters.endMin;
+        data.endMax = parameters.endMax;
+        data.inputSeed = parameters.inputSeed;
+
+        data.pathThickness = parameters.pathThickness;
+        data.curvePercent = parameters.curvePercent;
+
+        data.minStarDistance = parameters.minStarDistance;
+        data.starsConnectToEnd = parameters.starsConnectToEnd;
+
+        // Copy grid
+        int width = grid.GetLength(0);
+        int height = grid.GetLength(1);
+        TileType[,] newGrid = new TileType[width, height];
+        for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++)
+                newGrid[x, y] = grid[x, y];
+        data.grid = newGrid;
+
+        data.usedSeed = usedSeed;
+
+        EditorUtility.SetDirty(levelDatabase);
+        AssetDatabase.SaveAssets();
+        Debug.Log($"Level {levelIndex} saved successfully!");
+    }
+
+    private void LoadLevel()
+    {
+        if (levelDatabase == null || levelDatabase.levels.Count <= levelIndex) return;
+
+        LevelData_SO data = levelDatabase.levels[levelIndex];
+        if (data == null) return;
+
+        // Load all fields into parameters for display and regeneration
+        parameters.gridWidth = data.gridWidth;
+        parameters.gridHeight = data.gridHeight;
+        parameters.randomEnd = data.randomEnd;
+        parameters.fixedEnd = data.fixedEnd;
+        parameters.endMin = data.endMin;
+        parameters.endMax = data.endMax;
+        parameters.inputSeed = data.inputSeed;
+
+        parameters.pathThickness = data.pathThickness;
+        parameters.curvePercent = data.curvePercent;
+
+        parameters.minStarDistance = data.minStarDistance;
+        parameters.starsConnectToEnd = data.starsConnectToEnd;
+
+        // Load grid and seed
+        grid = data.grid;
+        usedSeed = data.usedSeed;
+
+        Repaint();
+        Debug.Log($"Level {levelIndex} loaded successfully!");
     }
 }
