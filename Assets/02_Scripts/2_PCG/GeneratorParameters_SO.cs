@@ -13,7 +13,7 @@ public class GeneratorParameters_SO : ScriptableObject
     [Header("End Settings")]
     public bool randomEnd = true;
     public Vector2Int fixedEnd = new(9, 9);
-    public Vector2Int endMin = new(5, 0);
+    public Vector2Int endMin = new(0, 0);
     public Vector2Int endMax = new(10, 5);
 
     [Header("Seed Settings")]

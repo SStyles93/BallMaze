@@ -16,6 +16,12 @@ public static class Generator
     // PUBLIC ENTRY POINT
     // =========================================================
 
+    /// <summary>
+    /// Gets the parameters passed and creates a maze
+    /// </summary>
+    /// <param name="p">GeneratorParameters to pass</param>
+    /// <param name="usedSeed">usedSeed</param>
+    /// <returns>TIleType Array</returns>
     public static TileType[,] GenerateMaze(
         GeneratorParameters_SO p,
         out int usedSeed

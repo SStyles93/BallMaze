@@ -311,7 +311,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_fontSize
-      value: 79.7
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_margin.z
@@ -320,7 +320,7 @@ PrefabInstance:
     - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_spriteAsset
       value: 
-      objectReference: {fileID: 11400000, guid: c2f75f25b6e5ccf48ad807648a3fb8dd, type: 2}
+      objectReference: {fileID: 11400000, guid: 24eee33ac0660f647a3dd3af32bab135, type: 2}
     - target: {fileID: 2810706896204072601, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

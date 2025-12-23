@@ -1,0 +1,55 @@
+{
+  "firstTimestamp": "2025-12-23T05:07:50.3193775Z",
+  "levelsData": {
+    "1": {
+      "numberOfStars": 3,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "2": {
+      "numberOfStars": 3,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "3": {
+      "numberOfStars": 3,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "4": {
+      "numberOfStars": 3,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "5": {
+      "numberOfStars": 2,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "6": {
+      "numberOfStars": 1,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "7": {
+      "numberOfStars": 2,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "8": {
+      "numberOfStars": 2,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "9": {
+      "numberOfStars": 3,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    },
+    "10": {
+      "numberOfStars": 2,
+      "currencyLeftToEarn": 0,
+      "wasLevelFinished": true
+    }
+  }
+}

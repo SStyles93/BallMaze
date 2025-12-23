@@ -5,6 +5,8 @@ public class PathGeneratorWindow : EditorWindow
 {
     private GeneratorParameters_SO parameters;
     public LevelDatabase_SO levelDatabase;
+    private PhysicalMazeGenerator physicalGenerator;
+
     private int levelIndex = 0;
     private TileType[,] grid;
     private int usedSeed;
@@ -41,17 +43,37 @@ public class PathGeneratorWindow : EditorWindow
 
         // --- Level Database GUI ---
         levelDatabase = (LevelDatabase_SO)EditorGUILayout.ObjectField(
-            "Level Database",
-            levelDatabase,
-            typeof(LevelDatabase_SO),
-            false
-        );
+            "Level Database", levelDatabase, typeof(LevelDatabase_SO), false);
+
+        physicalGenerator = (PhysicalMazeGenerator)EditorGUILayout.ObjectField(
+            "Physical Generator", physicalGenerator, typeof(PhysicalMazeGenerator), true);
+
 
         levelIndex = EditorGUILayout.IntField("Level Index", levelIndex);
 
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Save Level")) SaveCurrentLevel();
-        if (GUILayout.Button("Load Level")) LoadLevel();
+        if (GUILayout.Button("Save Level"))
+        {
+            if (levelDatabase.GetLevelDataAtIndex(levelIndex) != null)
+            {
+                if (!EditorUtility.DisplayDialog(
+                    "Override Level?",
+                    $"A level already exists at index {levelIndex}.\nDo you want to override it?",
+                    "Override",
+                    "Cancel"))
+                    return;
+            }
+
+            SaveCurrentLevel();
+        }
+        if (GUILayout.Button("Load Level"))
+        {
+            LoadLevel();
+            if (physicalGenerator != null)
+            {
+                physicalGenerator.Generate(grid);
+            }
+        }
         GUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
@@ -69,7 +91,19 @@ public class PathGeneratorWindow : EditorWindow
         if (GUILayout.Button("Generate"))
         {
             grid = Generator.GenerateMaze(parameters, out usedSeed);
+
+            if (physicalGenerator != null)
+            {
+                physicalGenerator.Generate(grid);
+            }
         }
+        if (physicalGenerator != null)
+        {
+            if (GUILayout.Button("Clear"))
+            {
+                physicalGenerator.Clear();
+            }
+        } 
 
         GUILayout.Space(20);
         DrawGrid();
@@ -101,8 +135,8 @@ public class PathGeneratorWindow : EditorWindow
 
         if (parameters.randomEnd)
         {
-            parameters.endMin =
-                EditorGUILayout.Vector2IntField("End Min", parameters.endMin);
+            //parameters.endMin =
+            //    EditorGUILayout.Vector2IntField("End Min", parameters.endMin);
             parameters.endMax =
                 EditorGUILayout.Vector2IntField("End Max", parameters.endMax);
         }
@@ -197,8 +231,15 @@ public class PathGeneratorWindow : EditorWindow
             return;
 
         grid = Generator.GenerateMaze(parameters, out usedSeed);
+
+        if (physicalGenerator != null)
+        {
+            physicalGenerator.Generate(grid);
+        }
+
         Repaint();
     }
+
 
     private void HandleGridMouseInput(Rect gridRect)
     {
@@ -254,17 +295,17 @@ public class PathGeneratorWindow : EditorWindow
     {
         if (levelDatabase == null || grid == null) return;
 
-        while (levelDatabase.levels.Count <= levelIndex)
-            levelDatabase.levels.Add(new LevelData_SO());
 
-        LevelData_SO data = levelDatabase.levels[levelIndex];
+        LevelData_SO data = new LevelData_SO();
+
+        data.index = levelIndex;
 
         // Copy all fields from editor window / parameters
         data.gridWidth = parameters.gridWidth;
         data.gridHeight = parameters.gridHeight;
         data.randomEnd = parameters.randomEnd;
         data.fixedEnd = parameters.fixedEnd;
-        data.endMin = parameters.endMin;
+        //data.endMin = //parameters.endMin;
         data.endMax = parameters.endMax;
         data.inputSeed = parameters.inputSeed;
 
@@ -276,8 +317,8 @@ public class PathGeneratorWindow : EditorWindow
 
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
-        data.width = width;
-        data.height = height;
+        data.gridWidth = width;
+        data.gridHeight = height;
         // Save grid (flattend grid for serializeation)
         data.gridData = new TileType[width * height];
         for (int y = 0; y < height; y++)
@@ -290,6 +331,8 @@ public class PathGeneratorWindow : EditorWindow
 
         data.usedSeed = usedSeed;
 
+        levelDatabase.SaveLevelData(data);
+
         EditorUtility.SetDirty(levelDatabase);
         AssetDatabase.SaveAssets();
         Debug.Log($"Level {levelIndex} saved successfully!");
@@ -297,9 +340,9 @@ public class PathGeneratorWindow : EditorWindow
 
     private void LoadLevel()
     {
-        if (levelDatabase == null || levelDatabase.levels.Count <= levelIndex) return;
+        if (levelDatabase == null) return;
 
-        LevelData_SO data = levelDatabase.levels[levelIndex];
+        LevelData_SO data = levelDatabase.GetLevelDataAtIndex(levelIndex);
         if (data == null) return;
 
         // Load all fields into parameters for display and regeneration
@@ -307,10 +350,10 @@ public class PathGeneratorWindow : EditorWindow
         parameters.gridHeight = data.gridHeight;
         parameters.randomEnd = data.randomEnd;
         parameters.fixedEnd = data.fixedEnd;
-        parameters.endMin = data.endMin;
+        //parameters.endMin = data.endMin;
         parameters.endMax = data.endMax;
 
-        
+
         parameters.inputSeed = data.usedSeed;
 
         parameters.pathThickness = data.pathThickness;
@@ -320,12 +363,12 @@ public class PathGeneratorWindow : EditorWindow
         parameters.starsConnectToEnd = data.starsConnectToEnd;
 
         // Load from flattened grid (for serialization)
-        grid = new TileType[data.width, data.height];
-        for (int y = 0; y < data.height; y++)
+        grid = new TileType[data.gridWidth, data.gridHeight];
+        for (int y = 0; y < data.gridHeight; y++)
         {
-            for (int x = 0; x < data.width; x++)
+            for (int x = 0; x < data.gridWidth; x++)
             {
-                grid[x, y] = data.gridData[y * data.width + x];
+                grid[x, y] = data.gridData[y * data.gridWidth + x];
             }
         }
 

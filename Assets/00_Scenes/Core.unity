@@ -1042,8 +1042,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3f02b2da7956b44adea59bd8920e5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pcgData: {fileID: 11400000, guid: c78b11adcb1b42f43951254aa7e8c352, type: 2}
-  generationParamameters: {fileID: 11400000, guid: a5105104f3b6fd94baab9a19ee5448aa, type: 2}
+  GeneratorParameters: {fileID: 11400000, guid: 56084ab9538960249bd360380bfaa0d6, type: 2}
+  LevelDatabase: {fileID: 11400000, guid: 7a2e4b9ee92d5bf42bec9798e4208ea8, type: 2}
 --- !u!1 &1333845251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   shopData: {fileID: 0}
   shopSlotPrefab: {fileID: 0}
-  shopSlotsHolder: {fileID: 0}
+  shopSlotsContainer: {fileID: 0}
 --- !u!1 &1549264545
 GameObject:
   m_ObjectHideFlags: 0
@@ -1551,7 +1551,7 @@ MonoBehaviour:
     hearts: 0
     colorIndex: 0
     materialIndex: 0
-  currentShopData:
+  currentSkinData:
     colorsLockedState: 
     materialsLockedState: 
   currentSettingsData:
