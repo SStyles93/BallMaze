@@ -1,22 +1,11 @@
 using Unity.Services.LevelPlay;
 using UnityEngine;
 
-public class AdsManager : MonoBehaviour
+// This sample demonstrates how to use the LevelPlay SDK to load and show ads in a Unity game.
+public class LevelPlaySample : MonoBehaviour
 {
-    #region Singleton
-    public static AdsManager Instance;
-
-    public void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        Instance = this;
-        //DontDestroyOnLoad(gameObject);
-    }
-    #endregion
-
+    [SerializeField]
+    private Texture2D lpLogo;
     private LevelPlayBannerAd bannerAd;
     private LevelPlayInterstitialAd interstitialAd;
     private LevelPlayRewardedAd rewardedVideoAd;
@@ -81,6 +70,96 @@ public class AdsManager : MonoBehaviour
         interstitialAd.OnAdClicked += InterstitialOnAdClickedEvent;
         interstitialAd.OnAdClosed += InterstitialOnAdClosedEvent;
         interstitialAd.OnAdInfoChanged += InterstitialOnAdInfoChangedEvent;
+    }
+
+    public void OnGUI()
+    {
+        GUI.enabled = isAdsEnabled;
+
+        var safeArea = new Rect(
+            Screen.safeArea.x,
+            Screen.height - Screen.safeArea.yMax,
+            Screen.safeArea.width,
+            Screen.safeArea.height
+        );
+
+        var buttonXLeft = 0.05f * safeArea.width;
+        var buttonXRight = 0.55f * safeArea.width;
+        var buttonWidth = 0.4f * safeArea.width;
+        var buttonHeight = 0.08f * safeArea.height;
+
+        GUI.backgroundColor = Color.blue;
+        GUI.skin.button.fontSize = 40;
+
+        GUI.BeginGroup(safeArea);
+
+        if (lpLogo != null)
+        {
+            const float lpLogoWidth = 500;
+            const float lpLogoHeight = 100;
+            var displayRect = new Rect((safeArea.width - lpLogoWidth) / 2.0f, 20, lpLogoWidth, lpLogoHeight);
+            GUI.DrawTexture(displayRect, lpLogo, ScaleMode.ScaleToFit);
+        }
+
+        var loadRewardedVideoButton = new Rect(buttonXLeft, 0.15f * safeArea.height, buttonWidth, buttonHeight);
+        if (GUI.Button(loadRewardedVideoButton, "Load Rewarded Video"))
+        {
+            Debug.Log("[LevelPlaySample] LoadRewardedVideoButtonClicked");
+            rewardedVideoAd.LoadAd();
+        }
+
+        var showRewardedVideoButton = new Rect(buttonXRight, 0.15f * safeArea.height, buttonWidth, buttonHeight);
+        if (GUI.Button(showRewardedVideoButton, "Show Rewarded Video"))
+        {
+            Debug.Log("[LevelPlaySample] ShowRewardedVideoButtonClicked");
+            if (rewardedVideoAd.IsAdReady())
+            {
+                Debug.Log("[LevelPlaySample] Showing Rewarded Video Ad");
+                rewardedVideoAd.ShowAd();
+            }
+            else
+            {
+                Debug.Log("[LevelPlaySample] LevelPlay Rewarded Video Ad is not ready");
+            }
+        }
+
+        var loadInterstitialButton = new Rect(buttonXLeft, 0.25f * safeArea.height, buttonWidth, buttonHeight);
+        if (GUI.Button(loadInterstitialButton, "Load Interstitial"))
+        {
+            Debug.Log("[LevelPlaySample] LoadInterstitialButtonClicked");
+            interstitialAd.LoadAd();
+        }
+
+        var showInterstitialButton = new Rect(buttonXRight, 0.25f * safeArea.height, buttonWidth, buttonHeight);
+        if (GUI.Button(showInterstitialButton, "Show Interstitial"))
+        {
+            Debug.Log("[LevelPlaySample] ShowInterstitialButtonClicked");
+            if (interstitialAd.IsAdReady())
+            {
+                Debug.Log("[LevelPlaySample] Showing Interstitial Ad");
+                interstitialAd.ShowAd();
+            }
+            else
+            {
+                Debug.Log("[LevelPlaySample] LevelPlay Interstital Ad is not ready");
+            }
+        }
+
+        var loadBannerButton = new Rect(buttonXLeft, 0.35f * safeArea.height, buttonWidth, buttonHeight);
+        if (GUI.Button(loadBannerButton, "Load Banner"))
+        {
+            Debug.Log("[LevelPlaySample] LoadBannerButtonClicked");
+            bannerAd.LoadAd();
+        }
+
+        var hideBannerButton = new Rect(buttonXRight, 0.35f * safeArea.height, buttonWidth, buttonHeight);
+        if (GUI.Button(hideBannerButton, "Hide Banner"))
+        {
+            Debug.Log("[LevelPlaySample] HideBannerButtonClicked");
+            bannerAd.HideAd();
+        }
+
+        GUI.EndGroup();
     }
 
     void SdkInitializationCompletedEvent(LevelPlayConfiguration config)

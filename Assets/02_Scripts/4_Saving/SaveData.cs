@@ -20,7 +20,7 @@ public class GameData : SaveableData
 public class LevelData
 {
     public int numberOfStars;
-    public int currencyLeftToEarn;
+    public int coinsLeftToEarn;
     public bool wasLevelFinished = false;
 }
 

@@ -298,7 +298,7 @@ public class SavingManager : MonoBehaviour
                 LevelData levelData = new LevelData()
                 {
                     numberOfStars = 3,
-                    currencyLeftToEarn = 0,
+                    coinsLeftToEarn = 0,
                     wasLevelFinished = true
                 };
                 for (int i = 0; i <= CoreManager.Instance.numberOfLevels; i++)

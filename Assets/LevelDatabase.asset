@@ -18,11 +18,11 @@ MonoBehaviour:
     gridHeight: 10
     randomEnd: 0
     fixedEnd: {x: 1, y: 0}
-    endMin: {x: 0, y: 0}
-    endMax: {x: 20, y: 5}
+    endMinHeightPercent: 0
     inputSeed: -160900234
     pathThickness: 0
     curvePercent: 30
+    coinsToEarn: 30
     starCount: 0
     minStarDistance: 2
     starsConnectToEnd: 1

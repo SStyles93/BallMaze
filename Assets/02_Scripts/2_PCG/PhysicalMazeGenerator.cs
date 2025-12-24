@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PhysicalMazeGenerator : MonoBehaviour
@@ -14,9 +15,14 @@ public class PhysicalMazeGenerator : MonoBehaviour
     public float cellSize = 1f;
     public bool clearPrevious = true;
 
+    [Header("Visuals")]
+    [SerializeField] private EnvironmentColors_SO environmentColors_SO;
+    [SerializeField] public Material material = null;
+    [SerializeField] public Material emissiveBandMaterial = null;
+
     public static event Action OnGenerationFinished;
 
-    [SerializeField] private bool isGridGenerated = false;
+    [HideInInspector][SerializeField] private bool isGridGenerated = false;
 
     private void Awake()
     {
@@ -32,7 +38,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
         }
     }
 
-    public void Generate(TileType[,] grid)
+public void Generate(TileType[,] grid)
     {
         if (grid == null)
         {
@@ -66,9 +72,14 @@ public class PhysicalMazeGenerator : MonoBehaviour
         }
 
         isGridGenerated = true;
+
+        ColourGroundWithRandomPreset();
+
         // Calls the Player Spawner
         OnGenerationFinished?.Invoke();
     }
+
+
 
     public void Clear()
     {
@@ -84,6 +95,12 @@ public class PhysicalMazeGenerator : MonoBehaviour
         {
             DestroyImmediate(transform.GetChild(i).gameObject);
         }
+    }
+
+    private void ColourGroundWithRandomPreset()
+    {
+        int rndPresetIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
+        ColorGroundWithPresetIndex(rndPresetIndex);
     }
 
     private GameObject GetPrefabForTile(TileType type)
@@ -159,5 +176,14 @@ public class PhysicalMazeGenerator : MonoBehaviour
         );
 
         floor.name = $"Floor_{x}_{y}";
+    }
+
+    private void ColorGroundWithPresetIndex(int presetIndex)
+    {
+        material.SetColor("_TopColor", environmentColors_SO.Presets[presetIndex].Top);
+        material.SetColor("_RightColor", environmentColors_SO.Presets[presetIndex].Right);
+        material.SetColor("_LeftColor", environmentColors_SO.Presets[presetIndex].Left);
+        material.SetColor("_FrontColor", environmentColors_SO.Presets[presetIndex].Front);
+        emissiveBandMaterial.SetColor("_EmissionColor", environmentColors_SO.Presets[presetIndex].Emissive);
     }
 }

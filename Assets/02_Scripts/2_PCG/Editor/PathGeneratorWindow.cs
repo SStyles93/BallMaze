@@ -11,6 +11,8 @@ public class PathGeneratorWindow : EditorWindow
     private TileType[,] grid;
     private int usedSeed;
 
+    private int coinsToEarn;
+
     private bool showGrid = true;
     private bool showPath = true;
     private bool showStars = true;
@@ -80,7 +82,7 @@ public class PathGeneratorWindow : EditorWindow
 
         DrawSection("Grid Settings", ref showGrid, DrawGridSettings);
         DrawSection("Path Settings", ref showPath, DrawPathSettings);
-        DrawSection("Stars", ref showStars, DrawStarSettings);
+        DrawSection("Stars & Currencies", ref showStars, DrawStarSettings);
 
         GUILayout.Space(10);
         EditorGUILayout.LabelField("Used Seed", usedSeed.ToString());
@@ -97,13 +99,12 @@ public class PathGeneratorWindow : EditorWindow
                 physicalGenerator.Generate(grid);
             }
         }
-        if (physicalGenerator != null)
+        if (GUILayout.Button("Clear"))
         {
-            if (GUILayout.Button("Clear"))
-            {
+            grid = null;
+            if (physicalGenerator != null)
                 physicalGenerator.Clear();
-            }
-        } 
+        }
 
         GUILayout.Space(20);
         DrawGrid();
@@ -137,8 +138,8 @@ public class PathGeneratorWindow : EditorWindow
         {
             //parameters.endMin =
             //    EditorGUILayout.Vector2IntField("End Min", parameters.endMin);
-            parameters.endMax =
-                EditorGUILayout.Vector2IntField("End Max", parameters.endMax);
+            parameters.endMaxHeightPercent =
+                EditorGUILayout.IntField("End Max Height Percent", parameters.endMaxHeightPercent);
         }
         else
         {
@@ -172,6 +173,9 @@ public class PathGeneratorWindow : EditorWindow
     private void DrawStarSettings()
     {
         EditorGUI.BeginChangeCheck();
+
+        parameters.coinsToEarn =
+             EditorGUILayout.IntField("Coin to earn", parameters.coinsToEarn);
 
         parameters.starCount =
             EditorGUILayout.IntSlider("Star Count", parameters.starCount, 0, 20);
@@ -306,12 +310,13 @@ public class PathGeneratorWindow : EditorWindow
         data.randomEnd = parameters.randomEnd;
         data.fixedEnd = parameters.fixedEnd;
         //data.endMin = //parameters.endMin;
-        data.endMax = parameters.endMax;
+        data.endMinHeightPercent = parameters.endMaxHeightPercent;
         data.inputSeed = parameters.inputSeed;
 
         data.pathThickness = parameters.pathThickness;
         data.curvePercent = parameters.curvePercent;
 
+        data.coinsToEarn = parameters.coinsToEarn;
         data.minStarDistance = parameters.minStarDistance;
         data.starsConnectToEnd = parameters.starsConnectToEnd;
 
@@ -350,8 +355,7 @@ public class PathGeneratorWindow : EditorWindow
         parameters.gridHeight = data.gridHeight;
         parameters.randomEnd = data.randomEnd;
         parameters.fixedEnd = data.fixedEnd;
-        //parameters.endMin = data.endMin;
-        parameters.endMax = data.endMax;
+        parameters.endMaxHeightPercent = data.endMinHeightPercent;
 
 
         parameters.inputSeed = data.usedSeed;
@@ -359,6 +363,7 @@ public class PathGeneratorWindow : EditorWindow
         parameters.pathThickness = data.pathThickness;
         parameters.curvePercent = data.curvePercent;
 
+        parameters.coinsToEarn = data.coinsToEarn;
         parameters.minStarDistance = data.minStarDistance;
         parameters.starsConnectToEnd = data.starsConnectToEnd;
 

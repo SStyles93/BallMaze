@@ -4,25 +4,28 @@ using UnityEngine;
 public class LevelData_SO
 {
     public int index;
-    //public int currencyToEarn;
 
+    [Header("Grid Parameters")]
     // Generation parameters
     public int gridWidth;
     public int gridHeight;
 
     public bool randomEnd;
     public Vector2Int fixedEnd;
-    public Vector2Int endMin = new Vector2Int(0,0);
-    public Vector2Int endMax;
-
+    public int endMinHeightPercent;
     public int inputSeed;
+
+    [Header("Path Parameters")]
     public int pathThickness;
     public int curvePercent;
 
+    [Header("Star & Currencies Parameters")]
+    public int coinsToEarn;
     public int starCount;
     public int minStarDistance;
     public bool starsConnectToEnd;
 
+    [Header("Grid Data")]
     // Flattened grid
     public TileType[] gridData;
     public int usedSeed;

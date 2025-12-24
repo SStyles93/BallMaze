@@ -21,7 +21,7 @@ public static class RuntimeLevelProgression
         int width = 3;
         int height = 10;
         int curve = 30;
-        int starDistance = 5;
+        int starDistance = 2;
 
         // -------------------------
         // PHASE CONTROL
@@ -44,12 +44,14 @@ public static class RuntimeLevelProgression
                 // STEP 2 - Width increase
                 case 0:
                     width++;
+                    starDistance = 2;
                     if (width >= 10)
                         phase = 1;
                     break;
 
                 // STEP 3 - Curve decrease
                 case 1:
+                    starDistance = 4;
                     curve--;
                     if (curve <= 0)
                         phase = 2;
@@ -61,10 +63,10 @@ public static class RuntimeLevelProgression
                     width += 2;
                     height += 2;
 
-                    if (width >= 20 || height >= 20)
-                        phase = 4;
-                    else
+                    if (width < 20 || height < 20)
                         phase = 3;
+                    else
+                        phase = 4;
                     break;
 
                 // STEP 5 - (curve decrease again)

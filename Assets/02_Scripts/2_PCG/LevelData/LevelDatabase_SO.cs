@@ -32,7 +32,7 @@ public class LevelDatabase_SO : ScriptableObject
 
         if (foundItem == null)
         {
-            Debug.Log($"No LevelData found with index of [{index}]");
+            //Debug.Log($"No LevelData found with index of [{index}]");
             return null;
         }
         return foundItem;

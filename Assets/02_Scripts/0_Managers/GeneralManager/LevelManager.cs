@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
     public Dictionary<int, LevelData> LevelDataDictionnary = new Dictionary<int, LevelData>();
     [SerializeField] GeneratorParameters_SO GeneratorParameters;
     [SerializeField] LevelDatabase_SO LevelDatabase;
+    [SerializeField] int initialCoinAmount = 30;
     private TileType[,] currentGrid;
 
 
@@ -70,6 +71,7 @@ public class LevelManager : MonoBehaviour
     /// <remarks>This method will init. LevelParameters, GenerationParameters, and LevelData</remarks>
     public void InitializeLevel(int index)
     {
+
         // If no LevelData is present, create one with initial values
         InitializeCurrentLevelData(index);
 
@@ -77,7 +79,7 @@ public class LevelManager : MonoBehaviour
         currentStarCount = 0;
 
         // Get the values of time and currency to earn from the SO
-//=====>>> TODO        //currencyToEarn = pcgData.levelParameters[index].currencyToEarn;
+        currencyToEarn = LevelDatabase.GetLevelDataAtIndex(index) == null ? initialCoinAmount : LevelDatabase.GetLevelDataAtIndex(index).coinsToEarn;
         previousNumberOfStarts = LevelDataDictionnary[index].numberOfStars;
         wasGamePreviouslyFinished = LevelDataDictionnary[index].wasLevelFinished;
         
@@ -119,15 +121,15 @@ public class LevelManager : MonoBehaviour
             return;
 
         // If currency earned is bigger that what is left, return what is left
-        if (currencyEarned >= currentLevelData.currencyLeftToEarn)
+        if (currencyEarned >= currentLevelData.coinsLeftToEarn)
         {
-            currencyEarned = currentLevelData.currencyLeftToEarn;
-            currentLevelData.currencyLeftToEarn = 0;
+            currencyEarned = currentLevelData.coinsLeftToEarn;
+            currentLevelData.coinsLeftToEarn = 0;
         }
         // If what is earned is lower that what is left, return what is earned and remove that amount from what is left
         else
         {
-            currentLevelData.currencyLeftToEarn -= currencyEarned;
+            currentLevelData.coinsLeftToEarn -= currencyEarned;
         }
 
         CoinManager.Instance.IncreaseCurrencyAmount(CoinType.COIN, currencyEarned);
@@ -180,7 +182,7 @@ public class LevelManager : MonoBehaviour
             currentLevelData = new LevelData()
             {
                 numberOfStars = 0,
-//=====>>> TODO                //currencyLeftToEarn = LevelDatabase.levels[index].currencyToEarn,
+                coinsLeftToEarn = initialCoinAmount,
                 wasLevelFinished = false
             };
             LevelDataDictionnary.Add(index, currentLevelData);
@@ -221,6 +223,7 @@ public class LevelManager : MonoBehaviour
         baseParameters.gridHeight = runtimeParams.height;
         baseParameters.curvePercent = runtimeParams.curvePercent;
         baseParameters.minStarDistance = runtimeParams.minStarDistance;
+        baseParameters.coinsToEarn = existing == null ? 30 : existing.coinsToEarn;
 
         // Force random generation
         baseParameters.inputSeed = -1;

@@ -13,8 +13,7 @@ public class GeneratorParameters_SO : ScriptableObject
     [Header("End Settings")]
     public bool randomEnd = true;
     public Vector2Int fixedEnd = new(9, 9);
-    public Vector2Int endMin = new(0, 0);
-    public Vector2Int endMax = new(10, 5);
+    public int endMaxHeightPercent = 20;
 
     [Header("Seed Settings")]
     [Tooltip("-1 = random seed")]
@@ -28,9 +27,11 @@ public class GeneratorParameters_SO : ScriptableObject
     [Tooltip("0 = direct, 100 = very curvy")]
     public int curvePercent = 30;
 
-    [Header("Stars")]
+    [Header("Stars & Currencies")]
     [Range(0, 20)]
     public int starCount = 3;
+    [Range(0, 99999)]
+    public int coinsToEarn = 30;
 
     [Range(1, 10)]
     [Tooltip("Minimum distance between stars")]

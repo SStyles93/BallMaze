@@ -88,19 +88,32 @@ public static class Generator
         System.Random rng
     )
     {
-        if (!p.randomEnd)
-            return ClampToGrid(p.fixedEnd, p.gridWidth, p.gridHeight);
+        int width = p.gridWidth;
+        int height = p.gridHeight;
 
-        return new Vector2Int(
-            rng.Next(
-                Mathf.Clamp(p.endMin.x, 0, p.gridWidth - 1),
-                Mathf.Clamp(p.endMax.x, 0, p.gridWidth - 1) + 1
-            ),
-            rng.Next(
-                Mathf.Clamp(p.endMin.y, 0, p.gridHeight - 1),
-                Mathf.Clamp(p.endMax.y, 0, p.gridHeight - 1) + 1
-            )
-        );
+        // Clamp percentage
+        int percent = Mathf.Clamp(p.endMaxHeightPercent, 0, 100);
+
+        // Compute max allowed Y based on percentage
+        int maxAllowedY = Mathf.FloorToInt(height * (percent / 100f)) - 1;
+        maxAllowedY = Mathf.Clamp(maxAllowedY, 0, height - 1);
+
+        if (!p.randomEnd)
+        {
+            // Fixed end, but clamped to allowed range
+            Vector2Int end = p.fixedEnd;
+
+            end.x = Mathf.Clamp(end.x, 0, width - 1);
+            end.y = Mathf.Clamp(end.y, 0, maxAllowedY);
+
+            return end;
+        }
+
+        // Random end
+        int x = rng.Next(0, width);
+        int y = rng.Next(0, maxAllowedY + 1);
+
+        return new Vector2Int(x, y);
     }
 
     // =========================================================
