@@ -127,7 +127,7 @@ MonoBehaviour:
   objectToRotate: {fileID: 3102653523287797894}
   rotationSpeed: -20
   objectToLevitate: {fileID: 8312232639689095903}
-  maxFloatingHeight: 2
+  maxFloatingHeight: 1.5
   sinePeriod: 3
 --- !u!1 &8312232639689095903
 GameObject:

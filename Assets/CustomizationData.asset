@@ -25,7 +25,7 @@ MonoBehaviour:
       Amount: 0
     material: {fileID: 2100000, guid: b04528b585c20e840ab1e704b212ee2c, type: 2}
     sprite: {fileID: 21300000, guid: d366c5da8dbe6094480da901c2bb1e5d, type: 3}
-  - isLocked: 0
+  - isLocked: 1
     price:
       CoinType: 0
       Amount: 600
@@ -49,13 +49,13 @@ MonoBehaviour:
       Amount: 0
     material: {fileID: 2100000, guid: 41ae231139cc07f458258948079693b4, type: 2}
     sprite: {fileID: 21300000, guid: 2bdcd783ea3d0484a91b46f1f0d632f8, type: 3}
-  - isLocked: 0
+  - isLocked: 1
     price:
       CoinType: 0
       Amount: 0
     material: {fileID: 2100000, guid: 3d2776ad8bf9b694bb91e37a6e3350d2, type: 2}
     sprite: {fileID: 21300000, guid: a1804dce8c6e49b4fb214153d5ebc218, type: 3}
-  - isLocked: 0
+  - isLocked: 1
     price:
       CoinType: 0
       Amount: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
       Amount: 0
     name: 
     color: {r: 0.65882355, g: 0.9019608, b: 0.8117647, a: 1}
-  - isLocked: 0
+  - isLocked: 1
     price:
       CoinType: 0
       Amount: 0

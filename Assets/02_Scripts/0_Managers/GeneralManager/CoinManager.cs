@@ -82,6 +82,10 @@ public class CoinManager : MonoBehaviour
         if (type == CoinType.COIN)
             PreviousCoinAmount = coins[CoinType.COIN];
         coins[type] += amount;
+        if (type == CoinType.HEART)
+        {
+            RecalculateHearts();
+        }
         OnCoinChanged?.Invoke(type, coins[type]);
     }
 
@@ -104,6 +108,7 @@ public class CoinManager : MonoBehaviour
                 // Start refill timer ONLY when dropping from max
                 lastHeartRefillTime = DateTime.UtcNow;
             }
+            RecalculateHearts();
         }
 
         OnCoinChanged?.Invoke(type, coins[type]);
@@ -144,6 +149,7 @@ public class CoinManager : MonoBehaviour
     {
         if (coins[CoinType.HEART] >= maxHeartAmount)
         {
+            coins[CoinType.HEART] = maxHeartAmount;
             return;
         }
 

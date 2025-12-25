@@ -135,13 +135,15 @@ public void Generate(TileType[,] grid)
             return;
         }
 
-        // 2️⃣ NOT WALL → spawn floor
+        // 2️ NOT WALL → spawn floor
         SpawnFloor(basePosition, x, y);
 
-        // 3️⃣ Special tiles on top
+        // 3️ Special tiles on top
         GameObject specialPrefab = GetPrefabForTile(tileType);
         if (specialPrefab == null || tileType == TileType.Floor)
             return;
+        if (tileType == TileType.Start || tileType == TileType.End)
+            basePosition.y = 0.5f;
 
         GameObject special = Instantiate(
             specialPrefab,
@@ -158,13 +160,9 @@ public void Generate(TileType[,] grid)
         if (floorPrefab == null)
             return;
 
-        float floorHeight = floorPrefab.transform.localScale.y;
-
-        float yPos = -(floorHeight * 0.5f ) - 0.5f;
-
         Vector3 floorPosition = new Vector3(
             basePosition.x,
-            yPos,
+            0,
             basePosition.z
         );
 

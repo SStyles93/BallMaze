@@ -13,20 +13,24 @@ public class GamesMenuManager : MonoBehaviour
     [Header("Variables")]
     [SerializeField] private int numberOfLevels = 50;
 
-    #region Singleton
     public static GamesMenuManager Instance { get; private set; }
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         //DontDestroyOnLoad(gameObject);
 
+        if (AdsManager.Instance.BannerAd != null)
+            AdsManager.Instance.BannerAd.DestroyAd();
+
+        AdsManager.Instance.LoadBanner();
+
     }
-    #endregion
-
-
     private void Start()
     {
+        AdsManager.Instance.BannerAd.ShowAd();
+
         if (SavingManager.Instance == null)
             Debug.Log("Saving Manager does not exist");
         SavingManager.Instance?.LoadSession();
@@ -42,6 +46,7 @@ public class GamesMenuManager : MonoBehaviour
 
         scrollbar.value = scrollbarData.scrollbarValue;
         scrollbar.size = scrollbarData.scrollbarSize;
+        
     }
 
     private void InitializeSlots(int numberOfLevels)
@@ -108,11 +113,13 @@ public class GamesMenuManager : MonoBehaviour
         SaveScrollbarValues();
         SavingManager.Instance.SaveGame();
 
+        //Load Rewarded ads before the pannel appears
+        AdsManager.Instance?.RewardedVideoAd.LoadAd();
+
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.HeartPannel)
             .Perform();
-
     }
 
     public void SaveScrollbarValues()

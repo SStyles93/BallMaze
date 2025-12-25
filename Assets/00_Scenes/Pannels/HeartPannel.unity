@@ -414,9 +414,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1809072718}
-        m_TargetAssemblyTypeName: SettingsPannelManager, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1809072720}
+        m_TargetAssemblyTypeName: HeartPannelManager, Assembly-CSharp
+        m_MethodName: LaunchRewardedAd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -608,7 +608,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3000 <sprite index=0>
+  m_text: 1800 <sprite index=0>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0b9a94f59b1cfdc408cec57dd7b076ee, type: 2}
   m_sharedMaterial: {fileID: -1296612248654450652, guid: 0b9a94f59b1cfdc408cec57dd7b076ee, type: 2}
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.95
+  m_fontSize: 46.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1121,7 +1121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269bf2d4d7d90ca4bb5c7944c0ebd37c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  heartValue: 3000
+  heartValue: 1800
   insufficientFundsPannel: {fileID: 2037393449}
 --- !u!1001 &2037393447
 PrefabInstance:

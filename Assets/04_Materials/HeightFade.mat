@@ -46,7 +46,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FadeHeight: 0.28
+    - _FadeHeight: 1
     - _Float: 2.28
     - _Mask_Power: 0.1
     - _Offset_Speed: 0.1

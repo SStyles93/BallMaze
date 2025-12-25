@@ -214,6 +214,8 @@ public class LevelPlaySample : MonoBehaviour
         Debug.Log($"[LevelPlaySample] Received RewardedVideoOnAdInfoChangedEvent With AdInfo {adInfo}");
     }
 
+
+
     void InterstitialOnAdLoadedEvent(LevelPlayAdInfo adInfo)
     {
         Debug.Log($"[LevelPlaySample] Received InterstitialOnAdLoadedEvent With AdInfo: {adInfo}");

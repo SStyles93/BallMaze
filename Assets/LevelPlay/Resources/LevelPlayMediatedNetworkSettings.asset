@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: LevelPlayMediatedNetworkSettings
   m_EditorClassIdentifier: Unity.LevelPlay.Editor::LevelPlayMediationNetworkSettings
   EnableAdmob: 0
-  AdmobAndroidAppId: 
-  AdmobIOSAppId: 
+  AdmobAndroidAppId: 6003174
+  AdmobIOSAppId: 6003175

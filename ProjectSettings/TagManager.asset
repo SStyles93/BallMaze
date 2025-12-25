@@ -44,5 +44,8 @@ TagManager:
   - name: Trash
     uniqueID: 2727232013
     locked: 0
+  - name: Nebulas
+    uniqueID: 1278241709
+    locked: 0
   m_RenderingLayers:
   - Default

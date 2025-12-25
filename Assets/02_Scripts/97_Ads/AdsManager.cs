@@ -1,6 +1,7 @@
 using Unity.Services.LevelPlay;
 using UnityEngine;
 
+
 public class AdsManager : MonoBehaviour
 {
     #region Singleton
@@ -17,9 +18,9 @@ public class AdsManager : MonoBehaviour
     }
     #endregion
 
-    private LevelPlayBannerAd bannerAd;
-    private LevelPlayInterstitialAd interstitialAd;
-    private LevelPlayRewardedAd rewardedVideoAd;
+    public LevelPlayBannerAd BannerAd;
+    public LevelPlayInterstitialAd InterstitialAd;
+    public LevelPlayRewardedAd RewardedVideoAd;
 
     bool isAdsEnabled = false;
 
@@ -37,7 +38,41 @@ public class AdsManager : MonoBehaviour
         // SDK init
         Debug.Log("[LevelPlaySample] LevelPlay SDK initialization");
         LevelPlay.Init(AdConfig.AppKey);
+
+        LoadBanner();
+        BannerAd.ShowAd();
     }
+
+    public void LoadBanner()
+    {
+        var configBuilder = new LevelPlayBannerAd.Config.Builder();
+        configBuilder.SetSize(LevelPlayAdSize.BANNER);
+        configBuilder.SetPosition(LevelPlayBannerPosition.BottomCenter);
+        configBuilder.SetDisplayOnLoad(true);
+        configBuilder.SetRespectSafeArea(true); // Only relevant for Android
+        //configBuilder.SetPlacementName("bannerPlacement");
+        //configBuilder.SetBidFloor(1.0); // Minimum bid price in USD
+        var bannerConfig = configBuilder.Build();
+
+        BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId, bannerConfig);
+        BannerAd.LoadAd();
+    }
+
+    public void LoadTopBanner()
+    {
+        var configBuilder = new LevelPlayBannerAd.Config.Builder();
+        configBuilder.SetSize(LevelPlayAdSize.BANNER);
+        configBuilder.SetPosition(LevelPlayBannerPosition.TopCenter);
+        configBuilder.SetDisplayOnLoad(true);
+        configBuilder.SetRespectSafeArea(true); // Only relevant for Android
+        //configBuilder.SetPlacementName("bannerPlacement");
+        //configBuilder.SetBidFloor(1.0); // Minimum bid price in USD
+        var bannerConfig = configBuilder.Build();
+
+        BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId, bannerConfig);
+        BannerAd.LoadAd();
+    }
+
 
     void EnableAds()
     {
@@ -45,42 +80,42 @@ public class AdsManager : MonoBehaviour
         LevelPlay.OnImpressionDataReady += ImpressionDataReadyEvent;
 
         // Create Rewarded Video object
-        rewardedVideoAd = new LevelPlayRewardedAd(AdConfig.RewardedVideoAdUnitId);
+        RewardedVideoAd = new LevelPlayRewardedAd(AdConfig.RewardedVideoAdUnitId);
 
         // Register to Rewarded Video events
-        rewardedVideoAd.OnAdLoaded += RewardedVideoOnLoadedEvent;
-        rewardedVideoAd.OnAdLoadFailed += RewardedVideoOnAdLoadFailedEvent;
-        rewardedVideoAd.OnAdDisplayed += RewardedVideoOnAdDisplayedEvent;
-        rewardedVideoAd.OnAdDisplayFailed += RewardedVideoOnAdDisplayedFailedEvent;
-        rewardedVideoAd.OnAdRewarded += RewardedVideoOnAdRewardedEvent;
-        rewardedVideoAd.OnAdClicked += RewardedVideoOnAdClickedEvent;
-        rewardedVideoAd.OnAdClosed += RewardedVideoOnAdClosedEvent;
-        rewardedVideoAd.OnAdInfoChanged += RewardedVideoOnAdInfoChangedEvent;
+        //RewardedVideoAd.OnAdLoaded += RewardedVideoOnLoadedEvent;
+        //RewardedVideoAd.OnAdLoadFailed += RewardedVideoOnAdLoadFailedEvent;
+        //RewardedVideoAd.OnAdDisplayed += RewardedVideoOnAdDisplayedEvent;
+        //RewardedVideoAd.OnAdDisplayFailed += RewardedVideoOnAdDisplayedFailedEvent;
+        //RewardedVideoAd.OnAdRewarded += RewardedVideoOnAdRewardedEvent;
+        //RewardedVideoAd.OnAdClicked += RewardedVideoOnAdClickedEvent;
+        //RewardedVideoAd.OnAdClosed += RewardedVideoOnAdClosedEvent;
+        //RewardedVideoAd.OnAdInfoChanged += RewardedVideoOnAdInfoChangedEvent;
 
-        // Create Banner object
-        bannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId);
+        //// Create Banner object
+        //BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId);
 
-        // Register to Banner events
-        bannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
-        bannerAd.OnAdLoadFailed += BannerOnAdLoadFailedEvent;
-        bannerAd.OnAdDisplayed += BannerOnAdDisplayedEvent;
-        bannerAd.OnAdDisplayFailed += BannerOnAdDisplayFailedEvent;
-        bannerAd.OnAdClicked += BannerOnAdClickedEvent;
-        bannerAd.OnAdCollapsed += BannerOnAdCollapsedEvent;
-        bannerAd.OnAdLeftApplication += BannerOnAdLeftApplicationEvent;
-        bannerAd.OnAdExpanded += BannerOnAdExpandedEvent;
+        //// Register to Banner events
+        //BannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
+        //BannerAd.OnAdLoadFailed += BannerOnAdLoadFailedEvent;
+        //BannerAd.OnAdDisplayed += BannerOnAdDisplayedEvent;
+        //BannerAd.OnAdDisplayFailed += BannerOnAdDisplayFailedEvent;
+        //BannerAd.OnAdClicked += BannerOnAdClickedEvent;
+        //BannerAd.OnAdCollapsed += BannerOnAdCollapsedEvent;
+        //BannerAd.OnAdLeftApplication += BannerOnAdLeftApplicationEvent;
+        //BannerAd.OnAdExpanded += BannerOnAdExpandedEvent;
 
-        // Create Interstitial object
-        interstitialAd = new LevelPlayInterstitialAd(AdConfig.InterstitalAdUnitId);
+        //// Create Interstitial object
+        //InterstitialAd = new LevelPlayInterstitialAd(AdConfig.InterstitalAdUnitId);
 
-        // Register to Interstitial events
-        interstitialAd.OnAdLoaded += InterstitialOnAdLoadedEvent;
-        interstitialAd.OnAdLoadFailed += InterstitialOnAdLoadFailedEvent;
-        interstitialAd.OnAdDisplayed += InterstitialOnAdDisplayedEvent;
-        interstitialAd.OnAdDisplayFailed += InterstitialOnAdDisplayFailedEvent;
-        interstitialAd.OnAdClicked += InterstitialOnAdClickedEvent;
-        interstitialAd.OnAdClosed += InterstitialOnAdClosedEvent;
-        interstitialAd.OnAdInfoChanged += InterstitialOnAdInfoChangedEvent;
+        //// Register to Interstitial events
+        //InterstitialAd.OnAdLoaded += InterstitialOnAdLoadedEvent;
+        //InterstitialAd.OnAdLoadFailed += InterstitialOnAdLoadFailedEvent;
+        //InterstitialAd.OnAdDisplayed += InterstitialOnAdDisplayedEvent;
+        //InterstitialAd.OnAdDisplayFailed += InterstitialOnAdDisplayFailedEvent;
+        //InterstitialAd.OnAdClicked += InterstitialOnAdClickedEvent;
+        //InterstitialAd.OnAdClosed += InterstitialOnAdClosedEvent;
+        //InterstitialAd.OnAdInfoChanged += InterstitialOnAdInfoChangedEvent;
     }
 
     void SdkInitializationCompletedEvent(LevelPlayConfiguration config)
@@ -218,7 +253,7 @@ public class AdsManager : MonoBehaviour
 
     private void OnDisable()
     {
-        bannerAd?.DestroyAd();
-        interstitialAd?.DestroyAd();
+        BannerAd?.DestroyAd();
+        InterstitialAd?.DestroyAd();
     }
 }
