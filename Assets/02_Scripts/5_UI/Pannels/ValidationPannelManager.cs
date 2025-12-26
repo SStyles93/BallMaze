@@ -49,6 +49,11 @@ public class ValidationPannelManager : MonoBehaviour
         InitializePannelWithOption(selectedOption);
     }
 
+    public void ClosePannel()
+    {
+        validationPannel.SetActive(false);
+    }
+
     /// <summary>
     /// Tryies to validate the current purchase
     /// </summary>

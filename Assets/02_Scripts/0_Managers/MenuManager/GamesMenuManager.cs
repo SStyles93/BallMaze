@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,17 +19,10 @@ public class GamesMenuManager : MonoBehaviour
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         //DontDestroyOnLoad(gameObject);
-
-        if (AdsManager.Instance.BannerAd != null)
-            AdsManager.Instance.BannerAd.DestroyAd();
-
-        AdsManager.Instance.LoadBanner();
-
     }
+
     private void Start()
     {
-        AdsManager.Instance.BannerAd.ShowAd();
-
         if (SavingManager.Instance == null)
             Debug.Log("Saving Manager does not exist");
         SavingManager.Instance?.LoadSession();
