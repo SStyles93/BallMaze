@@ -21,14 +21,15 @@ public class AdsManager : MonoBehaviour
     public LevelPlayBannerAd BannerAd;
     public LevelPlayInterstitialAd InterstitialAd;
     public LevelPlayRewardedAd RewardedVideoAd;
+    [SerializeField] private int bannerHeightPercent;
 
     bool isAdsEnabled = false;
 
-    public enum BannerPosition
-    {
-        Top,
-        Bottom
-    }
+    //public enum BannerPosition
+    //{
+    //    Top,
+    //    Bottom
+    //}
 
     public void Start()
     {
@@ -44,22 +45,17 @@ public class AdsManager : MonoBehaviour
         // SDK init
         Debug.Log("[LevelPlaySample] LevelPlay SDK initialization");
         LevelPlay.Init(AdConfig.AppKey);
+
+        LoadBanner(bannerHeightPercent);
     }
 
-
-    public void LoadBanner(Rect rect, BannerPosition bannerPosition, int heightPercent)
+    public void LoadBanner(int heightPercent)
     {
         var configBuilder = new LevelPlayBannerAd.Config.Builder();
-
-        Vector2Int pannelSize = new Vector2Int((int)rect.width, Screen.height * heightPercent/100);
+        Vector2Int pannelSize = new Vector2Int(Screen.width, (int)(Screen.height * (heightPercent / 100f)));
         LevelPlayAdSize adSize = LevelPlayAdSize.CreateCustomBannerSize(pannelSize.x, pannelSize.y);
         configBuilder.SetSize(adSize);
-
-        //LevelPlayBannerPosition bannerPosition = new LevelPlayBannerPosition(rect.center);
-
-        LevelPlayBannerPosition bannerPos = bannerPosition == BannerPosition.Top ? LevelPlayBannerPosition.TopCenter : LevelPlayBannerPosition.BottomCenter;
-        configBuilder.SetPosition(bannerPos);
-
+        configBuilder.SetPosition(LevelPlayBannerPosition.TopCenter);
         configBuilder.SetDisplayOnLoad(true);
         configBuilder.SetRespectSafeArea(true); // Only relevant for Android
         //configBuilder.SetPlacementName("bannerPlacement");
@@ -69,65 +65,6 @@ public class AdsManager : MonoBehaviour
         BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId, bannerConfig);
         BannerAd.LoadAd();
     }
-
-
-    public void LoadBanner(Rect rect, BannerPosition bannerPosition)
-    {
-        var configBuilder = new LevelPlayBannerAd.Config.Builder();
-        
-        Vector2Int pannelSize = new Vector2Int((int)rect.width, (int)rect.height);
-        LevelPlayAdSize adSize = LevelPlayAdSize.CreateCustomBannerSize(pannelSize.x, pannelSize.y);
-        configBuilder.SetSize(adSize);
-
-        //LevelPlayBannerPosition bannerPosition = new LevelPlayBannerPosition(rect.center);
-
-        LevelPlayBannerPosition bannerPos = bannerPosition == BannerPosition.Top ? LevelPlayBannerPosition.TopCenter : LevelPlayBannerPosition.BottomCenter;
-        configBuilder.SetPosition(bannerPos);
-
-        configBuilder.SetDisplayOnLoad(true);
-        configBuilder.SetRespectSafeArea(true); // Only relevant for Android
-        //configBuilder.SetPlacementName("bannerPlacement");
-        //configBuilder.SetBidFloor(1.0); // Minimum bid price in USD
-        var bannerConfig = configBuilder.Build();
-
-        BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId, bannerConfig);
-        BannerAd.LoadAd();
-    }
-
-
-    //public void LoadBottomBanner(float heightPercent)
-    //{
-    //    var configBuilder = new LevelPlayBannerAd.Config.Builder();
-    //    Vector2Int pannelSize = new Vector2Int(Screen.width, (int)(Screen.height * (heightPercent/100f)));
-    //    LevelPlayAdSize adSize = LevelPlayAdSize.CreateCustomBannerSize(pannelSize.x, pannelSize.y);
-    //    configBuilder.SetSize(adSize);
-    //    configBuilder.SetPosition(LevelPlayBannerPosition.BottomCenter);
-    //    configBuilder.SetDisplayOnLoad(true);
-    //    configBuilder.SetRespectSafeArea(true); // Only relevant for Android
-    //    //configBuilder.SetPlacementName("bannerPlacement");
-    //    //configBuilder.SetBidFloor(1.0); // Minimum bid price in USD
-    //    var bannerConfig = configBuilder.Build();
-
-    //    BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId, bannerConfig);
-    //    BannerAd.LoadAd();
-    //}
-
-    //public void LoadTopBanner(int heightPercent)
-    //{
-    //    var configBuilder = new LevelPlayBannerAd.Config.Builder();
-    //    Vector2Int pannelSize = new Vector2Int(Screen.width, (int)(Screen.height * (heightPercent / 100f)));
-    //    LevelPlayAdSize adSize = LevelPlayAdSize.CreateCustomBannerSize(pannelSize.x, pannelSize.y);
-    //    configBuilder.SetSize(adSize);
-    //    configBuilder.SetPosition(LevelPlayBannerPosition.TopCenter);
-    //    configBuilder.SetDisplayOnLoad(true);
-    //    configBuilder.SetRespectSafeArea(true); // Only relevant for Android
-    //    //configBuilder.SetPlacementName("bannerPlacement");
-    //    //configBuilder.SetBidFloor(1.0); // Minimum bid price in USD
-    //    var bannerConfig = configBuilder.Build();
-
-    //    BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId, bannerConfig);
-    //    BannerAd.LoadAd();
-    //}
 
 
     void EnableAds()

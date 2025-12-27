@@ -56,8 +56,9 @@ public class LevelSlot : BaseUISlot
 
             GamesMenuManager.Instance.SaveScrollbarValues();
 
-            LevelManager.Instance.InitializeLevel(slotIndex);
 
+
+            LevelManager.Instance.InitializeLevel(slotIndex);
             SceneController.Instance
                 .NewTransition()
                 .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)

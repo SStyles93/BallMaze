@@ -1336,6 +1336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9625d4970ba284683d2ec8f8a3c541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdsManager
+  bannerHeightPercent: 15
 --- !u!1 &1900290287
 GameObject:
   m_ObjectHideFlags: 0

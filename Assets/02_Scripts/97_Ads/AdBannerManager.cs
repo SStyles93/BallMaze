@@ -3,7 +3,7 @@ using UnityEngine;
 public class AdBannerManager : MonoBehaviour
 {
     [SerializeField] RectTransform bannerRectTransform;
-    [SerializeField] AdsManager.BannerPosition bannerPosition;
+    //[SerializeField] AdsManager.BannerPosition bannerPosition;
 
     private void Awake()
     {
@@ -14,7 +14,7 @@ public class AdBannerManager : MonoBehaviour
         if(AdsManager.Instance.BannerAd != null)
             AdsManager.Instance.BannerAd.DestroyAd();
 
-        AdsManager.Instance.LoadBanner(bannerRectTransform.rect, bannerPosition, 10);
+       // AdsManager.Instance.LoadBanner(bannerRectTransform.rect, bannerPosition, 15);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

@@ -10,7 +10,7 @@ public class InfiniteBackground : MonoBehaviour
         public float rotationSpeed;
     }
 
-    [SerializeField] private float speedFactor = 20000;
+    [SerializeField] private float speedFactor = 100;
     [SerializeField] private List<RotatingObject> starBackground = new List<RotatingObject>();
 
     // Update is called once per frame
@@ -18,7 +18,8 @@ public class InfiniteBackground : MonoBehaviour
     {
         for (int i = 0; i < starBackground.Count; i++)
         {
-            starBackground[i].background.transform.Rotate(Vector3.up, starBackground[i].rotationSpeed/speedFactor * Time.time);
+            float angle = starBackground[i].rotationSpeed / speedFactor * Time.deltaTime;
+            starBackground[i].background.transform.Rotate(Vector3.up, angle);
         }
     }
 }
