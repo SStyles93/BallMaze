@@ -31,6 +31,18 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    // TODO: IMPLEMENT SHOP BUYING BUTTONS -> Calls to the ShopIAPManager
+
+    //public void BuyGold()
+    //{
+    //    m_StoreController.PurchaseProduct(goldProductId);
+    //}
+
+    //public void BuyDiamond()
+    //{
+    //    m_StoreController.PurchaseProduct(diamondProductId);
+    //}
+
     public void ProcessShopOption(ShopOption shopOption)
     {
         //TODO: Process the aquired shopOption

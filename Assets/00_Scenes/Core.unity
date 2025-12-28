@@ -1229,7 +1229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1445328149
 Transform:
   m_ObjectHideFlags: 0
@@ -1254,12 +1254,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1445328148}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18e6138cb14cb08498351e5f80f00d99, type: 3}
+  m_Script: {fileID: 11500000, guid: b1dfaf5fedc5086468299ee496fb5197, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  shopData: {fileID: 0}
-  shopSlotPrefab: {fileID: 0}
-  shopSlotsContainer: {fileID: 0}
 --- !u!1 &1549264545
 GameObject:
   m_ObjectHideFlags: 0

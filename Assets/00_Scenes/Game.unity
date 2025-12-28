@@ -833,7 +833,7 @@ Transform:
   m_GameObject: {fileID: 1211419925}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 13.825023, y: 16.714743, z: -13.02}
+  m_LocalPosition: {x: 13.825023, y: 18.13, z: -2.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1030,7 +1030,7 @@ MonoBehaviour:
   environmentColors_SO: {fileID: 11400000, guid: 22cf0413d1085ed4aabc7775cc128e86, type: 2}
   material: {fileID: 2100000, guid: d0b5b4e45c472a94981a3234f899fd1c, type: 2}
   emissiveBandMaterial: {fileID: 2100000, guid: 0e0e1eb42e7f8d34382ebc5e7ddc4053, type: 2}
-  isGridGenerated: 1
+  isGridGenerated: 0
 --- !u!1 &1690082475
 GameObject:
   m_ObjectHideFlags: 0
@@ -1308,11 +1308,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5693295654109602499, guid: d1331a85c3efc2049bdb638d6c07e48d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.714743
+      value: 18.13
       objectReference: {fileID: 0}
     - target: {fileID: 5693295654109602499, guid: d1331a85c3efc2049bdb638d6c07e48d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13.02
+      value: -2.2
       objectReference: {fileID: 0}
     - target: {fileID: 5693295654109602499, guid: d1331a85c3efc2049bdb638d6c07e48d, type: 3}
       propertyPath: m_LocalRotation.w
