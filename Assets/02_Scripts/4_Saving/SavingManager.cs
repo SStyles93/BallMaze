@@ -351,7 +351,7 @@ public class SavingManager : MonoBehaviour
         coinManager.SetCurrencyAmount(CoinType.STAR, currentPlayerData.stars);
         coinManager.SetCurrencyAmount(CoinType.HEART, currentPlayerData.hearts);
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
-        LifeManager.Instance.ResetLife();
+        LifeManager.Instance.SetLife();
         
 
         // --- SHOP ---

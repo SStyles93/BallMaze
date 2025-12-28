@@ -50,21 +50,31 @@ public class LevelSlot : BaseUISlot
 
             lockImage.color = Color.white;
         }
-        else if(isMouseOver)
+        else if (isMouseOver)
         {
             if (isLocked) return;
 
             GamesMenuManager.Instance.SaveScrollbarValues();
 
+            // Normal behaviour
+            if (CoinManager.Instance.CanAfford(CoinType.HEART, 1))
+            {
+                LevelManager.Instance.InitializeLevel(slotIndex);
+                SceneController.Instance
+                    .NewTransition()
+                    .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
+                    .Unload(SceneDatabase.Scenes.GamesMenu)
+                    .WithOverlay()
+                    .Perform();
+            }
+            else // Heart Pannel
+            {
+                SceneController.Instance
+                    .NewTransition()
+                    .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.HeartPannel)
+                    .Perform();
+            }
 
-
-            LevelManager.Instance.InitializeLevel(slotIndex);
-            SceneController.Instance
-                .NewTransition()
-                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
-                .Unload(SceneDatabase.Scenes.GamesMenu)
-                .WithOverlay()
-                .Perform();
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
     }

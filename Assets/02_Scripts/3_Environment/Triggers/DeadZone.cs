@@ -6,8 +6,6 @@ public class DeadZone : MonoBehaviour
     [SerializeField] private Vector3 spawnPosition = Vector3.zero;
     [SerializeField] private LifePannel lifePannel;
 
-    public int LifeLeft = 3;
-
     private void Start()
     {
         spawnPosition = GameObject.FindGameObjectWithTag("Respawn").GetComponent<PlayerSpawner>().SpawnPosition;

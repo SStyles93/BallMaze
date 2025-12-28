@@ -1,4 +1,4 @@
-using System.Collections.Generic;   
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,7 +39,7 @@ public class EndPannelManager : MonoBehaviour
     /// </summary>
     public void LoadCurrentScene()
     {
-        LoadScene(0);
+            LoadScene(0);
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class EndPannelManager : MonoBehaviour
     {
         levelManager.InitializeLevel(levelManager.CurrentLevelIndex + sceneIndex);
 
-        LifeManager.Instance.ResetLife();
+        LifeManager.Instance.SetLife();
 
         CoinManager.Instance.UpdatePreviousCoinAmount();
 
@@ -73,7 +73,7 @@ public class EndPannelManager : MonoBehaviour
 
     public void ReturnToGamesMenu()
     {
-        LifeManager.Instance.ResetLife();
+        LifeManager.Instance.SetLife();
 
         CoinManager.Instance.UpdatePreviousCoinAmount();
 

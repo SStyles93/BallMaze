@@ -4,7 +4,7 @@ public class HomeButton : UIButton
 {
     public void ExitGame()
     {
-        LifeManager.Instance?.ResetLife();
+        LifeManager.Instance?.SetLife();
 
         SavingManager.Instance?.SavePlayer();
 

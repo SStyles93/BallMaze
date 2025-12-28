@@ -23,7 +23,7 @@ public class LifeManager : MonoBehaviour
 
     private void Start()
     {
-        ResetLife();
+        SetLife();
     }
 
     public void RemoveLife()
@@ -41,9 +41,9 @@ public class LifeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// // Sets the amount of life according to the Heart currency amount
+    /// Sets the amount of life according to the Heart currency amount
     /// </summary>
-    public void ResetLife()
+    public void SetLife()
     {
         CoinManager currencyManager = CoinManager.Instance;
         // Sets the amount of life according to the Heart currency amount
@@ -65,9 +65,19 @@ public class LifeManager : MonoBehaviour
         // Save Session
         SavingManager.Instance.SaveSession();
 
-        // Open EndPannel
-        SceneController.Instance.NewTransition()
-            .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
-            .Perform();
+        // Opens the Heart pannel if the player has no more hearts
+        if(!CoinManager.Instance.CanAfford(CoinType.HEART, 1))
+        {
+            SceneController.Instance.NewTransition()
+                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.HeartPannel)
+                .Perform();
+        }
+        else
+        {
+            // Open EndPannel
+            SceneController.Instance.NewTransition()
+                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
+                .Perform();
+        }
     }
 }

@@ -52,11 +52,11 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _FrontColor: {r: 0.5411765, g: 0.16862746, b: 0.8862746, a: 1}
-    - _LeftColor: {r: 0.36078432, g: 0.10196079, b: 0.6, a: 1}
+    - _FrontColor: {r: 0.19607845, g: 0.80392164, b: 0.19607845, a: 1}
+    - _LeftColor: {r: 0.13333334, g: 0.54509807, b: 0.13333334, a: 1}
     - _RIghtColor: {r: 0.735849, g: 0.5370562, b: 0.49288, a: 1}
-    - _RightColor: {r: 0.36078432, g: 0.10196079, b: 0.6, a: 1}
-    - _TopColor: {r: 0.6901961, g: 0.52156866, b: 0.9607844, a: 1}
+    - _RightColor: {r: 0.13333334, g: 0.54509807, b: 0.13333334, a: 1}
+    - _TopColor: {r: 0.46274513, g: 0.909804, b: 0.46274513, a: 1}
     - _Vector2: {r: -21.66, g: 5.46, b: 0, a: 0}
     - _Vector2_1: {r: 0, g: 0.008, b: 0, a: 0}
   m_BuildTextureStacks: []

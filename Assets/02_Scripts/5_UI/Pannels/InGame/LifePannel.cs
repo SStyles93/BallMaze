@@ -20,6 +20,8 @@ public class LifePannel : MonoBehaviour
 
     private void Start()
     {
+        LifeManager.Instance.SetLife();
+
         if(LifeManager.Instance != null)
             for (int i = 0; i < lifeImages.Count; i++)
             {

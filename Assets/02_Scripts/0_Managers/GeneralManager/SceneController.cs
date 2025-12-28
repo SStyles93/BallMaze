@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     // --- Singleton ---
-    
+
     #region Singleton
     public static SceneController Instance;
 
@@ -31,6 +31,17 @@ public class SceneController : MonoBehaviour
     private bool isBusy = false;
 
     // --- API ---
+
+    public bool IsGameLoaded()
+    {
+        Scene scene = SceneManager.GetSceneByName(SceneDatabase.Scenes.Game.ToString());
+
+        // Check the isLoaded property
+        if (scene.isLoaded)
+            return true;
+        return false;
+    }
+
 
     public SceneTransitionPlan NewTransition()
     {
@@ -157,7 +168,7 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    
+
     // --- Transition Plan Class ---
     public class SceneTransitionPlan
     {
