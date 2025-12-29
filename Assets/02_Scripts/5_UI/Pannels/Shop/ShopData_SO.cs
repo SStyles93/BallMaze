@@ -1,24 +1,16 @@
-using JetBrains.Annotations;
-using UnityEngine;
+//using JetBrains.Annotations;
+//using UnityEngine;
 
-[CreateAssetMenu(fileName = "ShopData", menuName = "Shop/ShopData")]
-public class ShopData_SO : ScriptableObject
-{
-    public ShopOption[] shopOptions;
-}
+//[CreateAssetMenu(fileName = "ShopData", menuName = "Shop/ShopData")]
+//public class ShopData_SO : ScriptableObject
+//{
+//    public ShopOption[] shopOptions;
+//}
 
-[System.Serializable]
-public class ShopOption
-{
-    public CurrencyValuePair price;
-    public CoinQuantityPair[] coinAmountPairs;
-
-    public float Price => price.value;
-
-    public bool Buy()
-    {
-        //Try buying
-        return false;
-    }
-}
+//[System.Serializable]
+//public class ShopOption
+//{
+//    public string productId; // MUST match IAP Catalog ID
+//    public CoinAmountPair[] coinAmountPairs;
+//}
 

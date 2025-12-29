@@ -1,52 +1,62 @@
 using UnityEngine;
+using UnityEngine.Purchasing;
 
 public class ShopManager : MonoBehaviour
 {
-    [Header("Shop objects")]
-    [SerializeField] private ShopData_SO shopData;
     [SerializeField] private GameObject shopSlotPrefab;
-    [Header("Scene References")]
-    [SerializeField] private GameObject shopSlotsContainer;
+    [SerializeField] private Transform shopSlotsContainer;
 
-    public static ShopManager Instance { get; private set; }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        { 
-            Destroy(gameObject); 
-            return; 
-        }
-        
-        Instance = this;
-    }
+    private ProductCatalog catalog;
 
     private void Start()
     {
-        SavingManager.Instance.LoadSession();
+        catalog = ProductCatalog.LoadDefaultCatalog();
+        CreateShopSlots();
+    }
 
-        for (int i = 0; i < shopData.shopOptions.Length; i++)
+    private void OnEnable()
+    {
+        ShopIAPManager.Instance.OnProductsFetchedEvent += OnProductsFetched;
+    }
+
+    private void OnDisable()
+    {
+        if (ShopIAPManager.Instance != null)
         {
-            GameObject shopSlot = Instantiate(shopSlotPrefab, shopSlotsContainer.transform);
-            shopSlot.GetComponent<ShopSlot>().InitializeSlot(shopData.shopOptions[i], this);
+            ShopIAPManager.Instance.OnProductsFetchedEvent -= OnProductsFetched;
         }
     }
 
-    // TODO: IMPLEMENT SHOP BUYING BUTTONS -> Calls to the ShopIAPManager
-
-    //public void BuyGold()
-    //{
-    //    m_StoreController.PurchaseProduct(goldProductId);
-    //}
-
-    //public void BuyDiamond()
-    //{
-    //    m_StoreController.PurchaseProduct(diamondProductId);
-    //}
-
-    public void ProcessShopOption(ShopOption shopOption)
+    private void CreateShopSlots()
     {
-        //TODO: Process the aquired shopOption
-        Debug.Log($"ShopOption {shopOption.coinAmountPairs[0].Amount} {shopOption.coinAmountPairs[0].CoinType} " +
-            $"for {shopOption.price.value} {shopOption.price.currencyType} is being processed.");
+        foreach (var product in catalog.allProducts)
+        {
+            GameObject slotGO = Instantiate(
+                shopSlotPrefab,
+                shopSlotsContainer
+            );
+
+            slotGO.GetComponent<ShopSlot>()
+                .InitializeFromCatalog(product, this);
+        }
+    }
+
+    private void OnProductsFetched(Product[] products)
+    {
+        foreach (Transform child in shopSlotsContainer)
+        {
+            var slot = child.GetComponent<ShopSlot>();
+            if (slot == null) continue;
+
+            foreach (var product in products)
+            {
+                slot.BindRuntimeProduct(product);
+            }
+        }
+    }
+
+    public void Buy(string productId)
+    {
+        ShopIAPManager.Instance.BuyProduct(productId);
     }
 }

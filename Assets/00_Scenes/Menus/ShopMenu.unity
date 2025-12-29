@@ -1114,9 +1114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e6138cb14cb08498351e5f80f00d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  shopData: {fileID: 11400000, guid: dabf67849cf156f4b86d1b488e3826be, type: 2}
   shopSlotPrefab: {fileID: 7636381603028056410, guid: d014f58c2a5ccd346b4284096b089832, type: 3}
-  shopSlotsContainer: {fileID: 911601820}
+  shopSlotsContainer: {fileID: 911601821}
 --- !u!1 &1789736216
 GameObject:
   m_ObjectHideFlags: 0
@@ -1426,7 +1425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.078431375, g: 0.14117648, b: 0.21176471, a: 0.47058824}
+  m_Color: {r: 0.15294118, g: 0.21176471, b: 0.36078432, a: 0.52156866}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

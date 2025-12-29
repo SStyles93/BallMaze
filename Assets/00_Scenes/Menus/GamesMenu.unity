@@ -1727,6 +1727,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 5119785156891559622, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_Color.a
+      value: 0.52156866
+      objectReference: {fileID: 0}
+    - target: {fileID: 5119785156891559622, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_Color.b
+      value: 0.36078432
+      objectReference: {fileID: 0}
+    - target: {fileID: 5119785156891559622, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_Color.g
+      value: 0.21176471
+      objectReference: {fileID: 0}
+    - target: {fileID: 5119785156891559622, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_Color.r
+      value: 0.15294118
+      objectReference: {fileID: 0}
     - target: {fileID: 7713013644878688651, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
       propertyPath: m_Name
       value: HeartPannel
@@ -1995,6 +2011,22 @@ PrefabInstance:
     - target: {fileID: 6912385403538302960, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001944929128180580, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Color.a
+      value: 0.52156866
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001944929128180580, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Color.b
+      value: 0.36078432
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001944929128180580, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Color.g
+      value: 0.21176471
+      objectReference: {fileID: 0}
+    - target: {fileID: 7001944929128180580, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_Color.r
+      value: 0.15294118
       objectReference: {fileID: 0}
     - target: {fileID: 7433119119640757087, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMax.y

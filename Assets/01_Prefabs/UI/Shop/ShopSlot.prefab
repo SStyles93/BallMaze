@@ -785,3 +785,4 @@ MonoBehaviour:
   coinStackSprite: {fileID: 21300000, guid: 22a210695fe615648bd8fd878e96c2cf, type: 3}
   coinAmountText: {fileID: 7320831755200411753}
   valueText: {fileID: 1007585817820033142}
+  buyButton: {fileID: 9048367154327114284}

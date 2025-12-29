@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,137 +6,181 @@ using UnityEngine.Purchasing;
 
 public class ShopIAPManager : MonoBehaviour
 {
-    StoreController m_StoreController;
+    public static ShopIAPManager Instance { get; private set; }
 
+    private StoreController storeController;
+    private ProductCatalog catalog;
 
-    void Awake()
+    private bool isConnected;
+    public bool IsInitialized => storeController != null && isConnected;
+
+    // Event used by ShopManager
+    public event Action<Product[]> OnProductsFetchedEvent;
+
+    private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         InitializeIAP();
     }
 
     async void InitializeIAP()
     {
-        m_StoreController = UnityIAPServices.StoreController();
+        catalog = ProductCatalog.LoadDefaultCatalog();
+        storeController = UnityIAPServices.StoreController();
 
-        m_StoreController.OnPurchasePending += OnPurchasePending;
-        m_StoreController.OnPurchaseConfirmed += OnPurchaseConfirmed;
-        m_StoreController.OnPurchaseFailed += OnPurchaseFailed;
+        storeController.OnPurchasePending += OnPurchasePending;
+        storeController.OnPurchaseConfirmed += OnPurchaseConfirmed;
+        storeController.OnPurchaseFailed += OnPurchaseFailed;
 
-        m_StoreController.OnStoreDisconnected += OnStoreDisconnected;
-        Debug.Log("Connecting to store.");
-        await m_StoreController.Connect();
+        storeController.OnProductsFetched += OnProductsFetched;
+        storeController.OnProductsFetchFailed += OnProductsFetchFailed;
+        storeController.OnStoreDisconnected += OnStoreDisconnected;
 
-        m_StoreController.OnProductsFetchFailed += OnProductsFetchedFailed;
-        m_StoreController.OnProductsFetched += OnProductsFetched;
-        FetchProducts();
+        Debug.Log("Connecting to store...");
+        await storeController.Connect();
+        isConnected = true;
+
+        FetchProductsFromCatalog();
     }
 
-    void FetchProducts()
-    {
-        var initialProductsToFetch = new List<ProductDefinition>
-            {
-                //new(goldProductId, ProductType.Consumable),
-                //new(diamondProductId, ProductType.Consumable)
-            };
+    // ---------------- FETCH PRODUCTS ----------------
 
-        m_StoreController.FetchProducts(initialProductsToFetch);
-    }
-    void OnPurchaseFailed(FailedOrder order)
+    void FetchProductsFromCatalog()
     {
-        var product = GetFirstProductInOrder(order);
-        if (product == null)
+        var productsToFetch = new List<ProductDefinition>();
+
+        foreach (var item in catalog.allProducts)
         {
-            Debug.Log("Could not find product in failed order.");
+            productsToFetch.Add(new ProductDefinition(item.id, item.type));
         }
 
-        Debug.Log($"Purchase failed - Product: '{product?.definition.id}'," +
-                  $"PurchaseFailureReason: {order.FailureReason.ToString()},"
-                  + $"Purchase Failure Details: {order.Details}");
-    }
-
-    void OnPurchasePending(PendingOrder order)
-    {
-        var product = GetFirstProductInOrder(order);
-        if (product is null)
+        if (productsToFetch.Count == 0)
         {
-            Debug.Log("Could not find product in order.");
+            Debug.LogWarning("IAP Catalog is empty.");
             return;
         }
 
-        //Add the purchased product to the players inventory
-        //if (product.definition.id == goldProductId)
-        //{
-        //    AddGold();
-        //}
-        //else if (product.definition.id == diamondProductId)
-        //{
-        //    AddDiamond();
-        //}
+        storeController.FetchProducts(productsToFetch);
+    }
 
-        Debug.Log($"Purchase complete - Product: {product.definition.id}");
+    // ---------------- BUY ----------------
 
-        m_StoreController.ConfirmPurchase(order);
+    public void BuyProduct(string productId)
+    {
+        if (!IsInitialized)
+        {
+            Debug.LogWarning("IAP not initialized.");
+            return;
+        }
+
+        storeController.PurchaseProduct(productId);
+    }
+
+    // ---------------- PURCHASE FLOW ----------------
+
+    void OnPurchasePending(PendingOrder order)
+    {
+        var product = GetFirstProduct(order);
+        if (product == null)
+        {
+            Debug.LogWarning("Pending order contains no product.");
+            return;
+        }
+
+        Debug.Log($"Purchase pending: {product.definition.id}");
+
+        GrantPayouts(product.definition.id);
+        storeController.ConfirmPurchase(order);
     }
 
     void OnPurchaseConfirmed(Order order)
     {
-        switch (order)
+        if (order is ConfirmedOrder)
         {
-            case ConfirmedOrder confirmedOrder:
-                OnPurchaseConfirmed(confirmedOrder);
-                break;
-            case FailedOrder failedOrder:
-                OnPurchaseConfirmationFailed(failedOrder);
-                break;
-            default:
-                Debug.Log("Unknown OnPurchaseConfirmed result.");
-                break;
+            Debug.Log("Purchase confirmed.");
+        }
+        else if (order is FailedOrder failed)
+        {
+            Debug.LogError(
+                $"Purchase confirmation failed: {failed.FailureReason} - {failed.Details}"
+            );
         }
     }
 
-    void OnPurchaseConfirmed(ConfirmedOrder order)
+    void OnPurchaseFailed(FailedOrder order)
     {
-        var product = GetFirstProductInOrder(order);
-        if (product == null)
+        var product = GetFirstProduct(order);
+
+        Debug.LogError(
+            $"Purchase failed - Product: {product?.definition.id}, " +
+            $"Reason: {order.FailureReason}, Details: {order.Details}"
+        );
+    }
+
+    // ---------------- PAYOUTS ----------------
+
+    void GrantPayouts(string productId)
+    {
+        var catalogItem = catalog.allProducts
+            .FirstOrDefault(p => p.id == productId);
+
+        if (catalogItem == null)
         {
-            Debug.Log("Could not find product in purchase confirmation.");
+            Debug.LogWarning($"No catalog item for product {productId}");
+            return;
         }
 
-        Debug.Log($"Purchase confirmed- Product: {product?.definition.id}");
-    }
-
-    void OnPurchaseConfirmationFailed(FailedOrder order)
-    {
-        var product = GetFirstProductInOrder(order);
-        if (product == null)
+        foreach (var payout in catalogItem.Payouts)
         {
-            Debug.Log("Could not find product in failed confirmation.");
+            if (payout.type ==
+                ProductCatalogPayout.ProductCatalogPayoutType.Currency)
+            {
+                if (!Enum.TryParse(payout.subtype, out CoinType coinType))
+                {
+                    coinType = CoinType.COIN; // fallback
+                }
+
+                CoinManager.Instance.IncreaseCurrencyAmount(
+                    coinType,
+                    (int)payout.quantity
+                );
+            }
         }
-
-        Debug.Log($"Confirmation failed - Product: '{product?.definition.id}'," +
-                  $"PurchaseFailureReason: {order.FailureReason.ToString()},"
-                  + $"Confirmation Failure Details: {order.Details}");
     }
 
-    Product GetFirstProductInOrder(Order order)
+
+    // ---------------- HELPERS ----------------
+
+    Product GetFirstProduct(Order order)
     {
-        return order.CartOrdered.Items().First()?.Product;
+        return order.CartOrdered.Items()
+            .FirstOrDefault()?.Product;
     }
 
-    // Calling StoreController.Connect without a listener on the StoreController.OnStoreDisconnected event will result in warnings.
-    void OnStoreDisconnected(StoreConnectionFailureDescription description)
-    {
-        Debug.Log($"Store disconnected details: {description.message}");
-    }
-
-    // Calling StoreController.Connect without listeners on StoreController.OnProductsFetched and StoreController.OnProductsFetchedFailed will result in warnings.
     void OnProductsFetched(List<Product> products)
     {
-        Debug.Log($"Products fetched successfully for {products.Count} products.");
+        Debug.Log($"Products fetched successfully: {products.Count}");
+        OnProductsFetchedEvent?.Invoke(products.ToArray());
     }
 
-    void OnProductsFetchedFailed(ProductFetchFailed failure)
+    void OnProductsFetchFailed(ProductFetchFailed failure)
     {
-        Debug.Log($"Products fetch failed for {failure.FailedFetchProducts.Count} products: {failure.FailureReason}");
+        Debug.LogError(
+            $"Product fetch failed: {failure.FailureReason} " +
+            $"({failure.FailedFetchProducts.Count} products)"
+        );
+    }
+
+    void OnStoreDisconnected(StoreConnectionFailureDescription description)
+    {
+        Debug.LogError($"Store disconnected: {description.message}");
     }
 }

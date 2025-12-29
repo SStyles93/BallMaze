@@ -1,38 +1,74 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
+using UnityEngine.Purchasing;
 
 public class ShopSlot : MonoBehaviour
 {
-    // Slot parameters
     [Header("Slot Parameters")]
-    [SerializeField] protected Image slotImage;
+    [SerializeField] private Image slotImage;
 
     [Header("ShopSlot Parameters")]
     [SerializeField] private Sprite coinStackSprite;
     [SerializeField] private TMP_Text coinAmountText;
     [SerializeField] private TMP_Text valueText;
+    [SerializeField] private Button buyButton;
 
-    private ShopOption shopOption;
+    private ProductCatalogItem catalogItem;
+    private Product runtimeProduct;
     private ShopManager shopManager;
 
-    public virtual void InitializeSlot(ShopOption shopOption, ShopManager shopManager)
-    {
-        this.shopOption = shopOption;
-        this.shopManager = shopManager;
+    // ---------------- INITIALIZATION ----------------
 
-        slotImage.GetComponent<Image>().sprite = coinStackSprite;
-        coinAmountText.text = $"{shopOption.coinAmountPairs[0].Amount}";
-        valueText.text = $"{shopOption.price.value} {shopOption.price.currencyType}";
+    public void InitializeFromCatalog(ProductCatalogItem item, ShopManager manager)
+    {
+        catalogItem = item;
+        shopManager = manager;
+
+        slotImage.sprite = coinStackSprite;
+        valueText.text = "...";
+        buyButton.interactable = false;
+
+        SetPayoutText(item);
+
+        buyButton.onClick.RemoveAllListeners();
+        buyButton.onClick.AddListener(OnBuyClicked);
     }
 
-    public virtual void SendSlotDataToManager() 
+    // ---------------- RUNTIME PRODUCT BIND ----------------
+
+    public void BindRuntimeProduct(Product product)
     {
-        if (shopManager != null)
+        if (product.definition.id != catalogItem.id)
+            return;
+
+        runtimeProduct = product;
+
+        valueText.text = product.metadata.localizedPriceString;
+        buyButton.interactable = product.availableToPurchase;
+    }
+
+    // ---------------- UI HELPERS ----------------
+
+    void SetPayoutText(ProductCatalogItem item)
+    {
+        foreach (var payout in item.Payouts)
         {
-            shopManager.ProcessShopOption(shopOption);
+            if (payout.type ==
+                ProductCatalogPayout.ProductCatalogPayoutType.Currency)
+            {
+                coinAmountText.text = payout.quantity.ToString();
+                return;
+            }
         }
+
+        coinAmountText.text = "?";
+    }
+
+    // ---------------- ACTION ----------------
+
+    void OnBuyClicked()
+    {
+        shopManager.Buy(catalogItem.id);
     }
 }

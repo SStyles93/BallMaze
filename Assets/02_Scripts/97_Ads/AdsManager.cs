@@ -149,10 +149,15 @@ public class AdsManager : MonoBehaviour
         if (adsArea == null)
             return;
 
-        adsArea.SetSizeWithCurrentAnchors(
-            RectTransform.Axis.Vertical,
-            CurrentBannerHeightPx
-        );
+        float scaleFactor = adsArea.GetComponentInParent<Canvas>().scaleFactor;
+
+        // Calculate top safe area in pixels
+        float safeAreaTop = Screen.height - Screen.safeArea.yMax;
+
+        // Total height = banner + safe area
+        float totalHeight = (CurrentBannerHeightPx + safeAreaTop) / scaleFactor;
+
+        adsArea.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, totalHeight);
     }
 
     #endregion

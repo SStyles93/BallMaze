@@ -30,10 +30,18 @@ public class AdAwareCanvasPadding : MonoBehaviour
         if (root == null)
             return;
 
+        float scaleFactor = root.GetComponentInParent<Canvas>().scaleFactor;
+
+        // Get top safe area inset in pixels
+        float safeAreaTop = Screen.height - Screen.safeArea.yMax;
+
+        // Combine banner height and safe area
+        float totalTopPadding = (bannerHeightPx + safeAreaTop) / scaleFactor;
+
         Vector2 offsetMin = root.offsetMin;
         Vector2 offsetMax = root.offsetMax;
 
-        offsetMax.y = -bannerHeightPx;
+        offsetMax.y = -totalTopPadding;
 
         root.offsetMin = offsetMin;
         root.offsetMax = offsetMax;
