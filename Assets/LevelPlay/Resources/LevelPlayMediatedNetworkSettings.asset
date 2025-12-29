@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 221c390957eb94a53a823b1654c3c34b, type: 3}
   m_Name: LevelPlayMediatedNetworkSettings
   m_EditorClassIdentifier: Unity.LevelPlay.Editor::LevelPlayMediationNetworkSettings
-  EnableAdmob: 0
-  AdmobAndroidAppId: 6003174
-  AdmobIOSAppId: 6003175
+  EnableAdmob: 1
+  AdmobAndroidAppId: ca-app-pub-6864190118844831~4853285044
+  AdmobIOSAppId: 

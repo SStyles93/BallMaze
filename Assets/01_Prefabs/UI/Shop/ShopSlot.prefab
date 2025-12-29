@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
-  m_SizeDelta: {x: 675.83, y: 340}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 582, y: 340}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5679706814660088505
 CanvasRenderer:
@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 99.99 CAD$
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5c06ea7d38a289e4bbcdfe699600ab6b, type: 2}
-  m_sharedMaterial: {fileID: -8206984325510986594, guid: 5c06ea7d38a289e4bbcdfe699600ab6b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 00bf1b5006ad71144b79379a7f1e2d18, type: 2}
+  m_sharedMaterial: {fileID: 5836008013621343584, guid: 00bf1b5006ad71144b79379a7f1e2d18, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,12 +92,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
+  m_fontSize: 118.65
   m_fontSizeBase: 150
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 150
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -355,8 +355,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 150000 <sprite index=0>
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5c06ea7d38a289e4bbcdfe699600ab6b, type: 2}
-  m_sharedMaterial: {fileID: -8206984325510986594, guid: 5c06ea7d38a289e4bbcdfe699600ab6b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 00bf1b5006ad71144b79379a7f1e2d18, type: 2}
+  m_sharedMaterial: {fileID: 5836008013621343584, guid: 00bf1b5006ad71144b79379a7f1e2d18, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -380,12 +380,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
+  m_fontSize: 137.05
   m_fontSizeBase: 150
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 150
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

@@ -1,248 +1,189 @@
-using Unity.Services.LevelPlay;
+﻿using Unity.Services.LevelPlay;
 using UnityEngine;
-
+using TMPro;
 
 public class AdsManager : MonoBehaviour
 {
     #region Singleton
     public static AdsManager Instance;
 
-    public void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
     }
     #endregion
+
+    [Header("Core Scene")]
+    [SerializeField] private RectTransform adsArea;
 
     public LevelPlayBannerAd BannerAd;
     public LevelPlayInterstitialAd InterstitialAd;
     public LevelPlayRewardedAd RewardedVideoAd;
-    [SerializeField] private int bannerHeightPercent;
 
-    bool isAdsEnabled = false;
+    [SerializeField] private TMP_Text adsDebugText;
 
-    //public enum BannerPosition
-    //{
-    //    Top,
-    //    Bottom
-    //}
+    // -------- Banner layout authority --------
+    public static int CurrentBannerHeightPx { get; private set; }
+    public static event System.Action<int> OnBannerHeightChanged;
 
-    public void Start()
+    private void Start()
     {
-        Debug.Log("[LevelPlaySample] LevelPlay.ValidateIntegration");
         LevelPlay.ValidateIntegration();
 
-        Debug.Log($"[LevelPlaySample] Unity version {LevelPlay.UnityVersion}");
-
-        Debug.Log("[LevelPlaySample] Register initialization callbacks");
         LevelPlay.OnInitSuccess += SdkInitializationCompletedEvent;
         LevelPlay.OnInitFailed += SdkInitializationFailedEvent;
 
-        // SDK init
-        Debug.Log("[LevelPlaySample] LevelPlay SDK initialization");
         LevelPlay.Init(AdConfig.AppKey);
-
-        LoadBanner(bannerHeightPercent);
     }
 
-    public void LoadBanner(int heightPercent)
+    #region SDK Init
+
+    private void SdkInitializationCompletedEvent(LevelPlayConfiguration config)
+    {
+        Debug.Log($"[AdsManager] SDK initialized");
+
+        EnableAds();
+        LoadBanner();
+    }
+
+    private void SdkInitializationFailedEvent(LevelPlayInitError error)
+    {
+        Debug.LogError($"[AdsManager] SDK init failed: {error}");
+    }
+
+    #endregion
+
+    #region Enable Ads
+
+    private void EnableAds()
+    {
+        LevelPlay.OnImpressionDataReady += ImpressionDataReadyEvent;
+
+        // ---------- Rewarded ----------
+        RewardedVideoAd = new LevelPlayRewardedAd(AdConfig.RewardedVideoAdUnitId);
+
+        RewardedVideoAd.OnAdLoaded += RewardedVideoOnLoadedEvent;
+        RewardedVideoAd.OnAdLoadFailed += RewardedVideoOnAdLoadFailedEvent;
+        RewardedVideoAd.OnAdDisplayed += RewardedVideoOnAdDisplayedEvent;
+        RewardedVideoAd.OnAdDisplayFailed += RewardedVideoOnAdDisplayedFailedEvent;
+        RewardedVideoAd.OnAdRewarded += RewardedVideoOnAdRewardedEvent;
+        RewardedVideoAd.OnAdClicked += RewardedVideoOnAdClickedEvent;
+        RewardedVideoAd.OnAdClosed += RewardedVideoOnAdClosedEvent;
+
+        RewardedVideoAd.LoadAd();
+
+        // ---------- Interstitial ----------
+        InterstitialAd = new LevelPlayInterstitialAd(AdConfig.InterstitalAdUnitId);
+
+        InterstitialAd.OnAdLoaded += InterstitialOnAdLoadedEvent;
+        InterstitialAd.OnAdLoadFailed += InterstitialOnAdLoadFailedEvent;
+        InterstitialAd.OnAdDisplayed += InterstitialOnAdDisplayedEvent;
+        InterstitialAd.OnAdDisplayFailed += InterstitialOnAdDisplayFailedEvent;
+        InterstitialAd.OnAdClosed += InterstitialOnAdClosedEvent;
+
+        InterstitialAd.LoadAd();
+    }
+
+    #endregion
+
+    #region Banner
+
+    private void LoadBanner()
     {
         var configBuilder = new LevelPlayBannerAd.Config.Builder();
-        Vector2Int pannelSize = new Vector2Int(Screen.width, (int)(Screen.height * (heightPercent / 100f)));
-        LevelPlayAdSize adSize = LevelPlayAdSize.CreateCustomBannerSize(pannelSize.x, pannelSize.y);
-        configBuilder.SetSize(adSize);
+
+        configBuilder.SetSize(LevelPlayAdSize.BANNER);
         configBuilder.SetPosition(LevelPlayBannerPosition.TopCenter);
         configBuilder.SetDisplayOnLoad(true);
-        configBuilder.SetRespectSafeArea(true); // Only relevant for Android
-        //configBuilder.SetPlacementName("bannerPlacement");
-        //configBuilder.SetBidFloor(1.0); // Minimum bid price in USD
-        var bannerConfig = configBuilder.Build();
+        configBuilder.SetRespectSafeArea(true);
 
-        BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId, bannerConfig);
+        BannerAd = new LevelPlayBannerAd(
+            AdConfig.BannerAdUnitId,
+            configBuilder.Build()
+        );
+
+        BannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
+        BannerAd.OnAdLoadFailed += BannerOnAdLoadFailedEvent;
+
         BannerAd.LoadAd();
     }
 
-
-    void EnableAds()
+    private int GetBannerHeightPx()
     {
-        // Register to ImpressionDataReadyEvent
-        LevelPlay.OnImpressionDataReady += ImpressionDataReadyEvent;
-
-        // Create Rewarded Video object
-        RewardedVideoAd = new LevelPlayRewardedAd(AdConfig.RewardedVideoAdUnitId);
-
-        // Register to Rewarded Video events
-        //RewardedVideoAd.OnAdLoaded += RewardedVideoOnLoadedEvent;
-        //RewardedVideoAd.OnAdLoadFailed += RewardedVideoOnAdLoadFailedEvent;
-        //RewardedVideoAd.OnAdDisplayed += RewardedVideoOnAdDisplayedEvent;
-        //RewardedVideoAd.OnAdDisplayFailed += RewardedVideoOnAdDisplayedFailedEvent;
-        //RewardedVideoAd.OnAdRewarded += RewardedVideoOnAdRewardedEvent;
-        //RewardedVideoAd.OnAdClicked += RewardedVideoOnAdClickedEvent;
-        //RewardedVideoAd.OnAdClosed += RewardedVideoOnAdClosedEvent;
-        //RewardedVideoAd.OnAdInfoChanged += RewardedVideoOnAdInfoChangedEvent;
-
-        //// Create Banner object
-        //BannerAd = new LevelPlayBannerAd(AdConfig.BannerAdUnitId);
-
-        //// Register to Banner events
-        //BannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
-        //BannerAd.OnAdLoadFailed += BannerOnAdLoadFailedEvent;
-        //BannerAd.OnAdDisplayed += BannerOnAdDisplayedEvent;
-        //BannerAd.OnAdDisplayFailed += BannerOnAdDisplayFailedEvent;
-        //BannerAd.OnAdClicked += BannerOnAdClickedEvent;
-        //BannerAd.OnAdCollapsed += BannerOnAdCollapsedEvent;
-        //BannerAd.OnAdLeftApplication += BannerOnAdLeftApplicationEvent;
-        //BannerAd.OnAdExpanded += BannerOnAdExpandedEvent;
-
-        //// Create Interstitial object
-        //InterstitialAd = new LevelPlayInterstitialAd(AdConfig.InterstitalAdUnitId);
-
-        //// Register to Interstitial events
-        //InterstitialAd.OnAdLoaded += InterstitialOnAdLoadedEvent;
-        //InterstitialAd.OnAdLoadFailed += InterstitialOnAdLoadFailedEvent;
-        //InterstitialAd.OnAdDisplayed += InterstitialOnAdDisplayedEvent;
-        //InterstitialAd.OnAdDisplayFailed += InterstitialOnAdDisplayFailedEvent;
-        //InterstitialAd.OnAdClicked += InterstitialOnAdClickedEvent;
-        //InterstitialAd.OnAdClosed += InterstitialOnAdClosedEvent;
-        //InterstitialAd.OnAdInfoChanged += InterstitialOnAdInfoChangedEvent;
+        const float bannerDp = 50f; // Standard banner
+        return Mathf.RoundToInt(bannerDp * (Screen.dpi / 160f));
     }
 
-    void SdkInitializationCompletedEvent(LevelPlayConfiguration config)
+    #endregion
+
+    #region Banner Callbacks
+
+    private void BannerOnAdLoadedEvent(LevelPlayAdInfo adInfo)
     {
-        Debug.Log($"[LevelPlaySample] Received SdkInitializationCompletedEvent with Config: {config}");
-        EnableAds();
-        isAdsEnabled = true;
+        CurrentBannerHeightPx = GetBannerHeightPx();
+
+        ApplyBannerAreaSize();
+        OnBannerHeightChanged?.Invoke(CurrentBannerHeightPx);
+
+        Debug.Log($"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)");
     }
 
-    void SdkInitializationFailedEvent(LevelPlayInitError error)
+    private void BannerOnAdLoadFailedEvent(LevelPlayAdError error)
     {
-        Debug.Log($"[LevelPlaySample] Received SdkInitializationFailedEvent with Error: {error}");
+        CurrentBannerHeightPx = 0;
+
+        ApplyBannerAreaSize();
+        OnBannerHeightChanged?.Invoke(0);
+
+        Debug.LogWarning($"[AdsManager] Banner failed to load");
     }
 
-    void RewardedVideoOnLoadedEvent(LevelPlayAdInfo adInfo)
+    private void ApplyBannerAreaSize()
     {
-        Debug.Log($"[LevelPlaySample] Received RewardedVideoOnLoadedEvent With AdInfo: {adInfo}");
+        if (adsArea == null)
+            return;
+
+        adsArea.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Vertical,
+            CurrentBannerHeightPx
+        );
     }
 
-    void RewardedVideoOnAdLoadFailedEvent(LevelPlayAdError error)
-    {
-        Debug.Log($"[LevelPlaySample] Received RewardedVideoOnAdLoadFailedEvent With Error: {error}");
-    }
+    #endregion
 
-    void RewardedVideoOnAdDisplayedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received RewardedVideoOnAdDisplayedEvent With AdInfo: {adInfo}");
-    }
+    #region Rewarded Callbacks
 
-    void RewardedVideoOnAdDisplayedFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error)
-    {
-        Debug.Log($"[LevelPlaySample] Received RewardedVideoOnAdDisplayedFailedEvent With AdInfo: {adInfo} and Error: {error}");
-    }
+    void RewardedVideoOnLoadedEvent(LevelPlayAdInfo adInfo) { }
+    void RewardedVideoOnAdLoadFailedEvent(LevelPlayAdError error) { }
+    void RewardedVideoOnAdDisplayedEvent(LevelPlayAdInfo adInfo) { }
+    void RewardedVideoOnAdDisplayedFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error) { }
+    void RewardedVideoOnAdRewardedEvent(LevelPlayAdInfo adInfo, LevelPlayReward reward) { }
+    void RewardedVideoOnAdClickedEvent(LevelPlayAdInfo adInfo) { }
+    void RewardedVideoOnAdClosedEvent(LevelPlayAdInfo adInfo) { }
 
-    void RewardedVideoOnAdRewardedEvent(LevelPlayAdInfo adInfo, LevelPlayReward reward)
-    {
-        Debug.Log($"[LevelPlaySample] Received RewardedVideoOnAdRewardedEvent With AdInfo: {adInfo} and Reward: {reward}");
-    }
+    #endregion
 
-    void RewardedVideoOnAdClickedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received RewardedVideoOnAdClickedEvent With AdInfo: {adInfo}");
-    }
+    #region Interstitial Callbacks
 
-    void RewardedVideoOnAdClosedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received RewardedVideoOnAdClosedEvent With AdInfo: {adInfo}");
-    }
-
-    void RewardedVideoOnAdInfoChangedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received RewardedVideoOnAdInfoChangedEvent With AdInfo {adInfo}");
-    }
-
-    void InterstitialOnAdLoadedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received InterstitialOnAdLoadedEvent With AdInfo: {adInfo}");
-    }
-
-    void InterstitialOnAdLoadFailedEvent(LevelPlayAdError error)
-    {
-        Debug.Log($"[LevelPlaySample] Received InterstitialOnAdLoadFailedEvent With Error: {error}");
-    }
-
-    void InterstitialOnAdDisplayedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received InterstitialOnAdDisplayedEvent With AdInfo: {adInfo}");
-    }
-
-    void InterstitialOnAdDisplayFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error)
-    {
-        Debug.Log($"[LevelPlaySample] Received InterstitialOnAdDisplayFailedEvent With AdInfo: {adInfo} and Error: {error}");
-    }
-
-    void InterstitialOnAdClickedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received InterstitialOnAdClickedEvent With AdInfo: {adInfo}");
-    }
+    void InterstitialOnAdLoadedEvent(LevelPlayAdInfo adInfo) { }
+    void InterstitialOnAdLoadFailedEvent(LevelPlayAdError error) { }
+    void InterstitialOnAdDisplayedEvent(LevelPlayAdInfo adInfo) { }
+    void InterstitialOnAdDisplayFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error) { }
 
     void InterstitialOnAdClosedEvent(LevelPlayAdInfo adInfo)
     {
-        Debug.Log($"[LevelPlaySample] Received InterstitialOnAdClosedEvent With AdInfo: {adInfo}");
+        InterstitialAd.LoadAd();
     }
 
-    void InterstitialOnAdInfoChangedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received InterstitialOnAdInfoChangedEvent With AdInfo: {adInfo}");
-    }
+    #endregion
 
-    void BannerOnAdLoadedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received BannerOnAdLoadedEvent With AdInfo: {adInfo}");
-    }
-
-    void BannerOnAdLoadFailedEvent(LevelPlayAdError error)
-    {
-        Debug.Log($"[LevelPlaySample] Received BannerOnAdLoadFailedEvent With Error: {error}");
-    }
-
-    void BannerOnAdClickedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received BannerOnAdClickedEvent With AdInfo: {adInfo}");
-    }
-
-    void BannerOnAdDisplayedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received BannerOnAdDisplayedEvent With AdInfo: {adInfo}");
-    }
-
-    void BannerOnAdDisplayFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error)
-    {
-        Debug.Log($"[LevelPlaySample] Received BannerOnAdDisplayFailedEvent With AdInfo: {adInfo} and Error: {error}");
-    }
-
-    void BannerOnAdCollapsedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received BannerOnAdCollapsedEvent With AdInfo: {adInfo}");
-    }
-
-    void BannerOnAdLeftApplicationEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received BannerOnAdLeftApplicationEvent With AdInfo: {adInfo}");
-    }
-
-    void BannerOnAdExpandedEvent(LevelPlayAdInfo adInfo)
-    {
-        Debug.Log($"[LevelPlaySample] Received BannerOnAdExpandedEvent With AdInfo: {adInfo}");
-    }
-
-    void ImpressionDataReadyEvent(LevelPlayImpressionData impressionData)
-    {
-        Debug.Log($"[LevelPlaySample] Received ImpressionDataReadyEvent ToString(): {impressionData}");
-        Debug.Log($"[LevelPlaySample] Received ImpressionDataReadyEvent allData: {impressionData.AllData}");
-    }
+    private void ImpressionDataReadyEvent(LevelPlayImpressionData impressionData) { }
 
     private void OnDisable()
     {

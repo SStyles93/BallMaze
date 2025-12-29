@@ -96,7 +96,7 @@ MonoBehaviour:
       m_Width: 1024
       m_Height: 1024
       m_HorizontalBearingX: -0
-      m_HorizontalBearingY: 1024
+      m_HorizontalBearingY: 790
       m_HorizontalAdvance: 1024
     m_GlyphRect:
       m_X: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
       m_Width: 1024
       m_Height: 1024
       m_HorizontalBearingX: -0
-      m_HorizontalBearingY: 1024
+      m_HorizontalBearingY: 790
       m_HorizontalAdvance: 1024
     m_GlyphRect:
       m_X: 1024

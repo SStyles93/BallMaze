@@ -278,8 +278,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: BUY ?
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0b9a94f59b1cfdc408cec57dd7b076ee, type: 2}
-  m_sharedMaterial: {fileID: -1296612248654450652, guid: 0b9a94f59b1cfdc408cec57dd7b076ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 00bf1b5006ad71144b79379a7f1e2d18, type: 2}
+  m_sharedMaterial: {fileID: 5836008013621343584, guid: 00bf1b5006ad71144b79379a7f1e2d18, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -585,7 +585,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9121871916675446333}
-  m_Mesh: {fileID: -3580902997708593619, guid: e7a31015259378e43a0efb7ecd87defe, type: 3}
+  m_Mesh: {fileID: 2045381858856265635, guid: fb0dc162d906bc442b3c4f486c342d04, type: 3}
 --- !u!23 &2409869961202904356
 MeshRenderer:
   m_ObjectHideFlags: 0
