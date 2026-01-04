@@ -25,12 +25,11 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _EMISSION
   - _ENVIRONMENTREFLECTIONS_OFF
   - _RECEIVE_SHADOWS_OFF
   - _SPECULARHIGHLIGHTS_OFF
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -133,9 +132,9 @@ Material:
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.990566, g: 0.70913756, b: 0.13550198, a: 1}
-    - _Color: {r: 0.99056596, g: 0.70913756, b: 0.13550195, a: 1}
-    - _EmissionColor: {r: 2.1185474, g: 1.1738764, b: 0.16988353, a: 1}
+    - _BaseColor: {r: 1, g: 0.8392157, b: 0.039215688, a: 1}
+    - _Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 1}
+    - _EmissionColor: {r: 1, g: 0.67244333, b: 0.00303527, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

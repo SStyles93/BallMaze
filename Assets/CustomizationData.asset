@@ -12,91 +12,154 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8ab3b68e8ce4c4292323bcb2d002b0, type: 3}
   m_Name: CustomizationData
   m_EditorClassIdentifier: Assembly-CSharp::CustomizationData_SO
-  materials:
+  skins:
   - isLocked: 0
     price:
       CoinType: 0
       Amount: 0
-    material: {fileID: 2100000, guid: fffa77d3caab66a47988762de62a9d51, type: 2}
-    sprite: {fileID: 21300000, guid: 8302d2a16f6a5494e963483444e8f41b, type: 3}
+    name: 
+    skin: {fileID: 2043128687369127624, guid: eda84d7c4fdf24042a2db3ec85cc0ed1, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
   - isLocked: 0
     price:
       CoinType: 0
       Amount: 0
-    material: {fileID: 2100000, guid: b04528b585c20e840ab1e704b212ee2c, type: 2}
-    sprite: {fileID: 21300000, guid: d366c5da8dbe6094480da901c2bb1e5d, type: 3}
-  - isLocked: 1
+    name: 
+    skin: {fileID: 2043128687369127624, guid: d21b3a85df215eb4b9fda965208772be, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
     price:
       CoinType: 0
-      Amount: 100
-    material: {fileID: 2100000, guid: b7062c465af3e3c45804c739f82b2a19, type: 2}
-    sprite: {fileID: 21300000, guid: 545acbf02d66cb14a85ab086cdf7544a, type: 3}
-  - isLocked: 1
-    price:
-      CoinType: 1
-      Amount: 10
-    material: {fileID: 2100000, guid: 9a33912de08bc5343985758dc0eaa9a7, type: 2}
-    sprite: {fileID: 21300000, guid: 4e6a6b0e0b559c94fa0f0b4d28506e8a, type: 3}
-  - isLocked: 1
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: d83722138f8a56f40a5e0c546599325d, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
     price:
       CoinType: 0
-      Amount: 200
-    material: {fileID: 2100000, guid: 1c96e7fda94e2a648afe853a9d2bb995, type: 2}
-    sprite: {fileID: 21300000, guid: 746e0dc16f2574e41bf925bc950effbe, type: 3}
-  - isLocked: 1
-    price:
-      CoinType: 1
-      Amount: 12
-    material: {fileID: 2100000, guid: 41ae231139cc07f458258948079693b4, type: 2}
-    sprite: {fileID: 21300000, guid: 2bdcd783ea3d0484a91b46f1f0d632f8, type: 3}
-  - isLocked: 1
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: fa9f3653a2061254993cfc6ecda3ab89, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
     price:
       CoinType: 0
-      Amount: 300
-    material: {fileID: 2100000, guid: 3d2776ad8bf9b694bb91e37a6e3350d2, type: 2}
-    sprite: {fileID: 21300000, guid: a1804dce8c6e49b4fb214153d5ebc218, type: 3}
-  - isLocked: 1
-    price:
-      CoinType: 1
-      Amount: 15
-    material: {fileID: 2100000, guid: 32a7f25df68b7a045bc159c3be07d7ff, type: 2}
-    sprite: {fileID: 21300000, guid: 42bc0d3d47dc4a6489379e3b8efcf435, type: 3}
-  - isLocked: 1
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: 541225d60f0edff49b5fb636c10abe01, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
     price:
       CoinType: 0
-      Amount: 400
-    material: {fileID: 2100000, guid: 2cb07259c129b9544b1ff0a43f0f6f71, type: 2}
-    sprite: {fileID: 21300000, guid: 25d4fa89d8becc04ea7b044cddee91a0, type: 3}
-  - isLocked: 1
-    price:
-      CoinType: 1
-      Amount: 18
-    material: {fileID: 2100000, guid: d81ccbb8958d7334e82ac15ad038f6fe, type: 2}
-    sprite: {fileID: 21300000, guid: 6d330d62bf2f42041a4cb27742741a84, type: 3}
-  - isLocked: 1
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: cbb052dcfe9ffbf488d309a3575af8ae, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
     price:
       CoinType: 0
-      Amount: 600
-    material: {fileID: 2100000, guid: af3b57d23c7f2d747bf06afc55532396, type: 2}
-    sprite: {fileID: 21300000, guid: df23db28db3d4bc4092cb39f9fd2090f, type: 3}
-  - isLocked: 1
-    price:
-      CoinType: 1
-      Amount: 21
-    material: {fileID: 2100000, guid: 577bc812fa6e8d44a80ff8d8bb2cd520, type: 2}
-    sprite: {fileID: 21300000, guid: b503421c6e115e9428c432e096ccfde3, type: 3}
-  - isLocked: 1
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: 1c47343c42155c64b89e3f706ebe0257, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
     price:
       CoinType: 0
-      Amount: 900
-    material: {fileID: 2100000, guid: 538055a2f73ae4740ac439a5d80ef578, type: 2}
-    sprite: {fileID: 21300000, guid: 37680af64d719e74089f299adbe321f8, type: 3}
-  - isLocked: 1
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: b831549669affcc4ba9dc90c88308208, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
     price:
-      CoinType: 1
-      Amount: 24
-    material: {fileID: 2100000, guid: e01d898cf95fdd940ba825baab1df72a, type: 2}
-    sprite: {fileID: 21300000, guid: 4a727636854f65e4e9e050cd318b2fc7, type: 3}
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: 77470115b69fc784fbf3b15fa0dec1ae, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: 0d3bac3db411ca845a54c116667d7d71, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: dd53999c4847b7241b17ecc46f9c5333, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: e8611e3df30400148a7e1d495f943f97, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: f308da9c10d735546ad7030414f1b1e9, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 2043128687369127624, guid: 453819fc6430f1946bbc18ff77397a86, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 6602769584495123945, guid: 17193aa03fad9cc4ab4dbe9c0ec27f89, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 6602769584495123945, guid: 3ab2a445f8a04a742b9c3597e3203a6b, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 5664766208951650563, guid: bd89542a5b40466489db9637c417d581, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 7970386201335555324, guid: 3056c4d5511e7934fbf7c1831e78940a, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 1932357125071815328, guid: ba381cea57b729c458832c635bf98f63, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 8969567062033464987, guid: ab2d239ca368154419aacc206805f706, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 890731879874981919, guid: bf74bcf6fb748464d80e91e6078d836c, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
   colors:
   - isLocked: 0
     price:
@@ -104,145 +167,145 @@ MonoBehaviour:
       Amount: 0
     name: NONE
     color: {r: 0, g: 0, b: 0, a: 0}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 1, g: 0.81960785, b: 0.8627451, a: 1}
-  - isLocked: 1
+    color: {r: 1, g: 0.7660377, b: 0.81617254, a: 0}
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 0.65882355, g: 0.9019608, b: 0.8117647, a: 1}
-  - isLocked: 1
+    color: {r: 0.7169812, g: 1, b: 0.899574, a: 0}
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 30
     name: 
     color: {r: 1, g: 0.9098039, b: 0.6313726, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 30
     name: 
     color: {r: 0.7019608, g: 0.8175039, b: 1, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 60
     name: 
     color: {r: 1, g: 0, b: 0.36078432, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 60
     name: 
     color: {r: 0, g: 1, b: 0.68235296, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 60
     name: 
     color: {r: 1, g: 0.6666667, b: 0, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 60
     name: 
     color: {r: 0.54901963, g: 0, b: 1, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 60
     name: 
     color: {r: 0, g: 1, b: 0.96862745, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 60
     name: 
     color: {r: 1, g: 0.84313726, b: 0, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 1, g: 0.43529412, b: 0.8117647, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 0.74509805, g: 0.15686275, b: 0.101960786, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 0, g: 1, b: 0.78431374, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 1, g: 0.23921569, b: 0, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 0.22352941, g: 1, b: 0.078431375, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 0, g: 1, b: 1, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 0.70980394, g: 0, b: 1, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 90
     name: 
     color: {r: 1, g: 1, b: 0.24705882, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 1
       Amount: 10
     name: 
     color: {r: 1, g: 0.8509804, b: 0.4, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 1
       Amount: 12
     name: 
     color: {r: 0.95686275, g: 0.96862745, b: 1, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 120
     name: 
     color: {r: 0, g: 1, b: 0.6156863, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 0
       Amount: 120
     name: 
     color: {r: 1, g: 0.36078432, b: 0.23137255, a: 1}
-  - isLocked: 1
+  - isLocked: 0
     price:
       CoinType: 1
       Amount: 50

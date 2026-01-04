@@ -24,7 +24,7 @@ public class PlayerCustomization : MonoBehaviour
 
     private void Awake()
     {
-        m_meshRenderer ??= GetComponent<MeshRenderer>();
+        //m_meshRenderer ??= GetComponent<MeshRenderer>();
     }
 
     void Start()
@@ -37,14 +37,12 @@ public class PlayerCustomization : MonoBehaviour
     /// </summary>
     public void UpdateAppearence()
     {
-        // Assigne the saved material - Skin
-        // Clear Visuals
-        //Instantiate new visuals.
-        //m_meshRenderer.material = playerSkinData_SO.playerSkin;
+        // Clear, Create the saved skin
+        UpdateVisual(playerSkinData_SO.playerSkin);
 
         // if idx is 0 assign material colour
         if (playerSkinData_SO.playerColorIndex == 0)
-            m_meshRenderer.material.color = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().material.color;
+            m_meshRenderer.material.color = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color;
         // Otherwise assign selected colour
         else
             m_meshRenderer.material.color = playerSkinData_SO.playerColor;
@@ -65,9 +63,7 @@ public class PlayerCustomization : MonoBehaviour
                 break;
 
             case SkinOption skinOpt:
-                //Clear Visu.
-                //Instantiate Visu.
-                //m_meshRenderer.material = skinOpt.skin;
+                UpdateVisual(skinOpt.skin);
                 break;
         }
     }
@@ -87,9 +83,10 @@ public class PlayerCustomization : MonoBehaviour
                 break;
 
             case SkinOption skinOpt:
+                UpdateVisual(skinOpt.skin);
                 AssignSkin(skinOpt.skin);
                 AssignMaterialIndex(index);
-                AssignColor(skinOpt.skin.GetComponent<MeshRenderer>().material.color);
+                AssignColor(skinOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color);
                 AssignColorIndex(0);
                 break;
         }
@@ -100,7 +97,7 @@ public class PlayerCustomization : MonoBehaviour
     /// </summary>
     public void AssignOriginalColor()
     {
-        playerSkinData_SO.playerColor = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().material.color;
+        playerSkinData_SO.playerColor = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color;
         playerSkinData_SO.playerColorIndex = 0;
         UpdateAppearence();
     }
@@ -127,11 +124,18 @@ public class PlayerCustomization : MonoBehaviour
         playerSkinData_SO.playerSkinIndex = index;
     }
 
+    private void UpdateVisual(GameObject skinPrefab)
+    {
+        ClearVisualContainer();
+        GameObject newVisual = Instantiate(skinPrefab, m_visualContainer.transform);
+        m_meshRenderer = newVisual.GetComponent<MeshRenderer>();
+    }
+
     private void ClearVisualContainer()
     {
         foreach(Transform child in m_visualContainer.GetComponentInChildren<Transform>())
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
     }
 }
