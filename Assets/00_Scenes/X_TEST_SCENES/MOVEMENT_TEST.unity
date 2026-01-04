@@ -3051,19 +3051,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 569871771093822925, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.90241754
       objectReference: {fileID: 0}
     - target: {fileID: 569871771093822925, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 569871771093822925, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 569871771093822925, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.43086267
       objectReference: {fileID: 0}
     - target: {fileID: 569871771093822925, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3075,12 +3075,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 569871771093822925, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -51.045
       objectReference: {fileID: 0}
     - target: {fileID: 976364394071838964, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: m_Name
       value: Sphere
       objectReference: {fileID: 0}
+    - target: {fileID: 5282394038517741061, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c61d796695deb144d9e6cf77ec047892, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3619,7 +3623,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168715953}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
