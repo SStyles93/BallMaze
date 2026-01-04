@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float fallThreashold = -5.0f;
 
     [SerializeField] private bool isGrounded = false;
+    [SerializeField] private bool wasJumpPerfromed = false;
     [SerializeField] private Vector3 movementValue;
 
     public float FallThreashold => fallThreashold;
@@ -65,6 +66,16 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        int collisionLayer = collision.collider.gameObject.layer;
+        if ((1 << collisionLayer & groundedLayerMask) != 0 && wasJumpPerfromed)
+        {
+            wasJumpPerfromed = false;
+            AudioManager.Instance?.PlayThumpSound();
+        }
+    }
+
     /// <summary>
     /// Does what it says with Phisics Raycast
     /// </summary>
@@ -100,6 +111,7 @@ public class PlayerMovement : MonoBehaviour
         //Debug.Log($"Force Applied up with {jumpForce} force, and {movementForceMode.ToString()}");
         VibrationManager.Instance?.Pop();
         AudioManager.Instance?.PlayJumpSound();
+        wasJumpPerfromed = true;
     }
 
     /// <summary>

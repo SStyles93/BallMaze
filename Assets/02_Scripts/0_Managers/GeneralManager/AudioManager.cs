@@ -19,6 +19,7 @@ public class AudioManager : MonoBehaviour
     [Header("Player SFX")]
     [SerializeField] private AudioClip rollingClip;
     [SerializeField] private AudioClip jumpClip;
+    [SerializeField] private AudioClip thumpClip;
     [SerializeField] private AudioClip clickClip;
     [SerializeField] private AudioClip validateClip;
 
@@ -109,6 +110,12 @@ public class AudioManager : MonoBehaviour
     {
         playerSfxAudioSource.pitch = 2.0f;
         PlayPlayerSound(jumpClip);
+    }
+
+    public void PlayThumpSound()
+    {
+        playerSfxAudioSource.pitch = 1.0f;
+        PlayPlayerSound(thumpClip);
     }
 
     public void PlayClickSound()

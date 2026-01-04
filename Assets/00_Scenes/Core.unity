@@ -781,6 +781,7 @@ MonoBehaviour:
   musicClip: {fileID: 8300000, guid: 02f8a67d81fd7d1448cf0b2213796b97, type: 3}
   rollingClip: {fileID: 8300000, guid: e06645a62ba918744832020ca093cb26, type: 3}
   jumpClip: {fileID: 8300000, guid: b5d138cf3c10ee345aa3b6108fdffb94, type: 3}
+  thumpClip: {fileID: 8300000, guid: ef7aa61bf0b8556448d331256e741311, type: 3}
   clickClip: {fileID: 8300000, guid: 43388645cce375a42a77c0867acc79fd, type: 3}
   validateClip: {fileID: 8300000, guid: e7782d87603539140b19b1940d0abad7, type: 3}
   starClip: {fileID: 8300000, guid: c4850539d7f313a418beb6c3ceeb7c5c, type: 3}
@@ -1486,7 +1487,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 2624485987641308137, guid: c682e0716e7d1a44dbfb4894c9308383, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 26a6d1dcb9e3fed49a315e3c0b377a3e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
