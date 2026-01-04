@@ -35,7 +35,7 @@ public class PlayerData : SaveableData
     public int stars;
     public int hearts;
     public int colorIndex;
-    public int materialIndex;
+    public int skinIndex;
 }
 
 /// <summary>
@@ -45,7 +45,7 @@ public class PlayerData : SaveableData
 public class SkinShopData : SaveableData
 {
     public List<bool> colorsLockedState;
-    public List<bool> materialsLockedState;
+    public List<bool> skinsLockedState;
 }
 
 /// <summary>

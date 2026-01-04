@@ -68,9 +68,9 @@ public class CustomizationManager : MonoBehaviour
         {
             customizationData_SO.colors[optionIndex].isLocked = false;
         }
-        if(option is MaterialOption matOption)
+        if(option is SkinOption matOption)
         {
-            customizationData_SO.materials[optionIndex].isLocked = false;
+            customizationData_SO.skins[optionIndex].isLocked = false;
         }
         currentSlot.Unlock();
     }
@@ -88,10 +88,10 @@ public class CustomizationManager : MonoBehaviour
                 skinData_SO.playerColorIndex = currentOptionIndex;
                 break;
 
-            case MaterialOption materialOpt:
-                skinData_SO.playerMaterial = materialOpt.material;
-                skinData_SO.playerMaterialIndex = currentOptionIndex;
-                skinData_SO.playerColor = materialOpt.material.color;
+            case SkinOption materialOpt:
+                skinData_SO.playerSkin = materialOpt.skin;
+                skinData_SO.playerSkinIndex = currentOptionIndex;
+                skinData_SO.playerColor = materialOpt.skin.GetComponent<MeshRenderer>().material.color;
                 skinData_SO.playerColorIndex = 0;
                 break;
 

@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 public class MaterialSlot : CustomizationSlot
 {
-    public MaterialOption skinData;
+    public SkinOption skinData;
 
     /// <summary>
     /// Initializes the Material Slot with it's options, index and a ref to the playerCustomization
@@ -11,7 +11,7 @@ public class MaterialSlot : CustomizationSlot
     /// <param name="option">The MaterialOption passed</param>
     /// <param name="optionIndex">The index of the material</param>
     /// <param name="playerCustomization">Ref to the PlayerCustomization script</param>
-    public void InitializeMaterialSlot(MaterialOption option, int optionIndex, PlayerCustomization playerCustomization)
+    public void InitializeMaterialSlot(SkinOption option, int optionIndex, PlayerCustomization playerCustomization)
     {
         InitializeSlot(option, optionIndex, playerCustomization);
 

@@ -149,7 +149,7 @@ public class SavingManager : MonoBehaviour
             return;
         }
         playerSaveData.colorIndex = shopManager.skinData_SO.playerColorIndex;
-        playerSaveData.materialIndex = shopManager.skinData_SO.playerMaterialIndex;
+        playerSaveData.skinIndex = shopManager.skinData_SO.playerSkinIndex;
 
 
         // --- SAVING ---
@@ -199,7 +199,7 @@ public class SavingManager : MonoBehaviour
         SkinShopData shopData = new SkinShopData
         {
             colorsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length),
-            materialsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length)
+            skinsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length)
         };
 
         // Save colors state (un-locked)
@@ -209,9 +209,9 @@ public class SavingManager : MonoBehaviour
         }
 
         // Save materials state (un-locked)
-        foreach (var materialOption in currentDataSO.materials)
+        foreach (var materialOption in currentDataSO.skins)
         {
-            shopData.materialsLockedState.Add(materialOption.isLocked);
+            shopData.skinsLockedState.Add(materialOption.isLocked);
         }
 
         currentSkinData = shopData;
@@ -333,7 +333,7 @@ public class SavingManager : MonoBehaviour
                 stars = 0,
                 hearts = CoinManager.Instance.InitialHeartAmount,
                 colorIndex = 0,
-                materialIndex = 0,
+                skinIndex = 0,
 
             };
             //Debug.Log("Current Session Data does not exist, creating new PlayerData");
@@ -363,9 +363,9 @@ public class SavingManager : MonoBehaviour
             return;
         }
         shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentPlayerData.colorIndex].color;
-        shopManager.skinData_SO.playerMaterial = shopManager.customizationData_SO.materials[currentPlayerData.materialIndex].material;
+        shopManager.skinData_SO.playerSkin = shopManager.customizationData_SO.skins[currentPlayerData.skinIndex].skin;
         shopManager.skinData_SO.playerColorIndex = currentPlayerData.colorIndex;
-        shopManager.skinData_SO.playerMaterialIndex = currentPlayerData.materialIndex;
+        shopManager.skinData_SO.playerSkinIndex = currentPlayerData.skinIndex;
     }
 
     /// <summary>
@@ -424,10 +424,10 @@ public class SavingManager : MonoBehaviour
         }
 
         // Restore materials state (un-locked)
-        for (int i = 0; i < dataSO.materials.Count(); i++)
+        for (int i = 0; i < dataSO.skins.Count(); i++)
         {
-            if (i < currentSkinData.materialsLockedState.Count)
-                dataSO.materials[i].isLocked = currentSkinData.materialsLockedState[i];
+            if (i < currentSkinData.skinsLockedState.Count)
+                dataSO.skins[i].isLocked = currentSkinData.skinsLockedState[i];
         }
     }
 

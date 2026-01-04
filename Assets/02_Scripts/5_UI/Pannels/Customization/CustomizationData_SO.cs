@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CustomizationData", menuName = "Customization/CustomizationData")]
 public class CustomizationData_SO : ScriptableObject
 {
-    public MaterialOption[] materials;
+    public SkinOption[] skins;
     public ColorOption[] colors;
 }
 
@@ -12,19 +12,19 @@ public class CustomizationOption
 {
     public bool isLocked;
     public CoinQuantityPair price;
+    public string name;
 }
 
 [System.Serializable]
-public class MaterialOption : CustomizationOption
+public class SkinOption : CustomizationOption
 {
-    public Material material;
+    public GameObject skin;
     public Sprite sprite;
 }
 
 [System.Serializable]
 public class ColorOption : CustomizationOption
 {
-    public string name;
     public Color color;
 }
 
@@ -39,9 +39,9 @@ public class CustomizationData_SO_CustomInspectior : Editor
 
         if (GUILayout.Button("Reset Data"))
         {
-            for (int i = 1; i < _target.materials.Length; i++)
+            for (int i = 1; i < _target.skins.Length; i++)
             {
-                _target.materials[i].isLocked = true;
+                _target.skins[i].isLocked = true;
             }
             for (int i = 1; i < _target.colors.Length; i++)
             {
@@ -55,9 +55,9 @@ public class CustomizationData_SO_CustomInspectior : Editor
 
         if (GUILayout.Button("Unlock All"))
         {
-            for (int i = 0; i < _target.materials.Length; i++)
+            for (int i = 0; i < _target.skins.Length; i++)
             {
-                _target.materials[i].isLocked = false;
+                _target.skins[i].isLocked = false;
             }
             for (int i = 0; i < _target.colors.Length; i++)
             {
