@@ -1,3 +1,5 @@
+using PxP.Draw;
+using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -7,17 +9,25 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement Settings")]
     [SerializeField] private ForceMode movementForceMode = ForceMode.Force;
-    [SerializeField] private float movementForce = 5.0f;
+    [SerializeField] private float movementForce = 1400.0f;
 
     [Header("Jump Settings")]
     [SerializeField] private ForceMode jumpForceMode = ForceMode.Impulse;
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float gravityScale = 2.0f;
     [SerializeField] float groundCheckDistance = 1.1f;
+    [SerializeField] float groundDetectionRadius = 0.35f;
     [SerializeField] LayerMask groundedLayerMask;
+
+    [Header("Fall Settings")]
+    [SerializeField] private float fallThreashold = -5.0f;
 
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private Vector3 movementValue;
+
+    public float FallThreashold => fallThreashold;
+
+    public float MovementForce { get => movementForce; set => movementForce = value; }
 
     private void OnEnable()
     {
@@ -40,13 +50,6 @@ public class PlayerMovement : MonoBehaviour
         else Debug.Log($"No Rigidbody found on {this.gameObject.name}");
     }
 
-    private void Update()
-    {
-#if UNITY_EDITOR
-        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, Color.green);
-#endif
-    }
-
     private void FixedUpdate()
     {
         UpdateFallGravity();
@@ -57,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded)
         {
             // Apply movement with force
-            playerRigidbody.AddForce(movementValue * movementForce * Time.deltaTime, movementForceMode);
+            playerRigidbody.AddForce(movementValue * MovementForce * Time.deltaTime, movementForceMode);
             //Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
         }
     }
@@ -67,10 +70,21 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private bool CheckIfPlayerIsGrounded()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, groundCheckDistance))
+        Ray ray = new Ray(transform.position, Vector3.down);
+        if (Physics.SphereCast(ray, groundDetectionRadius, groundCheckDistance, groundedLayerMask))
+        {
+#if UNITY_EDITOR
+            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.green);
+#endif
             return true;
+        }
         else
+        {
+#if UNITY_EDITOR
+            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.red);
+#endif
             return false;
+        }
     }
 
     /// <summary>
@@ -78,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     /// <remarks>Player has to be grounded</remarks>
     private void Jump()
-    { 
+    {
         // If the player is in the air we don't want a second jump
         if (!isGrounded) return;
         isGrounded = false;
@@ -153,7 +167,7 @@ public class DirectionMapper : MonoBehaviour
         verticalOut = Mathf.Round(verticalOut);
 
         // Normalize the vector
-        Vector2 snappedDirection = new Vector2(horizontalOut, verticalOut).normalized; 
+        Vector2 snappedDirection = new Vector2(horizontalOut, verticalOut).normalized;
 
         return snappedDirection;
     }

@@ -1,13 +1,14 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class VibrationManager : MonoBehaviour
 {
     public static VibrationManager Instance { get; private set; }
+    public bool IsVibrationActive => isVibrationActive;
 
     private Coroutine currentVibrationRoutine = null;
 
+    private bool isVibrationActive = true;
 
     private void Awake()
     {
@@ -26,15 +27,9 @@ public class VibrationManager : MonoBehaviour
     /// </summary>
     public void Classic()
     {
-        Vibration.Vibrate();
-    }
+        if (!isVibrationActive) return;
 
-    /// <summary>
-    /// Unique short vibration
-    /// </summary>
-    public void Pop()
-    {
-        Vibration.VibratePop();
+        Vibration.Vibrate();
     }
 
     /// <summary>
@@ -44,9 +39,26 @@ public class VibrationManager : MonoBehaviour
     /// <param name="period">time span over which the vibrations are called</param>
     public void MultiPop(int numberOfPops, float period = 0.6f)
     {
-        if(currentVibrationRoutine != null) StopCoroutine(currentVibrationRoutine);
+        if (!isVibrationActive) return;
 
-        currentVibrationRoutine = StartCoroutine(MultiPopRoutine(numberOfPops,period));
+        if (currentVibrationRoutine != null) StopCoroutine(currentVibrationRoutine);
+
+        currentVibrationRoutine = StartCoroutine(MultiPopRoutine(numberOfPops, period));
+    }
+
+    /// <summary>
+    /// Unique short vibration
+    /// </summary>
+    public void Pop()
+    {
+        if (!isVibrationActive) return;
+
+        Vibration.VibratePop();
+    }
+
+    public void SetVibrationManagerState(bool isActive)
+    {
+        this.isVibrationActive = isActive;
     }
 
     /// <summary>

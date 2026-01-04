@@ -22,12 +22,12 @@ public class CustomizationMenuManager : MonoBehaviour
     {
         SaveSession();
 
-        //SceneController.Instance
-        //    .NewTransition()
-        //    .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.MainMenu)
-        //    .Unload(SceneDatabase.Scenes.CustomizationMenu)
-        //    .WithOverlay()
-        //    .Perform();
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.ShopMenu)
+            .Unload(SceneDatabase.Scenes.CustomizationMenu)
+            .WithOverlay()
+            .Perform();
     }
 
     public void SaveSession()

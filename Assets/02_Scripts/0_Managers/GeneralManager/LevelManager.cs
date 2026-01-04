@@ -1,12 +1,15 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
     public Dictionary<int, LevelData> LevelDataDictionnary = new Dictionary<int, LevelData>();
-    [SerializeField] private PcgData_SO pcgData;
-    [SerializeField] private GenerationParamameters_SO generationParamameters;
+    [SerializeField] GeneratorParameters_SO GeneratorParameters;
+    [SerializeField] LevelDatabase_SO LevelDatabase;
+    [SerializeField] int initialCoinAmount = 30;
+    private TileType[,] currentGrid;
+
 
     private LevelData currentLevelData = null;
     private int currentStarCount = 0;
@@ -15,14 +18,16 @@ public class LevelManager : MonoBehaviour
     private int previousNumberOfStarts = 0;
     private bool wasGamePreviouslyFinished = false;
 
+    public event Action<int> OnStarCountChanged;
 
     #region Singleton
     public static LevelManager Instance { get; private set; }
     public int CurrentLevelIndex { get => currentLevelIndex; }
     public LevelData CurrentLevelData { get => currentLevelData; }
-    public int PreviousNumberOfStars  => previousNumberOfStarts;
+    public int PreviousNumberOfStars => previousNumberOfStarts;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount => currentStarCount;
+    public TileType[,] CurrentGrid => currentGrid;
 
     private void Awake()
     {
@@ -32,6 +37,20 @@ public class LevelManager : MonoBehaviour
 
     }
     #endregion
+    public TileType[,] GenerateAndGetCurrentLevelGrid()
+    {
+        int usedSeed;
+
+        TileType[,] grid = GenerateRuntimeLevel(
+            currentLevelIndex,
+            LevelDatabase,
+            GeneratorParameters,
+            out usedSeed
+        );
+
+        // Optional: store usedSeed somewhere if needed later
+        return grid;
+    }
 
     /// <summary>
     /// Return the Grade for a Level saved in dictionnary
@@ -40,8 +59,8 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     public int GetGradeForLevelAtIndex(int levelIndex)
     {
-        if(LevelDataDictionnary.ContainsKey(levelIndex))
-        return LevelDataDictionnary[levelIndex].numberOfStars;
+        if (LevelDataDictionnary.ContainsKey(levelIndex))
+            return LevelDataDictionnary[levelIndex].numberOfStars;
         else return 0;
     }
 
@@ -52,11 +71,6 @@ public class LevelManager : MonoBehaviour
     /// <remarks>This method will init. LevelParameters, GenerationParameters, and LevelData</remarks>
     public void InitializeLevel(int index)
     {
-        // Ensure the list is large enough. If not, generate and add parameters up to the required index.
-        FillLevelParametersUpToIndex(index);
-
-        // Now that we're sure the parameters exist at 'index', we can safely access them.
-        SetGenerationParameters(index);
 
         // If no LevelData is present, create one with initial values
         InitializeCurrentLevelData(index);
@@ -65,10 +79,16 @@ public class LevelManager : MonoBehaviour
         currentStarCount = 0;
 
         // Get the values of time and currency to earn from the SO
-        currencyToEarn = pcgData.levelParameters[index].currencyToEarn;
+        currencyToEarn = LevelDatabase.GetLevelDataAtIndex(index) == null ? initialCoinAmount : LevelDatabase.GetLevelDataAtIndex(index).coinsToEarn;
         previousNumberOfStarts = LevelDataDictionnary[index].numberOfStars;
         wasGamePreviouslyFinished = LevelDataDictionnary[index].wasLevelFinished;
+        
+        //Init level
+        currentGrid = GenerateAndGetCurrentLevelGrid();
     }
+
+
+    #region LEVEL DATA (GRADES)
 
     /// <summary>
     /// Calculates the Grade and Currency value earned in the level
@@ -77,28 +97,42 @@ public class LevelManager : MonoBehaviour
     {
         currentLevelData.wasLevelFinished = true;
 
+        // --- STARS ---
+
+        int earnedStars = currentStarCount - previousNumberOfStarts;
+        // Make sure that the amount of stars is not negative
+        // ex: previous try:3,
+        //     current 2     ->     2-3 = -1
+        if (earnedStars < 0) earnedStars = 0;
+
+        CoinManager.Instance.IncreaseCurrencyAmount(CoinType.STAR, earnedStars);
+
+        // Sets the StarCount for the level accounting for previously obtained stars
         if (currentStarCount > previousNumberOfStarts)
             currentLevelData.numberOfStars = currentStarCount;
         else
             currentStarCount = previousNumberOfStarts;
+
+
+        // --- COINS ---
 
         int currencyEarned = CalculateCurrencyEarnedFromGrade(currentStarCount);
         if (currencyEarned <= 0)
             return;
 
         // If currency earned is bigger that what is left, return what is left
-        if (currencyEarned >= currentLevelData.currencyLeftToEarn)
+        if (currencyEarned >= currentLevelData.coinsLeftToEarn)
         {
-            currencyEarned = currentLevelData.currencyLeftToEarn;
-            currentLevelData.currencyLeftToEarn = 0;
+            currencyEarned = currentLevelData.coinsLeftToEarn;
+            currentLevelData.coinsLeftToEarn = 0;
         }
         // If what is earned is lower that what is left, return what is earned and remove that amount from what is left
         else
         {
-            currentLevelData.currencyLeftToEarn -= currencyEarned;
+            currentLevelData.coinsLeftToEarn -= currencyEarned;
         }
 
-        CurrencyManager.Instance.IncreaseCurrency(currencyEarned);
+        CoinManager.Instance.IncreaseCurrencyAmount(CoinType.COIN, currencyEarned);
     }
 
     /// <summary>
@@ -116,7 +150,10 @@ public class LevelManager : MonoBehaviour
     public void IncreaseStarCount()
     {
         currentStarCount++;
+        OnStarCountChanged?.Invoke(currentStarCount);
     }
+
+    #endregion
 
     #region PRIVATE FUNCTIONS
 
@@ -135,23 +172,6 @@ public class LevelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates parameters for all levels up to the index value 
-    /// </summary>
-    /// <param name="index">target index</param>
-    private void FillLevelParametersUpToIndex(int index)
-    {
-        while (pcgData.levelParameters.Count <= index)
-        {
-            // Generate parameters for the next level in the sequence
-            int nextLevelIndex = pcgData.levelParameters.Count;
-            LevelParameters newParams = LevelParameterGenerator.GenerateParametersForLevel(nextLevelIndex);
-
-            // Add the newly generated parameters to the list
-            pcgData.levelParameters.Add(newParams);
-        }
-    }
-
-    /// <summary>
     /// Gets or Creates a LevelData container for the given index
     /// </summary>
     /// <param name="index">Index of the level</param>
@@ -162,7 +182,7 @@ public class LevelManager : MonoBehaviour
             currentLevelData = new LevelData()
             {
                 numberOfStars = 0,
-                currencyLeftToEarn = pcgData.levelParameters[index].currencyToEarn,
+                coinsLeftToEarn = initialCoinAmount,
                 wasLevelFinished = false
             };
             LevelDataDictionnary.Add(index, currentLevelData);
@@ -175,19 +195,40 @@ public class LevelManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets the Generation Parameters for the given level index
+    /// Generates a level with RuntimeLevelProgression
     /// </summary>
-    /// <param name="levelIndex">Index of the Level</param>
-    private void SetGenerationParameters(int levelIndex)
+    /// <param name="levelIndex">index of the level to generate/get</param>
+    /// <param name="database">ref to the database </param>
+    /// <param name="baseParameters">original parameters</param>
+    /// <param name="usedSeed">OUT param. has to be declared but not necessarily used...</param>
+    /// <returns>A 2D array of tiles (grid)</returns>
+    private TileType[,] GenerateRuntimeLevel(int levelIndex,
+        LevelDatabase_SO database, GeneratorParameters_SO baseParameters,
+        out int usedSeed)
     {
-        LevelParameters targetParams = pcgData.levelParameters[levelIndex];
+        // If level already exists → load it
+        LevelData_SO existing = database.GetLevelDataAtIndex(levelIndex);
+        if (existing != null)
+        {
+            usedSeed = existing.usedSeed;
+            return existing.ToGrid();
+        }
 
-        generationParamameters.Seed = targetParams.Seed;
-        generationParamameters.Spacing = targetParams.Spacing;
-        generationParamameters.PathDensity = targetParams.PathDensity;
-        generationParamameters.PathTwistiness = targetParams.PathTwistiness;
-        generationParamameters.PathWidth = targetParams.PathWidth;
-        generationParamameters.AllowBranching = targetParams.AllowBranching;
+        // Otherwise generate new parameters
+        RuntimeLevelParameters runtimeParams =
+            RuntimeLevelProgression.GetParametersForLevel(levelIndex);
+
+        // Apply to generator parameters
+        baseParameters.gridWidth = runtimeParams.width;
+        baseParameters.gridHeight = runtimeParams.height;
+        baseParameters.curvePercent = runtimeParams.curvePercent;
+        baseParameters.minStarDistance = runtimeParams.minStarDistance;
+        baseParameters.coinsToEarn = existing == null ? 30 : existing.coinsToEarn;
+
+        // Force random generation
+        baseParameters.inputSeed = -1;
+
+        return Generator.GenerateMaze(baseParameters, out usedSeed);
     }
     #endregion
 }

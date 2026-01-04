@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace PxP
+namespace PxP.BallMaze
 {
     public class Color : MonoBehaviour
     {

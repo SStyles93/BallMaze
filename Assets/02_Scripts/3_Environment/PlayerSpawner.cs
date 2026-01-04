@@ -9,11 +9,11 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        PathGeneratorManager.OnGenerationFinished += InstantiatePlayer;
+        PhysicalMazeGenerator.OnGenerationFinished += InstantiatePlayer;
     }
     private void OnDisable()
     {
-        PathGeneratorManager.OnGenerationFinished -= InstantiatePlayer;
+        PhysicalMazeGenerator.OnGenerationFinished -= InstantiatePlayer;
     }
 
     private void InstantiatePlayer()
@@ -23,7 +23,7 @@ public class PlayerSpawner : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(spawnPosition, 1.0f);
+        //Gizmos.color = Color.green;
+        //Gizmos.DrawSphere(spawnPosition, 1.0f);
     }
 }

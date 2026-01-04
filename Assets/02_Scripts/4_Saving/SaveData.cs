@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 
+public class SaveableData { }
+
 /// <summary>
-/// Data of the player (currency)
+/// Data of the Session (Game)
 /// </summary>
 [System.Serializable]
-public class PlayerData
+public class GameData : SaveableData
 {
-    public int currency;
-    public int colorIndex;
-    public int materialIndex;
+    public DateTime firstTimestamp; // Date-Time at which the game was first launched
+    public Dictionary<int, LevelData> levelsData = new Dictionary<int, LevelData>(); // The dictionary holding the kvp sceneID - LevelData
 }
 
 /// <summary>
@@ -19,29 +20,41 @@ public class PlayerData
 public class LevelData
 {
     public int numberOfStars;
-    public int currencyLeftToEarn;
+    public int coinsLeftToEarn;
     public bool wasLevelFinished = false;
+}
+
+/// <summary>
+/// Data of the player (coins, stars, hearts, colorIndex, materialIndex)
+/// </summary>
+[System.Serializable]
+public class PlayerData : SaveableData
+{
+    public DateTime lastHeartRefillTime; // Date-Time at which the game was first launched
+    public int coins;
+    public int stars;
+    public int hearts;
+    public int colorIndex;
+    public int materialIndex;
 }
 
 /// <summary>
 /// The data of the customization menu options (locked or not)
 /// </summary>
 [System.Serializable]
-public class ShopData
+public class SkinShopData : SaveableData
 {
     public List<bool> colorsLockedState;
     public List<bool> materialsLockedState;
 }
 
 /// <summary>
-/// Data of the Session (Game)
+/// The state of the settings
 /// </summary>
 [System.Serializable]
-public class GameData
+public class SettingsData : SaveableData
 {
-    public DateTime timestamp; // Date-Time at which the game was saved
-    public PlayerData playerData;
-    public Dictionary<int, LevelData> levelsData = new Dictionary<int, LevelData>(); // The dictionary holding the kvp sceneID - LevelData
-    public ShopData shopData;
-    public string lastUnlockedScene; // The current unlocked scene when saving
+    public bool isAudioOn = true;
+    public bool isMusicOn = true;
+    public bool isVibrationOn = true;
 }

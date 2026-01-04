@@ -104,3 +104,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectRotator
   m_rotationSpeed: -30
+  rotationAxis: {x: 0, y: 1, z: 0}

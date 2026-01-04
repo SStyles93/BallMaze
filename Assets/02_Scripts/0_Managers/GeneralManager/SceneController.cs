@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     // --- Singleton ---
-    
+
     #region Singleton
     public static SceneController Instance;
 
@@ -31,6 +31,17 @@ public class SceneController : MonoBehaviour
     private bool isBusy = false;
 
     // --- API ---
+
+    public bool IsGameLoaded()
+    {
+        Scene scene = SceneManager.GetSceneByName(SceneDatabase.Scenes.Game.ToString());
+
+        // Check the isLoaded property
+        if (scene.isLoaded)
+            return true;
+        return false;
+    }
+
 
     public SceneTransitionPlan NewTransition()
     {
@@ -85,14 +96,6 @@ public class SceneController : MonoBehaviour
             else
             {
                 yield return LoadAdditiveRoutine(sceneSlot, sceneName, plan.ActiveScene == sceneName);
-            }
-        }
-
-        if (plan.SaveSession)
-        {
-            if(SavingManager.Instance != null)
-            {
-                SavingManager.Instance.SaveSession();
             }
         }
 
@@ -165,7 +168,7 @@ public class SceneController : MonoBehaviour
         }
     }
 
-    
+
     // --- Transition Plan Class ---
     public class SceneTransitionPlan
     {
@@ -175,7 +178,6 @@ public class SceneController : MonoBehaviour
 
         public string ActiveScene;
         public bool ClearUnusedAssets { get; private set; } = false;
-        public bool SaveSession { get; private set; } = false;
         public bool Overlay { get; private set; } = false;
 
         public SceneTransitionPlan Load(SceneDatabase.Slots slot, SceneDatabase.Scenes scene, bool setActive = true)
@@ -200,12 +202,6 @@ public class SceneController : MonoBehaviour
         public SceneTransitionPlan WithClearUnusedAssets()
         {
             ClearUnusedAssets = true;
-            return this;
-        }
-
-        public SceneTransitionPlan WithSave()
-        {
-            SaveSession = true;
             return this;
         }
 

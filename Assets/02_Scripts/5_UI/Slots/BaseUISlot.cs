@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class BaseUISlot : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     // Slot parameters
+    [Header("Slot Parameters")]
     [SerializeField] protected Image slotImage;
-    [SerializeField] protected Image lockImage;
 
-    // Locked Parameters
+    // Locking Parameters
+    [Header("Locking Parameters")]
+    [SerializeField] protected Image lockImage;
     [SerializeField] protected Sprite lockSprite;
     [SerializeField] protected Color lockColor = Color.orange;
 

@@ -11,7 +11,7 @@ public class CustomizationData_SO : ScriptableObject
 public class CustomizationOption
 {
     public bool isLocked;
-    public int price;
+    public CoinQuantityPair price;
 }
 
 [System.Serializable]
@@ -46,6 +46,22 @@ public class CustomizationData_SO_CustomInspectior : Editor
             for (int i = 1; i < _target.colors.Length; i++)
             {
                 _target.colors[i].isLocked = true;
+            }
+
+            EditorUtility.SetDirty(_target);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        if (GUILayout.Button("Unlock All"))
+        {
+            for (int i = 0; i < _target.materials.Length; i++)
+            {
+                _target.materials[i].isLocked = false;
+            }
+            for (int i = 0; i < _target.colors.Length; i++)
+            {
+                _target.colors[i].isLocked = false;
             }
 
             EditorUtility.SetDirty(_target);

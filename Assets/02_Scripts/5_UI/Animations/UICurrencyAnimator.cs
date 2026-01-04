@@ -11,8 +11,8 @@ public class UICurrencyAnimator : MonoBehaviour
     {
      
         AnimateCurrency(
-            CurrencyManager.Instance.PreviousCurrencyValue,
-            CurrencyManager.Instance.CurrencyValue,
+            CoinManager.Instance.PreviousCoinAmount,
+            CoinManager.Instance.CoinAmount,
             animationDuration);
     }
 
@@ -29,7 +29,7 @@ public class UICurrencyAnimator : MonoBehaviour
         DOTween.To(() => currentValue, x =>
         {
             currentValue = x;
-            scoreText.text = currentValue.ToString();
+            scoreText.text = $"<sprite index=0>{currentValue.ToString()}";
         },
         end,
         duration)
