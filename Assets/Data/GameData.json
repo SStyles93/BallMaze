@@ -35,6 +35,16 @@
       "numberOfStars": 3,
       "coinsLeftToEarn": 0,
       "wasLevelFinished": true
+    },
+    "8": {
+      "numberOfStars": 2,
+      "coinsLeftToEarn": 10,
+      "wasLevelFinished": true
+    },
+    "9": {
+      "numberOfStars": 2,
+      "coinsLeftToEarn": 10,
+      "wasLevelFinished": true
     }
   }
 }

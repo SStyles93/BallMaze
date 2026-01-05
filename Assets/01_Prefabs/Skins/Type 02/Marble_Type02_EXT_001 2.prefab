@@ -28,8 +28,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4476826070853890006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1077937607107622367}
-  m_Mesh: {fileID: -1663365397551299599, guid: aa7eb6fde4a443a4e8efd71dc19de3a2, type: 3}
+  m_Mesh: {fileID: 3854446612376989883, guid: b54db9839eee5dd45b85646a252d6528, type: 3}
 --- !u!23 &1092905566860711111
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c03cb700386f9a44d94b7964ca9e93a8, type: 2}
+  - {fileID: 2100000, guid: 14d172d5fb8f83341a86423d5c8dc25b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 5547446776629926800}
   - component: {fileID: 1908675441754733621}
   m_Layer: 0
-  m_Name: Marble_Type02_EXT_001 1
+  m_Name: Marble_Type02_EXT_001 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
