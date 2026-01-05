@@ -130,20 +130,6 @@ MonoBehaviour:
       CoinType: 0
       Amount: 0
     name: 
-    skin: {fileID: 5664766208951650563, guid: bd89542a5b40466489db9637c417d581, type: 3}
-    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
-  - isLocked: 0
-    price:
-      CoinType: 0
-      Amount: 0
-    name: 
-    skin: {fileID: 7970386201335555324, guid: 3056c4d5511e7934fbf7c1831e78940a, type: 3}
-    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
-  - isLocked: 0
-    price:
-      CoinType: 0
-      Amount: 0
-    name: 
     skin: {fileID: 1932357125071815328, guid: ba381cea57b729c458832c635bf98f63, type: 3}
     sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
   - isLocked: 0
@@ -159,6 +145,41 @@ MonoBehaviour:
       Amount: 0
     name: 
     skin: {fileID: 890731879874981919, guid: bf74bcf6fb748464d80e91e6078d836c, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 8883132156341426583, guid: 9156a7e9975a99f4eaf21a2be2cf3c1a, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 8175672573599236831, guid: 1d0330782166cd24fbc79b25d6456e08, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 625979079707677755, guid: 1a0675e598f1b614b933983e6c93d9cf, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 2334731125251935483, guid: caefe7ebbb7fdbc4fad2533ac62f058f, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 5664766208951650563, guid: bd89542a5b40466489db9637c417d581, type: 3}
     sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
   colors:
   - isLocked: 0

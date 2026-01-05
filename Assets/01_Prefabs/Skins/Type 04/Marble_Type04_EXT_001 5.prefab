@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 8972659408814354355}
   - component: {fileID: 7737056583787388703}
   m_Layer: 0
-  m_Name: Marble_Type04_EXT_001
+  m_Name: Marble_Type04_EXT_001 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,7 +131,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5664766208951650563}
-  m_Mesh: {fileID: -2943408598516587002, guid: ca3c2456fdf27ef4d83857d8fd71f599, type: 3}
+  m_Mesh: {fileID: 5596742288281898276, guid: 99ec5b8f731c55941bbef696366c2a2a, type: 3}
 --- !u!23 &7737056583787388703
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -157,7 +157,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 254a5920dbffd9e4e99e018080963f60, type: 2}
+  - {fileID: 2100000, guid: 8acc65e66dc245744a6fc3fa270dd342, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

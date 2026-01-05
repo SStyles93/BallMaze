@@ -674,6 +674,7 @@ MonoBehaviour:
   m_meshRenderer: {fileID: 0}
   glassTintPercent: 15
   m_trailMaterial: {fileID: 2100000, guid: eb13614572aa11c409fa757d0ad8476c, type: 2}
+  m_trailIntensity: 2
 --- !u!114 &8230093531960402944
 MonoBehaviour:
   m_ObjectHideFlags: 0
