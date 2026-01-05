@@ -781,7 +781,7 @@ MonoBehaviour:
   musicClip: {fileID: 8300000, guid: 02f8a67d81fd7d1448cf0b2213796b97, type: 3}
   rollingClip: {fileID: 8300000, guid: e06645a62ba918744832020ca093cb26, type: 3}
   jumpClip: {fileID: 8300000, guid: b5d138cf3c10ee345aa3b6108fdffb94, type: 3}
-  thumpClip: {fileID: 8300000, guid: ef7aa61bf0b8556448d331256e741311, type: 3}
+  thumpClip: {fileID: 8300000, guid: decb37e8bd6cbc84283b494a48c9a1ac, type: 3}
   clickClip: {fileID: 8300000, guid: 43388645cce375a42a77c0867acc79fd, type: 3}
   validateClip: {fileID: 8300000, guid: e7782d87603539140b19b1940d0abad7, type: 3}
   starClip: {fileID: 8300000, guid: c4850539d7f313a418beb6c3ceeb7c5c, type: 3}
@@ -1719,10 +1719,10 @@ MonoBehaviour:
     stars: 0
     hearts: 0
     colorIndex: 0
-    materialIndex: 0
+    skinIndex: 0
   currentSkinData:
     colorsLockedState: 
-    materialsLockedState: 
+    skinsLockedState: 
   currentSettingsData:
     isAudioOn: 1
     isMusicOn: 1
