@@ -9,6 +9,10 @@ public class PlayerCustomization : MonoBehaviour
     [SerializeField] private Color m_color;
     [SerializeField] private GameObject m_visualContainer;
     [SerializeField] private MeshRenderer m_meshRenderer;
+    [Range(0,100)]
+    [SerializeField] private int glassTintPercent = 15;
+    [SerializeField] private Material m_trailMaterial;
+    [SerializeField] private float m_trailIntensity = 2.0f;
 
     private void OnEnable()
     {
@@ -38,16 +42,23 @@ public class PlayerCustomization : MonoBehaviour
     public void UpdateAppearence()
     {
         // Clear, Create the saved skin
-        UpdateVisual(playerSkinData_SO.playerSkin);
+        UpdateSkinPrefab(playerSkinData_SO.playerSkin);
 
         // if idx is 0 assign material colour
         if (playerSkinData_SO.playerColorIndex == 0)
-            m_meshRenderer.material.color = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color;
+        {
+            Color newColor = TintedColourFrom(
+                    playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color);
+            m_meshRenderer.material.color = newColor;
+            UpdateTrailColor(newColor);
+        }
         // Otherwise assign selected colour
         else
-            m_meshRenderer.material.color = playerSkinData_SO.playerColor;
-
-
+        {
+            Color newColor = TintedColourFrom(playerSkinData_SO.playerColor);
+            m_meshRenderer.material.color = newColor;
+            UpdateTrailColor(newColor);
+        }
     }
 
     /// <summary>
@@ -59,11 +70,11 @@ public class PlayerCustomization : MonoBehaviour
         switch (option)
         {
             case ColorOption colorOpt:
-                m_meshRenderer.material.color = colorOpt.color;
+                m_meshRenderer.material.color = TintedColourFrom(colorOpt.color);
                 break;
 
             case SkinOption skinOpt:
-                UpdateVisual(skinOpt.skin);
+                UpdateSkinPrefab(skinOpt.skin);
                 break;
         }
     }
@@ -83,10 +94,11 @@ public class PlayerCustomization : MonoBehaviour
                 break;
 
             case SkinOption skinOpt:
-                UpdateVisual(skinOpt.skin);
+                UpdateSkinPrefab(skinOpt.skin);
                 AssignSkin(skinOpt.skin);
                 AssignMaterialIndex(index);
-                AssignColor(skinOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color);
+                Color colorToAssign = skinOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color;
+                AssignColor(colorToAssign);
                 AssignColorIndex(0);
                 break;
         }
@@ -97,7 +109,8 @@ public class PlayerCustomization : MonoBehaviour
     /// </summary>
     public void AssignOriginalColor()
     {
-        playerSkinData_SO.playerColor = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color;
+        Color color = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color;
+        playerSkinData_SO.playerColor = color;
         playerSkinData_SO.playerColorIndex = 0;
         UpdateAppearence();
     }
@@ -106,8 +119,8 @@ public class PlayerCustomization : MonoBehaviour
 
     private void AssignColor(Color color)
     {
-        m_meshRenderer.material.color = color;
         playerSkinData_SO.playerColor = color;
+        m_meshRenderer.material.color = TintedColourFrom(color);
     }
     private void AssignColorIndex(int index)
     {
@@ -124,11 +137,15 @@ public class PlayerCustomization : MonoBehaviour
         playerSkinData_SO.playerSkinIndex = index;
     }
 
-    private void UpdateVisual(GameObject skinPrefab)
+    private void UpdateSkinPrefab(GameObject skinPrefab)
     {
         ClearVisualContainer();
         GameObject newVisual = Instantiate(skinPrefab, m_visualContainer.transform);
         m_meshRenderer = newVisual.GetComponent<MeshRenderer>();
+    }
+    private void UpdateTrailColor(Color color)
+    {
+        m_trailMaterial.SetColor("_EmissionColor", color * m_trailIntensity);
     }
 
     private void ClearVisualContainer()
@@ -138,4 +155,11 @@ public class PlayerCustomization : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+
+    private Color TintedColourFrom(Color color)
+    {
+        Color tintedColor = color;
+        tintedColor.a = glassTintPercent/100.0f;
+        return tintedColor;
+    } 
 }

@@ -110,8 +110,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarLightManager
   lightRef: {fileID: 1714893847554673639}
-  minMaxIntensityValue: {x: 0.5, y: 1}
-  sinePeriod: 2
+  minMaxIntensityValue: {x: 0, y: 5}
+  sinePeriod: 3
 --- !u!114 &3623532063193294096
 MonoBehaviour:
   m_ObjectHideFlags: 0

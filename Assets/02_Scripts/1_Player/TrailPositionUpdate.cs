@@ -4,6 +4,7 @@ public class TrailPositionUpdate : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private float feetOffset = -0.5f;
+
     void LateUpdate()
     {
         if (player == null) return;

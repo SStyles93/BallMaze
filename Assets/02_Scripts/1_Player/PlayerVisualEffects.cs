@@ -4,6 +4,8 @@ using DG.Tweening;
 public class PlayerVisualEffects : MonoBehaviour
 {
     [SerializeField] private float shrinkDuration = 1f;
+    [SerializeField] private TrailRenderer m_trailRenderer;
+
 
     private PlayerMovement playerMovement;
     private Tween scaleTween;
@@ -19,6 +21,7 @@ public class PlayerVisualEffects : MonoBehaviour
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        m_trailRenderer = GetComponentInChildren<TrailRenderer>();
 
         // Create the tween ONCE and reuse it
         scaleTween = transform
@@ -26,7 +29,8 @@ public class PlayerVisualEffects : MonoBehaviour
             .SetEase(Ease.InOutQuad)
             .SetAutoKill(false)
             .Pause()
-            .SetLink(gameObject);
+            .SetLink(gameObject)
+            .OnRewind(EnableTrail);
     }
 
     private void Update()
@@ -53,5 +57,10 @@ public class PlayerVisualEffects : MonoBehaviour
     {
         state = ScaleState.Normal;
         scaleTween.PlayBackwards();
+    }
+
+    private void EnableTrail()
+    {
+        m_trailRenderer.enabled = true;
     }
 }

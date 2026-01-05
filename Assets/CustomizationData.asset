@@ -172,13 +172,13 @@ MonoBehaviour:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 1, g: 0.7660377, b: 0.81617254, a: 0}
+    color: {r: 1, g: 0.7660377, b: 0.81617254, a: 1}
   - isLocked: 0
     price:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 0.7169812, g: 1, b: 0.899574, a: 0}
+    color: {r: 0.7169812, g: 1, b: 0.899574, a: 1}
   - isLocked: 0
     price:
       CoinType: 0

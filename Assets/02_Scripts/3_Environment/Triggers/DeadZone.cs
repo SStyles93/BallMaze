@@ -36,6 +36,9 @@ public class DeadZone : MonoBehaviour
                 rb.isKinematic = true;
                 collision.gameObject.transform.position = spawnPosition;
                 rb.isKinematic = false;
+
+                TrailRenderer tr = collision.gameObject.GetComponentInChildren<TrailRenderer>();
+                tr.enabled = false;
             }
         }
     }

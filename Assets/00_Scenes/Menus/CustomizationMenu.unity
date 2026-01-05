@@ -16327,26 +16327,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 957345749901761452, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.004
-      objectReference: {fileID: 0}
-    - target: {fileID: 957345749901761452, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.004
-      objectReference: {fileID: 0}
-    - target: {fileID: 957345749901761452, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.004
-      objectReference: {fileID: 0}
-    - target: {fileID: 957345749901761452, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 3.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 957345749901761452, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -2
-      objectReference: {fileID: 0}
     - target: {fileID: 1739167241937593451, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
       propertyPath: m_Name
       value: Presentoir
@@ -16399,10 +16379,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 461574832}
-    - target: {fileID: 6258012554519995264, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
-      propertyPath: m_spriteAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 24eee33ac0660f647a3dd3af32bab135, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

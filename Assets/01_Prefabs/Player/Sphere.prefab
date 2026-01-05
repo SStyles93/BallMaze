@@ -304,6 +304,9 @@ MonoBehaviour:
   m_color: {r: 0, g: 0, b: 0, a: 0}
   m_visualContainer: {fileID: 6644927266387035701}
   m_meshRenderer: {fileID: 0}
+  glassTintPercent: 15
+  m_trailMaterial: {fileID: 2100000, guid: eb13614572aa11c409fa757d0ad8476c, type: 2}
+  m_trailIntensity: 10
 --- !u!114 &959544580089661260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,6 +320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   shrinkDuration: 1
+  m_trailRenderer: {fileID: 6363875689516456458}
 --- !u!114 &2578096927877487692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,7 +416,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 1
+  m_Time: 0.5
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -422,7 +426,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.30275154
         inSlope: 0
         outSlope: 0
         tangentMode: 0
