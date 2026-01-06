@@ -181,6 +181,13 @@ MonoBehaviour:
     name: 
     skin: {fileID: 5664766208951650563, guid: bd89542a5b40466489db9637c417d581, type: 3}
     sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
+  - isLocked: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
+    skin: {fileID: 6602769584495123945, guid: 487ccdda00bfbc34d8479fedc0e9cafd, type: 3}
+    sprite: {fileID: 21300000, guid: 084f5d11c0d53ea44be399aaeec75079, type: 3}
   colors:
   - isLocked: 0
     price:
