@@ -4,7 +4,9 @@ using DG.Tweening;
 public class PlayerVisualEffects : MonoBehaviour
 {
     [SerializeField] private float shrinkDuration = 1f;
-    [SerializeField] private TrailRenderer m_trailRenderer;
+    [SerializeField] private GameObject m_trail;
+    [SerializeField] private Color m_trailColor;
+    [SerializeField] private Material[] m_trailMaterials;
 
 
     private PlayerMovement playerMovement;
@@ -21,7 +23,6 @@ public class PlayerVisualEffects : MonoBehaviour
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
-        m_trailRenderer = GetComponentInChildren<TrailRenderer>();
 
         // Create the tween ONCE and reuse it
         scaleTween = transform
@@ -47,6 +48,25 @@ public class PlayerVisualEffects : MonoBehaviour
         }
     }
 
+    public void SetTrailColor(Color color)
+    {
+        color.a = 1.0f;
+        // First Trail Mat. Colour
+        Color c1A = color;    
+        Color c1B = TrailPalette.Generate(color, -0.015f, +0.02f, -0.10f);
+        
+        // Second Trail Mat. Colour
+        Color c2A = TrailPalette.Generate(color, +0.215f, -0.33f, 0.00f);
+        Color c2B = TrailPalette.Generate(color, -0.035f, +0.05f, -0.19f);
+
+        m_trailMaterials[0].SetColor("_Color01", c1A);
+        m_trailMaterials[0].SetColor("_Color02", c1B);
+
+        m_trailMaterials[1].SetColor("_Color01", c2A);
+        m_trailMaterials[1].SetColor("_Color02", c2B);
+    }
+
+
     private void Shrink()
     {
         state = ScaleState.Shrunk;
@@ -61,6 +81,15 @@ public class PlayerVisualEffects : MonoBehaviour
 
     private void EnableTrail()
     {
-        m_trailRenderer.enabled = true;
+        m_trail.SetActive(true);
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("DeadZone"))
+        {
+            m_trail.SetActive(false);
+        }
     }
 }

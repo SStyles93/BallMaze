@@ -11,8 +11,8 @@ public class PlayerCustomization : MonoBehaviour
     [SerializeField] private MeshRenderer m_meshRenderer;
     [Range(0,100)]
     [SerializeField] private int glassTintPercent = 15;
-    [SerializeField] private Material m_trailMaterial;
-    [SerializeField] private float m_trailIntensity = 2.0f;
+
+    [SerializeField] private PlayerVisualEffects m_playerVisualEffects;
 
     private void OnEnable()
     {
@@ -28,7 +28,7 @@ public class PlayerCustomization : MonoBehaviour
 
     private void Awake()
     {
-        //m_meshRenderer ??= GetComponent<MeshRenderer>();
+        m_playerVisualEffects = transform.GetComponent<PlayerVisualEffects>();
     }
 
     void Start()
@@ -145,7 +145,8 @@ public class PlayerCustomization : MonoBehaviour
     }
     private void UpdateTrailColor(Color color)
     {
-        m_trailMaterial.SetColor("_EmissionColor", color * m_trailIntensity);
+        if(m_playerVisualEffects != null)
+        m_playerVisualEffects.SetTrailColor(color);
     }
 
     private void ClearVisualContainer()

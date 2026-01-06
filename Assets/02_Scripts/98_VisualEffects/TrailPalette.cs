@@ -1,21 +1,23 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public static class TrailPalette
 {
     public static Color Generate(Color baseColor,
-        float hueOffset,float satMultiplier,
-        float valueMultiplier,bool allowHDR = false)
+    float hueOffset,float satOffset,float valueOffset)
     {
-        Color.RGBToHSV(baseColor, out float h, out float s, out float v);
+        // Convert Linear → Gamma BEFORE HSV
+        Color gammaColor = baseColor.gamma;
+
+        Color.RGBToHSV(gammaColor, out float h, out float s, out float v);
 
         h = Mathf.Repeat(h + hueOffset, 1f);
-        s = Mathf.Clamp01(s * satMultiplier);
+        s = Mathf.Clamp01(s + satOffset);
+        v = Mathf.Clamp01(v + valueOffset);
 
-        v *= valueMultiplier;
+        // HSV → Gamma RGB
+        Color gammaResult = Color.HSVToRGB(h, s, v);
 
-        if (!allowHDR)
-            v = Mathf.Clamp01(v);
-
-        return Color.HSVToRGB(h, s, v);
+        // Convert back to Linear for URP
+        return gammaResult.linear;
     }
 }

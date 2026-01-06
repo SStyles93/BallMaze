@@ -305,8 +305,7 @@ MonoBehaviour:
   m_visualContainer: {fileID: 6644927266387035701}
   m_meshRenderer: {fileID: 0}
   glassTintPercent: 15
-  m_trailMaterial: {fileID: 2100000, guid: eb13614572aa11c409fa757d0ad8476c, type: 2}
-  m_trailIntensity: 5
+  m_playerVisualEffects: {fileID: 959544580089661260}
 --- !u!114 &959544580089661260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,7 +319,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   shrinkDuration: 1
-  m_trailRenderer: {fileID: 0}
+  m_trail: {fileID: 913785208105611328}
+  m_trailColor: {r: 0, g: 0, b: 0, a: 0}
+  m_trailMaterials:
+  - {fileID: 2100000, guid: d495fd46a21a26a4ca25ac52dfb86a19, type: 2}
+  - {fileID: 2100000, guid: 9de04be4b9f8109478edfa5ad158476b, type: 2}
 --- !u!114 &2578096927877487692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,33 +421,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4369940289791482897, guid: 26169785b8e30c944a512729256a05cd, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 569871771093822925}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2393817908272368249, guid: 26169785b8e30c944a512729256a05cd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1571581815941304833}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26169785b8e30c944a512729256a05cd, type: 3}
 --- !u!1 &913785208105611328 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2393817908272368249, guid: 26169785b8e30c944a512729256a05cd, type: 3}
   m_PrefabInstance: {fileID: 3285066391848172089}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1571581815941304833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 913785208105611328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21c73595f32a4c843ba9806c9a3fc8f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TrailPositionUpdate
-  player: {fileID: 569871771093822925}
-  feetOffset: -1
 --- !u!4 &2107853515111090581 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3519140762433254316, guid: 26169785b8e30c944a512729256a05cd, type: 3}
