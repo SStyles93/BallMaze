@@ -12,6 +12,8 @@ public class PlayerVisualEffects : MonoBehaviour
 
     private PlayerMovement playerMovement;
     private Tween scaleTween;
+    private TrailRenderer[] trailRenderers;
+    private Tween trailWidthTween;
     private bool m_isTrailActive = true;
 
     private enum ScaleState
@@ -25,6 +27,8 @@ public class PlayerVisualEffects : MonoBehaviour
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
+
+        trailRenderers = m_trail.GetComponentsInChildren<TrailRenderer>();
 
         // Create the tween ONCE and reuse it
         scaleTween = transform
@@ -70,8 +74,8 @@ public class PlayerVisualEffects : MonoBehaviour
         Color c0B = TrailPalette.Generate(color, -0.015f, +0.02f, -0.10f);
         
         // Second Trail Mat. Colour
-        Color c1A = TrailPalette.Generate(color, +0.035f, -0.33f, 0.00f);
-        Color c1B = TrailPalette.Generate(color, -0.035f, +0.05f, -0.19f);
+        Color c1A = TrailPalette.Generate(color, -0.035f, +0.30f, 0.00f);
+        Color c1B = c1A;
 
         m_trailMaterials[0].SetColor("_Color01", c0A);
         m_trailMaterials[0].SetColor("_Color02", c0B);
@@ -85,12 +89,31 @@ public class PlayerVisualEffects : MonoBehaviour
     {
         state = ScaleState.Shrunk;
         scaleTween.PlayForward();
+        TweenTrailWidth(0f);
     }
 
     private void Grow()
     {
         state = ScaleState.Normal;
         scaleTween.PlayBackwards();
+        TweenTrailWidth(1f);
+    }
+
+    private void TweenTrailWidth(float targetWidth)
+    {
+        trailWidthTween?.Kill();
+
+        trailWidthTween = DOTween.To(
+            () => trailRenderers[0].widthMultiplier,
+            value =>
+            {
+                foreach (var tr in trailRenderers)
+                    tr.widthMultiplier = value;
+            },
+            targetWidth,
+            shrinkDuration
+        ).SetEase(Ease.InOutQuad)
+         .SetLink(gameObject);
     }
 
     private void EnableTrail()

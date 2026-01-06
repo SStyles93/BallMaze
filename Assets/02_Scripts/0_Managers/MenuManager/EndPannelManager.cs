@@ -16,17 +16,19 @@ public class EndPannelManager : MonoBehaviour
     {
         levelManager = LevelManager.Instance;
 
-        // lvl n°
+        // LVL n°
         levelText.text = $"Level {levelManager.CurrentLevelIndex}";
 
-        // stars ( * * * )
+        // START ( * * * )
         if (levelManager.CurrentLevelData.numberOfStars == 0 || LifeManager.Instance.CurrentLife == 0)
         {
+            //GAME OVER
             retryButton.SetActive(true);
             continueButton.SetActive(false);
         }
         else
         {
+            // WIN
             continueButton.SetActive(true);
             retryButton.SetActive(false);
 
