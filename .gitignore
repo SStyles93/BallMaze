@@ -92,6 +92,5 @@ Assets/Rewired/Internal/Libraries/Runtime/Native/WindowsStandalone/x86.meta
 /.config
 
 # Game Data (local to each Editor)
-Assets/Data/*
-Asset/Data*
-
+Assets/Data/
+Assets/Data.meta
