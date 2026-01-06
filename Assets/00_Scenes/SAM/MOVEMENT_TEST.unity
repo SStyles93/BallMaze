@@ -697,6 +697,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 959544580089661260, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
+      propertyPath: m_trailRenderer
+      value: 
+      objectReference: {fileID: 940634146}
     - target: {fileID: 976364394071838964, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: m_Name
       value: Sphere
@@ -706,6 +710,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
+--- !u!96 &940634146 stripped
+TrailRenderer:
+  m_CorrespondingSourceObject: {fileID: 3405826931702074766, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
+  m_PrefabInstance: {fileID: 940634145}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1100654055
 GameObject:
   m_ObjectHideFlags: 0
