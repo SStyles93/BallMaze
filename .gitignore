@@ -10,9 +10,6 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
-# Game Data (local to each Editor)
-/[Aa]ssets/Data/*
-
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
@@ -93,3 +90,8 @@ Assets/Rewired/Internal/Libraries/Runtime/Native/WindowsStandalone.meta
 Assets/Rewired/Internal/Libraries/Runtime/Native/WindowsStandalone/x64.meta
 Assets/Rewired/Internal/Libraries/Runtime/Native/WindowsStandalone/x86.meta
 /.config
+
+# Game Data (local to each Editor)
+Assets/Data/*
+Asset/Data*
+
