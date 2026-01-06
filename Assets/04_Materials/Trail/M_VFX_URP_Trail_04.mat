@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_VFX_URP_Trail_02
+  m_Name: M_VFX_URP_Trail_04
   m_Shader: {fileID: 4800000, guid: f94f00b9ec6b04346a617d373aa6281c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -64,7 +64,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Mask:
-        m_Texture: {fileID: 2800000, guid: 808d46c12c9252f498ac7166c5e53282, type: 3}
+        m_Texture: {fileID: 2800000, guid: d922386714e241743ab20b5ea59e21ae, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -113,7 +113,7 @@ Material:
     - _Distortion_Amount: 0
     - _Dst: 10
     - _DstBlend: 0
-    - _EmissiveIntensity: 1
+    - _EmissiveIntensity: 5
     - _ErosionMultiply: 1
     - _ErosionPower: 1
     - _ErosionSmoothstep: 0
@@ -140,7 +140,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Opacity_Boost: 1
-    - _OverallSpeed: 1
+    - _OverallSpeed: 0.75
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -156,8 +156,8 @@ Material:
     - __dirty: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color01: {r: 0.9649505, g: 0.08898155, b: 1, a: 1}
-    - _Color02: {r: 0.17144023, g: 0, b: 0.62091595, a: 1}
+    - _Color01: {r: 0.6679753, g: 0.07323897, b: 1, a: 1}
+    - _Color02: {r: 0.44282454, g: 0.059253525, b: 0.78741235, a: 1}
     - _ColorPanSpeed: {r: -0.733, g: 0.113, b: 0, a: 0}
     - _ColorUVScale: {r: 0.5, g: 1, b: 0, a: 0}
     - _Color_01: {r: 0.5323144, g: 0.3, b: 1, a: 0}
@@ -175,7 +175,7 @@ Material:
     - _Erosion_Scale: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _Erosion_Speed: {r: 0.25, g: 0, b: 0, a: 0}
     - _MaskPanSpeed: {r: -1, g: 0, b: 0, a: 0}
-    - _MaskUVScale: {r: 0.15, g: 1, b: 0, a: 0}
+    - _MaskUVScale: {r: 0.14, g: 1, b: 0, a: 0}
     - _Mask_Scale: {r: 0.5, g: 1, b: 0, a: 0}
     - _Mask_Speed: {r: 0.5, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

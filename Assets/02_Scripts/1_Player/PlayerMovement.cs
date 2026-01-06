@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     public float FallThreashold => fallThreashold;
 
     public float MovementForce { get => movementForce; set => movementForce = value; }
+    public Rigidbody Rigidbody { get => playerRigidbody; set => playerRigidbody = value; }
 
     private void OnEnable()
     {

@@ -5,12 +5,14 @@ public class PlayerVisualEffects : MonoBehaviour
 {
     [SerializeField] private float shrinkDuration = 1f;
     [SerializeField] private GameObject m_trail;
+    [SerializeField] private float m_trailVelocityThreshold = 1.0f;
     [SerializeField] private Color m_trailColor;
     [SerializeField] private Material[] m_trailMaterials;
 
 
     private PlayerMovement playerMovement;
     private Tween scaleTween;
+    private bool m_isTrailActive = true;
 
     private enum ScaleState
     {
@@ -48,22 +50,34 @@ public class PlayerVisualEffects : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if(playerMovement.Rigidbody.linearVelocity.magnitude < m_trailVelocityThreshold || !m_isTrailActive)
+        {
+            m_trail.SetActive(false);
+        }
+        else
+        {
+            m_trail.SetActive(true);
+        }
+    }
+
     public void SetTrailColor(Color color)
     {
         color.a = 1.0f;
         // First Trail Mat. Colour
-        Color c1A = color;    
-        Color c1B = TrailPalette.Generate(color, -0.015f, +0.02f, -0.10f);
+        Color c0A = color;    
+        Color c0B = TrailPalette.Generate(color, -0.015f, +0.02f, -0.10f);
         
         // Second Trail Mat. Colour
-        Color c2A = TrailPalette.Generate(color, +0.215f, -0.33f, 0.00f);
-        Color c2B = TrailPalette.Generate(color, -0.035f, +0.05f, -0.19f);
+        Color c1A = TrailPalette.Generate(color, +0.035f, -0.33f, 0.00f);
+        Color c1B = TrailPalette.Generate(color, -0.035f, +0.05f, -0.19f);
 
-        m_trailMaterials[0].SetColor("_Color01", c1A);
-        m_trailMaterials[0].SetColor("_Color02", c1B);
+        m_trailMaterials[0].SetColor("_Color01", c0A);
+        m_trailMaterials[0].SetColor("_Color02", c0B);
 
-        m_trailMaterials[1].SetColor("_Color01", c2A);
-        m_trailMaterials[1].SetColor("_Color02", c2B);
+        m_trailMaterials[1].SetColor("_Color01", c1A);
+        m_trailMaterials[1].SetColor("_Color02", c1B);
     }
 
 
@@ -82,6 +96,7 @@ public class PlayerVisualEffects : MonoBehaviour
     private void EnableTrail()
     {
         m_trail.SetActive(true);
+        m_isTrailActive = true;
     }
 
 
@@ -90,6 +105,7 @@ public class PlayerVisualEffects : MonoBehaviour
         if (collision.collider.CompareTag("DeadZone"))
         {
             m_trail.SetActive(false);
+            m_isTrailActive = false;
         }
     }
 }

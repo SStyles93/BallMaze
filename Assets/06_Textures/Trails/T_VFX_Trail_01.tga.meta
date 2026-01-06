@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 06ae8cc8bd06ae2488f1c9c630a3ebfe
+guid: 808d46c12c9252f498ac7166c5e53282
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,5 +127,5 @@ AssetOrigin:
   productId: 242574
   packageName: Trails VFX - URP
   packageVersion: 1.0.20251
-  assetPath: Assets/06_Textures/Trails/T_VFX_Trail_02.tga
+  assetPath: Assets/Vefects/Trails VFX URP/VFX/Textures/T_VFX_Trail_01.tga
   uploadId: 770211
