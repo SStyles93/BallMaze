@@ -87,6 +87,11 @@ public class LevelManager : MonoBehaviour
         currentGrid = GenerateAndGetCurrentLevelGrid();
     }
 
+    // Return the last index (count) of the LevelDataDictionnary
+    public int GetLastLevelIndex()
+    {
+        return LevelDataDictionnary.Count;
+    }
 
     #region LEVEL DATA (GRADES)
 

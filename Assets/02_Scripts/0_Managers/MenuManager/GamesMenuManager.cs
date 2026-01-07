@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +9,12 @@ public class GamesMenuManager : MonoBehaviour
     [SerializeField] private Scrollbar scrollbar;
     [SerializeField] private ScrollbarData_SO scrollbarData;
     [SerializeField] private GameObject slotPrefab;
+    [SerializeField] private PlayButton playButton;
 
     [Header("Variables")]
-    [SerializeField] private int numberOfLevels = 50;
+    [SerializeField] private int levelsToBatchLoad = 24;
+
+    public event Action OnGamesMenuInitialized;
 
     public static GamesMenuManager Instance { get; private set; }
 
@@ -30,15 +34,16 @@ public class GamesMenuManager : MonoBehaviour
 
 
         int levelManagerCount = LevelManager.Instance.LevelDataDictionnary.Count;
-        if (levelManagerCount % numberOfLevels == 0 || levelManagerCount <= 0 || levelManagerCount > numberOfLevels)
+        if (levelManagerCount % levelsToBatchLoad == 0 || levelManagerCount <= 0 || levelManagerCount > levelsToBatchLoad)
         {
-            numberOfLevels = LevelManager.Instance.LevelDataDictionnary.Count + numberOfLevels;
+            levelsToBatchLoad = LevelManager.Instance.LevelDataDictionnary.Count + levelsToBatchLoad;
         }
-        InitializeSlots(numberOfLevels);
+        InitializeSlots(levelsToBatchLoad);
 
         scrollbar.value = scrollbarData.scrollbarValue;
         scrollbar.size = scrollbarData.scrollbarSize;
-        
+
+        playButton.InitializeNextLevelText();
     }
 
     private void InitializeSlots(int numberOfLevels)

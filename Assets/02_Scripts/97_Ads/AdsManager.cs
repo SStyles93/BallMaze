@@ -131,6 +131,8 @@ public class AdsManager : MonoBehaviour
         ApplyBannerAreaSize();
         OnBannerHeightChanged?.Invoke(CurrentBannerHeightPx);
 
+        BannerAd.ShowAd();
+
         Debug.Log($"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)");
     }
 
@@ -140,6 +142,8 @@ public class AdsManager : MonoBehaviour
 
         ApplyBannerAreaSize();
         OnBannerHeightChanged?.Invoke(0);
+
+        BannerAd.HideAd();
 
         Debug.LogWarning($"[AdsManager] Banner failed to load");
     }

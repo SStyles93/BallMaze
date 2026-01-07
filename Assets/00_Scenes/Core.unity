@@ -1458,7 +1458,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdsManager
   adsArea: {fileID: 1361026683}
-  adsDebugText: {fileID: 0}
 --- !u!1 &1900290287
 GameObject:
   m_ObjectHideFlags: 0
