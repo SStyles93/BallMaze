@@ -1918,6 +1918,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3027643350485154227, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1944165807}
+    - target: {fileID: 3027643350485154227, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenHeartPannel
+      objectReference: {fileID: 0}
+    - target: {fileID: 3027643350485154227, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GamesMenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5193043973078981123, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -50

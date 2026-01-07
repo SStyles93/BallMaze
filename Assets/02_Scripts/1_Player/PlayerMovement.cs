@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private ForceMode movementForceMode = ForceMode.Force;
     [SerializeField] private float movementForce = 1400.0f;
+    [SerializeField] private float linearDampingGroundValue = 4.0f;
+    [SerializeField] private float linearDampingAirValue = 4.0f;
 
     [Header("Jump Settings")]
     [SerializeField] private ForceMode jumpForceMode = ForceMode.Impulse;
@@ -57,7 +59,11 @@ public class PlayerMovement : MonoBehaviour
         UpdateFallGravity();
 
         isGrounded = CheckIfPlayerIsGrounded();
-        playerRigidbody.linearDamping = isGrounded ? 2.0f : 0.5f;
+        // linearDamping is canceled with no movement, otherwise ground/air value accordingly
+        playerRigidbody.linearDamping =
+            isGrounded ?
+            movementValue.magnitude > 0.1f ? 1.0f : linearDampingGroundValue
+            : linearDampingAirValue;
 
         if (isGrounded)
         {

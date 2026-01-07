@@ -14,8 +14,6 @@ public class GamesMenuManager : MonoBehaviour
     [Header("Variables")]
     [SerializeField] private int levelsToBatchLoad = 24;
 
-    public event Action OnGamesMenuInitialized;
-
     public static GamesMenuManager Instance { get; private set; }
 
     private void Awake()

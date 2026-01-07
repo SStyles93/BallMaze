@@ -1292,6 +1292,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1992151543186630611, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1992151543186630611, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1992151543186630611, guid: 46348d537613ecb469eb3602253946b6, type: 3}
       propertyPath: m_LocalScale.x
       value: 3.4
       objectReference: {fileID: 0}
@@ -1311,9 +1319,73 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 598
       objectReference: {fileID: 0}
+    - target: {fileID: 3882761793877393265, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882761793877393265, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3882761793877393265, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4137634905186176456, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 40737c12140e69f42964d70b09fdcd38, type: 3}
+    - target: {fileID: 4137634905186176456, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4137634905186176456, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4137634905186176456, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4137634905186176456, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4764293245395086822, guid: 46348d537613ecb469eb3602253946b6, type: 3}
       propertyPath: m_Name
       value: JoystickPannel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7311211901023177850, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 35291836ffaa2a9419386984b2355030, type: 3}
+    - target: {fileID: 7311211901023177850, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Color.b
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: 7311211901023177850, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Color.g
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: 7311211901023177850, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Color.r
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: 7311211901023177850, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7311211901023177850, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_UseSpriteMesh
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7493712019058315896, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 7493712019058315896, guid: 46348d537613ecb469eb3602253946b6, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 7493712019058315896, guid: 46348d537613ecb469eb3602253946b6, type: 3}
       propertyPath: m_LocalScale.x
@@ -1478,6 +1550,22 @@ PrefabInstance:
     - target: {fileID: 8309155741861631724, guid: de9ebb89887a50c4597b1f134fbc6fbd, type: 3}
       propertyPath: m_Name
       value: JumpButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313252246081985755, guid: de9ebb89887a50c4597b1f134fbc6fbd, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313252246081985755, guid: de9ebb89887a50c4597b1f134fbc6fbd, type: 3}
+      propertyPath: m_Color.b
+      value: 0.45882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313252246081985755, guid: de9ebb89887a50c4597b1f134fbc6fbd, type: 3}
+      propertyPath: m_Color.g
+      value: 0.18431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 8313252246081985755, guid: de9ebb89887a50c4597b1f134fbc6fbd, type: 3}
+      propertyPath: m_Color.r
+      value: 0.24313726
       objectReference: {fileID: 0}
     - target: {fileID: 9003239335088865271, guid: de9ebb89887a50c4597b1f134fbc6fbd, type: 3}
       propertyPath: m_Pivot.x
