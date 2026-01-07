@@ -26,7 +26,7 @@ public class AdsManager : MonoBehaviour
     public LevelPlayInterstitialAd InterstitialAd;
     public LevelPlayRewardedAd RewardedVideoAd;
 
-    [SerializeField] private TMP_Text adsDebugText;
+    //[SerializeField] private TMP_Text adsDebugText;
 
     // -------- Banner layout authority --------
     public static int CurrentBannerHeightPx { get; private set; }
@@ -144,6 +144,7 @@ public class AdsManager : MonoBehaviour
         Debug.LogWarning($"[AdsManager] Banner failed to load");
     }
 
+    // Scales the Ads Area (Core Canvas)
     private void ApplyBannerAreaSize()
     {
         if (adsArea == null)
