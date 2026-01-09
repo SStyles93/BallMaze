@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300, y: 150}
+  m_AnchoredPosition: {x: 300, y: 180}
   m_SizeDelta: {x: 600, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &134108503
@@ -203,12 +203,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 64
+  m_fontSize: 40
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 64
+  m_fontSizeMax: 40
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 1024
@@ -1187,6 +1187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GeneratorParameters: {fileID: 11400000, guid: 56084ab9538960249bd360380bfaa0d6, type: 2}
   LevelDatabase: {fileID: 11400000, guid: 7a2e4b9ee92d5bf42bec9798e4208ea8, type: 2}
+  levelsPerCycle: 30
   initialCoinAmount: 30
 --- !u!1 &1333845251
 GameObject:

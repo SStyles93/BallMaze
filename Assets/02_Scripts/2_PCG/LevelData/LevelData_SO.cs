@@ -34,11 +34,31 @@ public class LevelData_SO
     /// </summary>
     public CellData[,] ToGrid()
     {
+        // Validate grid dimensions
+        if (gridWidth <= 0 || gridHeight <= 0)
+        {
+            Debug.LogWarning($"LevelData_SO: Invalid grid size ({gridWidth}x{gridHeight}). Returning empty grid.");
+            return new CellData[0, 0];
+        }
+
         CellData[,] grid = new CellData[gridWidth, gridHeight];
 
-        if (gridData == null || gridData.Length != gridWidth * gridHeight)
+        if (gridData == null)
         {
-            Debug.LogWarning("LevelData_SO: gridData is null or has wrong length. Returning empty grid.");
+            Debug.LogWarning("LevelData_SO: gridData is null. Returning empty grid.");
+            return grid;
+        }
+
+        if (gridData.Length != gridWidth * gridHeight)
+        {
+            Debug.LogWarning($"LevelData_SO: gridData length mismatch ({gridData.Length} != {gridWidth * gridHeight}). Filling with default cells.");
+            for (int y = 0; y < gridHeight; y++)
+            {
+                for (int x = 0; x < gridWidth; x++)
+                {
+                    grid[x, y] = new CellData(); // default struct
+                }
+            }
             return grid;
         }
 

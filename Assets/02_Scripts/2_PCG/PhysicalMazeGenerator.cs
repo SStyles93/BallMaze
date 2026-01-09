@@ -22,7 +22,13 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     public static event Action OnGenerationFinished;
 
-    [HideInInspector][SerializeField] private bool isGridGenerated = false;
+    //[HideInInspector][SerializeField] private bool isGridGenerated = false;
+
+    private void Start()
+    {
+        Generate(LevelManager.Instance.CurrentGrid);
+    }
+
 
     // ======================================
     // PUBLIC GENERATION METHOD
@@ -60,7 +66,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
             }
         }
 
-        isGridGenerated = true;
+        //isGridGenerated = true;
 
         ApplyRandomEnvironmentColors();
 
@@ -70,7 +76,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
     public void Clear()
     {
         ClearChildren();
-        isGridGenerated = false;
+        //isGridGenerated = false;
     }
 
     // ======================================

@@ -111,7 +111,7 @@ public class AdsManager : MonoBehaviour
         BannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
         BannerAd.OnAdLoadFailed += BannerOnAdLoadFailedEvent;
         //BannerAd.OnAdDisplayed += BannerOnAdDisplayedEvent;
-        //BannerAd.OnAdDisplayFailed += BannerOnAdDisplayedFailedEvent;
+        BannerAd.OnAdDisplayFailed += BannerOnAdDisplayedFailedEvent;
 
         BannerAd.LoadAd();
     }
@@ -133,7 +133,7 @@ public class AdsManager : MonoBehaviour
         ApplyBannerAreaSize();
         OnBannerHeightChanged?.Invoke(CurrentBannerHeightPx);
 
-        adsDebugText.text = "$\"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)\"";
+        adsDebugText.text = $"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)";
         //Debug.Log($"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)");
     }
 
@@ -159,15 +159,16 @@ public class AdsManager : MonoBehaviour
     //    Debug.Log($"[AdsManager] Banner Displayed with ({CurrentBannerHeightPx}px)");
     //}
 
-    //private void BannerOnAdDisplayedFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error)
-    //{
-    //    CurrentBannerHeightPx = 0;
+    private void BannerOnAdDisplayedFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error)
+    {
+        CurrentBannerHeightPx = 0;
 
-    //    ApplyBannerAreaSize();
-    //    OnBannerHeightChanged?.Invoke(0);
+        ApplyBannerAreaSize();
+        OnBannerHeightChanged?.Invoke(0);
 
-    //    Debug.LogWarning($"[AdsManager] Banner failed to display");
-    //}
+        adsDebugText.text = "[AdsManager] Banner failed to Display";
+        Debug.LogWarning($"[AdsManager] Banner failed to display");
+    }
 
 
     // Scales the Ads Area (Core Canvas)
