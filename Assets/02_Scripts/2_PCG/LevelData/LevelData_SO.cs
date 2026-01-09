@@ -6,7 +6,6 @@ public class LevelData_SO
     public int index;
 
     [Header("Grid Parameters")]
-    // Generation parameters
     public int gridWidth;
     public int gridHeight;
 
@@ -26,13 +25,22 @@ public class LevelData_SO
     public bool starsConnectToEnd;
 
     [Header("Grid Data")]
-    // Flattened grid
-    public TileType[] gridData;
+    // Flattened Cell array
+    public CellData[] gridData;
     public int usedSeed;
 
-    public TileType[,] ToGrid()
+    /// <summary>
+    /// Converts the flattened Cell array to a 2D grid
+    /// </summary>
+    public CellData[,] ToGrid()
     {
-        TileType[,] grid = new TileType[gridWidth, gridHeight];
+        CellData[,] grid = new CellData[gridWidth, gridHeight];
+
+        if (gridData == null || gridData.Length != gridWidth * gridHeight)
+        {
+            Debug.LogWarning("LevelData_SO: gridData is null or has wrong length. Returning empty grid.");
+            return grid;
+        }
 
         for (int y = 0; y < gridHeight; y++)
         {
@@ -43,5 +51,30 @@ public class LevelData_SO
         }
 
         return grid;
+    }
+
+    /// <summary>
+    /// Converts a 2D Cell grid into the flattened gridData array
+    /// </summary>
+    public void FromGrid(CellData[,] grid)
+    {
+        if (grid == null)
+        {
+            gridData = null;
+            return;
+        }
+
+        gridWidth = grid.GetLength(0);
+        gridHeight = grid.GetLength(1);
+
+        gridData = new CellData[gridWidth * gridHeight];
+
+        for (int y = 0; y < gridHeight; y++)
+        {
+            for (int x = 0; x < gridWidth; x++)
+            {
+                gridData[y * gridWidth + x] = grid[x, y];
+            }
+        }
     }
 }

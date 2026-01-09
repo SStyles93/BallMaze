@@ -1,14 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileType
+public enum GroundType
 {
-    Wall,
     Floor,
+    Ice
+}
+
+public enum OverlayType
+{
+    None,
     Start,
     End,
-    Star,
-    Ice
+    Star
+}
+
+[System.Serializable]
+public struct CellData
+{
+    public bool isWall;
+    public GroundType ground;
+    public OverlayType overlay;
 }
 
 public static class Generator
@@ -23,21 +35,20 @@ public static class Generator
     /// <param name="p">GeneratorParameters to pass</param>
     /// <param name="usedSeed">usedSeed</param>
     /// <returns>TIleType Array</returns>
-    public static TileType[,] GenerateMaze(
-        GeneratorParameters_SO p,
-        out int usedSeed
-    )
+    public static CellData[,] GenerateMaze(
+    GeneratorParameters_SO p,
+    out int usedSeed
+)
     {
-        usedSeed = p.inputSeed == -1
-            ? Random.Range(int.MinValue, int.MaxValue)
-            : p.inputSeed;
+        usedSeed = p.inputSeed == -1 ? 
+            Random.Range(int.MinValue, int.MaxValue) : p.inputSeed;
 
         System.Random rng = new System.Random(usedSeed);
 
         Vector2Int start = GetStartPosition(p);
         Vector2Int end = ResolveEndPosition(p, rng);
 
-        TileType[,] grid = CreateWallGrid(p.gridWidth, p.gridHeight);
+        CellData[,] grid = CreateWallGrid(p.gridWidth, p.gridHeight);
 
         List<Vector2Int> mainPath = GeneratePath(
             p.gridWidth,
@@ -230,30 +241,35 @@ public static class Generator
     // GRID CARVING
     // =========================================================
 
-    private static TileType[,] CreateWallGrid(int width, int height)
+    private static CellData[,] CreateWallGrid(int width, int height)
     {
-        TileType[,] grid = new TileType[width, height];
+        CellData[,] grid = new CellData[width, height];
+
         for (int x = 0; x < width; x++)
+        {
             for (int y = 0; y < height; y++)
-                grid[x, y] = TileType.Wall;
+            {
+                grid[x, y] = new CellData
+                {
+                    isWall = true,
+                    ground = GroundType.Floor,
+                    overlay = OverlayType.None
+                };
+            }
+        }
+
         return grid;
     }
 
     private static void CarvePath(
-        TileType[,] grid,
-        List<Vector2Int> path,
-        int thickness
-    )
+    CellData[,] grid,List<Vector2Int> path,int thickness)
     {
         foreach (var cell in path)
             CarveCell(grid, cell, thickness);
     }
 
     private static void CarveCell(
-        TileType[,] grid,
-        Vector2Int center,
-        int thickness
-    )
+    CellData[,] grid, Vector2Int center, int thickness)
     {
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
@@ -267,28 +283,35 @@ public static class Generator
                 if (!IsInsideGrid(p, width, height))
                     continue;
 
-                if (grid[p.x, p.y] == TileType.Start ||
-                    grid[p.x, p.y] == TileType.End ||
-                    grid[p.x, p.y] == TileType.Star)
+                ref CellData cell = ref grid[p.x, p.y];
+
+                // Never overwrite overlays
+                if (cell.overlay != OverlayType.None)
                     continue;
 
-                grid[p.x, p.y] = TileType.Floor;
+                cell.isWall = false;
+                cell.ground = GroundType.Floor;
             }
         }
     }
 
 
-    private static void MarkStartAndEnd(
-        TileType[,] grid,
-        Vector2Int start,
-        Vector2Int end
-    )
+    private static void MarkStartAndEnd(CellData[,] grid, 
+        Vector2Int start, Vector2Int end)
     {
         if (IsInsideGrid(start, grid))
-            grid[start.x, start.y] = TileType.Start;
+        {
+            grid[start.x, start.y].isWall = false;
+            grid[start.x, start.y].ground = GroundType.Floor;
+            grid[start.x, start.y].overlay = OverlayType.Start;
+        }
 
         if (IsInsideGrid(end, grid))
-            grid[end.x, end.y] = TileType.End;
+        {
+            grid[end.x, end.y].isWall = false;
+            grid[end.x, end.y].ground = GroundType.Floor;
+            grid[end.x, end.y].overlay = OverlayType.End;
+        }
     }
 
     // =========================================================
@@ -296,7 +319,7 @@ public static class Generator
     // =========================================================
 
     private static void PlaceStarsAndPaths(
-    TileType[,] grid,
+    CellData[,] grid,
     GeneratorParameters_SO p,
     List<Vector2Int> mainPath,
     Vector2Int start,
@@ -307,7 +330,6 @@ public static class Generator
         List<Vector2Int> placedStars = new();
         List<Vector2Int> freeCells = new();
 
-        // Gather all free positions
         for (int x = 0; x < p.gridWidth; x++)
         {
             for (int y = 0; y < p.gridHeight; y++)
@@ -324,7 +346,6 @@ public static class Generator
 
         foreach (var pos in freeCells)
         {
-            // Check minimum distance from already placed stars
             bool tooClose = false;
             foreach (var s in placedStars)
             {
@@ -338,11 +359,14 @@ public static class Generator
             if (tooClose)
                 continue;
 
-            // Place the star
-            placedStars.Add(pos);
-            grid[pos.x, pos.y] = TileType.Star;
+            ref CellData cell = ref grid[pos.x, pos.y];
 
-            // Connect to main path
+            if (cell.isWall)
+                continue;
+
+            placedStars.Add(pos);
+            cell.overlay = OverlayType.Star;
+
             Vector2Int connection = mainPath[rng.Next(mainPath.Count)];
             List<Vector2Int> starPath = GeneratePath(
                 p.gridWidth,
@@ -356,7 +380,6 @@ public static class Generator
             if (starPath != null)
                 CarvePath(grid, starPath, p.pathThickness);
 
-            // Optional: also connect star to the end
             if (p.starsConnectToEnd)
             {
                 List<Vector2Int> endPath = GeneratePath(
@@ -392,10 +415,7 @@ public static class Generator
                p.y >= 0 && p.y < height;
     }
 
-    private static bool IsInsideGrid(
-        Vector2Int p,
-        TileType[,] grid
-    )
+    private static bool IsInsideGrid(Vector2Int p, CellData[,] grid)
     {
         return IsInsideGrid(
             p,

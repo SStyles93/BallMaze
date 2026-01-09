@@ -8,7 +8,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] GeneratorParameters_SO GeneratorParameters;
     [SerializeField] LevelDatabase_SO LevelDatabase;
     [SerializeField] int initialCoinAmount = 30;
-    private TileType[,] currentGrid;
+    private CellData[,] currentGrid;
 
 
     private LevelData currentLevelData = null;
@@ -27,7 +27,7 @@ public class LevelManager : MonoBehaviour
     public int PreviousNumberOfStars => previousNumberOfStarts;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount => currentStarCount;
-    public TileType[,] CurrentGrid => currentGrid;
+    public CellData[,] CurrentGrid => currentGrid;
 
     private void Awake()
     {
@@ -37,16 +37,22 @@ public class LevelManager : MonoBehaviour
 
     }
     #endregion
-    public TileType[,] GenerateAndGetCurrentLevelGrid()
+    /// <summary>
+    /// Generates the current level and returns its Cell grid
+    /// </summary>
+    public CellData[,] GenerateAndGetCurrentLevelGrid()
     {
         int usedSeed;
 
-        TileType[,] grid = GenerateRuntimeLevel(
+        // Use the new Cell[,] generator
+        CellData[,] grid = this.GenerateRuntimeLevel(
             currentLevelIndex,
             LevelDatabase,
             GeneratorParameters,
             out usedSeed
         );
+
+        currentGrid = grid;
 
         // Optional: store usedSeed somewhere if needed later
         return grid;
@@ -203,37 +209,43 @@ public class LevelManager : MonoBehaviour
     /// Generates a level with RuntimeLevelProgression
     /// </summary>
     /// <param name="levelIndex">index of the level to generate/get</param>
-    /// <param name="database">ref to the database </param>
-    /// <param name="baseParameters">original parameters</param>
-    /// <param name="usedSeed">OUT param. has to be declared but not necessarily used...</param>
-    /// <returns>A 2D array of tiles (grid)</returns>
-    private TileType[,] GenerateRuntimeLevel(int levelIndex,
-        LevelDatabase_SO database, GeneratorParameters_SO baseParameters,
-        out int usedSeed)
+    /// <param name="database">reference to the level database</param>
+    /// <param name="baseParameters">generator parameters</param>
+    /// <param name="usedSeed">OUT param for the RNG seed</param>
+    /// <returns>A 2D array of CellData (grid)</returns>
+    private CellData[,] GenerateRuntimeLevel(
+        int levelIndex,
+        LevelDatabase_SO database,
+        GeneratorParameters_SO baseParameters,
+        out int usedSeed
+    )
     {
-        // If level already exists → load it
+        // 1️ If level already exists → load it
         LevelData_SO existing = database.GetLevelDataAtIndex(levelIndex);
         if (existing != null)
         {
             usedSeed = existing.usedSeed;
-            return existing.ToGrid();
+            return existing.ToGrid(); // <-- now returns CellData[,]
         }
 
-        // Otherwise generate new parameters
+        // 2️ Otherwise, generate runtime parameters
         RuntimeLevelParameters runtimeParams =
             RuntimeLevelProgression.GetParametersForLevel(levelIndex);
 
-        // Apply to generator parameters
+        // 3️ Apply runtime parameters to generator
         baseParameters.gridWidth = runtimeParams.width;
         baseParameters.gridHeight = runtimeParams.height;
         baseParameters.curvePercent = runtimeParams.curvePercent;
         baseParameters.minStarDistance = runtimeParams.minStarDistance;
         baseParameters.coinsToEarn = existing == null ? 30 : existing.coinsToEarn;
 
-        // Force random generation
+        // 4️ Force random seed
         baseParameters.inputSeed = -1;
 
-        return Generator.GenerateMaze(baseParameters, out usedSeed);
+        // 5️ Generate new grid
+        CellData[,] grid = Generator.GenerateMaze(baseParameters, out usedSeed);
+
+        return grid;
     }
     #endregion
 }

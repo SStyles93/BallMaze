@@ -1,16 +1,15 @@
 ﻿using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PhysicalMazeGenerator : MonoBehaviour
 {
     [Header("Prefabs")]
     public GameObject floorPrefab;
+    public GameObject icePrefab;
     public GameObject wallPrefab;
     public GameObject startPrefab;
     public GameObject endPrefab;
     public GameObject starPrefab;
-    public GameObject icePrefab;
 
     [Header("Layout")]
     public float cellSize = 1f;
@@ -25,21 +24,10 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     [HideInInspector][SerializeField] private bool isGridGenerated = false;
 
-    private void Awake()
-    {
-        LevelManager levelManager = LevelManager.Instance;
-        if (levelManager != null)
-        {
-            Generate(LevelManager.Instance.CurrentGrid);
-        }
-        // Calls the player spawner in debug if the grid is not empty
-        else if(isGridGenerated)
-        {
-            OnGenerationFinished?.Invoke();
-        }
-    }
-
-public void Generate(TileType[,] grid)
+    // ======================================
+    // PUBLIC GENERATION METHOD
+    // ======================================
+    public void Generate(CellData[,] grid)
     {
         if (grid == null)
         {
@@ -57,9 +45,9 @@ public void Generate(TileType[,] grid)
         {
             for (int x = 0; x < width; x++)
             {
-                TileType tile = grid[x, y];
+                CellData cell = grid[x, y];
 
-                // Flip Y to match editor grid
+                // Flip Y to match editor visualization
                 int flippedY = (height - 1) - y;
 
                 Vector3 basePosition = new Vector3(
@@ -68,28 +56,115 @@ public void Generate(TileType[,] grid)
                     flippedY * cellSize
                 );
 
-                SpawnTile(tile, basePosition, x, y);
+                SpawnCell(cell, basePosition, x, y);
             }
         }
 
         isGridGenerated = true;
 
-        ColourGroundWithRandomPreset();
+        ApplyRandomEnvironmentColors();
 
-        // Calls the Player Spawner
         OnGenerationFinished?.Invoke();
     }
-
-
 
     public void Clear()
     {
         ClearChildren();
         isGridGenerated = false;
     }
-    
-    // --- HELPER ---
 
+    // ======================================
+    // CORE SPAWN LOGIC
+    // ======================================
+    private void SpawnCell(CellData cell, Vector3 basePosition, int x, int y)
+    {
+        // 1️⃣ Wall overrides everything
+        if (cell.isWall)
+        {
+            SpawnWall(basePosition, x, y);
+            return;
+        }
+
+        // 2️⃣ Ground always exists
+        SpawnGround(cell.ground, basePosition, x, y);
+
+        // 3️⃣ Overlay (optional)
+        if (cell.overlay != OverlayType.None)
+            SpawnOverlay(cell.overlay, basePosition, x, y);
+    }
+
+    private void SpawnWall(Vector3 basePosition, int x, int y)
+    {
+        if (wallPrefab == null) return;
+
+        GameObject wall = Instantiate(
+            wallPrefab,
+            basePosition,
+            Quaternion.identity,
+            transform
+        );
+        wall.name = $"Wall_{x}_{y}";
+    }
+
+    private void SpawnGround(GroundType groundType, Vector3 basePosition, int x, int y)
+    {
+        GameObject prefab = groundType switch
+        {
+            GroundType.Floor => floorPrefab,
+            GroundType.Ice => icePrefab,
+            _ => null
+        };
+
+        if (prefab == null) return;
+
+        GameObject ground = Instantiate(
+            prefab,
+            basePosition,
+            Quaternion.identity,
+            transform
+        );
+
+        ground.name = $"{groundType}_{x}_{y}";
+    }
+
+    private void SpawnOverlay(OverlayType overlayType, Vector3 basePosition, int x, int y)
+    {
+        GameObject prefab = overlayType switch
+        {
+            OverlayType.Start => startPrefab,
+            OverlayType.End => endPrefab,
+            OverlayType.Star => starPrefab,
+            _ => null
+        };
+
+        if (prefab == null) return;
+
+        basePosition.y += GetOverlayHeight(overlayType);
+
+        GameObject overlay = Instantiate(
+            prefab,
+            basePosition,
+            Quaternion.identity,
+            transform
+        );
+
+        overlay.name = $"{overlayType}_{x}_{y}";
+    }
+
+    private float GetOverlayHeight(OverlayType type)
+    {
+        return type switch
+        {
+            OverlayType.Start => 0.5f,
+            OverlayType.End => 0.5f,
+            OverlayType.Star => 0.25f,
+            _ => 0f
+        };
+    }
+
+    // ======================================
+    // HELPERS
+    // ======================================
     private void ClearChildren()
     {
         for (int i = transform.childCount - 1; i >= 0; i--)
@@ -98,87 +173,16 @@ public void Generate(TileType[,] grid)
         }
     }
 
-    private void ColourGroundWithRandomPreset()
+    private void ApplyRandomEnvironmentColors()
     {
+        if (environmentColors_SO == null || material == null || emissiveBandMaterial == null)
+            return;
+
         int rndPresetIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
-        ColorGroundWithPresetIndex(rndPresetIndex);
+        ApplyEnvironmentColors(rndPresetIndex);
     }
 
-    private GameObject GetPrefabForTile(TileType type)
-    {
-        return type switch
-        {
-            TileType.Floor => floorPrefab,
-            TileType.Wall => wallPrefab,
-            TileType.Start => startPrefab,
-            TileType.End => endPrefab,
-            TileType.Star => starPrefab,
-            TileType.Ice => icePrefab,
-            _ => null
-        };
-    }
-
-    private void SpawnTile(TileType tileType, Vector3 basePosition, int x, int y)
-    {
-        // 1 WALL: no floor, only wall
-        if (tileType == TileType.Wall)
-        {
-            if (wallPrefab == null)
-                return;
-
-            GameObject wall = Instantiate(
-                wallPrefab,
-                basePosition,
-                Quaternion.identity,
-                transform
-            );
-
-            wall.name = $"Wall_{x}_{y}";
-            return;
-        }
-
-        // 2️ NOT WALL → spawn floor
-        SpawnFloor(basePosition, x, y);
-
-        // 3️ Special tiles on top
-        GameObject specialPrefab = GetPrefabForTile(tileType);
-        if (specialPrefab == null || tileType == TileType.Floor)
-            return;
-        if (tileType == TileType.Start || tileType == TileType.End)
-            basePosition.y = 0.5f;
-
-        GameObject special = Instantiate(
-            specialPrefab,
-            basePosition,
-            Quaternion.identity,
-            transform
-        );
-
-        special.name = $"{tileType}_{x}_{y}";
-    }
-
-    private void SpawnFloor(Vector3 basePosition, int x, int y)
-    {
-        if (floorPrefab == null)
-            return;
-
-        Vector3 floorPosition = new Vector3(
-            basePosition.x,
-            0,
-            basePosition.z
-        );
-
-        GameObject floor = Instantiate(
-            floorPrefab,
-            floorPosition,
-            Quaternion.identity,
-            transform
-        );
-
-        floor.name = $"Floor_{x}_{y}";
-    }
-
-    private void ColorGroundWithPresetIndex(int presetIndex)
+    private void ApplyEnvironmentColors(int presetIndex)
     {
         material.SetColor("_TopColor", environmentColors_SO.Presets[presetIndex].Top);
         material.SetColor("_RightColor", environmentColors_SO.Presets[presetIndex].Right);

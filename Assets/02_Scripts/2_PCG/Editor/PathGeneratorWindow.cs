@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 public class PathGeneratorWindow : EditorWindow
@@ -8,7 +8,7 @@ public class PathGeneratorWindow : EditorWindow
     private PhysicalMazeGenerator physicalGenerator;
 
     private int levelIndex = 0;
-    private TileType[,] grid;
+    private CellData[,] grid;
     private int usedSeed;
 
     private int coinsToEarn;
@@ -18,6 +18,17 @@ public class PathGeneratorWindow : EditorWindow
     private bool showStars = true;
 
     private float cellSize = 20f;
+
+    private PaintMode paintMode = PaintMode.Ground;
+    private GroundType selectedGround = GroundType.Floor;
+    private OverlayType selectedOverlay = OverlayType.None;
+
+    private enum PaintMode
+    {
+        Wall,
+        Ground,
+        Overlay
+    }
 
     [MenuItem("Tools/Path Generator")]
     public static void ShowWindow()
@@ -95,20 +106,38 @@ public class PathGeneratorWindow : EditorWindow
             grid = Generator.GenerateMaze(parameters, out usedSeed);
 
             if (physicalGenerator != null)
-            {
                 physicalGenerator.Generate(grid);
-            }
         }
+
         if (GUILayout.Button("Clear"))
         {
             grid = null;
-            if (physicalGenerator != null)
-                physicalGenerator.Clear();
+            physicalGenerator?.Clear();
         }
 
         GUILayout.Space(20);
+
+        GUILayout.Space(10);
+        EditorGUILayout.LabelField("Manual Painting", EditorStyles.boldLabel);
+
+        paintMode = (PaintMode)EditorGUILayout.EnumPopup("Paint Mode", paintMode);
+
+        switch (paintMode)
+        {
+            case PaintMode.Ground:
+                selectedGround = (GroundType)EditorGUILayout.EnumPopup(
+                    "Ground Type", selectedGround);
+                break;
+
+            case PaintMode.Overlay:
+                selectedOverlay = (OverlayType)EditorGUILayout.EnumPopup(
+                    "Overlay Type", selectedOverlay);
+                break;
+        }
+
         DrawGrid();
     }
+
 
     private void DrawSection(string title, ref bool foldout, System.Action content)
     {
@@ -121,7 +150,6 @@ public class PathGeneratorWindow : EditorWindow
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
     }
-
     private void DrawGridSettings()
     {
         EditorGUI.BeginChangeCheck();
@@ -153,8 +181,6 @@ public class PathGeneratorWindow : EditorWindow
         if (EditorGUI.EndChangeCheck())
             Regenerate();
     }
-
-
     private void DrawPathSettings()
     {
         EditorGUI.BeginChangeCheck();
@@ -168,8 +194,6 @@ public class PathGeneratorWindow : EditorWindow
         if (EditorGUI.EndChangeCheck())
             Regenerate();
     }
-
-
     private void DrawStarSettings()
     {
         EditorGUI.BeginChangeCheck();
@@ -189,7 +213,6 @@ public class PathGeneratorWindow : EditorWindow
         if (EditorGUI.EndChangeCheck())
             Regenerate();
     }
-
     private void DrawGrid()
     {
         if (grid == null)
@@ -200,29 +223,57 @@ public class PathGeneratorWindow : EditorWindow
             parameters.gridHeight * cellSize
         );
 
+        float overlayScale = 0.5f; // overlays are smaller than the cell
+
         for (int y = 0; y < parameters.gridHeight; y++)
         {
             for (int x = 0; x < parameters.gridWidth; x++)
             {
-                Rect cell = new(
+                ref CellData cell = ref grid[x, y];
+
+                Rect cellRect = new(
                     rect.x + x * cellSize,
                     rect.y + y * cellSize,
                     cellSize,
                     cellSize
                 );
 
-                Color color = grid[x, y] switch
+                // --- Draw ground first ---
+                Color groundColor = cell.ground switch
                 {
-                    TileType.Wall => Color.gray,
-                    TileType.Floor => Color.green,
-                    TileType.Start => Color.blue,
-                    TileType.End => Color.red,
-                    TileType.Star => Color.yellow,
+                    GroundType.Floor => Color.green,
+                    GroundType.Ice => Color.cyan,
                     _ => Color.magenta
                 };
 
-                EditorGUI.DrawRect(cell, color);
-                Handles.DrawSolidRectangleWithOutline(cell, Color.clear, Color.black);
+                if (cell.isWall)
+                    groundColor = Color.gray;
+
+                EditorGUI.DrawRect(cellRect, groundColor);
+                Handles.DrawSolidRectangleWithOutline(cellRect, Color.clear, Color.black);
+
+                // --- Draw overlay scaled down ---
+                if (cell.overlay != OverlayType.None)
+                {
+                    Color overlayColor = cell.overlay switch
+                    {
+                        OverlayType.Start => Color.blue,
+                        OverlayType.End => Color.red,
+                        OverlayType.Star => Color.yellow,
+                        _ => Color.white
+                    };
+
+                    float overlaySize = cellSize * overlayScale;
+                    Rect overlayRect = new Rect(
+                        cellRect.x + (cellSize - overlaySize) / 2f,
+                        cellRect.y + (cellSize - overlaySize) / 2f,
+                        overlaySize,
+                        overlaySize
+                    );
+
+                    EditorGUI.DrawRect(overlayRect, overlayColor);
+                    Handles.DrawSolidRectangleWithOutline(overlayRect, Color.clear, Color.black);
+                }
             }
         }
 
@@ -243,58 +294,79 @@ public class PathGeneratorWindow : EditorWindow
 
         Repaint();
     }
-
-
     private void HandleGridMouseInput(Rect gridRect)
     {
         Event e = Event.current;
 
-        if (e.type == EventType.MouseDown && e.button == 0) // left click
+        if (e.type != EventType.MouseDown)
+            return;
+
+        Vector2 localMousePos = e.mousePosition - new Vector2(gridRect.x, gridRect.y);
+
+        int x = Mathf.FloorToInt(localMousePos.x / cellSize);
+        int y = Mathf.FloorToInt(localMousePos.y / cellSize);
+
+        if (!IsInsideGrid(x, y))
+            return;
+
+        ref CellData cell = ref grid[x, y];
+
+        // Prevent overwriting Start position
+        Vector2Int startPos = new(
+            parameters.gridWidth / 2,
+            parameters.gridHeight - 1
+        );
+
+        if (x == startPos.x && y == startPos.y)
+            return;
+
+        // LEFT CLICK → paint
+        if (e.button == 0)
         {
-            Vector2 localMousePos = e.mousePosition - new Vector2(gridRect.x, gridRect.y);
-
-            int x = Mathf.FloorToInt(localMousePos.x / cellSize);
-            int y = Mathf.FloorToInt(localMousePos.y / cellSize);
-
-            // Bounds check
-            if (x >= 0 && x < parameters.gridWidth && y >= 0 && y < parameters.gridHeight)
+            switch (paintMode)
             {
-                // Prevent changing start tile
-                Vector2Int startPos = new Vector2Int(parameters.gridWidth / 2, parameters.gridHeight - 1);
-                if (x == startPos.x && y == startPos.y)
-                    return;
+                case PaintMode.Wall:
+                    cell.isWall = true;
+                    cell.overlay = OverlayType.None;
+                    break;
 
-                // Cycle tile type
-                TileType current = grid[x, y];
-                TileType next;
-                switch (current)
-                {
-                    case TileType.Floor:
-                        next = TileType.Star;
-                        break;
-                    case TileType.Star:
-                        next = TileType.End;
-                        break;
-                    case TileType.End:
-                        next = TileType.Wall;
-                        break;
-                    case TileType.Wall:
-                        next = TileType.Floor;
-                        break;
-                    default:
-                        next = TileType.Floor;
-                        break;
-                }
+                case PaintMode.Ground:
+                    cell.isWall = false;
+                    cell.ground = selectedGround;
+                    break;
 
-                grid[x, y] = next;
-
-                e.Use(); // consume event
-                Repaint();
+                case PaintMode.Overlay:
+                    if (!cell.isWall)
+                        cell.overlay = selectedOverlay;
+                    break;
             }
+        }
+
+        // RIGHT CLICK → first remove overlay, then wall
+        if (e.button == 1)
+        {
+            if (cell.overlay != OverlayType.None)
+            {
+                cell.overlay = OverlayType.None; // remove overlay first
+            }
+            else
+            {
+                cell.isWall = true;  // then turn into wall
+            }
+
+            Repaint();
+            e.Use();
         }
     }
 
-    // --- New Save/Load Methods ---
+    private bool IsInsideGrid(int x, int y)
+    {
+        return x >= 0 && x < parameters.gridWidth &&
+               y >= 0 && y < parameters.gridHeight;
+    }
+
+
+    // --- Save/Load Methods ---
     private void SaveCurrentLevel()
     {
         if (levelDatabase == null || grid == null) return;
@@ -325,7 +397,7 @@ public class PathGeneratorWindow : EditorWindow
         data.gridWidth = width;
         data.gridHeight = height;
         // Save grid (flattend grid for serializeation)
-        data.gridData = new TileType[width * height];
+        data.gridData = new CellData[width * height];
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -368,7 +440,7 @@ public class PathGeneratorWindow : EditorWindow
         parameters.starsConnectToEnd = data.starsConnectToEnd;
 
         // Load from flattened grid (for serialization)
-        grid = new TileType[data.gridWidth, data.gridHeight];
+        grid = new CellData[data.gridWidth, data.gridHeight];
         for (int y = 0; y < data.gridHeight; y++)
         {
             for (int x = 0; x < data.gridWidth; x++)
