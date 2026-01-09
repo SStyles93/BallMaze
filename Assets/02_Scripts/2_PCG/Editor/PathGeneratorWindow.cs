@@ -25,7 +25,6 @@ public class PathGeneratorWindow : EditorWindow
 
     private enum PaintMode
     {
-        Wall,
         Ground,
         Overlay
     }
@@ -191,6 +190,9 @@ public class PathGeneratorWindow : EditorWindow
         parameters.curvePercent =
             EditorGUILayout.IntSlider("Curve %", parameters.curvePercent, 0, 100);
 
+        parameters.iceRatio =
+            EditorGUILayout.Slider("Ice %", parameters.iceRatio, 0, 1);
+
         if (EditorGUI.EndChangeCheck())
             Regenerate();
     }
@@ -325,11 +327,6 @@ public class PathGeneratorWindow : EditorWindow
         {
             switch (paintMode)
             {
-                case PaintMode.Wall:
-                    cell.isWall = true;
-                    cell.overlay = OverlayType.None;
-                    break;
-
                 case PaintMode.Ground:
                     cell.isWall = false;
                     cell.ground = selectedGround;

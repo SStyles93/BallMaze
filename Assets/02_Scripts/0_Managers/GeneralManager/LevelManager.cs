@@ -7,6 +7,7 @@ public class LevelManager : MonoBehaviour
     public Dictionary<int, LevelData> LevelDataDictionnary = new Dictionary<int, LevelData>();
     [SerializeField] GeneratorParameters_SO GeneratorParameters;
     [SerializeField] LevelDatabase_SO LevelDatabase;
+    [SerializeField] int levelsPerCycle = 30;
     [SerializeField] int initialCoinAmount = 30;
     private CellData[,] currentGrid;
 
@@ -225,17 +226,19 @@ public class LevelManager : MonoBehaviour
         if (existing != null)
         {
             usedSeed = existing.usedSeed;
-            return existing.ToGrid(); // <-- now returns CellData[,]
+            return existing.ToGrid();
         }
 
         // 2️ Otherwise, generate runtime parameters
         RuntimeLevelParameters runtimeParams =
-            RuntimeLevelProgression.GetParametersForLevel(levelIndex);
+            RuntimeLevelProgression.GetParametersForLevel(levelIndex, levelsPerCycle);
 
         // 3️ Apply runtime parameters to generator
         baseParameters.gridWidth = runtimeParams.width;
         baseParameters.gridHeight = runtimeParams.height;
         baseParameters.curvePercent = runtimeParams.curvePercent;
+        baseParameters.iceRatio = runtimeParams.iceRatio;
+        
         baseParameters.minStarDistance = runtimeParams.minStarDistance;
         baseParameters.coinsToEarn = existing == null ? 30 : existing.coinsToEarn;
 

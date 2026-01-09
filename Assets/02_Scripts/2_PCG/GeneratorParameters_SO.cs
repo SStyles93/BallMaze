@@ -27,6 +27,8 @@ public class GeneratorParameters_SO : ScriptableObject
     [Tooltip("0 = direct, 100 = very curvy")]
     public int curvePercent = 30;
 
+    [Range(0f, 1f)] public float iceRatio = 0;
+
     [Header("Stars & Currencies")]
     [Range(0, 20)]
     public int starCount = 3;

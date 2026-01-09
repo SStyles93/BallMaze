@@ -56,7 +56,7 @@ public static class Generator
             start,
             end,
             rng,
-            p.curvePercent
+            p
         );
 
         if (mainPath == null || mainPath.Count == 0)
@@ -65,7 +65,7 @@ public static class Generator
             return grid;
         }
 
-        CarvePath(grid, mainPath, p.pathThickness);
+        CarvePath(grid, mainPath, p);
         MarkStartAndEnd(grid, start, end);
 
         PlaceStarsAndPaths(
@@ -138,7 +138,7 @@ public static class Generator
         Vector2Int start,
         Vector2Int end,
         System.Random rng,
-        int curvePercent
+        GeneratorParameters_SO p
     )
     {
         start = ClampToGrid(start, width, height);
@@ -165,7 +165,7 @@ public static class Generator
             }
 
             Vector2Int next =
-                rng.Next(0, 100) < curvePercent ? 
+                rng.Next(0, 100) < p.curvePercent ? 
                 neighbors[rng.Next(neighbors.Count)] : PickClosest(neighbors, end);
 
             path.Add(next);
@@ -262,35 +262,37 @@ public static class Generator
     }
 
     private static void CarvePath(
-    CellData[,] grid,List<Vector2Int> path,int thickness)
+    CellData[,] grid,List<Vector2Int> path, GeneratorParameters_SO p)
     {
         foreach (var cell in path)
-            CarveCell(grid, cell, thickness);
+            CarveCell(grid, cell, p);
     }
 
     private static void CarveCell(
-    CellData[,] grid, Vector2Int center, int thickness)
+    CellData[,] grid, Vector2Int center, GeneratorParameters_SO p)
     {
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
 
-        for (int dx = -thickness; dx <= thickness; dx++)
-        {
-            for (int dy = -thickness; dy <= thickness; dy++)
-            {
-                Vector2Int p = new(center.x + dx, center.y + dy);
+        int pathThickness = p.pathThickness;
 
-                if (!IsInsideGrid(p, width, height))
+        for (int dx = -pathThickness; dx <= pathThickness; dx++)
+        {
+            for (int dy = -pathThickness; dy <= pathThickness; dy++)
+            {
+                Vector2Int path = new(center.x + dx, center.y + dy);
+
+                if (!IsInsideGrid(path, width, height))
                     continue;
 
-                ref CellData cell = ref grid[p.x, p.y];
+                ref CellData cell = ref grid[path.x, path.y];
 
                 // Never overwrite overlays
                 if (cell.overlay != OverlayType.None)
                     continue;
 
                 cell.isWall = false;
-                cell.ground = GroundType.Floor;
+                cell.ground = (Random.value < p.iceRatio) ? GroundType.Ice : GroundType.Floor;
             }
         }
     }
@@ -374,11 +376,11 @@ public static class Generator
                 connection,
                 pos,
                 rng,
-                p.curvePercent
+                p
             );
 
             if (starPath != null)
-                CarvePath(grid, starPath, p.pathThickness);
+                CarvePath(grid, starPath, p);
 
             if (p.starsConnectToEnd)
             {
@@ -388,11 +390,11 @@ public static class Generator
                     pos,
                     end,
                     rng,
-                    p.curvePercent
+                    p
                 );
 
                 if (endPath != null)
-                    CarvePath(grid, endPath, p.pathThickness);
+                    CarvePath(grid, endPath, p);
             }
 
             starsPlaced++;
