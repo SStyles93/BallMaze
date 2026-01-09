@@ -54,26 +54,29 @@ public class LevelSlot : BaseUISlot
         {
             if (isLocked) return;
 
-            GamesMenuManager.Instance.SaveScrollbarValues();
+            GamesMenuManager.Instance.SetLevelToPlay(slotIndex);
 
-            // Normal behaviour
-            if (CoinManager.Instance.CanAfford(CoinType.HEART, 1))
-            {
-                LevelManager.Instance.InitializeLevel(slotIndex);
-                SceneController.Instance
-                    .NewTransition()
-                    .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
-                    .Unload(SceneDatabase.Scenes.GamesMenu)
-                    .WithOverlay()
-                    .Perform();
-            }
-            else // Heart Pannel
-            {
-                SceneController.Instance
-                    .NewTransition()
-                    .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.HeartPannel)
-                    .Perform();
-            }
+
+            //GamesMenuManager.Instance.SaveScrollbarValues();
+
+            //// Normal behaviour
+            //if (CoinManager.Instance.CanAfford(CoinType.HEART, 1))
+            //{
+            //    LevelManager.Instance.InitializeLevel(slotIndex);
+            //    SceneController.Instance
+            //        .NewTransition()
+            //        .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
+            //        .Unload(SceneDatabase.Scenes.GamesMenu)
+            //        .WithOverlay()
+            //        .Perform();
+            //}
+            //else // Heart Pannel
+            //{
+            //    SceneController.Instance
+            //        .NewTransition()
+            //        .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.HeartPannel)
+            //        .Perform();
+            //}
 
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }

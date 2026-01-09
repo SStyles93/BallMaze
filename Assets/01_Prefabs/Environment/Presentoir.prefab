@@ -279,8 +279,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: BUY ?
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 00bf1b5006ad71144b79379a7f1e2d18, type: 2}
-  m_sharedMaterial: {fileID: 5836008013621343584, guid: 00bf1b5006ad71144b79379a7f1e2d18, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -600,14 +600,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9121871916675446333}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0.0000000010766216, y: -1, z: -0.000000029802326, w: 0.00000044286432}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5142728392721388109}
   m_Father: {fileID: 572434989680360804}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!135 &8763675286625736236
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -673,8 +673,7 @@ MonoBehaviour:
   m_visualContainer: {fileID: 6133059397183963696}
   m_meshRenderer: {fileID: 0}
   glassTintPercent: 15
-  m_trailMaterial: {fileID: 2100000, guid: eb13614572aa11c409fa757d0ad8476c, type: 2}
-  m_trailIntensity: 2
+  m_playerVisualEffects: {fileID: 0}
 --- !u!114 &8230093531960402944
 MonoBehaviour:
   m_ObjectHideFlags: 0

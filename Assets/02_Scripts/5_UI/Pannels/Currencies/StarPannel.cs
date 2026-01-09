@@ -15,6 +15,11 @@ public class StarPannel : MonoBehaviour
         CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
     }
 
+    private void Start()
+    {
+        UpdateCurrencyValue(CoinType.STAR, CoinManager.Instance.StarAmount);
+    }
+
     private void UpdateCurrencyValue(CoinType type, int value)
     {
         if(type == CoinType.STAR)

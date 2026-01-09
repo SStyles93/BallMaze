@@ -72,7 +72,7 @@ Rigidbody:
   m_GameObject: {fileID: 976364394071838964}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 1
+  m_LinearDamping: 0.5
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -262,10 +262,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRigidbody: {fileID: 6087839670450387137}
-  movementForceMode: 0
-  movementForce: 1800
+  movementForceMode: 2
+  movementForce: 30
+  maxVelocity: 10
   linearDampingGroundValue: 5
-  linearDampingAirValue: 1.5
+  linearDampingAirValue: 0.5
   jumpForceMode: 1
   jumpForce: 15
   gravityScale: 2
@@ -273,7 +274,7 @@ MonoBehaviour:
   groundDetectionRadius: 0.35
   groundedLayerMask:
     serializedVersion: 2
-    m_Bits: 32768
+    m_Bits: 163840
   fallThreashold: -5
   isGrounded: 0
   wasJumpPerfromed: 0

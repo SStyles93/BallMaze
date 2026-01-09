@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7747165779374627889
 Transform:
   m_ObjectHideFlags: 0
@@ -132,8 +132,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4792155202841099101}
   - component: {fileID: 808952405081972941}
-  m_Layer: 15
-  m_Name: Cube
+  m_Layer: 17
+  m_Name: IceCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,7 +162,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3363912154842587231}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a7d17c27fd2894548875d15b7d403ec7, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -242,7 +242,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d0b5b4e45c472a94981a3234f899fd1c, type: 2}
+  - {fileID: 2100000, guid: 6f3a69e402bf21741992a33bec79340d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayButton : UIButton
 {
     [SerializeField] private TMP_Text m_levelIndexText;
+    private int m_indexOfLevelToPlay = 0;
 
     protected override void Start()
     {
@@ -18,9 +19,16 @@ public class PlayButton : UIButton
         button.onClick.RemoveListener(PlayNextLevel);
     }
 
-    public void InitializeNextLevelText()
+    public void InitializeLastLevelToPlay()
     {
-        m_levelIndexText.text = (LevelManager.Instance.GetLastLevelIndex() + 1).ToString();
+        m_indexOfLevelToPlay = LevelManager.Instance.GetLastLevelIndex() + 1;
+        m_levelIndexText.text = (m_indexOfLevelToPlay).ToString();
+    }
+
+    public void SetIndexOfLevelToPlay(int index)
+    {
+        m_indexOfLevelToPlay = index;
+        m_levelIndexText.text = (m_indexOfLevelToPlay).ToString();
     }
 
     private void PlayNextLevel()
@@ -30,7 +38,7 @@ public class PlayButton : UIButton
         // Normal behaviour
         if (CoinManager.Instance.CanAfford(CoinType.HEART, 1))
         {
-            LevelManager.Instance.InitializeLevel(LevelManager.Instance.GetLastLevelIndex() + 1);
+            LevelManager.Instance.InitializeLevel(m_indexOfLevelToPlay);
             SceneController.Instance
                 .NewTransition()
                 .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)

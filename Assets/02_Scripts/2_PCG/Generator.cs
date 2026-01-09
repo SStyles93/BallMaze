@@ -7,7 +7,8 @@ public enum TileType
     Floor,
     Start,
     End,
-    Star
+    Star,
+    Ice
 }
 
 public static class Generator
@@ -153,9 +154,8 @@ public static class Generator
             }
 
             Vector2Int next =
-                rng.Next(0, 100) < curvePercent
-                    ? neighbors[rng.Next(neighbors.Count)]
-                    : PickClosest(neighbors, end);
+                rng.Next(0, 100) < curvePercent ? 
+                neighbors[rng.Next(neighbors.Count)] : PickClosest(neighbors, end);
 
             path.Add(next);
             visited.Add(next);

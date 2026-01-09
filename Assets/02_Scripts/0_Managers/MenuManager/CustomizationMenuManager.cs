@@ -2,9 +2,12 @@ using UnityEngine;
 
 public class CustomizationMenuManager : MonoBehaviour
 {
+    [SerializeField] private PlayButton playButton;
+
     private void Start()
     {
         SavingManager.Instance.LoadSession();
+        playButton.InitializeLastLevelToPlay();
     }
 
     public void OpenGamesMenu()

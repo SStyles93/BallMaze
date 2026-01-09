@@ -8,8 +8,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Rigidbody playerRigidbody = null;
 
     [Header("Movement Settings")]
-    [SerializeField] private ForceMode movementForceMode = ForceMode.Force;
-    [SerializeField] private float movementForce = 1400.0f;
+    [SerializeField] private ForceMode movementForceMode = ForceMode.VelocityChange;
+    [SerializeField] private float movementForce = 30.0f;
+    [SerializeField] private float maxVelocity = 10.0f;
     [SerializeField] private float linearDampingGroundValue = 4.0f;
     [SerializeField] private float linearDampingAirValue = 4.0f;
 
@@ -27,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private bool wasJumpPerfromed = false;
     [SerializeField] private Vector3 movementValue;
+
+    private bool isOnIce = false;
 
     public float FallThreashold => fallThreashold;
 
@@ -60,16 +63,40 @@ public class PlayerMovement : MonoBehaviour
 
         isGrounded = CheckIfPlayerIsGrounded();
         // linearDamping is canceled with no movement, otherwise ground/air value accordingly
-        playerRigidbody.linearDamping =
-            isGrounded ?
-            movementValue.magnitude > 0.1f ? 1.0f : linearDampingGroundValue
-            : linearDampingAirValue;
+        float linearDamping = 1.0f;
+        if (isOnIce)
+        {
+            linearDamping = 0.05f;
+        }
+        else if (isGrounded)
+        {
+            linearDamping = movementValue.magnitude > 0.1f ? 
+                1.0f : linearDampingGroundValue;
+        }
+        else
+            linearDamping = linearDampingAirValue;
+
+        playerRigidbody.linearDamping = linearDamping;
+
 
         if (isGrounded)
         {
+            if(playerRigidbody.linearVelocity.magnitude > maxVelocity) return;
+
+            Vector3 appliedForce = movementValue * MovementForce * Time.deltaTime;
+            
+            //Check for Ice impact, Reduce input impact on ice
+            float controlMultiplier = isOnIce ? 0.25f : 1.0f;
+            appliedForce *= controlMultiplier;
+            
             // Apply movement with force
-            playerRigidbody.AddForce(movementValue * MovementForce * Time.deltaTime, movementForceMode);
-            //Debug.Log($"Force Applied in {movementDirection} direction, with {movementForceMode.ToString()}");
+            playerRigidbody.AddForce(appliedForce, movementForceMode);
+            
+            //Debug.Log($"Force Applied {(movementValue * MovementForce * Time.deltaTime).magnitude} " +
+            //    $"in {movementValue} direction, " +
+            //    $"with {movementForceMode.ToString()}");
+
+            //Debug.Log($"{playerRigidbody.linearVelocity.magnitude}");
         }
     }
 
@@ -89,11 +116,13 @@ public class PlayerMovement : MonoBehaviour
     private bool CheckIfPlayerIsGrounded()
     {
         Ray ray = new Ray(transform.position, Vector3.down);
-        if (Physics.SphereCast(ray, groundDetectionRadius, groundCheckDistance, groundedLayerMask))
+        if (Physics.SphereCast(ray, groundDetectionRadius, out RaycastHit hit, groundCheckDistance, groundedLayerMask))
         {
 #if UNITY_EDITOR
             DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.green);
 #endif
+            // 17 is the ICE LAYER
+            isOnIce = hit.collider.gameObject.layer == 17;
             return true;
         }
         else
@@ -153,41 +182,31 @@ public class DirectionMapper : MonoBehaviour
     /// <returns>A Vector2 snapped to one of the 8 cardinal directions, or Vector2.zero if within the deadzone.</returns>
     public static Vector2 MapTo8CardinalPoints(Vector2 analogInput, float deadzone = 0.1f)
     {
-        // Check if the input magnitude is below the deadzone
-        if (analogInput.magnitude < deadzone)
-        {
+        float magnitude = analogInput.magnitude;
+
+        // Deadzone check
+        if (magnitude < deadzone)
             return Vector2.zero;
-        }
 
-        // Calculate the angle in degrees from the input vector (atan2 returns angle in radians)
-        // Note: In Unity's 2D system, Atan2(y, x) is standard for angle calculation
-        float angle = Mathf.Atan2(analogInput.y, analogInput.x) * Mathf.Rad2Deg;
+        // Normalize only for angle calculation
+        Vector2 normalizedInput = analogInput / magnitude;
 
-        // Ensure the angle is positive (0 to 360) instead of (-180 to 180)
+        // Angle in degrees
+        float angle = Mathf.Atan2(normalizedInput.y, normalizedInput.x) * Mathf.Rad2Deg;
         if (angle < 0)
-        {
-            angle += 360;
-        }
+            angle += 360f;
 
-        // Snap the angle to the nearest 45-degree increment
-        // There are 8 directions, so 360 / 8 = 45 degrees per direction
+        // Snap angle to nearest 45°
         float snappedAngle = Mathf.Round(angle / 45f) * 45f;
+        snappedAngle %= 360f;
 
-        // Wrap around 360 degrees to 0 if necessary
-        snappedAngle %= 360;
+        // Direction from snapped angle (UNIT vector)
+        Vector2 snappedDirection = new Vector2(
+            Mathf.Cos(snappedAngle * Mathf.Deg2Rad),
+            Mathf.Sin(snappedAngle * Mathf.Deg2Rad)
+        );
 
-        // Convert the snapped angle back to a directional Vector2
-        float horizontalOut = Mathf.Cos(snappedAngle * Mathf.Deg2Rad);
-        float verticalOut = Mathf.Sin(snappedAngle * Mathf.Deg2Rad);
-
-        // Round the results to clean integer/near-integer values (-1, 0, 1) for axis-aligned movement, 
-        // otherwise they will be floats due to Cos/Sin calculation
-        horizontalOut = Mathf.Round(horizontalOut);
-        verticalOut = Mathf.Round(verticalOut);
-
-        // Normalize the vector
-        Vector2 snappedDirection = new Vector2(horizontalOut, verticalOut).normalized;
-
-        return snappedDirection;
+        // Reapply original magnitude (ANALOG)
+        return snappedDirection * magnitude;
     }
 }

@@ -11,12 +11,12 @@ public class JsonDataService : IDataService
         if (Directory.Exists(GetFolderPath("Data")))
         {
             // The folder exists
-            Debug.Log("Folder found: " + GetFolderPath("Data"));
+            //Debug.Log("Folder found: " + GetFolderPath("Data"));
         }
         else
         {
             // The folder does not exist
-            Debug.Log("Folder not found: " + GetFolderPath("Data"));
+            //Debug.Log("Folder not found: " + GetFolderPath("Data"));
             // You can create it if needed:
             Directory.CreateDirectory(GetFolderPath("Data"));
         }
@@ -26,7 +26,7 @@ public class JsonDataService : IDataService
 
             if (File.Exists(path) && !overwrite)
             {
-                Debug.LogError($"File already exists and overwrite is false: {path}");
+                //Debug.LogError($"File already exists and overwrite is false: {path}");
                 return false;
             }
 
@@ -52,7 +52,7 @@ public class JsonDataService : IDataService
         {
             if (!File.Exists(path))
             {
-                Debug.LogWarning($"File not found: {path}");
+                //Debug.LogWarning($"File not found: {path}");
                 return default(T);
             }
 

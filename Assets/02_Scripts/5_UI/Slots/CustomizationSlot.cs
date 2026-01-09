@@ -92,6 +92,9 @@ public class CustomizationSlot : BaseUISlot
         // If the click released when over the slot
         else if (isMouseOver)
         {
+            //Reset rotation of the viewer
+            playerCustomization.transform.localRotation = Quaternion.Euler(new Vector3(0,180,0));
+
             // Material is given to shop manager (not yet unlocked)
             if (isLocked)
             {

@@ -15,6 +15,11 @@ public class CurrencyPannel : MonoBehaviour
         CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
     }
 
+    private void Start()
+    {
+        UpdateCurrencyValue(CoinType.COIN, CoinManager.Instance.CoinAmount);
+    }
+
     private void UpdateCurrencyValue(CoinType type, int value)
     {
         if(type == CoinType.COIN)

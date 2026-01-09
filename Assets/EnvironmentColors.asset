@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnvironmentColors
   m_EditorClassIdentifier: Assembly-CSharp::EnvironmentColors
   Presets:
-  - Top: {r: 0.43529412, g: 0.29411766, b: 0.64705884, a: 1}
+  - Top: {r: 0.5317594, g: 0.36551085, b: 0.78113204, a: 1}
     Right: {r: 0.22745098, g: 0.12156863, b: 0.3882353, a: 1}
     Left: {r: 0.227451, g: 0.121568635, b: 0.38823533, a: 1}
     Front: {r: 0.5411765, g: 0.16862746, b: 0.8862746, a: 1}

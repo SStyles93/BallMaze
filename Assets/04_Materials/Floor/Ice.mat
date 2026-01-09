@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ground
+  m_Name: Ice
   m_Shader: {fileID: -6465566751694194690, guid: 81c18cc7f1b71214ea900b4d75a74955, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -52,11 +52,11 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _FrontColor: {r: 0.19607845, g: 0.80392164, b: 0.19607845, a: 1}
-    - _LeftColor: {r: 0.13333334, g: 0.54509807, b: 0.13333334, a: 1}
+    - _FrontColor: {r: 0.121568635, g: 1, b: 0.882353, a: 1}
+    - _LeftColor: {r: 0.121568635, g: 1, b: 0.882353, a: 1}
     - _RIghtColor: {r: 0.735849, g: 0.5370562, b: 0.49288, a: 1}
-    - _RightColor: {r: 0.13333334, g: 0.54509807, b: 0.13333334, a: 1}
-    - _TopColor: {r: 0.46274513, g: 0.909804, b: 0.46274513, a: 1}
+    - _RightColor: {r: 0.12075472, g: 1, b: 0.883246, a: 1}
+    - _TopColor: {r: 0.4792453, g: 0.8853981, b: 1, a: 1}
     - _Vector2: {r: -21.66, g: 5.46, b: 0, a: 0}
     - _Vector2_1: {r: 0, g: 0.008, b: 0, a: 0}
   m_BuildTextureStacks: []

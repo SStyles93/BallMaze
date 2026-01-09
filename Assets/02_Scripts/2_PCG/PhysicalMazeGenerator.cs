@@ -10,6 +10,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
     public GameObject startPrefab;
     public GameObject endPrefab;
     public GameObject starPrefab;
+    public GameObject icePrefab;
 
     [Header("Layout")]
     public float cellSize = 1f;
@@ -112,13 +113,14 @@ public void Generate(TileType[,] grid)
             TileType.Start => startPrefab,
             TileType.End => endPrefab,
             TileType.Star => starPrefab,
+            TileType.Ice => icePrefab,
             _ => null
         };
     }
 
     private void SpawnTile(TileType tileType, Vector3 basePosition, int x, int y)
     {
-        // 1️⃣ WALL: no floor, only wall
+        // 1 WALL: no floor, only wall
         if (tileType == TileType.Wall)
         {
             if (wallPrefab == null)

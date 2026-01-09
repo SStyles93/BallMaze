@@ -881,6 +881,7 @@ MonoBehaviour:
   startPrefab: {fileID: 839851351414052169, guid: 71d9a997e250b584e94d1ae44a3efb43, type: 3}
   endPrefab: {fileID: 839851351414052169, guid: 29acc65d504401e4d88b0827385a419b, type: 3}
   starPrefab: {fileID: 3102653523287797894, guid: f5147e29e7531614bbb3b478e45ae50f, type: 3}
+  icePrefab: {fileID: 3363912154842587231, guid: fdd7fc5c027b1ba43a890055811e917b, type: 3}
   cellSize: 3
   clearPrevious: 1
   environmentColors_SO: {fileID: 11400000, guid: 22cf0413d1085ed4aabc7775cc128e86, type: 2}
@@ -1111,6 +1112,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b331abe9920a60488d5b355582c65d8, type: 3}
+--- !u!114 &981403621664270245 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1620956924987401326, guid: 0b331abe9920a60488d5b355582c65d8, type: 3}
+  m_PrefabInstance: {fileID: 981403621664270244}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1c800fb3c8075d4ba77f29165b81f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1143648109617186724
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,6 +1458,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: DeadZone
       objectReference: {fileID: 0}
+    - target: {fileID: 1712408051279362468, guid: 70763902aef5aaf419e9e9e0b7ba2a64, type: 3}
+      propertyPath: lifePannel
+      value: 
+      objectReference: {fileID: 981403621664270245}
     - target: {fileID: 8827413682975056885, guid: 70763902aef5aaf419e9e9e0b7ba2a64, type: 3}
       propertyPath: m_LocalPosition.x
       value: 27.4

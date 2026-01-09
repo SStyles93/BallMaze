@@ -91,7 +91,7 @@ public class CustomizationManager : MonoBehaviour
             case SkinOption materialOpt:
                 skinData_SO.playerSkin = materialOpt.skin;
                 skinData_SO.playerSkinIndex = currentOptionIndex;
-                skinData_SO.playerColor = materialOpt.skin.GetComponent<MeshRenderer>().material.color;
+                skinData_SO.playerColor = materialOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color;
                 skinData_SO.playerColorIndex = 0;
                 break;
 

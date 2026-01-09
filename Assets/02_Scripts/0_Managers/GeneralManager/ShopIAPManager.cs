@@ -26,7 +26,7 @@ public class ShopIAPManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         InitializeIAP();
     }

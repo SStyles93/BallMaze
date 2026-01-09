@@ -26,7 +26,7 @@ public class AdsManager : MonoBehaviour
     public LevelPlayInterstitialAd InterstitialAd;
     public LevelPlayRewardedAd RewardedVideoAd;
 
-    //[SerializeField] private TMP_Text adsDebugText;
+    [SerializeField] private TMP_Text adsDebugText;
 
     // -------- Banner layout authority --------
     public static int CurrentBannerHeightPx { get; private set; }
@@ -110,6 +110,8 @@ public class AdsManager : MonoBehaviour
 
         BannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
         BannerAd.OnAdLoadFailed += BannerOnAdLoadFailedEvent;
+        //BannerAd.OnAdDisplayed += BannerOnAdDisplayedEvent;
+        //BannerAd.OnAdDisplayFailed += BannerOnAdDisplayedFailedEvent;
 
         BannerAd.LoadAd();
     }
@@ -131,22 +133,42 @@ public class AdsManager : MonoBehaviour
         ApplyBannerAreaSize();
         OnBannerHeightChanged?.Invoke(CurrentBannerHeightPx);
 
-        BannerAd.ShowAd();
-
-        Debug.Log($"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)");
+        adsDebugText.text = "$\"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)\"";
+        //Debug.Log($"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)");
     }
 
     private void BannerOnAdLoadFailedEvent(LevelPlayAdError error)
     {
-        CurrentBannerHeightPx = 0;
+        //CurrentBannerHeightPx = 0;
 
-        ApplyBannerAreaSize();
-        OnBannerHeightChanged?.Invoke(0);
+        //ApplyBannerAreaSize();
+        //OnBannerHeightChanged?.Invoke(0);
 
-        BannerAd.HideAd();
-
-        Debug.LogWarning($"[AdsManager] Banner failed to load");
+        adsDebugText.text = "[AdsManager] Banner failed to load";
+        Debug.LogWarning("[AdsManager] Banner failed to load");
     }
+
+
+    //private void BannerOnAdDisplayedEvent(LevelPlayAdInfo adInfo)
+    //{
+    //    CurrentBannerHeightPx = GetBannerHeightPx();
+
+    //    ApplyBannerAreaSize();
+    //    OnBannerHeightChanged?.Invoke(CurrentBannerHeightPx);
+
+    //    Debug.Log($"[AdsManager] Banner Displayed with ({CurrentBannerHeightPx}px)");
+    //}
+
+    //private void BannerOnAdDisplayedFailedEvent(LevelPlayAdInfo adInfo, LevelPlayAdError error)
+    //{
+    //    CurrentBannerHeightPx = 0;
+
+    //    ApplyBannerAreaSize();
+    //    OnBannerHeightChanged?.Invoke(0);
+
+    //    Debug.LogWarning($"[AdsManager] Banner failed to display");
+    //}
+
 
     // Scales the Ads Area (Core Canvas)
     private void ApplyBannerAreaSize()
@@ -199,5 +221,6 @@ public class AdsManager : MonoBehaviour
     {
         BannerAd?.DestroyAd();
         InterstitialAd?.DestroyAd();
+        RewardedVideoAd?.DestroyAd();
     }
 }

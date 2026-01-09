@@ -41,7 +41,12 @@ public class GamesMenuManager : MonoBehaviour
         scrollbar.value = scrollbarData.scrollbarValue;
         scrollbar.size = scrollbarData.scrollbarSize;
 
-        playButton.InitializeNextLevelText();
+        playButton.InitializeLastLevelToPlay();
+    }
+
+    public void SetLevelToPlay(int index)
+    {
+        playButton.SetIndexOfLevelToPlay(index);
     }
 
     private void InitializeSlots(int numberOfLevels)
