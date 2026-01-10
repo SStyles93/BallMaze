@@ -143,6 +143,12 @@ public class PhysicalMazeGenerator : MonoBehaviour
             transform
         );
 
+        // Set the value of movement so that is it always coherant with the grid's size
+        if(groundType == GroundType.MovingPlatformH || groundType == GroundType.MovingPlatformV)
+        {
+            ground.GetComponent<PlatformMovement>().MovementValue = cellSize;
+        }
+
         ground.name = $"{groundType}_{x}_{y}";
     }
 

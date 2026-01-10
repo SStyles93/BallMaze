@@ -6,7 +6,8 @@ public enum GroundType
     Floor,
     Ice,
     MovingPlatformH, // horizontal
-    MovingPlatformV  // vertical
+    MovingPlatformV, // vertical
+    PlatformSide
 }
 
 public enum OverlayType
@@ -410,6 +411,9 @@ public static class Generator
 
         Shuffle(candidates, rng);
 
+        // Keep track of tiles already reserved for platforms
+        bool[,] reserved = new bool[width, height];
+
         int placed = 0;
 
         foreach (var c in candidates)
@@ -418,6 +422,25 @@ public static class Generator
                 break;
 
             Vector2Int center = c.center;
+
+            // Skip if any of the 3 tiles are already reserved
+            bool overlap = false;
+            if (c.horizontal)
+            {
+                overlap = reserved[center.x - 1, center.y] ||
+                          reserved[center.x, center.y] ||
+                          reserved[center.x + 1, center.y];
+            }
+            else
+            {
+                overlap = reserved[center.x, center.y - 1] ||
+                          reserved[center.x, center.y] ||
+                          reserved[center.x, center.y + 1];
+            }
+
+            if (overlap)
+                continue;
+
             ref CellData centerCell = ref grid[center.x, center.y];
 
             // Skip if center is start or end (safety check)
@@ -427,23 +450,51 @@ public static class Generator
             // Center becomes the moving platform
             centerCell.isWall = false;
             centerCell.ground = c.horizontal ? GroundType.MovingPlatformH : GroundType.MovingPlatformV;
-            centerCell.overlay = OverlayType.None;
 
-            // Side tiles become walls but preserve any stars
+            // Side tiles become PlatformSide (preserve any stars)
             if (c.horizontal)
             {
-                grid[center.x - 1, center.y].isWall = true;
-                grid[center.x + 1, center.y].isWall = true;
+                SetPlatformSide(grid, center.x - 1, center.y);
+                SetPlatformSide(grid, center.x + 1, center.y);
+
+                // Reserve the 3 tiles
+                ReserveTile(reserved, center.x - 1, center.y);
+                ReserveTile(reserved, center.x, center.y);
+                ReserveTile(reserved, center.x + 1, center.y);
             }
             else
             {
-                grid[center.x, center.y - 1].isWall = true;
-                grid[center.x, center.y + 1].isWall = true;
+                SetPlatformSide(grid, center.x, center.y - 1);
+                SetPlatformSide(grid, center.x, center.y + 1);
+
+                // Reserve the 3 tiles
+                ReserveTile(reserved, center.x, center.y - 1);
+                ReserveTile(reserved, center.x, center.y);
+                ReserveTile(reserved, center.x, center.y + 1);
             }
 
             placed++;
         }
     }
+
+    // Marks a tile as PlatformSide without removing stars
+    private static void SetPlatformSide(CellData[,] grid, int x, int y)
+    {
+        ref CellData cell = ref grid[x, y];
+        if (cell.ground != GroundType.MovingPlatformH && cell.ground != GroundType.MovingPlatformV)
+        {
+            cell.isWall = false;        // optional: ensures it's walkable
+            cell.ground = GroundType.PlatformSide;
+        }
+    }
+
+    // Marks a tile as reserved for placement
+    private static void ReserveTile(bool[,] reserved, int x, int y)
+    {
+        reserved[x, y] = true;
+    }
+
+
 
     // === STARS ===
 

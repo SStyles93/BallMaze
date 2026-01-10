@@ -247,27 +247,24 @@ public class PathGeneratorWindow : EditorWindow
                     cellSize
                 );
 
-                // --- Draw ground first ---
+                // --- Draw ground ---
                 Color groundColor = cell.ground switch
                 {
                     GroundType.Floor => Color.green,
                     GroundType.Ice => Color.cyan,
                     GroundType.MovingPlatformH => Color.magenta,
                     GroundType.MovingPlatformV => Color.magenta,
-                    _ => Color.magenta
+                    GroundType.PlatformSide => Color.magenta * 0.75f,
+                    _ => Color.pink
                 };
 
                 if (cell.isWall)
                     groundColor = Color.gray;
 
+                // Normal ground / wall
                 EditorGUI.DrawRect(cellRect, groundColor);
                 Handles.DrawSolidRectangleWithOutline(cellRect, Color.clear, Color.black);
 
-                // --- Draw sides if it's a moving platform ---
-                if (cell.ground == GroundType.MovingPlatformH || cell.ground == GroundType.MovingPlatformV)
-                {
-                    DrawMovingPlatformSides(grid, cellRect, x, y, cellSize, groundColor);
-                }
 
                 // --- Draw overlays ---
                 if (cell.overlay != OverlayType.None)
@@ -296,57 +293,6 @@ public class PathGeneratorWindow : EditorWindow
 
         HandleGridMouseInput(rect);
     }
-
-    /// <summary>
-    /// Draws a moving platform given its center position and orientation.
-    /// Center tile is full magenta, side tiles are slightly desaturated.
-    /// </summary>
-    private void DrawMovingPlatformSides(CellData[,] grid, Rect cellRect, int x, int y, float cellSize, Color color)
-    {
-        int width = grid.GetLength(0);
-        int height = grid.GetLength(1);
-
-        Color sideColor = color * 0.75f; // slightly less saturated
-        ref CellData cell = ref grid[x, y];
-
-        if (cell.ground == GroundType.MovingPlatformH)
-        {
-            // Left side
-            if (x > 0 && !IsStartOrEnd(x - 1, y))
-            {
-                Rect leftRect = new Rect(cellRect.x - cellSize, cellRect.y, cellSize, cellSize);
-                EditorGUI.DrawRect(leftRect, sideColor);
-                Handles.DrawSolidRectangleWithOutline(leftRect, Color.clear, Color.black);
-            }
-
-            // Right side
-            if (x < width - 1 && !IsStartOrEnd(x + 1, y))
-            {
-                Rect rightRect = new Rect(cellRect.x + cellSize, cellRect.y, cellSize, cellSize);
-                EditorGUI.DrawRect(rightRect, sideColor);
-                Handles.DrawSolidRectangleWithOutline(rightRect, Color.clear, Color.black);
-            }
-        }
-        else if (cell.ground == GroundType.MovingPlatformV)
-        {
-            // Top
-            if (y > 0 && !IsStartOrEnd(x, y - 1))
-            {
-                Rect topRect = new Rect(cellRect.x, cellRect.y - cellSize, cellSize, cellSize);
-                EditorGUI.DrawRect(topRect, sideColor);
-                Handles.DrawSolidRectangleWithOutline(topRect, Color.clear, Color.black);
-            }
-
-            // Bottom
-            if (y < height - 1 && !IsStartOrEnd(x, y + 1))
-            {
-                Rect bottomRect = new Rect(cellRect.x, cellRect.y + cellSize, cellSize, cellSize);
-                EditorGUI.DrawRect(bottomRect, sideColor);
-                Handles.DrawSolidRectangleWithOutline(bottomRect, Color.clear, Color.black);
-            }
-        }
-    }
-
 
     private void Regenerate()
     {
@@ -412,18 +358,30 @@ public class PathGeneratorWindow : EditorWindow
                             if (horizontal)
                             {
                                 if (x > 0 && !IsStartOrEnd(x - 1, y))
-                                    grid[x - 1, y].isWall = true;
+                                {
+                                    grid[x - 1, y].isWall = false;
+                                    grid[x - 1, y].ground = GroundType.PlatformSide;
+                                }
 
                                 if (x < width - 1 && !IsStartOrEnd(x + 1, y))
-                                    grid[x + 1, y].isWall = true;
+                                {
+                                    grid[x + 1, y].isWall = false;
+                                    grid[x + 1, y].ground = GroundType.PlatformSide;
+                                }
                             }
                             else // vertical
                             {
                                 if (y > 0 && !IsStartOrEnd(x, y - 1))
-                                    grid[x, y - 1].isWall = true;
+                                {
+                                    grid[x, y - 1].isWall = false;
+                                    grid[x, y - 1].ground = GroundType.PlatformSide;
+                                }
 
                                 if (y < height - 1 && !IsStartOrEnd(x, y + 1))
-                                    grid[x, y + 1].isWall = true;
+                                {
+                                    grid[x, y + 1].isWall = false;
+                                    grid[x, y + 1].ground = GroundType.PlatformSide;
+                                }
                             }
                         }
                         else
