@@ -7,15 +7,18 @@ public class PlatformMovement : MonoBehaviour
     [SerializeField] private float movementPeriod = 3.0f;
 
     private Vector3 originalPosition;
+    private Vector3 lastPosition;
 
+    public Vector3 PlatformVelocity { get; private set; }
     public float MovementValue { get => movementValue; set => movementValue = value; }
 
     private void Start()
     {
         originalPosition = transform.position;
+        lastPosition = transform.position;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         float offset = SineWave.SineWaveEffect(movementPeriod,
             -movementValue, movementValue);
@@ -31,6 +34,9 @@ public class PlatformMovement : MonoBehaviour
             newPosition.z += offset;
         }
 
+        PlatformVelocity = (newPosition - lastPosition) / Time.fixedDeltaTime;
+
         transform.position = newPosition;
+        lastPosition = newPosition;
     }
 }

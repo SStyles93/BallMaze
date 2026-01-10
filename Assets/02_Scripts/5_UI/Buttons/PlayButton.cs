@@ -1,5 +1,8 @@
+using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Purchasing;
+using UnityEngine.SceneManagement;
 
 public class PlayButton : UIButton
 {
@@ -39,12 +42,17 @@ public class PlayButton : UIButton
         if (CoinManager.Instance.CanAfford(CoinType.HEART, 1))
         {
             LevelManager.Instance.InitializeLevel(m_indexOfLevelToPlay);
-            SceneController.Instance
+
+            if (Enum.TryParse<SceneDatabase.Scenes>(
+                SceneManager.GetActiveScene().name, out SceneDatabase.Scenes scene))
+            {
+                SceneController.Instance
                 .NewTransition()
                 .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
-                .Unload(SceneDatabase.Scenes.GamesMenu)
+                .Unload(scene)
                 .WithOverlay()
                 .Perform();
+            }
         }
         else // Heart Pannel
         {

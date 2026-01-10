@@ -29,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private bool wasJumpPerfromed = false;
     [SerializeField] private Vector3 movementValue;
 
+    private Rigidbody currentPlatformRb;
+    private Vector3 currentPlatformVelocity;
+
     private bool isOnIce = false;
 
     public float FallThreashold => fallThreashold;
@@ -61,7 +64,19 @@ public class PlayerMovement : MonoBehaviour
     {
         UpdateFallGravity();
 
-        isGrounded = CheckIfPlayerIsGrounded();
+        RaycastHit groundHit;
+        isGrounded = CheckIfPlayerIsGrounded(out groundHit);
+
+        currentPlatformVelocity = Vector3.zero;
+
+        if (isGrounded)
+        {
+            if (groundHit.collider.TryGetComponent<PlatformMovement>(out var platform))
+            {
+                currentPlatformVelocity = platform.PlatformVelocity;
+            }
+        }
+
         // linearDamping is canceled with no movement, otherwise ground/air value accordingly
         float linearDamping = 1.0f;
         if (isOnIce)
@@ -91,7 +106,15 @@ public class PlayerMovement : MonoBehaviour
             
             // Apply movement with force
             playerRigidbody.AddForce(appliedForce, movementForceMode);
-            
+
+            // Ad Platform velocity
+            Vector3 velocity = playerRigidbody.linearVelocity;
+
+            velocity.x += currentPlatformVelocity.x;
+            velocity.z += currentPlatformVelocity.z;
+
+            playerRigidbody.linearVelocity = velocity;
+
             //Debug.Log($"Force Applied {(movementValue * MovementForce * Time.deltaTime).magnitude} " +
             //    $"in {movementValue} direction, " +
             //    $"with {movementForceMode.ToString()}");
@@ -113,10 +136,10 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Does what it says with Phisics Raycast
     /// </summary>
-    private bool CheckIfPlayerIsGrounded()
+    private bool CheckIfPlayerIsGrounded(out RaycastHit hit)
     {
         Ray ray = new Ray(transform.position, Vector3.down);
-        if (Physics.SphereCast(ray, groundDetectionRadius, out RaycastHit hit, groundCheckDistance, groundedLayerMask))
+        if (Physics.SphereCast(ray, groundDetectionRadius, out hit, groundCheckDistance, groundedLayerMask))
         {
 #if UNITY_EDITOR
             DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.green);
