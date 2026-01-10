@@ -120,22 +120,20 @@ public class PathGeneratorWindow : EditorWindow
         EditorGUILayout.LabelField("Manual Painting", EditorStyles.boldLabel);
 
         paintMode = (PaintMode)EditorGUILayout.EnumPopup("Paint Mode", paintMode);
-
         switch (paintMode)
         {
             case PaintMode.Ground:
-                selectedGround = (GroundType)EditorGUILayout.EnumPopup(
-                    "Ground Type", selectedGround);
+                selectedGround = (GroundType)EditorGUILayout.EnumPopup("Ground Type", selectedGround);
                 break;
 
             case PaintMode.Overlay:
-                selectedOverlay = (OverlayType)EditorGUILayout.EnumPopup(
-                    "Overlay Type", selectedOverlay);
+                selectedOverlay = (OverlayType)EditorGUILayout.EnumPopup("Overlay Type", selectedOverlay);
                 break;
         }
 
         DrawGrid();
     }
+
 
 
     private void DrawSection(string title, ref bool foldout, System.Action content)
@@ -190,8 +188,14 @@ public class PathGeneratorWindow : EditorWindow
         parameters.curvePercent =
             EditorGUILayout.IntSlider("Curve %", parameters.curvePercent, 0, 100);
 
+        parameters.emptyRatio =
+            EditorGUILayout.Slider("Emtpy %", parameters.emptyRatio, 0, 1);
+
         parameters.iceRatio =
             EditorGUILayout.Slider("Ice %", parameters.iceRatio, 0, 1);
+
+        parameters.movingPlatformRatio =
+            EditorGUILayout.Slider("Moving Platform %", parameters.movingPlatformRatio, 0, 1);
 
         if (EditorGUI.EndChangeCheck())
             Regenerate();
@@ -225,15 +229,18 @@ public class PathGeneratorWindow : EditorWindow
             parameters.gridHeight * cellSize
         );
 
-        float overlayScale = 0.5f; // overlays are smaller than the cell
+        float overlayScale = 0.5f;
 
-        for (int y = 0; y < parameters.gridHeight; y++)
+        int width = parameters.gridWidth;
+        int height = parameters.gridHeight;
+
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < parameters.gridWidth; x++)
+            for (int x = 0; x < width; x++)
             {
                 ref CellData cell = ref grid[x, y];
 
-                Rect cellRect = new(
+                Rect cellRect = new Rect(
                     rect.x + x * cellSize,
                     rect.y + y * cellSize,
                     cellSize,
@@ -245,6 +252,8 @@ public class PathGeneratorWindow : EditorWindow
                 {
                     GroundType.Floor => Color.green,
                     GroundType.Ice => Color.cyan,
+                    GroundType.MovingPlatformH => Color.magenta,
+                    GroundType.MovingPlatformV => Color.magenta,
                     _ => Color.magenta
                 };
 
@@ -254,7 +263,13 @@ public class PathGeneratorWindow : EditorWindow
                 EditorGUI.DrawRect(cellRect, groundColor);
                 Handles.DrawSolidRectangleWithOutline(cellRect, Color.clear, Color.black);
 
-                // --- Draw overlay scaled down ---
+                // --- Draw sides if it's a moving platform ---
+                if (cell.ground == GroundType.MovingPlatformH || cell.ground == GroundType.MovingPlatformV)
+                {
+                    DrawMovingPlatformSides(grid, cellRect, x, y, cellSize, groundColor);
+                }
+
+                // --- Draw overlays ---
                 if (cell.overlay != OverlayType.None)
                 {
                     Color overlayColor = cell.overlay switch
@@ -281,6 +296,57 @@ public class PathGeneratorWindow : EditorWindow
 
         HandleGridMouseInput(rect);
     }
+
+    /// <summary>
+    /// Draws a moving platform given its center position and orientation.
+    /// Center tile is full magenta, side tiles are slightly desaturated.
+    /// </summary>
+    private void DrawMovingPlatformSides(CellData[,] grid, Rect cellRect, int x, int y, float cellSize, Color color)
+    {
+        int width = grid.GetLength(0);
+        int height = grid.GetLength(1);
+
+        Color sideColor = color * 0.75f; // slightly less saturated
+        ref CellData cell = ref grid[x, y];
+
+        if (cell.ground == GroundType.MovingPlatformH)
+        {
+            // Left side
+            if (x > 0 && !IsStartOrEnd(x - 1, y))
+            {
+                Rect leftRect = new Rect(cellRect.x - cellSize, cellRect.y, cellSize, cellSize);
+                EditorGUI.DrawRect(leftRect, sideColor);
+                Handles.DrawSolidRectangleWithOutline(leftRect, Color.clear, Color.black);
+            }
+
+            // Right side
+            if (x < width - 1 && !IsStartOrEnd(x + 1, y))
+            {
+                Rect rightRect = new Rect(cellRect.x + cellSize, cellRect.y, cellSize, cellSize);
+                EditorGUI.DrawRect(rightRect, sideColor);
+                Handles.DrawSolidRectangleWithOutline(rightRect, Color.clear, Color.black);
+            }
+        }
+        else if (cell.ground == GroundType.MovingPlatformV)
+        {
+            // Top
+            if (y > 0 && !IsStartOrEnd(x, y - 1))
+            {
+                Rect topRect = new Rect(cellRect.x, cellRect.y - cellSize, cellSize, cellSize);
+                EditorGUI.DrawRect(topRect, sideColor);
+                Handles.DrawSolidRectangleWithOutline(topRect, Color.clear, Color.black);
+            }
+
+            // Bottom
+            if (y < height - 1 && !IsStartOrEnd(x, y + 1))
+            {
+                Rect bottomRect = new Rect(cellRect.x, cellRect.y + cellSize, cellSize, cellSize);
+                EditorGUI.DrawRect(bottomRect, sideColor);
+                Handles.DrawSolidRectangleWithOutline(bottomRect, Color.clear, Color.black);
+            }
+        }
+    }
+
 
     private void Regenerate()
     {
@@ -328,12 +394,52 @@ public class PathGeneratorWindow : EditorWindow
             switch (paintMode)
             {
                 case PaintMode.Ground:
-                    cell.isWall = false;
-                    cell.ground = selectedGround;
+                    if (paintMode == PaintMode.Ground)
+                    {
+                        if (selectedGround == GroundType.MovingPlatformH || selectedGround == GroundType.MovingPlatformV)
+                        {
+                            // Determine orientation
+                            bool horizontal = selectedGround == GroundType.MovingPlatformH;
+
+                            // Paint center
+                            cell.isWall = false;
+                            cell.ground = selectedGround;
+
+                            int width = grid.GetLength(0);
+                            int height = grid.GetLength(1);
+
+                            // Paint sides
+                            if (horizontal)
+                            {
+                                if (x > 0 && !IsStartOrEnd(x - 1, y))
+                                    grid[x - 1, y].isWall = true;
+
+                                if (x < width - 1 && !IsStartOrEnd(x + 1, y))
+                                    grid[x + 1, y].isWall = true;
+                            }
+                            else // vertical
+                            {
+                                if (y > 0 && !IsStartOrEnd(x, y - 1))
+                                    grid[x, y - 1].isWall = true;
+
+                                if (y < height - 1 && !IsStartOrEnd(x, y + 1))
+                                    grid[x, y + 1].isWall = true;
+                            }
+                        }
+                        else
+                        {
+                            // normal ground
+                            cell.isWall = false;
+                            cell.ground = selectedGround;
+                        }
+                    }
                     break;
+
 
                 case PaintMode.Overlay:
                     if (!cell.isWall)
+                        cell.overlay = selectedOverlay;
+                    if (cell.isWall && selectedOverlay == OverlayType.Star)
                         cell.overlay = selectedOverlay;
                     break;
             }
@@ -351,15 +457,23 @@ public class PathGeneratorWindow : EditorWindow
                 cell.isWall = true;  // then turn into wall
             }
 
-            Repaint();
-            e.Use();
         }
+        Repaint();
+        e.Use();
     }
 
     private bool IsInsideGrid(int x, int y)
     {
         return x >= 0 && x < parameters.gridWidth &&
                y >= 0 && y < parameters.gridHeight;
+    }
+
+    private bool IsStartOrEnd(int x, int y)
+    {
+        Vector2Int startPos = new Vector2Int(parameters.gridWidth / 2, parameters.gridHeight - 1);
+        Vector2Int endPos = parameters.randomEnd ? new Vector2Int(parameters.gridWidth / 2, 0) : parameters.fixedEnd;
+
+        return (x == startPos.x && y == startPos.y) || (x == endPos.x && y == endPos.y);
     }
 
 

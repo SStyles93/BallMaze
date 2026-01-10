@@ -1,10 +1,12 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public enum GroundType
 {
     Floor,
-    Ice
+    Ice,
+    MovingPlatformH, // horizontal
+    MovingPlatformV  // vertical
 }
 
 public enum OverlayType
@@ -36,11 +38,9 @@ public static class Generator
     /// <param name="usedSeed">usedSeed</param>
     /// <returns>TIleType Array</returns>
     public static CellData[,] GenerateMaze(
-    GeneratorParameters_SO p,
-    out int usedSeed
-)
+    GeneratorParameters_SO p, out int usedSeed)
     {
-        usedSeed = p.inputSeed == -1 ? 
+        usedSeed = p.inputSeed == -1 ?
             Random.Range(int.MinValue, int.MaxValue) : p.inputSeed;
 
         System.Random rng = new System.Random(usedSeed);
@@ -51,12 +51,9 @@ public static class Generator
         CellData[,] grid = CreateWallGrid(p.gridWidth, p.gridHeight);
 
         List<Vector2Int> mainPath = GeneratePath(
-            p.gridWidth,
-            p.gridHeight,
-            start,
-            end,
-            rng,
-            p
+            p.gridWidth, p.gridHeight,
+            start,end,
+            rng, p
         );
 
         if (mainPath == null || mainPath.Count == 0)
@@ -66,23 +63,20 @@ public static class Generator
         }
 
         CarvePath(grid, mainPath, p);
-        MarkStartAndEnd(grid, start, end);
+        MarkStartAndEnd(grid,start, end);
 
-        PlaceStarsAndPaths(
-            grid,
-            p,
-            mainPath,
-            start,
-            end,
-            rng
-        );
+        PlaceStarsAndPaths(grid, p, mainPath, 
+            start, end, rng);
+
+        ApplyEmptyTiles(grid, p, 
+            start, end, rng);
+
+        PlaceMovingPlatforms(grid, p, rng);
 
         return grid;
     }
 
-    // =========================================================
-    // START & END
-    // =========================================================
+    // === START & END ===
 
     /// <summary>
     /// Start is ALWAYS bottom-center of the grid.
@@ -96,9 +90,7 @@ public static class Generator
     }
 
     private static Vector2Int ResolveEndPosition(
-        GeneratorParameters_SO p,
-        System.Random rng
-    )
+        GeneratorParameters_SO p,System.Random rng)
     {
         int width = p.gridWidth;
         int height = p.gridHeight;
@@ -128,18 +120,12 @@ public static class Generator
         return new Vector2Int(x, y);
     }
 
-    // =========================================================
-    // PATH GENERATION
-    // =========================================================
+    // === PATH GENERATION ===
 
     private static List<Vector2Int> GeneratePath(
-        int width,
-        int height,
-        Vector2Int start,
-        Vector2Int end,
-        System.Random rng,
-        GeneratorParameters_SO p
-    )
+        int width, int height,
+        Vector2Int start, Vector2Int end,
+        System.Random rng, GeneratorParameters_SO p)
     {
         start = ClampToGrid(start, width, height);
         end = ClampToGrid(end, width, height);
@@ -165,7 +151,7 @@ public static class Generator
             }
 
             Vector2Int next =
-                rng.Next(0, 100) < p.curvePercent ? 
+                rng.Next(0, 100) < p.curvePercent ?
                 neighbors[rng.Next(neighbors.Count)] : PickClosest(neighbors, end);
 
             path.Add(next);
@@ -176,12 +162,8 @@ public static class Generator
     }
 
     private static List<Vector2Int> GetUnvisitedNeighbors(
-        Vector2Int cell,
-        int width,
-        int height,
-        HashSet<Vector2Int> visited,
-        System.Random rng
-    )
+        Vector2Int cell, int width, int height,
+        HashSet<Vector2Int> visited, System.Random rng)
     {
         Vector2Int[] directions =
         {
@@ -205,9 +187,7 @@ public static class Generator
     }
 
     private static Vector2Int PickClosest(
-        List<Vector2Int> cells,
-        Vector2Int target
-    )
+        List<Vector2Int> cells,Vector2Int target)
     {
         Vector2Int best = cells[0];
         float bestDist = Vector2Int.Distance(best, target);
@@ -226,9 +206,7 @@ public static class Generator
     }
 
     private static void Shuffle<T>(
-        List<T> list,
-        System.Random rng
-    )
+        List<T> list, System.Random rng)
     {
         for (int i = 0; i < list.Count; i++)
         {
@@ -237,9 +215,8 @@ public static class Generator
         }
     }
 
-    // =========================================================
-    // GRID CARVING
-    // =========================================================
+    
+    // === GRID CARVING ===
 
     private static CellData[,] CreateWallGrid(int width, int height)
     {
@@ -261,15 +238,15 @@ public static class Generator
         return grid;
     }
 
-    private static void CarvePath(
-    CellData[,] grid,List<Vector2Int> path, GeneratorParameters_SO p)
+    private static void CarvePath(CellData[,] grid, 
+        List<Vector2Int> path, GeneratorParameters_SO p)
     {
         foreach (var cell in path)
             CarveCell(grid, cell, p);
     }
 
-    private static void CarveCell(
-    CellData[,] grid, Vector2Int center, GeneratorParameters_SO p)
+    private static void CarveCell(CellData[,] grid, 
+        Vector2Int center, GeneratorParameters_SO p)
     {
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
@@ -297,8 +274,7 @@ public static class Generator
         }
     }
 
-
-    private static void MarkStartAndEnd(CellData[,] grid, 
+    private static void MarkStartAndEnd(CellData[,] grid,
         Vector2Int start, Vector2Int end)
     {
         if (IsInsideGrid(start, grid))
@@ -316,18 +292,165 @@ public static class Generator
         }
     }
 
-    // =========================================================
-    // STARS
-    // =========================================================
+    private static void ApplyEmptyTiles(CellData[,] grid, 
+        GeneratorParameters_SO p, Vector2Int start, Vector2Int end, 
+        System.Random rng)
+    {
+        if (p.emptyRatio <= 0f)
+            return;
+
+        int width = grid.GetLength(0);
+        int height = grid.GetLength(1);
+
+        List<Vector2Int> candidates = new();
+
+        // Collect ONLY walkable path tiles
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                ref CellData cell = ref grid[x, y];
+
+                if (cell.isWall)
+                    continue;
+
+                if (cell.overlay != OverlayType.None)
+                    continue;
+
+                Vector2Int pos = new(x, y);
+
+                // Never near Start or End
+                if (IsNear(pos, start) || IsNear(pos, end))
+                    continue;
+
+                candidates.Add(pos);
+            }
+        }
+
+        Shuffle(candidates, rng);
+
+        int targetCount =
+            Mathf.RoundToInt(candidates.Count * p.emptyRatio);
+
+        int placed = 0;
+
+        foreach (var pos in candidates)
+        {
+            if (placed >= targetCount)
+                break;
+
+            if (HasAdjacentEmpty(grid, pos))
+                continue;
+
+            ref CellData cell = ref grid[pos.x, pos.y];
+
+            cell.isWall = true;
+            cell.overlay = OverlayType.None;
+
+            placed++;
+        }
+    }
+
+    static void PlaceMovingPlatforms(CellData[,] grid,
+    GeneratorParameters_SO p, System.Random rng)
+    {
+        if (p.movingPlatformRatio <= 0f)
+            return;
+
+        int width = grid.GetLength(0);
+        int height = grid.GetLength(1);
+
+        // Count total walkable tiles (non-wall) excluding start/end overlays
+        int totalWalkableTiles = 0;
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                var cell = grid[x, y];
+                if (!cell.isWall && cell.overlay != OverlayType.Start && cell.overlay != OverlayType.End)
+                    totalWalkableTiles++;
+            }
+        }
+
+        // Estimate max platforms (each takes 3 tiles)
+        int maxPlatforms = Mathf.Max(1, Mathf.RoundToInt(totalWalkableTiles * p.movingPlatformRatio / 3f));
+
+        List<(Vector2Int center, bool horizontal)> candidates = new();
+
+        // Find all valid centers for platforms
+        for (int x = 1; x < width - 1; x++)
+        {
+            for (int y = 1; y < height - 1; y++)
+            {
+                var cell = grid[x, y];
+
+                // Skip walls, start or end positions
+                if (cell.isWall || cell.overlay == OverlayType.Start || cell.overlay == OverlayType.End)
+                    continue;
+
+                Vector2Int center = new(x, y);
+
+                // Horizontal platform check: 3 consecutive walkable tiles (center + sides) excluding start/end
+                if (!grid[x - 1, y].isWall && !grid[x + 1, y].isWall &&
+                    grid[x - 1, y].overlay != OverlayType.Start && grid[x - 1, y].overlay != OverlayType.End &&
+                    grid[x + 1, y].overlay != OverlayType.Start && grid[x + 1, y].overlay != OverlayType.End)
+                {
+                    candidates.Add((center, true));
+                }
+
+                // Vertical platform check: 3 consecutive walkable tiles (center + sides) excluding start/end
+                if (!grid[x, y - 1].isWall && !grid[x, y + 1].isWall &&
+                    grid[x, y - 1].overlay != OverlayType.Start && grid[x, y - 1].overlay != OverlayType.End &&
+                    grid[x, y + 1].overlay != OverlayType.Start && grid[x, y + 1].overlay != OverlayType.End)
+                {
+                    candidates.Add((center, false));
+                }
+            }
+        }
+
+        Shuffle(candidates, rng);
+
+        int placed = 0;
+
+        foreach (var c in candidates)
+        {
+            if (placed >= maxPlatforms)
+                break;
+
+            Vector2Int center = c.center;
+            ref CellData centerCell = ref grid[center.x, center.y];
+
+            // Skip if center is start or end (safety check)
+            if (centerCell.overlay == OverlayType.Start || centerCell.overlay == OverlayType.End)
+                continue;
+
+            // Center becomes the moving platform
+            centerCell.isWall = false;
+            centerCell.ground = c.horizontal ? GroundType.MovingPlatformH : GroundType.MovingPlatformV;
+            centerCell.overlay = OverlayType.None;
+
+            // Side tiles become walls but preserve any stars
+            if (c.horizontal)
+            {
+                grid[center.x - 1, center.y].isWall = true;
+                grid[center.x + 1, center.y].isWall = true;
+            }
+            else
+            {
+                grid[center.x, center.y - 1].isWall = true;
+                grid[center.x, center.y + 1].isWall = true;
+            }
+
+            placed++;
+        }
+    }
+
+    // === STARS ===
 
     private static void PlaceStarsAndPaths(
-    CellData[,] grid,
-    GeneratorParameters_SO p,
-    List<Vector2Int> mainPath,
-    Vector2Int start,
-    Vector2Int end,
-    System.Random rng
-)
+    CellData[,] grid, GeneratorParameters_SO p, List<Vector2Int> mainPath,
+    Vector2Int start, Vector2Int end, 
+    System.Random rng)
     {
         List<Vector2Int> placedStars = new();
         List<Vector2Int> freeCells = new();
@@ -345,8 +468,9 @@ public static class Generator
         Shuffle(freeCells, rng);
 
         int starsPlaced = 0;
+        var freeCellsSnapshot = new List<Vector2Int>(freeCells);
 
-        foreach (var pos in freeCells)
+        foreach (var pos in freeCellsSnapshot)
         {
             bool tooClose = false;
             foreach (var s in placedStars)
@@ -370,7 +494,7 @@ public static class Generator
             cell.overlay = OverlayType.Star;
 
             Vector2Int connection = mainPath[rng.Next(mainPath.Count)];
-            List<Vector2Int> starPath = GeneratePath(
+            var starPath = GeneratePath(
                 p.gridWidth,
                 p.gridHeight,
                 connection,
@@ -384,7 +508,7 @@ public static class Generator
 
             if (p.starsConnectToEnd)
             {
-                List<Vector2Int> endPath = GeneratePath(
+                var endPath = GeneratePath(
                     p.gridWidth,
                     p.gridHeight,
                     pos,
@@ -401,17 +525,64 @@ public static class Generator
             if (starsPlaced >= p.starCount)
                 break;
         }
+
+        // Fallback
+        if (starsPlaced < p.starCount)
+        {
+            ForcePlaceMissingStars(
+                grid,
+                freeCells,
+                placedStars,
+                p.starCount - starsPlaced,
+                rng
+            );
+        }
     }
 
-    // =========================================================
-    // UTILITIES
-    // =========================================================
+    // Distance relaxation 
+    private static void ForcePlaceMissingStars(
+    CellData[,] grid, 
+    List<Vector2Int> candidates, List<Vector2Int> placedStars,
+    int missingCount, System.Random rng)
+    {
+        // Start by relaxing distance gradually
+        int relaxedDistance = Mathf.Max(1, placedStars.Count > 0 ? 2 : 1);
 
-    private static bool IsInsideGrid(
-        Vector2Int p,
-        int width,
-        int height
-    )
+        Shuffle(candidates, rng);
+
+        foreach (var pos in candidates)
+        {
+            if (missingCount <= 0)
+                return;
+
+            ref CellData cell = ref grid[pos.x, pos.y];
+
+            if (cell.isWall || cell.overlay != OverlayType.None)
+                continue;
+
+            bool tooClose = false;
+            foreach (var s in placedStars)
+            {
+                if (Vector2Int.Distance(pos, s) < relaxedDistance)
+                {
+                    tooClose = true;
+                    break;
+                }
+            }
+
+            if (tooClose)
+                continue;
+
+            // Place forced star
+            cell.overlay = OverlayType.Star;
+            placedStars.Add(pos);
+            missingCount--;
+        }
+    }
+
+    // === UTILITIES ===
+
+    private static bool IsInsideGrid(Vector2Int p, int width, int height)
     {
         return p.x >= 0 && p.x < width &&
                p.y >= 0 && p.y < height;
@@ -426,15 +597,41 @@ public static class Generator
         );
     }
 
-    private static Vector2Int ClampToGrid(
-        Vector2Int p,
-        int width,
-        int height
-    )
+    private static bool IsNear(Vector2Int a, Vector2Int b)
+    {
+        return Mathf.Abs(a.x - b.x) <= 1 &&
+               Mathf.Abs(a.y - b.y) <= 1;
+    }
+
+    private static Vector2Int ClampToGrid(Vector2Int p, int width, int height)
     {
         return new Vector2Int(
             Mathf.Clamp(p.x, 0, width - 1),
             Mathf.Clamp(p.y, 0, height - 1)
         );
+    }
+
+    private static bool HasAdjacentEmpty(CellData[,] grid, Vector2Int pos)
+    {
+        Vector2Int[] dirs =
+        {
+            Vector2Int.up,
+            Vector2Int.down,
+            Vector2Int.left,
+            Vector2Int.right
+        };
+
+        foreach (var d in dirs)
+        {
+            Vector2Int n = pos + d;
+
+            if (!IsInsideGrid(n, grid))
+                continue;
+
+            if (grid[n.x, n.y].isWall)
+                return true;
+        }
+
+        return false;
     }
 }

@@ -13,6 +13,321 @@ MonoBehaviour:
   m_Name: LevelDatabase
   m_EditorClassIdentifier: Assembly-CSharp::LevelDatabase_SO
   levels:
+  - index: 0
+    gridWidth: 10
+    gridHeight: 10
+    randomEnd: 1
+    fixedEnd: {x: 9, y: 9}
+    endMinHeightPercent: 20
+    inputSeed: 1
+    pathThickness: 0
+    curvePercent: 30
+    coinsToEarn: 30
+    starCount: 0
+    minStarDistance: 3
+    starsConnectToEnd: 1
+    gridData:
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 2
+    - isWall: 0
+      ground: 1
+      overlay: 3
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 1
+      overlay: 0
+    - isWall: 0
+      ground: 1
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 2
+      overlay: 0
+    - isWall: 1
+      ground: 1
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 1
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 1
+      overlay: 0
+    - isWall: 0
+      ground: 1
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 3
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 1
+      overlay: 3
+    - isWall: 0
+      ground: 1
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 1
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 1
+      overlay: 0
+    - isWall: 0
+      ground: 1
+      overlay: 3
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 1
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    usedSeed: 1
   - index: 1
     gridWidth: 3
     gridHeight: 10
@@ -118,3 +433,108 @@ MonoBehaviour:
       ground: 0
       overlay: 0
     usedSeed: -160900234
+  - index: 30
+    gridWidth: 3
+    gridHeight: 10
+    randomEnd: 1
+    fixedEnd: {x: 9, y: 9}
+    endMinHeightPercent: 20
+    inputSeed: -1
+    pathThickness: 0
+    curvePercent: 30
+    coinsToEarn: 30
+    starCount: 0
+    minStarDistance: 3
+    starsConnectToEnd: 1
+    gridData:
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 2
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 3
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 3
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 3
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 0
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    - isWall: 0
+      ground: 0
+      overlay: 1
+    - isWall: 1
+      ground: 0
+      overlay: 0
+    usedSeed: 2092948473

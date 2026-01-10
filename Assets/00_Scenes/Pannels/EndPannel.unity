@@ -366,20 +366,28 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_text
-      value: <sprite index=0>9999
+      value: <sprite index=0> 9999
       objectReference: {fileID: 0}
     - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_fontSize
-      value: 80
+      value: 58.5
       objectReference: {fileID: 0}
     - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_margin.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_spriteAsset
       value: 
       objectReference: {fileID: 11400000, guid: 24eee33ac0660f647a3dd3af32bab135, type: 2}
+    - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 2810706896204072601, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

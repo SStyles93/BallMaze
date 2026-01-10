@@ -29,7 +29,7 @@ public class UICurrencyAnimator : MonoBehaviour
         DOTween.To(() => currentValue, x =>
         {
             currentValue = x;
-            scoreText.text = $"<sprite index=0>{currentValue.ToString()}";
+            scoreText.text = $"<sprite index=0> {currentValue.ToString()}";
         },
         end,
         duration)

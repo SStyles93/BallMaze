@@ -237,8 +237,10 @@ public class LevelManager : MonoBehaviour
         baseParameters.gridWidth = runtimeParams.width;
         baseParameters.gridHeight = runtimeParams.height;
         baseParameters.curvePercent = runtimeParams.curvePercent;
+        baseParameters.iceRatio = runtimeParams.emptyRatio;
         baseParameters.iceRatio = runtimeParams.iceRatio;
-        
+        baseParameters.movingPlatformRatio = runtimeParams.movingPlatformRatio;
+
         baseParameters.minStarDistance = runtimeParams.minStarDistance;
         baseParameters.coinsToEarn = existing == null ? 30 : existing.coinsToEarn;
 

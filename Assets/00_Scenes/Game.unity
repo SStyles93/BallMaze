@@ -876,9 +876,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f6ee56df5d9d2441862dc2f22d86a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PhysicalMazeGenerator
-  floorPrefab: {fileID: 3363912154842587231, guid: cf74b047c8c89b44fbe3d7b4a2336747, type: 3}
-  icePrefab: {fileID: 3363912154842587231, guid: fdd7fc5c027b1ba43a890055811e917b, type: 3}
   wallPrefab: {fileID: 0}
+  floorPrefab: {fileID: 3363912154842587231, guid: cf74b047c8c89b44fbe3d7b4a2336747, type: 3}
+  icePrefab: {fileID: 8329032435540354753, guid: 62a8787662ffe204a905bff7dfdc9820, type: 3}
+  movingPlatformPrefabH: {fileID: 7069366146948456912, guid: 1996dbda79cc57749907b9ed7c7a7def, type: 3}
+  movingPlatformPrefabV: {fileID: 7069366146948456912, guid: 1996dbda79cc57749907b9ed7c7a7def, type: 3}
   startPrefab: {fileID: 839851351414052169, guid: 71d9a997e250b584e94d1ae44a3efb43, type: 3}
   endPrefab: {fileID: 839851351414052169, guid: 29acc65d504401e4d88b0827385a419b, type: 3}
   starPrefab: {fileID: 3102653523287797894, guid: f5147e29e7531614bbb3b478e45ae50f, type: 3}
@@ -887,7 +889,7 @@ MonoBehaviour:
   environmentColors_SO: {fileID: 11400000, guid: 22cf0413d1085ed4aabc7775cc128e86, type: 2}
   material: {fileID: 2100000, guid: d0b5b4e45c472a94981a3234f899fd1c, type: 2}
   emissiveBandMaterial: {fileID: 2100000, guid: 0e0e1eb42e7f8d34382ebc5e7ddc4053, type: 2}
-  isGridGenerated: 1
+  isGridGenerated: 0
 --- !u!1 &1690082475
 GameObject:
   m_ObjectHideFlags: 0

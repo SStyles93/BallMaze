@@ -4,9 +4,11 @@ using UnityEngine;
 public class PhysicalMazeGenerator : MonoBehaviour
 {
     [Header("Prefabs")]
+    public GameObject wallPrefab;
     public GameObject floorPrefab;
     public GameObject icePrefab;
-    public GameObject wallPrefab;
+    public GameObject movingPlatformPrefabH;
+    public GameObject movingPlatformPrefabV;
     public GameObject startPrefab;
     public GameObject endPrefab;
     public GameObject starPrefab;
@@ -22,11 +24,20 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     public static event Action OnGenerationFinished;
 
-    //[HideInInspector][SerializeField] private bool isGridGenerated = false;
+    [HideInInspector][SerializeField] private bool isGridGenerated = false;
 
-    private void Start()
+    private void Awake()
     {
-        Generate(LevelManager.Instance.CurrentGrid);
+        if(LevelManager.Instance != null)
+        {
+            // Generate the map on Awake
+            Generate(LevelManager.Instance.CurrentGrid);
+        }
+        else if (isGridGenerated)
+        {
+            // Used by PlayerSpawner to Instantiate
+            OnGenerationFinished?.Invoke();
+        }
     }
 
 
@@ -66,7 +77,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
             }
         }
 
-        //isGridGenerated = true;
+        isGridGenerated = true;
 
         ApplyRandomEnvironmentColors();
 
@@ -76,7 +87,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
     public void Clear()
     {
         ClearChildren();
-        //isGridGenerated = false;
+        isGridGenerated = false;
     }
 
     // ======================================
@@ -118,6 +129,8 @@ public class PhysicalMazeGenerator : MonoBehaviour
         {
             GroundType.Floor => floorPrefab,
             GroundType.Ice => icePrefab,
+            GroundType.MovingPlatformH => movingPlatformPrefabH,
+            GroundType.MovingPlatformV => movingPlatformPrefabV,
             _ => null
         };
 
@@ -161,9 +174,9 @@ public class PhysicalMazeGenerator : MonoBehaviour
     {
         return type switch
         {
-            OverlayType.Start => 0.5f,
-            OverlayType.End => 0.5f,
-            OverlayType.Star => 0.25f,
+            OverlayType.Start => 1.2f,
+            OverlayType.End => 1.2f,
+            OverlayType.Star => 0.75f,
             _ => 0f
         };
     }
