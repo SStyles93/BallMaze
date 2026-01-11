@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarLightManager
   lightRef: {fileID: 1714893847554673639}
-  minMaxIntensityValue: {x: 0, y: 0.1}
+  minMaxIntensityValue: {x: 0, y: 0.2}
   sinePeriod: 3
 --- !u!114 &3623532063193294096
 MonoBehaviour:
@@ -127,7 +127,7 @@ MonoBehaviour:
   objectToRotate: {fileID: 3102653523287797894}
   rotationSpeed: -20
   objectToLevitate: {fileID: 8312232639689095903}
-  maxFloatingHeight: 1.5
+  maxFloatingHeight: 2
   sinePeriod: 3
 --- !u!1 &8312232639689095903
 GameObject:
@@ -157,14 +157,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8312232639689095903}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 2.5, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 760219920415088003}
   m_Father: {fileID: 6319804825816013683}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &2455766807881576953
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -325,7 +325,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5385069368042234918, guid: d79b56cb4484f544692564073295b803, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6305215814243675372, guid: d79b56cb4484f544692564073295b803, type: 3}
       propertyPath: m_Name

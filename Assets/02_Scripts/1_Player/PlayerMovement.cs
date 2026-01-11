@@ -1,43 +1,32 @@
-using PxP.Draw;
-using System;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Reference Components")]
-    [SerializeField] Rigidbody playerRigidbody = null;
+    [Header("References")]
+    [SerializeField] private Rigidbody playerRigidbody;
 
-    [Header("Movement Settings")]
-    [SerializeField] private ForceMode movementForceMode = ForceMode.VelocityChange;
-    [SerializeField] private float movementForce = 30.0f;
-    [SerializeField] private float maxVelocity = 10.0f;
-    [SerializeField] private float linearDampingGroundValue = 4.0f;
-    [SerializeField] private float linearDampingAirValue = 4.0f;
+    [Header("Rolling")]
+    [SerializeField] private float torqueStrength = 30f;
+    [SerializeField] private float maxAngularVelocity = 25f;
 
-    [Header("Jump Settings")]
-    [SerializeField] private ForceMode jumpForceMode = ForceMode.Impulse;
-    [SerializeField] private float jumpForce = 5.0f;
-    [SerializeField] private float gravityScale = 2.0f;
-    [SerializeField] float groundCheckDistance = 1.1f;
-    [SerializeField] float groundDetectionRadius = 0.35f;
-    [SerializeField] LayerMask groundedLayerMask;
+    [Header("Jump")]
+    [SerializeField] private float jumpForce = 6f;
+    [SerializeField] private float gravityScale = 2f;
 
-    [Header("Fall Settings")]
-    [SerializeField] private float fallThreashold = -5.0f;
+    [Header("Ground Check")]
+    [SerializeField] private float groundCheckDistance = 1.1f;
+    [SerializeField] private float groundDetectionRadius = 0.35f;
+    [SerializeField] private LayerMask groundedLayerMask;
 
-    [SerializeField] private bool isGrounded = false;
-    [SerializeField] private bool wasJumpPerfromed = false;
-    [SerializeField] private Vector3 movementValue;
+    [Header("Fall")]
+    [SerializeField] private float fallThreshold = -5f;
 
-    private Rigidbody currentPlatformRb;
-    private Vector3 currentPlatformVelocity;
+    private Vector3 movementInput;
+    private bool isGrounded;
+    private bool wasJumpPerformed;
 
-    private bool isOnIce = false;
-
-    public float FallThreashold => fallThreashold;
-
-    public float MovementForce { get => movementForce; set => movementForce = value; }
-    public Rigidbody Rigidbody { get => playerRigidbody; set => playerRigidbody = value; }
+    public float FallThreshold { get => fallThreshold; set => fallThreshold = value; }
+    public Rigidbody PlayerRigidbody { get => playerRigidbody; set => playerRigidbody = value; }
 
     private void OnEnable()
     {
@@ -53,141 +42,73 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        if (TryGetComponent<Rigidbody>(out Rigidbody rb))
-        {
-            playerRigidbody = rb;
-        }
-        else Debug.Log($"No Rigidbody found on {this.gameObject.name}");
+        if (!playerRigidbody)
+            playerRigidbody = GetComponent<Rigidbody>();
+
+        playerRigidbody.maxAngularVelocity = maxAngularVelocity;
     }
 
     private void FixedUpdate()
     {
-        UpdateFallGravity();
-
-        RaycastHit groundHit;
-        isGrounded = CheckIfPlayerIsGrounded(out groundHit);
-
-        currentPlatformVelocity = Vector3.zero;
-
-        if (isGrounded)
-        {
-            if (groundHit.collider.TryGetComponent<PlatformMovement>(out var platform))
-            {
-                currentPlatformVelocity = platform.PlatformVelocity;
-            }
-        }
-
-        // linearDamping is canceled with no movement, otherwise ground/air value accordingly
-        float linearDamping = 1.0f;
-        if (isOnIce)
-        {
-            linearDamping = 0.2f;
-        }
-        else if (isGrounded)
-        {
-            linearDamping = movementValue.magnitude > 0.1f ? 
-                1.0f : linearDampingGroundValue;
-        }
-        else
-            linearDamping = linearDampingAirValue;
-
-        playerRigidbody.linearDamping = linearDamping;
-
-
-        if (isGrounded)
-        {
-            if(playerRigidbody.linearVelocity.magnitude > maxVelocity) return;
-
-            Vector3 appliedForce = movementValue * MovementForce * Time.deltaTime;
-            
-            //Check for Ice impact, Reduce input impact on ice
-            float controlMultiplier = isOnIce ? 0.25f : 1.0f;
-            appliedForce *= controlMultiplier;
-
-            appliedForce += currentPlatformVelocity;
-            
-            // Apply movement with force
-            playerRigidbody.AddForce(appliedForce, movementForceMode);
-
-            //Debug.Log($"Force Applied {(movementValue * MovementForce * Time.deltaTime).magnitude} " +
-            //    $"in {movementValue} direction, " +
-            //    $"with {movementForceMode.ToString()}");
-
-            //Debug.Log($"{playerRigidbody.linearVelocity.magnitude}");
-        }
+        ApplyExtraGravity();
+        CheckGrounded();
+        Roll();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    // ---------------- ROLLING ----------------
+
+    private void Roll()
     {
-        int collisionLayer = collision.collider.gameObject.layer;
-        if ((1 << collisionLayer & groundedLayerMask) != 0 && wasJumpPerfromed)
-        {
-            wasJumpPerfromed = false;
-            AudioManager.Instance?.PlayThumpSound();
-        }
+        if (!isGrounded || movementInput.sqrMagnitude < 0.01f)
+            return;
+
+        // Torque direction: perpendicular to movement
+        Vector3 torque = Vector3.Cross(Vector3.up, movementInput.normalized);
+        playerRigidbody.AddTorque(torque * torqueStrength, ForceMode.Acceleration);
     }
 
-    /// <summary>
-    /// Does what it says with Phisics Raycast
-    /// </summary>
-    private bool CheckIfPlayerIsGrounded(out RaycastHit hit)
-    {
-        Ray ray = new Ray(transform.position, Vector3.down);
-        if (Physics.SphereCast(ray, groundDetectionRadius, out hit, groundCheckDistance, groundedLayerMask))
-        {
-#if UNITY_EDITOR
-            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.green);
-#endif
-            // 17 is the ICE LAYER
-            isOnIce = hit.collider.gameObject.layer == 17;
-            return true;
-        }
-        else
-        {
-#if UNITY_EDITOR
-            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.red);
-#endif
-            return false;
-        }
-    }
+    // ---------------- JUMP ----------------
 
-    /// <summary>
-    /// Method used to make the player jump
-    /// </summary>
-    /// <remarks>Player has to be grounded</remarks>
     private void Jump()
     {
-        // If the player is in the air we don't want a second jump
         if (!isGrounded) return;
+
+        playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         isGrounded = false;
-        playerRigidbody.AddForce(Vector3.up * jumpForce, jumpForceMode);
-        //Debug.Log($"Force Applied up with {jumpForce} force, and {movementForceMode.ToString()}");
-        VibrationManager.Instance?.Pop();
-        AudioManager.Instance?.PlayJumpSound();
-        wasJumpPerfromed = true;
     }
 
-    /// <summary>
-    /// Used to get the movement direction
-    /// </summary>
-    /// <param name="movementDirection">Movement direction (Vector2)</param>
-    private void SetMovementValue(Vector2 movementDirection)
+    // ---------------- GROUND ----------------
+
+    private void CheckGrounded()
     {
-        Vector2 remappedInput = DirectionMapper.MapTo8CardinalPoints(movementDirection);
-        Vector3 axisAlignedInput = new Vector3(remappedInput.x, 0, remappedInput.y);
-        movementValue = axisAlignedInput;
-        //Debug.Log(movementValue);
+        Ray ray = new Ray(transform.position, Vector3.down);
+        isGrounded = Physics.SphereCast(
+            ray,
+            groundDetectionRadius,
+            groundCheckDistance,
+            groundedLayerMask
+        );
     }
 
-    /// <summary>
-    /// Updates the gravity for a better fall
-    /// </summary>
-    private void UpdateFallGravity()
+    // ---------------- INPUT ----------------
+
+    private void SetMovementValue(Vector2 input)
     {
-        Vector3 gravity = Physics.gravity.y * gravityScale * Vector3.up;
-        playerRigidbody.AddForce(gravity, ForceMode.Acceleration);
+        Vector2 mapped = DirectionMapper.MapTo8CardinalPoints(input);
+        movementInput = new Vector3(mapped.x, 0, mapped.y);
+    }
+
+    // ---------------- GRAVITY ----------------
+
+    private void ApplyExtraGravity()
+    {
+        if (playerRigidbody.linearVelocity.y < 0f)
+        {
+            playerRigidbody.AddForce(Physics.gravity * gravityScale, ForceMode.Acceleration);
+        }
     }
 }
+
 
 public class DirectionMapper : MonoBehaviour
 {
@@ -213,7 +134,7 @@ public class DirectionMapper : MonoBehaviour
         if (angle < 0)
             angle += 360f;
 
-        // Snap angle to nearest 45°
+        // Snap angle to nearest 45ï¿½
         float snappedAngle = Mathf.Round(angle / 45f) * 45f;
         snappedAngle %= 360f;
 

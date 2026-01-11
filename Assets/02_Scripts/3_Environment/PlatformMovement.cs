@@ -1,42 +1,48 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlatformMovement : MonoBehaviour
 {
     [SerializeField] private GroundType groundType = GroundType.MovingPlatformH;
-    [SerializeField] private float movementValue = 3.0f;
+    [SerializeField] private float movementAmplitude = 3.0f;
     [SerializeField] private float movementPeriod = 3.0f;
 
-    private Vector3 originalPosition;
-    private Vector3 lastPosition;
+    private Rigidbody rb;
+    private Vector3 startPosition;
 
-    public Vector3 PlatformVelocity { get; private set; }
-    public float MovementValue { get => movementValue; set => movementValue = value; }
+    public float MovementAmplitude { get => movementAmplitude; set => movementAmplitude = value; }
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+    }
 
     private void Start()
     {
-        originalPosition = transform.position;
-        lastPosition = transform.position;
+        startPosition = rb.position;
     }
 
     private void FixedUpdate()
     {
-        float offset = SineWave.SineWaveEffect(movementPeriod,
-            -movementValue, movementValue);
+        float offset = SineWave.SineWaveEffect(
+            movementPeriod,
+            -movementAmplitude,
+            movementAmplitude
+        );
 
-        Vector3 newPosition = originalPosition;
+        Vector3 targetPosition = startPosition;
 
         if (groundType == GroundType.MovingPlatformH)
         {
-            newPosition.x += offset;
+            targetPosition.x += offset;
         }
-        else // Vertical
+        else // Vertical (Z)
         {
-            newPosition.z += offset;
+            targetPosition.z += offset;
         }
 
-        PlatformVelocity = (newPosition - lastPosition) / Time.fixedDeltaTime;
-
-        transform.position = newPosition;
-        lastPosition = newPosition;
+        rb.MovePosition(targetPosition);
     }
 }

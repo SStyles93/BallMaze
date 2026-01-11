@@ -19,7 +19,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        bool isFalling = transform.position.y < playerMovement.FallThreashold;
+        bool isFalling = transform.position.y < playerMovement.FallThreshold;
         SetIsFalling(isFalling);
     }
 

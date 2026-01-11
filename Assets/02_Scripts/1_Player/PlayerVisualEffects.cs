@@ -42,7 +42,7 @@ public class PlayerVisualEffects : MonoBehaviour
 
     private void Update()
     {
-        bool shouldShrink = transform.position.y < playerMovement.FallThreashold;
+        bool shouldShrink = transform.position.y < playerMovement.FallThreshold;
 
         if (shouldShrink && state == ScaleState.Normal)
         {
@@ -56,7 +56,7 @@ public class PlayerVisualEffects : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(playerMovement.Rigidbody.linearVelocity.magnitude < m_trailVelocityThreshold || !m_isTrailActive)
+        if(playerMovement.PlayerRigidbody.linearVelocity.magnitude < m_trailVelocityThreshold || !m_isTrailActive)
         {
             m_trail.SetActive(false);
         }
