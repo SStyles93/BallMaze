@@ -264,8 +264,8 @@ MonoBehaviour:
   playerRigidbody: {fileID: 6087839670450387137}
   torqueStrength: 100
   maxAngularVelocity: 100
-  jumpForce: 15
-  gravityScale: 2
+  jumpForce: 10
+  gravityScale: 5
   groundCheckDistance: 1.1
   groundDetectionRadius: 0.35
   groundedLayerMask:
