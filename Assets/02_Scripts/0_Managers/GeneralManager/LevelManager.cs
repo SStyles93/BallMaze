@@ -248,7 +248,7 @@ public class LevelManager : MonoBehaviour
         baseParameters.inputSeed = -1;
 
         // 5️ Generate new grid
-        CellData[,] grid = Generator.GenerateMaze(baseParameters, out usedSeed);
+        CellData[,] grid = PxP.PCG.Generator.GenerateMaze(baseParameters, out usedSeed);
 
         return grid;
     }

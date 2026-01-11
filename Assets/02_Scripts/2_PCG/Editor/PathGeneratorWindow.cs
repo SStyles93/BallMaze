@@ -102,7 +102,7 @@ public class PathGeneratorWindow : EditorWindow
         GUILayout.Space(10);
         if (GUILayout.Button("Generate"))
         {
-            grid = Generator.GenerateMaze(parameters, out usedSeed);
+            grid = PxP.PCG.Generator.GenerateMaze(parameters, out usedSeed);
 
             if (physicalGenerator == null)
                 physicalGenerator = FindFirstObjectByType<PhysicalMazeGenerator>();
@@ -193,6 +193,9 @@ public class PathGeneratorWindow : EditorWindow
 
         parameters.curvePercent =
             EditorGUILayout.IntSlider("Curve %", parameters.curvePercent, 0, 100);
+
+        parameters.loopChance =
+            EditorGUILayout.Slider("loopChance %", parameters.loopChance, 0, 100);
 
         parameters.emptyRatio =
             EditorGUILayout.Slider("Emtpy %", parameters.emptyRatio, 0, 1);
@@ -305,7 +308,7 @@ public class PathGeneratorWindow : EditorWindow
         if (parameters == null)
             return;
 
-        grid = Generator.GenerateMaze(parameters, out usedSeed);
+        grid = PxP.PCG.Generator.GenerateMaze(parameters, out usedSeed);
 
         if (physicalGenerator != null)
         {
