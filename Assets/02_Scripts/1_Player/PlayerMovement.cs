@@ -81,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
         float linearDamping = 1.0f;
         if (isOnIce)
         {
-            linearDamping = 0.05f;
+            linearDamping = 0.2f;
         }
         else if (isGrounded)
         {
@@ -103,17 +103,11 @@ public class PlayerMovement : MonoBehaviour
             //Check for Ice impact, Reduce input impact on ice
             float controlMultiplier = isOnIce ? 0.25f : 1.0f;
             appliedForce *= controlMultiplier;
+
+            appliedForce += currentPlatformVelocity;
             
             // Apply movement with force
             playerRigidbody.AddForce(appliedForce, movementForceMode);
-
-            // Ad Platform velocity
-            Vector3 velocity = playerRigidbody.linearVelocity;
-
-            velocity.x += currentPlatformVelocity.x;
-            velocity.z += currentPlatformVelocity.z;
-
-            playerRigidbody.linearVelocity = velocity;
 
             //Debug.Log($"Force Applied {(movementValue * MovementForce * Time.deltaTime).magnitude} " +
             //    $"in {movementValue} direction, " +

@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarLightManager
   lightRef: {fileID: 1714893847554673639}
-  minMaxIntensityValue: {x: 0, y: 5}
+  minMaxIntensityValue: {x: 0, y: 0.1}
   sinePeriod: 3
 --- !u!114 &3623532063193294096
 MonoBehaviour:
@@ -323,6 +323,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4795565085436581656}
     m_Modifications:
+    - target: {fileID: 5385069368042234918, guid: d79b56cb4484f544692564073295b803, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6305215814243675372, guid: d79b56cb4484f544692564073295b803, type: 3}
       propertyPath: m_Name
       value: Shine_Yellow

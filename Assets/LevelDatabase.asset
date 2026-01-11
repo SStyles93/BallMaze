@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelDatabase_SO
   levels:
   - index: 0
-    gridWidth: 10
+    gridWidth: 5
     gridHeight: 10
     randomEnd: 1
     fixedEnd: {x: 9, y: 9}
@@ -27,52 +27,22 @@ MonoBehaviour:
     minStarDistance: 3
     starsConnectToEnd: 1
     gridData:
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
     - isWall: 0
@@ -81,49 +51,19 @@ MonoBehaviour:
     - isWall: 0
       ground: 0
       overlay: 2
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
     - isWall: 0
       ground: 0
-      overlay: 3
+      overlay: 0
     - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
     - isWall: 0
@@ -141,19 +81,7 @@ MonoBehaviour:
     - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
     - isWall: 0
@@ -171,79 +99,7 @@ MonoBehaviour:
     - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
     - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 0
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
       ground: 0
       overlay: 0
     - isWall: 0
@@ -261,19 +117,19 @@ MonoBehaviour:
     - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
     - isWall: 0
@@ -291,19 +147,19 @@ MonoBehaviour:
     - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
+    - isWall: 0
       ground: 0
       overlay: 0
     - isWall: 0
@@ -321,13 +177,7 @@ MonoBehaviour:
     - isWall: 0
       ground: 0
       overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    - isWall: 1
-      ground: 0
-      overlay: 0
-    usedSeed: -1068609154
+    usedSeed: 1566443376
   - index: 1
     gridWidth: 3
     gridHeight: 10

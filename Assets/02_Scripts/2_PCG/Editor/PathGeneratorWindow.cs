@@ -104,12 +104,18 @@ public class PathGeneratorWindow : EditorWindow
         {
             grid = Generator.GenerateMaze(parameters, out usedSeed);
 
+            if (physicalGenerator == null)
+                physicalGenerator = FindFirstObjectByType<PhysicalMazeGenerator>();
+
             if (physicalGenerator != null)
                 physicalGenerator.Generate(grid);
         }
 
         if (GUILayout.Button("Clear"))
         {
+            if (physicalGenerator == null)
+                physicalGenerator = FindFirstObjectByType<PhysicalMazeGenerator>();
+
             grid = null;
             physicalGenerator?.Clear();
         }
