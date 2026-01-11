@@ -94,7 +94,4 @@ Assets/Rewired/Internal/Libraries/Runtime/Native/WindowsStandalone/x86.meta
 # Game Data (local to each Editor)
 Assets/Data/
 Assets/Data.meta
-Assets/04_Materials/Floor/Ground.mat
-Assets/04_Materials/Floor/Ground.mat.meta
-Assets/04_Materials/Floor/Emissive_Band.mat
-Assets/04_Materials/Floor/Emissive_Band.mat.meta
+Assets/04_Materials/Floor/*
