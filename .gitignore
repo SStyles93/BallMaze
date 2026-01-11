@@ -95,3 +95,6 @@ Assets/Rewired/Internal/Libraries/Runtime/Native/WindowsStandalone/x86.meta
 Assets/Data/
 Assets/Data.meta
 Assets/04_Materials/Floor/Ground.mat
+Assets/04_Materials/Floor/Ground.mat.meta
+Assets/04_Materials/Floor/Emissive_Band.mat
+Assets/04_Materials/Floor/Emissive_Band.mat.meta
