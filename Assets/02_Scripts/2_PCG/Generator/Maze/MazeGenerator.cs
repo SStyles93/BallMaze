@@ -56,7 +56,7 @@ namespace PxP.PCG
                     continue;
 
                 ref var cell = ref grid[pos.x, pos.y];
-                cell.isWall = false;
+                cell.isEmpty = false;
                 cell.ground = rng.NextDouble() < p.iceRatio
                     ? GroundType.Ice
                     : GroundType.Floor;

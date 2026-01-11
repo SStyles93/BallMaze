@@ -20,7 +20,7 @@ namespace PxP.PCG
             // Ensure the start tile is walkable
             if (IsInsideGrid(start, grid))
             {
-                grid[start.x, start.y].isWall = false;
+                grid[start.x, start.y].isEmpty = false;
                 grid[start.x, start.y].ground = GroundType.Floor;
             }
 
@@ -28,7 +28,7 @@ namespace PxP.PCG
             Vector2Int above = new(start.x, start.y - 1);
             if (IsInsideGrid(above, grid))
             {
-                grid[above.x, above.y].isWall = false;
+                grid[above.x, above.y].isEmpty = false;
                 grid[above.x, above.y].ground = GroundType.Floor;
             }
 
@@ -36,19 +36,37 @@ namespace PxP.PCG
         }
 
         public static Vector2Int ResolveEndPosition(
-            GeneratorParameters_SO p,
-            System.Random rng)
+            CellData[,] grid,GeneratorParameters_SO p,System.Random rng)
         {
-            int maxY = Mathf.FloorToInt(
-                p.gridHeight * (p.endMaxHeightPercent / 100f));
+            int maxY = Mathf.FloorToInt(p.gridHeight * (p.endMaxHeightPercent / 100f));
+            int width = p.gridWidth;
+            int height = p.gridHeight;
 
-            return p.randomEnd
-                ? new Vector2Int(
-                    rng.Next(0, p.gridWidth),
-                    rng.Next(0, Mathf.Max(0, maxY)))
-                : new Vector2Int(
-                    Mathf.Clamp(p.fixedEnd.x, 0, p.gridWidth),
-                    Mathf.Clamp(p.fixedEnd.y, 0, maxY));
+            Vector2Int end;
+
+            if (p.randomEnd)
+            {
+                // Pick a random position within allowed height
+                end = new Vector2Int(
+                    rng.Next(0, width),
+                    rng.Next(0, Mathf.Max(0, maxY))
+                );
+            }
+            else
+            {
+                end = new Vector2Int(
+                    Mathf.Clamp(p.fixedEnd.x, 0, width - 1),
+                    Mathf.Clamp(p.fixedEnd.y, 0, maxY)
+                );
+            }
+
+            // Ensure the tile "below" (toward bottom) is solid ground
+            if (end.y + 1 < height)
+            {
+                grid[end.x, end.y + 1].isEmpty = false;
+            }
+
+            return end;
         }
 
         public static void MarkStartAndEnd(
@@ -68,7 +86,7 @@ namespace PxP.PCG
             if (!IsInsideGrid(pos, grid)) return;
 
             ref var cell = ref grid[pos.x, pos.y];
-            cell.isWall = false;
+            cell.isEmpty = false;
             cell.ground = GroundType.Floor;
             cell.overlay = type;
         }
@@ -82,7 +100,7 @@ namespace PxP.PCG
             {
                 int nx = x + d.x;
                 int ny = y + d.y;
-                if (IsInsideGrid(nx, ny, grid) && grid[nx, ny].isWall)
+                if (IsInsideGrid(nx, ny, grid) && grid[nx, ny].isEmpty)
                     count++;
             }
             return count;
@@ -100,7 +118,7 @@ namespace PxP.PCG
                             int nx = x + ox + dx;
                             int ny = y + oy + dy;
                             if (IsInsideGrid(nx, ny, grid) &&
-                                !grid[nx, ny].isWall)
+                                !grid[nx, ny].isEmpty)
                                 open++;
                         }
                     if (open >= 3) return true;

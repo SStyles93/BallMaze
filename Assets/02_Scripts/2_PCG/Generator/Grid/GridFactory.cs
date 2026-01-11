@@ -12,7 +12,7 @@ namespace PxP.PCG
                 {
                     grid[x, y] = new CellData
                     {
-                        isWall = true,
+                        isEmpty = true,
                         ground = GroundType.Floor,
                         overlay = OverlayType.None
                     };

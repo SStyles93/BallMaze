@@ -188,15 +188,6 @@ public class PathGeneratorWindow : EditorWindow
     {
         EditorGUI.BeginChangeCheck();
 
-        parameters.pathThickness =
-            EditorGUILayout.IntSlider("Thickness", parameters.pathThickness, 0, 5);
-
-        parameters.curvePercent =
-            EditorGUILayout.IntSlider("Curve %", parameters.curvePercent, 0, 100);
-
-        parameters.loopChance =
-            EditorGUILayout.Slider("loopChance %", parameters.loopChance, 0, 100);
-
         parameters.emptyRatio =
             EditorGUILayout.Slider("Emtpy %", parameters.emptyRatio, 0, 1);
 
@@ -267,7 +258,7 @@ public class PathGeneratorWindow : EditorWindow
                     _ => Color.pink
                 };
 
-                if (cell.isWall)
+                if (cell.isEmpty)
                     groundColor = Color.gray;
 
                 // Normal ground / wall
@@ -357,7 +348,7 @@ public class PathGeneratorWindow : EditorWindow
                             bool horizontal = selectedGround == GroundType.MovingPlatformH;
 
                             // Paint center
-                            cell.isWall = false;
+                            cell.isEmpty = false;
                             cell.ground = selectedGround;
 
                             int width = grid.GetLength(0);
@@ -368,13 +359,13 @@ public class PathGeneratorWindow : EditorWindow
                             {
                                 if (x > 0 && !IsStartOrEnd(x - 1, y))
                                 {
-                                    grid[x - 1, y].isWall = false;
+                                    grid[x - 1, y].isEmpty = false;
                                     grid[x - 1, y].ground = GroundType.PlatformSide;
                                 }
 
                                 if (x < width - 1 && !IsStartOrEnd(x + 1, y))
                                 {
-                                    grid[x + 1, y].isWall = false;
+                                    grid[x + 1, y].isEmpty = false;
                                     grid[x + 1, y].ground = GroundType.PlatformSide;
                                 }
                             }
@@ -382,13 +373,13 @@ public class PathGeneratorWindow : EditorWindow
                             {
                                 if (y > 0 && !IsStartOrEnd(x, y - 1))
                                 {
-                                    grid[x, y - 1].isWall = false;
+                                    grid[x, y - 1].isEmpty = false;
                                     grid[x, y - 1].ground = GroundType.PlatformSide;
                                 }
 
                                 if (y < height - 1 && !IsStartOrEnd(x, y + 1))
                                 {
-                                    grid[x, y + 1].isWall = false;
+                                    grid[x, y + 1].isEmpty = false;
                                     grid[x, y + 1].ground = GroundType.PlatformSide;
                                 }
                             }
@@ -396,7 +387,7 @@ public class PathGeneratorWindow : EditorWindow
                         else
                         {
                             // normal ground
-                            cell.isWall = false;
+                            cell.isEmpty = false;
                             cell.ground = selectedGround;
                         }
                     }
@@ -404,9 +395,9 @@ public class PathGeneratorWindow : EditorWindow
 
 
                 case PaintMode.Overlay:
-                    if (!cell.isWall)
+                    if (!cell.isEmpty)
                         cell.overlay = selectedOverlay;
-                    if (cell.isWall && selectedOverlay == OverlayType.Star)
+                    if (cell.isEmpty && selectedOverlay == OverlayType.Star)
                         cell.overlay = selectedOverlay;
                     break;
             }
@@ -421,7 +412,7 @@ public class PathGeneratorWindow : EditorWindow
             }
             else
             {
-                cell.isWall = true;  // then turn into wall
+                cell.isEmpty = true;  // then turn into wall
             }
 
         }
@@ -462,9 +453,6 @@ public class PathGeneratorWindow : EditorWindow
         //data.endMin = //parameters.endMin;
         data.endMinHeightPercent = parameters.endMaxHeightPercent;
         data.inputSeed = parameters.inputSeed;
-
-        data.pathThickness = parameters.pathThickness;
-        data.curvePercent = parameters.curvePercent;
 
         data.coinsToEarn = parameters.coinsToEarn;
         data.minStarDistance = parameters.minStarDistance;
@@ -509,9 +497,6 @@ public class PathGeneratorWindow : EditorWindow
 
 
         parameters.inputSeed = data.usedSeed;
-
-        parameters.pathThickness = data.pathThickness;
-        parameters.curvePercent = data.curvePercent;
 
         parameters.coinsToEarn = data.coinsToEarn;
         parameters.minStarDistance = data.minStarDistance;

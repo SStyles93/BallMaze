@@ -20,15 +20,6 @@ public class GeneratorParameters_SO : ScriptableObject
     public int inputSeed = -1;
 
     [Header("Path Settings")]
-    [Range(0, 5)]
-    public int pathThickness = 0;
-
-    [Range(0, 100)]
-    [Tooltip("0 = direct, 100 = very curvy")]
-    public int curvePercent = 30;
-
-    public float loopChance = 0;
-
     [Range(0f, 1f)] public float emptyRatio = 0;
     [Range(0f, 1f)] public float iceRatio = 0;
     [Range(0f, 1f)] public float movingPlatformRatio = 0;

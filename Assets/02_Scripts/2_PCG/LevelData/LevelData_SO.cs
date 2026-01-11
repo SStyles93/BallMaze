@@ -15,8 +15,9 @@ public class LevelData_SO
     public int inputSeed;
 
     [Header("Path Parameters")]
-    public int pathThickness;
-    public int curvePercent;
+    public float emptyRatio;
+    public float iceRation;
+    public float movingPlatformRatio;
 
     [Header("Star & Currencies Parameters")]
     public int coinsToEarn;

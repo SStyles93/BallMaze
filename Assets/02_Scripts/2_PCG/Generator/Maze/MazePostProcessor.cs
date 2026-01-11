@@ -5,59 +5,61 @@ namespace PxP.PCG
 {
     public static class MazePostProcessor
     {
-        public static void AddSafeLoops(CellData[,] grid, float chance, System.Random rng)
-        {
-            int w = grid.GetLength(0);
-            int h = grid.GetLength(1);
 
-            for (int x = 1; x < w - 1; x++)
-                for (int y = 1; y < h - 1; y++)
-                {
-                    if (!grid[x, y].isWall) continue;
-                    if (rng.NextDouble() > chance) continue;
-
-                    if (!CanSafelyCarve(grid, x, y))
-                        continue;
-
-                    grid[x, y].isWall = false;
-                }
-        }
-
-        public static void CarveEmptyTiles( CellData[,] grid,GeneratorParameters_SO p, 
-            Vector2Int start, Vector2Int end, System.Random rng)
+        public static void CarveEmptyTiles(CellData[,] grid, GeneratorParameters_SO p,
+    Vector2Int start, Vector2Int end, System.Random rng)
         {
             if (p.emptyRatio <= 0f) return;
 
+            int width = grid.GetLength(0);
+            int height = grid.GetLength(1);
+
             var candidates = new List<Vector2Int>();
 
-            for (int x = 1; x < grid.GetLength(0) - 1; x++)
-                for (int y = 1; y < grid.GetLength(1) - 1; y++)
+            // Collect all solid ground tiles that are eligible to become holes
+            for (int x = 0; x < width - 1; x++)
+            {
+                for (int y = 0; y < height - 1; y++)
                 {
-                    if (grid[x, y].isWall &&
+                    ref var cell = ref grid[x, y];
+
+                    if (!cell.isEmpty && cell.overlay == OverlayType.None &&
                         !GridUtils.IsNear(new Vector2Int(x, y), start) &&
                         !GridUtils.IsNear(new Vector2Int(x, y), end))
                     {
                         candidates.Add(new Vector2Int(x, y));
                     }
                 }
+            }
 
             GridUtils.Shuffle(candidates, rng);
 
-            int target = Mathf.RoundToInt(candidates.Count * p.emptyRatio);
+            int targetCount = Mathf.RoundToInt(candidates.Count * p.emptyRatio);
 
             foreach (var pos in candidates)
             {
-                if (target-- <= 0) break;
-                if (!CanSafelyCarve(grid, pos.x, pos.y)) continue;
+                if (targetCount-- <= 0) break;
 
-                grid[pos.x, pos.y].isWall = false;
+                // Count solid neighbours (up, down, left, right)
+                int solidNeighbours = 0;
+                Vector2Int[] dirs = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+
+                foreach (var d in dirs)
+                {
+                    Vector2Int n = pos + d;
+                    if (n.x >= 0 && n.x < width && n.y >= 0 && n.y < height &&
+                        !grid[n.x, n.y].isEmpty)
+                    {
+                        solidNeighbours++;
+                    }
+                }
+
+                // Only carve hole if at least 2 solid neighbours remain
+                if (solidNeighbours >= 2)
+                {
+                    grid[pos.x, pos.y].isEmpty = true;
+                }
             }
-        }
-
-        private static bool CanSafelyCarve(CellData[,] grid, int x, int y)
-        {
-            return GridUtils.CountWallNeighbors(grid, x, y) >= 2
-                && !GridUtils.CreatesOpenSquare(grid, x, y);
         }
     }
 }

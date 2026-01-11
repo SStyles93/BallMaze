@@ -96,7 +96,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
     private void SpawnCell(CellData cell, Vector3 basePosition, int x, int y)
     {
         // 1️⃣ Wall overrides everything
-        if (cell.isWall)
+        if (cell.isEmpty)
         {
             SpawnWall(basePosition, x, y);
             return;

@@ -18,7 +18,7 @@ public enum OverlayType
 [System.Serializable]
 public struct CellData
 {
-    public bool isWall;
+    public bool isEmpty;
     public GroundType ground;
     public OverlayType overlay;
 }

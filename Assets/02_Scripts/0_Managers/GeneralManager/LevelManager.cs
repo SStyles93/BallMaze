@@ -236,11 +236,13 @@ public class LevelManager : MonoBehaviour
         // 3️ Apply runtime parameters to generator
         baseParameters.gridWidth = runtimeParams.width;
         baseParameters.gridHeight = runtimeParams.height;
-        baseParameters.curvePercent = runtimeParams.curvePercent;
-        baseParameters.iceRatio = runtimeParams.emptyRatio;
+
+        // 4 Path Settings
+        baseParameters.emptyRatio = runtimeParams.emptyRatio;
         baseParameters.iceRatio = runtimeParams.iceRatio;
         baseParameters.movingPlatformRatio = runtimeParams.movingPlatformRatio;
 
+        // Star Settings
         baseParameters.minStarDistance = runtimeParams.minStarDistance;
         baseParameters.coinsToEarn = existing == null ? 30 : existing.coinsToEarn;
 

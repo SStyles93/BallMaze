@@ -20,12 +20,9 @@ namespace PxP.PCG
             var carved = MazeGenerator.GenerateKruskalMaze(p.gridWidth, p.gridHeight, rng);
             MazeGenerator.ApplyMaze(grid, carved, p, rng);
 
-            // 2. Controlled loops
-            MazePostProcessor.AddSafeLoops(grid, p.loopChance, rng);
-
             // 3. Start / End
             var start = GridUtils.GetStartPosition(grid, p);
-            var end = GridUtils.ResolveEndPosition(p, rng);
+            var end = GridUtils.ResolveEndPosition(grid, p, rng);
             GridUtils.MarkStartAndEnd(grid, start, end);
 
             // 4. Stars & connections
