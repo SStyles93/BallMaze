@@ -705,6 +705,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sphere
       objectReference: {fileID: 0}
+    - target: {fileID: 5364715522439794130, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5788141387175152010, guid: ea4a9fe43b1c97e45a6cf051c7441232, type: 3}
       propertyPath: maxVelocity
       value: 10
@@ -1037,7 +1041,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a48e4dad8240ba54eaaa0b996e4a3b85, type: 2}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
