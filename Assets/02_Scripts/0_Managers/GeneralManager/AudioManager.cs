@@ -108,25 +108,29 @@ public class AudioManager : MonoBehaviour
 
     public void PlayJumpSound()
     {
+        playerSfxAudioSource.volume = 1.0f;
         playerSfxAudioSource.pitch = 2.0f;
         PlayPlayerSound(jumpClip);
     }
 
-    public void PlayThumpSound()
+    public void PlayThumpSound(float volume)
     {
         playerSfxAudioSource.pitch = 1.0f;
+        playerSfxAudioSource.volume = volume;
         PlayPlayerSound(thumpClip);
     }
 
     public void PlayClickSound()
     {
         playerSfxAudioSource.pitch = 1.0f;
+        playerSfxAudioSource.volume = 1.0f;
         PlayPlayerSound(clickClip);
     }
 
     public void PlayValidate()
     {
         playerSfxAudioSource.pitch = 1.0f;
+        playerSfxAudioSource.volume = 1.0f;
         PlayPlayerSound(validateClip);
     }
 

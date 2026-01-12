@@ -113,9 +113,19 @@ public class PlayerMovement : MonoBehaviour
                 currentPlatform = null;
             }
 
-            if (wasJumpPerformed)
+            if (wasJumpPerformed && playerRigidbody.linearVelocity.y < 0)
             {
-                AudioManager.Instance?.PlayThumpSound();
+                float fallSpeed = Mathf.Abs(playerRigidbody.linearVelocity.y);
+
+                // Tune these values
+                float minSpeed = 2f;   // soft landing
+                float maxSpeed = 10f;  // hard landing
+
+                float volume = Mathf.InverseLerp(minSpeed, maxSpeed, fallSpeed);
+                volume = Mathf.Clamp01(volume);
+
+
+                AudioManager.Instance?.PlayThumpSound(volume);
                 wasJumpPerformed = false;
             }
         }
