@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &134108502
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1296,6 +1296,10 @@ PrefabInstance:
     - target: {fileID: 6444920024075937477, guid: 4ede250c63ec24c49ae7cd47008ac83e, type: 3}
       propertyPath: m_Name
       value: AdsArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444920024075937477, guid: 4ede250c63ec24c49ae7cd47008ac83e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9099991707849406601, guid: 4ede250c63ec24c49ae7cd47008ac83e, type: 3}
       propertyPath: m_Pivot.x

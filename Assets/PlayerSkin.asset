@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 960823be51cfab64aa0fe5f1860323fd, type: 3}
   m_Name: PlayerSkin
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkinData_SO
-  playerSkin: {fileID: 2043128687369127624, guid: d83722138f8a56f40a5e0c546599325d, type: 3}
-  playerColor: {r: 0, g: 0, b: 0, a: 0}
-  playerSkinIndex: 2
+  playerSkin: {fileID: 2043128687369127624, guid: eda84d7c4fdf24042a2db3ec85cc0ed1, type: 3}
+  playerColor: {r: 1, g: 1, b: 1, a: 1}
+  playerSkinIndex: 0
   playerColorIndex: 0
+  firstSkin: {fileID: 2043128687369127624, guid: eda84d7c4fdf24042a2db3ec85cc0ed1, type: 3}

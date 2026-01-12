@@ -8,6 +8,7 @@ public class PlayerSkinData_SO : ScriptableObject
     [SerializeField] public Color playerColor;
     [SerializeField] public int playerSkinIndex;
     [SerializeField] public int playerColorIndex;
+    [SerializeField] private GameObject firstSkin;
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(PlayerSkinData_SO))]
@@ -20,7 +21,7 @@ public class PlayerSkinData_SO : ScriptableObject
 
             if (GUILayout.Button("Reset Data"))
             {
-                _target.playerSkin = null;
+                _target.playerSkin = _target.firstSkin;
                 _target.playerColor = Color.white;
                 _target.playerSkinIndex = 0;
                 _target.playerColorIndex = 0;
