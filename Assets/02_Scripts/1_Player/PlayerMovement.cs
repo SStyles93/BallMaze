@@ -1,3 +1,5 @@
+using PxP.Draw;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -30,7 +32,8 @@ public class PlayerMovement : MonoBehaviour
     private bool allowRotation;
     private Transform currentPlatform;
 
-
+    public event Action<string> OnPlayerLanded;
+    public event Action OnPlayerJumped;
 
 
     public float FallThreshold { get => fallThreshold; set => fallThreshold = value; }
@@ -89,6 +92,9 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = false;
         wasJumpPerformed = true;
 
+        // Calls the JumpSound on the PlayerSound script
+        OnPlayerJumped?.Invoke();
+        
         // Unset platform reference when jumping
         currentPlatform = null;
     }
@@ -115,22 +121,17 @@ public class PlayerMovement : MonoBehaviour
 
             if (wasJumpPerformed && playerRigidbody.linearVelocity.y < 0)
             {
-                float fallSpeed = Mathf.Abs(playerRigidbody.linearVelocity.y);
+                // Calls the LandedSound on the PlayerSound script
+                OnPlayerLanded?.Invoke(hit.collider.tag);
 
-                // Tune these values
-                float minSpeed = 2f;   // soft landing
-                float maxSpeed = 10f;  // hard landing
-
-                float volume = Mathf.InverseLerp(minSpeed, maxSpeed, fallSpeed);
-                volume = Mathf.Clamp01(volume);
-
-
-                AudioManager.Instance?.PlayThumpSound(volume);
                 wasJumpPerformed = false;
             }
+
+            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.green);
         }
         else
         {
+            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.red);
             currentPlatform = null;
         }
     }

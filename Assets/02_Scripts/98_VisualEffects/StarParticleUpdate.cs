@@ -16,6 +16,5 @@ public class StarParticleUpdate : MonoBehaviour
     {
         starColor = starParticleSystem.main.startColor;
         GetComponent<ParticleSystemRenderer>().material.SetColor("_EmissionColor", starColor.color * 3.0f);
-        
     }
 }

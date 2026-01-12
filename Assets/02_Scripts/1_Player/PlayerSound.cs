@@ -14,7 +14,20 @@ public class PlayerSound : MonoBehaviour
     // Define the desired range for the audio volume
     public Vector2 volumeRange = new Vector2(0.0f, 1.0f);
 
-    // ^^^^^^^^^^^^^
+    [SerializeField] private float GroundPitch = 2.8f;
+    [SerializeField] private float IcePitch = 5f;
+
+    private void OnEnable()
+    {
+        playerMovement.OnPlayerJumped += PlayJumpSound;
+        playerMovement.OnPlayerLanded += PlayLandedSound;
+    }
+
+    private void OnDisable()
+    {
+        playerMovement.OnPlayerJumped -= PlayJumpSound;
+        playerMovement.OnPlayerLanded -= PlayLandedSound;
+    }
 
     private void Awake()
     {
@@ -28,5 +41,24 @@ public class PlayerSound : MonoBehaviour
         float speed = rb.linearVelocity.magnitude;
         float rollingVolume = speed / maxSpeed;
         AudioManager.Instance.SetRollingVolume(rollingVolume);
+    }
+
+    private void PlayJumpSound()
+    {
+        AudioManager.Instance?.PlayJumpSound();
+    }
+
+    private void PlayLandedSound(string surfaceTypeTag)
+    {
+        float pitch = surfaceTypeTag switch
+        {
+            "Ground" => GroundPitch,
+            "Ice" => IcePitch,
+            "MovingPlatform" => GroundPitch,
+            _ => 1.0f
+
+        };
+
+        AudioManager.Instance?.PlayThumpSound(pitch);
     }
 }

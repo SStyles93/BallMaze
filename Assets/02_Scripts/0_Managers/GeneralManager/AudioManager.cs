@@ -113,10 +113,10 @@ public class AudioManager : MonoBehaviour
         PlayPlayerSound(jumpClip);
     }
 
-    public void PlayThumpSound(float volume)
+    public void PlayThumpSound(float pitch)
     {
-        playerSfxAudioSource.pitch = 1.0f;
-        playerSfxAudioSource.volume = volume;
+        playerSfxAudioSource.pitch = pitch;
+        playerSfxAudioSource.volume = .3f;
         PlayPlayerSound(thumpClip);
     }
 
