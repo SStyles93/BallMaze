@@ -110,7 +110,7 @@ public class SavingManager : MonoBehaviour
             return;
         }
 
-        foreach (var kvp in LevelManager.Instance.LevelDataDictionnary)
+        foreach (var kvp in LevelManager.Instance.levelDataDictionnary)
         {
             if (gameData.levelsData.ContainsKey(kvp.Key))
                 gameData.levelsData[kvp.Key] = kvp.Value;
@@ -282,7 +282,7 @@ public class SavingManager : MonoBehaviour
     {
         if (LevelManager.Instance == null) return;
 
-        LevelManager.Instance.LevelDataDictionnary.Clear();
+        LevelManager.Instance.levelDataDictionnary.Clear();
 
         if (gameData.levelsData == null)
         {
@@ -299,11 +299,13 @@ public class SavingManager : MonoBehaviour
                 {
                     numberOfStars = 3,
                     coinsLeftToEarn = 0,
+                    livesLostToThisLevel = 0,
+                    failedTimes = 0,
                     wasLevelFinished = true
                 };
                 for (int i = 0; i <= CoreManager.Instance.numberOfLevels; i++)
                 {
-                    LevelManager.Instance.LevelDataDictionnary.Add(i, levelData);
+                    LevelManager.Instance.levelDataDictionnary.Add(i, levelData);
                 }
             }
             else
@@ -311,7 +313,7 @@ public class SavingManager : MonoBehaviour
                 // Retrieves the LevelDatas and sets them in the LevelManager
                 foreach (var kvp in gameData.levelsData)
                 {
-                    LevelManager.Instance.LevelDataDictionnary[kvp.Key] = kvp.Value;
+                    LevelManager.Instance.levelDataDictionnary[kvp.Key] = kvp.Value;
                 }
             }
         }

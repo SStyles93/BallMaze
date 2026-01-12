@@ -23,7 +23,7 @@ public class LevelSlot : BaseUISlot
         else
         {
             lockImage.enabled = false;
-            slotText.text = levelIndex.ToString();
+            slotText.text = (levelIndex+1).ToString();
 
             foreach (var image in starImages)
                 image.enabled = true;

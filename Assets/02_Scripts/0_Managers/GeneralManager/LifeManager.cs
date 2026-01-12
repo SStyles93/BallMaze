@@ -34,6 +34,7 @@ public class LifeManager : MonoBehaviour
             CoinManager.Instance.ReduceCurrencyAmount(CoinType.HEART, 1);
         }
 
+        LevelManager.Instance.IncreaseLivesLostToThisLevel();
         OnRemoveLife?.Invoke();
 
         if (currentLife <= 0)
@@ -60,7 +61,7 @@ public class LifeManager : MonoBehaviour
 
         // Remove Level Data from saving
         if (levelManager.PreviousNumberOfStars == 0 && levelManager.WasGamePreviouslyFinished == false)
-            LevelManager.Instance.RemoveCurrentLevelData();
+            LevelManager.Instance.MarkLevelAsFailed();
 
         // Save Session
         SavingManager.Instance.SaveSession();

@@ -1,7 +1,6 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Purchasing;
 using UnityEngine.SceneManagement;
 
 public class PlayButton : UIButton
@@ -24,14 +23,18 @@ public class PlayButton : UIButton
 
     public void InitializeLastLevelToPlay()
     {
-        m_indexOfLevelToPlay = LevelManager.Instance.GetLastLevelIndex() + 1;
-        m_levelIndexText.text = (m_indexOfLevelToPlay).ToString();
+        m_indexOfLevelToPlay = LevelManager.Instance.GetHighestFinishedLevelIndex()+1;
+
+        if (m_indexOfLevelToPlay <= 0) m_indexOfLevelToPlay = 1;
+        m_levelIndexText.text = (m_indexOfLevelToPlay+1).ToString();
     }
 
     public void SetIndexOfLevelToPlay(int index)
     {
+        if (m_indexOfLevelToPlay <= 0) m_indexOfLevelToPlay = 1;
+
         m_indexOfLevelToPlay = index;
-        m_levelIndexText.text = (m_indexOfLevelToPlay).ToString();
+        m_levelIndexText.text = (index+1).ToString();
     }
 
     private void PlayNextLevel()

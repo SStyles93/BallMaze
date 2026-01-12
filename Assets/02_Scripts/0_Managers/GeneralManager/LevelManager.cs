@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public Dictionary<int, LevelData> LevelDataDictionnary = new Dictionary<int, LevelData>();
-    [SerializeField] GeneratorParameters_SO GeneratorParameters;
-    [SerializeField] LevelDatabase_SO LevelDatabase;
+    public Dictionary<int, LevelData> levelDataDictionnary = new Dictionary<int, LevelData>();
+    [SerializeField] GeneratorParameters_SO generatorParameters;
+    [SerializeField] LevelDatabase_SO levelDatabase;
+    [SerializeField] LevelArchetypeDatabase_SO levelArchetypeDatabase;
     [SerializeField] int levelsPerCycle = 30;
     [SerializeField] int initialCoinAmount = 30;
     private CellData[,] currentGrid;
@@ -17,18 +18,22 @@ public class LevelManager : MonoBehaviour
     private int currentLevelIndex = 0;
     private int currencyToEarn = 0;
     private int previousNumberOfStarts = 0;
+    private int livesLostToThisLevel = 0;
+    private int failedTimes = 0;
     private bool wasGamePreviouslyFinished = false;
 
     public event Action<int> OnStarCountChanged;
 
     #region Singleton
     public static LevelManager Instance { get; private set; }
+    public LevelDatabase_SO LevelDatabase { get => levelDatabase; set => levelDatabase = value; }
     public int CurrentLevelIndex { get => currentLevelIndex; }
     public LevelData CurrentLevelData { get => currentLevelData; }
     public int PreviousNumberOfStars => previousNumberOfStarts;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount => currentStarCount;
     public CellData[,] CurrentGrid => currentGrid;
+
 
     private void Awake()
     {
@@ -38,6 +43,8 @@ public class LevelManager : MonoBehaviour
 
     }
     #endregion
+
+
     /// <summary>
     /// Generates the current level and returns its Cell grid
     /// </summary>
@@ -48,8 +55,8 @@ public class LevelManager : MonoBehaviour
         // Use the new Cell[,] generator
         CellData[,] grid = this.GenerateRuntimeLevel(
             currentLevelIndex,
-            LevelDatabase,
-            GeneratorParameters,
+            levelDatabase,
+            generatorParameters,
             out usedSeed
         );
 
@@ -66,8 +73,8 @@ public class LevelManager : MonoBehaviour
     /// <returns></returns>
     public int GetGradeForLevelAtIndex(int levelIndex)
     {
-        if (LevelDataDictionnary.ContainsKey(levelIndex))
-            return LevelDataDictionnary[levelIndex].numberOfStars;
+        if (levelDataDictionnary.ContainsKey(levelIndex))
+            return levelDataDictionnary[levelIndex].numberOfStars;
         else return 0;
     }
 
@@ -78,6 +85,11 @@ public class LevelManager : MonoBehaviour
     /// <remarks>This method will init. LevelParameters, GenerationParameters, and LevelData</remarks>
     public void InitializeLevel(int index)
     {
+        if (!CanStartLevel(index))
+        {
+            Debug.LogWarning($"Cannot start level {index} because previous level is unfinished.");
+            return;
+        }
 
         // If no LevelData is present, create one with initial values
         InitializeCurrentLevelData(index);
@@ -86,18 +98,39 @@ public class LevelManager : MonoBehaviour
         currentStarCount = 0;
 
         // Get the values of time and currency to earn from the SO
-        currencyToEarn = LevelDatabase.GetLevelDataAtIndex(index) == null ? initialCoinAmount : LevelDatabase.GetLevelDataAtIndex(index).coinsToEarn;
-        previousNumberOfStarts = LevelDataDictionnary[index].numberOfStars;
-        wasGamePreviouslyFinished = LevelDataDictionnary[index].wasLevelFinished;
-        
+        currencyToEarn = levelDatabase.GetLevelDataAtIndex(index) == null ? initialCoinAmount : levelDatabase.GetLevelDataAtIndex(index).coinsToEarn;
+        previousNumberOfStarts = levelDataDictionnary[index].numberOfStars;
+        wasGamePreviouslyFinished = levelDataDictionnary[index].wasLevelFinished;
+        livesLostToThisLevel = levelDataDictionnary[index].livesLostToThisLevel;
+        failedTimes = levelDataDictionnary[index].failedTimes;
+
         //Init level
         currentGrid = GenerateAndGetCurrentLevelGrid();
     }
 
-    // Return the last index (count) of the LevelDataDictionnary
-    public int GetLastLevelIndex()
+    public bool CanStartLevel(int index)
     {
-        return LevelDataDictionnary.Count;
+        if (index == 0) return true; // First level is always allowed
+
+        // Check if previous level was finished
+        if (!levelDataDictionnary.ContainsKey(index - 1))
+            return false;
+
+        return levelDataDictionnary[index - 1].wasLevelFinished;
+    }
+
+    // Return the last index (count) of the LevelDataDictionnary
+    public int GetHighestFinishedLevelIndex()
+    {
+        int highestFinished = -1;
+
+        foreach (var kvp in levelDataDictionnary)
+        {
+            if (kvp.Value.wasLevelFinished && kvp.Key > highestFinished)
+                highestFinished = kvp.Key;
+        }
+
+        return highestFinished;
     }
 
     #region LEVEL DATA (GRADES)
@@ -108,6 +141,7 @@ public class LevelManager : MonoBehaviour
     public void ProcessLevelData()
     {
         currentLevelData.wasLevelFinished = true;
+        currentLevelData.livesLostToThisLevel = livesLostToThisLevel;
 
         // --- STARS ---
 
@@ -145,14 +179,40 @@ public class LevelManager : MonoBehaviour
         }
 
         CoinManager.Instance.IncreaseCurrencyAmount(CoinType.COIN, currencyEarned);
+
+        SavingManager.Instance?.SaveGame();
     }
 
     /// <summary>
     /// Removes the current level data from the dictionnary of LevelDatas
     /// </summary>
-    public void RemoveCurrentLevelData()
+    public void MarkLevelAsFailed()
     {
-        LevelDataDictionnary.Remove(currentLevelIndex);
+        if (levelDataDictionnary.ContainsKey(currentLevelIndex))
+        {
+            currentLevelData.wasLevelFinished = false;
+            currentLevelData.failedTimes++;
+            currentLevelData.livesLostToThisLevel = livesLostToThisLevel;
+            levelDataDictionnary[currentLevelIndex] = currentLevelData;
+        }
+        else
+        {
+            // First attempt at this level
+            currentLevelData = new LevelData()
+            {
+                numberOfStars = 0,
+                coinsLeftToEarn = initialCoinAmount,
+                wasLevelFinished = false,
+                livesLostToThisLevel = 0,
+                failedTimes = 0
+            };
+            levelDataDictionnary.Add(currentLevelIndex, currentLevelData);
+        }
+    }
+
+    public void IncreaseLivesLostToThisLevel()
+    {
+        livesLostToThisLevel++;
     }
 
     /// <summary>
@@ -164,6 +224,7 @@ public class LevelManager : MonoBehaviour
         currentStarCount++;
         OnStarCountChanged?.Invoke(currentStarCount);
     }
+
 
     #endregion
 
@@ -189,7 +250,7 @@ public class LevelManager : MonoBehaviour
     /// <param name="index">Index of the level</param>
     private void InitializeCurrentLevelData(int index)
     {
-        if (!LevelDataDictionnary.ContainsKey(index))
+        if (!levelDataDictionnary.ContainsKey(index))
         {
             currentLevelData = new LevelData()
             {
@@ -197,11 +258,11 @@ public class LevelManager : MonoBehaviour
                 coinsLeftToEarn = initialCoinAmount,
                 wasLevelFinished = false
             };
-            LevelDataDictionnary.Add(index, currentLevelData);
+            levelDataDictionnary.Add(index, currentLevelData);
         }
         else
         {
-            currentLevelData = LevelDataDictionnary[index];
+            currentLevelData = levelDataDictionnary[index];
         }
         // Reset the number of stars at each level start
     }
@@ -218,8 +279,7 @@ public class LevelManager : MonoBehaviour
         int levelIndex,
         LevelDatabase_SO database,
         GeneratorParameters_SO baseParameters,
-        out int usedSeed
-    )
+        out int usedSeed)
     {
         // 1️ If level already exists → load it
         LevelData_SO existing = database.GetLevelDataAtIndex(levelIndex);
@@ -231,7 +291,9 @@ public class LevelManager : MonoBehaviour
 
         // 2️ Otherwise, generate runtime parameters
         RuntimeLevelParameters runtimeParams =
-            RuntimeLevelProgression.GetParametersForLevel(levelIndex, levelsPerCycle);
+            RuntimeLevelProgression.GetParametersForLevel(levelIndex, 
+            levelArchetypeDatabase, levelsPerCycle, 
+            livesLostToThisLevel, failedTimes);
 
         // 3️ Apply runtime parameters to generator
         baseParameters.gridWidth = runtimeParams.width;

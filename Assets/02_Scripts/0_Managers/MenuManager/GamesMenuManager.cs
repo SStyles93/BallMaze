@@ -11,9 +11,6 @@ public class GamesMenuManager : MonoBehaviour
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private PlayButton playButton;
 
-    [Header("Variables")]
-    [SerializeField] private int levelsToBatchLoad = 24;
-
     public static GamesMenuManager Instance { get; private set; }
 
     private void Awake()
@@ -30,13 +27,7 @@ public class GamesMenuManager : MonoBehaviour
         SavingManager.Instance?.LoadSession();
         AudioManager.Instance?.PlayMusic();
 
-
-        int levelManagerCount = LevelManager.Instance.LevelDataDictionnary.Count;
-        if (levelManagerCount % levelsToBatchLoad == 0 || levelManagerCount <= 0 || levelManagerCount > levelsToBatchLoad)
-        {
-            levelsToBatchLoad = LevelManager.Instance.LevelDataDictionnary.Count + levelsToBatchLoad;
-        }
-        InitializeSlots(levelsToBatchLoad);
+        InitializeSlots();
 
         scrollbar.value = scrollbarData.scrollbarValue;
         scrollbar.size = scrollbarData.scrollbarSize;
@@ -49,25 +40,35 @@ public class GamesMenuManager : MonoBehaviour
         playButton.SetIndexOfLevelToPlay(index);
     }
 
-    private void InitializeSlots(int numberOfLevels)
+    private void InitializeSlots()
     {
-        int levelManagerCount = LevelManager.Instance.LevelDataDictionnary.Count;
+        int highestFinishedLevel = LevelManager.Instance.GetHighestFinishedLevelIndex();
 
-        for (int i = 0; i < numberOfLevels; i++)
+        // Show up to next playable level (+1 for index) (+2 for next and following locked), 
+        int slotsToShow = Mathf.Max(highestFinishedLevel + 3, 1);
+
+        for (int i = 0; i < slotsToShow; i++)
         {
-            GameObject currentSlot = Instantiate(slotPrefab, scrollViewContent.transform);
-            if (i > levelManagerCount)
+            GameObject slotObj = Instantiate(slotPrefab, scrollViewContent.transform);
+            bool isLocked;
+
+            if (i == 0)
             {
-                bool lockLevel = true;
-#if UNITY_EDITOR
-                if (CoreManager.Instance.unlockAllLevels) lockLevel = false;
-#endif
-                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i + 1, lockLevel);
+                // First level is always playable
+                isLocked = false;
             }
             else
             {
-                currentSlot.GetComponent<LevelSlot>().InitializeLevelSlot(i + 1);
+                // Locked if previous level was NOT finished
+                isLocked = i - 1 > highestFinishedLevel;
             }
+
+#if UNITY_EDITOR
+            if (CoreManager.Instance.unlockAllLevels)
+                isLocked = false;
+#endif
+
+            slotObj.GetComponent<LevelSlot>().InitializeLevelSlot(i, isLocked);
         }
     }
 

@@ -37,4 +37,9 @@ public class LevelDatabase_SO : ScriptableObject
         }
         return foundItem;
     }
+
+    public int LevelCount()
+    {
+        return levels.Count;
+    }
 }

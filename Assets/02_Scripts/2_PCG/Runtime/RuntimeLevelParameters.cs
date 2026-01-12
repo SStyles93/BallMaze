@@ -22,24 +22,45 @@ public static class RuntimeLevelProgression
     const float MAX_ICE = 1.0f;
     const float MAX_MOVING = 0.5f;
 
-    const float DOMINANT_WEIGHT = 0.7f;
-    const float SECONDARY_WEIGHT = 0.3f;
+    // -------------------------
+    // ADAPTIVE DIFFICULTY
+    // -------------------------
 
-    enum LevelArchetype
+    /// <summary>
+    /// Calculates a difficulty multiplier based on lives lost and number of previous failures.
+    /// Lower multiplier = easier level.
+    /// </summary>
+    /// <param name="livesLost">Number of lives lost in the current attempt</param>
+    /// <param name="failedTimes">Number of previous failed attempts for this level</param>
+    /// <returns>Multiplier between 0.5f and 1.0f</returns>
+    static float GetDifficultyMultiplier(int livesLost, int failedTimes)
     {
-        Recovery,
-        Precision,              // Empty dominant
-        Slippery,               // Ice dominant
-        Timing,                 // Moving dominant
-        PrecisionSlippery,      // Empty + Ice
-        PrecisionTiming,        // Empty + Moving
-        SlipperyTiming          // Ice + Moving
+        // Base multiplier from lives lost
+        float multiplier = 1f;
+
+        if (livesLost >= 3) multiplier = 0.5f;   // big relief if game over
+        else if (livesLost == 2) multiplier = 0.7f; // moderate relief
+        else if (livesLost == 1) multiplier = 0.85f; // small relief
+
+        // Apply additional reduction based on previous failures
+        // Use diminishing returns: each failure reduces by 5% max 3 failures
+        int cappedFailures = Mathf.Min(failedTimes, 3);
+        multiplier *= 1f - (0.05f * cappedFailures);
+
+        // Clamp final multiplier to avoid too easy
+        return Mathf.Clamp(multiplier, 0.5f, 1f);
     }
+
+
+    // -------------------------
+    // MAIN FUNCTION
+    // -------------------------
 
     public static RuntimeLevelParameters GetParametersForLevel(
         int levelIndex,
-        int levelsPerCycle = 30
-    )
+        LevelArchetypeDatabase_SO archetypeDatabase,
+        int levelsPerCycle = 30,
+        int livesLostThisLevel = 0, int failedTimes = 0)
     {
         RuntimeLevelParameters p = new RuntimeLevelParameters();
 
@@ -102,20 +123,28 @@ public static class RuntimeLevelProgression
         // ENVIRONMENTAL DIFFICULTY
         // -------------------------
 
-        bool isRecoveryLevel = IsRecoveryLevel(cycleIndex, cycleLevel);
-        LevelArchetype archetype = SelectArchetype(cycleIndex, cycleLevel, isRecoveryLevel);
+        bool isRecovery = IsRecoveryLevel(cycleIndex, cycleLevel);
 
-        float emptyRatio;
-        float iceRatio;
-        float movingPlatformRatio;
+        LevelArchetypeData_SO archetype =
+            SelectArchetype(archetypeDatabase, cycleIndex, cycleLevel, isRecovery);
 
-        ApplyArchetype(
+        ApplyArchetypeData(
             archetype,
             cycleT,
-            out emptyRatio,
-            out iceRatio,
-            out movingPlatformRatio
+            out float emptyRatio,
+            out float iceRatio,
+            out float movingPlatformRatio
         );
+
+        // -------------------------
+        // ADAPTIVE DIFFICULTY
+        // -------------------------
+
+        float multiplier = GetDifficultyMultiplier(livesLostThisLevel, failedTimes);
+
+        emptyRatio *= multiplier;
+        iceRatio *= multiplier;
+        movingPlatformRatio *= multiplier;
 
         // -------------------------
         // OUTPUT
@@ -144,89 +173,71 @@ public static class RuntimeLevelProgression
     // ARCHETYPE SELECTION
     // -------------------------
 
-    static LevelArchetype SelectArchetype(
-        int cycleIndex,
-        int cycleLevel,
-        bool isRecovery
-    )
+    static LevelArchetypeData_SO SelectArchetype(
+        LevelArchetypeDatabase_SO db,
+        int cycleIndex, int cycleLevel, bool isRecovery)
     {
+        if (db == null)
+        {
+            Debug.LogError("LevelArchetypeDatabase is NULL");
+            return null;
+        }
+
         if (isRecovery)
-            return LevelArchetype.Recovery;
+            return db.recovery;
 
         bool emptyUnlocked = cycleIndex >= 1;
         bool iceUnlocked = cycleIndex >= 2;
         bool movingUnlocked = cycleIndex >= 4;
 
-        // Early game: single-modifier focus
-        if (cycleIndex < 3)
-        {
-            if (emptyUnlocked)
-                return LevelArchetype.Precision;
+        if (cycleIndex < 3 && emptyUnlocked)
+            return db.precision;
 
-            return LevelArchetype.Recovery;
-        }
-
-        // Mid / late game structured rotation
         int pattern = cycleLevel % 3;
 
         if (pattern == 0 && emptyUnlocked && iceUnlocked)
-            return LevelArchetype.PrecisionSlippery;
+            return db.precisionSlippery;
 
         if (pattern == 1 && iceUnlocked && movingUnlocked)
-            return LevelArchetype.SlipperyTiming;
+            return db.slipperyTiming;
 
         if (emptyUnlocked && movingUnlocked)
-            return LevelArchetype.PrecisionTiming;
+            return db.precisionTiming;
 
-        return LevelArchetype.Precision;
+        return db.precision;
     }
 
     // -------------------------
     // ARCHETYPE APPLICATION
     // -------------------------
 
-    static void ApplyArchetype(
-        LevelArchetype archetype,
-        float t,
-        out float empty,
-        out float ice,
-        out float moving
-    )
+    static void ApplyArchetypeData(
+        LevelArchetypeData_SO data, float t,
+        out float empty, out float ice, out float moving)
     {
         empty = ice = moving = 0f;
 
-        switch (archetype)
+        if (data == null || data.modifiers == null)
+            return;
+
+        foreach (var mod in data.modifiers)
         {
-            case LevelArchetype.Precision:
-                empty = MAX_EMPTY * DOMINANT_WEIGHT * t;
-                break;
+            float scaled = Mathf.Clamp01(mod.weight * t);
 
-            case LevelArchetype.Slippery:
-                ice = MAX_ICE * DOMINANT_WEIGHT * t;
-                break;
+            switch (mod.type)
+            {
+                case ModifierType.Empty:
+                    empty = Mathf.Min(MAX_EMPTY, scaled * MAX_EMPTY);
+                    break;
 
-            case LevelArchetype.Timing:
-                moving = MAX_MOVING * DOMINANT_WEIGHT * t;
-                break;
+                case ModifierType.Ice:
+                    ice = Mathf.Min(MAX_ICE, scaled * MAX_ICE);
+                    break;
 
-            case LevelArchetype.PrecisionSlippery:
-                empty = MAX_EMPTY * DOMINANT_WEIGHT * t;
-                ice = MAX_ICE * SECONDARY_WEIGHT * t;
-                break;
-
-            case LevelArchetype.PrecisionTiming:
-                empty = MAX_EMPTY * DOMINANT_WEIGHT * t;
-                moving = MAX_MOVING * SECONDARY_WEIGHT * t;
-                break;
-
-            case LevelArchetype.SlipperyTiming:
-                ice = MAX_ICE * DOMINANT_WEIGHT * t;
-                moving = MAX_MOVING * SECONDARY_WEIGHT * t;
-                break;
-
-            case LevelArchetype.Recovery:
-            default:
-                break;
+                case ModifierType.Moving:
+                    moving = Mathf.Min(MAX_MOVING, scaled * MAX_MOVING);
+                    break;
+            }
         }
     }
 }

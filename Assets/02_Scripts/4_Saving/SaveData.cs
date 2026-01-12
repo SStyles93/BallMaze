@@ -21,6 +21,8 @@ public class LevelData
 {
     public int numberOfStars;
     public int coinsLeftToEarn;
+    public int livesLostToThisLevel = 0;
+    public int failedTimes = 0;
     public bool wasLevelFinished = false;
 }
 
