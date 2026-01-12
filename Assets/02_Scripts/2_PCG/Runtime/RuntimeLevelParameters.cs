@@ -14,6 +14,28 @@ public struct RuntimeLevelParameters
 
 public static class RuntimeLevelProgression
 {
+    // -------------------------
+    // DESIGN CONSTANTS
+    // -------------------------
+
+    const float MAX_EMPTY = 0.5f;
+    const float MAX_ICE = 1.0f;
+    const float MAX_MOVING = 0.5f;
+
+    const float DOMINANT_WEIGHT = 0.7f;
+    const float SECONDARY_WEIGHT = 0.3f;
+
+    enum LevelArchetype
+    {
+        Recovery,
+        Precision,              // Empty dominant
+        Slippery,               // Ice dominant
+        Timing,                 // Moving dominant
+        PrecisionSlippery,      // Empty + Ice
+        PrecisionTiming,        // Empty + Moving
+        SlipperyTiming          // Ice + Moving
+    }
+
     public static RuntimeLevelParameters GetParametersForLevel(
         int levelIndex,
         int levelsPerCycle = 30
@@ -34,12 +56,12 @@ public static class RuntimeLevelProgression
         // -------------------------
         // CYCLE PROGRESSION
         // -------------------------
-        int cycleIndex = levelIndex / levelsPerCycle;      // 0,1,2,3...
-        int cycleLevel = levelIndex % levelsPerCycle;     // position inside cycle
-        float cycleT = (float)cycleLevel / (levelsPerCycle - 1); // [0..1]
+        int cycleIndex = levelIndex / levelsPerCycle;
+        int cycleLevel = levelIndex % levelsPerCycle;
+        float cycleT = (float)cycleLevel / (levelsPerCycle - 1);
 
         // -------------------------
-        // PHASE TIMING (normalized)
+        // PHASE TIMING
         // -------------------------
         float phase0End = 0.20f;
         float phase1End = 0.40f;
@@ -50,7 +72,6 @@ public static class RuntimeLevelProgression
         int height = minHeight;
         int starDistance = minStarDistance;
 
-        // Phase progression for width/height/starDistance
         if (cycleT <= phase0End)
         {
             float t = cycleT / phase0End;
@@ -80,24 +101,21 @@ public static class RuntimeLevelProgression
         // -------------------------
         // ENVIRONMENTAL DIFFICULTY
         // -------------------------
-        float emptyRatio = 0f;
-        float iceRatio = 0f;
-        float movingPlatformRatio = 0f;
 
-        if (cycleIndex >= 1)
-            emptyRatio = Mathf.Clamp01(cycleT);
+        bool isRecoveryLevel = IsRecoveryLevel(cycleIndex, cycleLevel);
+        LevelArchetype archetype = SelectArchetype(cycleIndex, cycleLevel, isRecoveryLevel);
 
-        if (cycleIndex >= 2)
-            iceRatio = Mathf.Clamp01(cycleT);
+        float emptyRatio;
+        float iceRatio;
+        float movingPlatformRatio;
 
-        if (cycleIndex >= 3)
-        {
-            emptyRatio = Mathf.Clamp01(cycleT);
-            iceRatio = Mathf.Clamp01(cycleT);
-        }
-
-        if (cycleIndex >= 4)
-            movingPlatformRatio = Mathf.Clamp01(0.5f * cycleT);
+        ApplyArchetype(
+            archetype,
+            cycleT,
+            out emptyRatio,
+            out iceRatio,
+            out movingPlatformRatio
+        );
 
         // -------------------------
         // OUTPUT
@@ -110,5 +128,105 @@ public static class RuntimeLevelProgression
         p.movingPlatformRatio = movingPlatformRatio;
 
         return p;
+    }
+
+    // -------------------------
+    // RECOVERY LOGIC
+    // -------------------------
+
+    static bool IsRecoveryLevel(int cycleIndex, int cycleLevel)
+    {
+        int recoveryFrequency = Mathf.Clamp(6 - cycleIndex, 3, 6);
+        return (cycleLevel % recoveryFrequency) == recoveryFrequency - 1;
+    }
+
+    // -------------------------
+    // ARCHETYPE SELECTION
+    // -------------------------
+
+    static LevelArchetype SelectArchetype(
+        int cycleIndex,
+        int cycleLevel,
+        bool isRecovery
+    )
+    {
+        if (isRecovery)
+            return LevelArchetype.Recovery;
+
+        bool emptyUnlocked = cycleIndex >= 1;
+        bool iceUnlocked = cycleIndex >= 2;
+        bool movingUnlocked = cycleIndex >= 4;
+
+        // Early game: single-modifier focus
+        if (cycleIndex < 3)
+        {
+            if (emptyUnlocked)
+                return LevelArchetype.Precision;
+
+            return LevelArchetype.Recovery;
+        }
+
+        // Mid / late game structured rotation
+        int pattern = cycleLevel % 3;
+
+        if (pattern == 0 && emptyUnlocked && iceUnlocked)
+            return LevelArchetype.PrecisionSlippery;
+
+        if (pattern == 1 && iceUnlocked && movingUnlocked)
+            return LevelArchetype.SlipperyTiming;
+
+        if (emptyUnlocked && movingUnlocked)
+            return LevelArchetype.PrecisionTiming;
+
+        return LevelArchetype.Precision;
+    }
+
+    // -------------------------
+    // ARCHETYPE APPLICATION
+    // -------------------------
+
+    static void ApplyArchetype(
+        LevelArchetype archetype,
+        float t,
+        out float empty,
+        out float ice,
+        out float moving
+    )
+    {
+        empty = ice = moving = 0f;
+
+        switch (archetype)
+        {
+            case LevelArchetype.Precision:
+                empty = MAX_EMPTY * DOMINANT_WEIGHT * t;
+                break;
+
+            case LevelArchetype.Slippery:
+                ice = MAX_ICE * DOMINANT_WEIGHT * t;
+                break;
+
+            case LevelArchetype.Timing:
+                moving = MAX_MOVING * DOMINANT_WEIGHT * t;
+                break;
+
+            case LevelArchetype.PrecisionSlippery:
+                empty = MAX_EMPTY * DOMINANT_WEIGHT * t;
+                ice = MAX_ICE * SECONDARY_WEIGHT * t;
+                break;
+
+            case LevelArchetype.PrecisionTiming:
+                empty = MAX_EMPTY * DOMINANT_WEIGHT * t;
+                moving = MAX_MOVING * SECONDARY_WEIGHT * t;
+                break;
+
+            case LevelArchetype.SlipperyTiming:
+                ice = MAX_ICE * DOMINANT_WEIGHT * t;
+                moving = MAX_MOVING * SECONDARY_WEIGHT * t;
+                break;
+
+            case LevelArchetype.Recovery:
+            default:
+                break;
+        }
     }
 }

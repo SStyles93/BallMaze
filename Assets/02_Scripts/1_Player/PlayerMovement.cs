@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
@@ -21,9 +22,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Fall")]
     [SerializeField] private float fallThreshold = -5f;
 
+
     private Vector3 movementInput;
     private bool isGrounded;
     private bool wasJumpPerformed;
+    // --- Platform ---
+    private bool allowRotation;
+    private Transform currentPlatform;
+
+
+
 
     public float FallThreshold { get => fallThreshold; set => fallThreshold = value; }
     public Rigidbody PlayerRigidbody { get => playerRigidbody; set => playerRigidbody = value; }
@@ -46,15 +54,19 @@ public class PlayerMovement : MonoBehaviour
             playerRigidbody = GetComponent<Rigidbody>();
 
         playerRigidbody.maxAngularVelocity = maxAngularVelocity;
+        playerRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
 
     private void FixedUpdate()
     {
-        ApplyExtraGravity();
         CheckGrounded();
-        Roll();
-    }
 
+        CheckIfRotationIsAllowed();
+
+        ApplyExtraGravity();
+
+        if (allowRotation) Roll();
+    }
     // ---------------- ROLLING ----------------
 
     private void Roll()
@@ -62,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isGrounded || movementInput.sqrMagnitude < 0.01f)
             return;
 
-        // Torque direction: perpendicular to movement
+        // Torque direction perpendicular to player input
         Vector3 torque = Vector3.Cross(Vector3.up, movementInput.normalized);
         playerRigidbody.AddTorque(torque * torqueStrength, ForceMode.Acceleration);
     }
@@ -75,6 +87,10 @@ public class PlayerMovement : MonoBehaviour
 
         playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         isGrounded = false;
+        wasJumpPerformed = true;
+
+        // Unset platform reference when jumping
+        currentPlatform = null;
     }
 
     // ---------------- GROUND ----------------
@@ -82,12 +98,48 @@ public class PlayerMovement : MonoBehaviour
     private void CheckGrounded()
     {
         Ray ray = new Ray(transform.position, Vector3.down);
-        isGrounded = Physics.SphereCast(
-            ray,
-            groundDetectionRadius,
-            groundCheckDistance,
-            groundedLayerMask
-        );
+        RaycastHit hit;
+
+        isGrounded = Physics.SphereCast(ray, groundDetectionRadius, out hit, groundCheckDistance, groundedLayerMask);
+
+        if (isGrounded)
+        {
+            if (hit.collider != null && hit.collider.CompareTag("MovingPlatform"))
+            {
+                currentPlatform = hit.collider.transform;
+            }
+            else
+            {
+                currentPlatform = null;
+            }
+
+            if (wasJumpPerformed)
+            {
+                AudioManager.Instance?.PlayThumpSound();
+                wasJumpPerformed = false;
+            }
+        }
+        else
+        {
+            currentPlatform = null;
+        }
+    }
+
+    // ---------------- PLATFORM COUNTER-TORQUE ----------------
+
+    private void CheckIfRotationIsAllowed()
+    {
+        allowRotation = isGrounded && movementInput.sqrMagnitude > 0.01f;
+
+        if (!isGrounded)
+            return;
+
+        if (currentPlatform != null && !allowRotation)
+        {
+            playerRigidbody.angularVelocity =
+            Vector3.Lerp(playerRigidbody.angularVelocity, Vector3.zero, 0.4f);
+        }
+        
     }
 
     // ---------------- INPUT ----------------
@@ -102,14 +154,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyExtraGravity()
     {
-        if (playerRigidbody.linearVelocity.y < 0f)
-        {
+        if (!isGrounded)
             playerRigidbody.AddForce(Physics.gravity * gravityScale, ForceMode.Acceleration);
-        }
     }
 }
-
-
 public class DirectionMapper : MonoBehaviour
 {
     /// <summary>

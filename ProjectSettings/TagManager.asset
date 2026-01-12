@@ -6,6 +6,7 @@ TagManager:
   tags:
   - AdBanner
   - DeadZone
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - Checkpoints
   - Ground
   - DeadZone
-  - Ice
+  - 
   - 
   - 
   - 

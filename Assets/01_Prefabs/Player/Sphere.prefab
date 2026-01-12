@@ -265,13 +265,15 @@ MonoBehaviour:
   torqueStrength: 100
   maxAngularVelocity: 100
   jumpForce: 10
-  gravityScale: 5
+  gravityScale: 2
   groundCheckDistance: 1.1
   groundDetectionRadius: 0.35
   groundedLayerMask:
     serializedVersion: 2
-    m_Bits: 163840
+    m_Bits: 425984
   fallThreshold: -5
+  ballRadius: 10
+  currentPlatform: {fileID: 0}
 --- !u!114 &9137505450509997439
 MonoBehaviour:
   m_ObjectHideFlags: 0

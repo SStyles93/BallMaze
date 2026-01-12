@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -6049237061903322977}
   m_Layer: 15
   m_Name: PlatformV
-  m_TagString: Untagged
+  m_TagString: MovingPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlatformMovement
   groundType: 3
-  movementValue: 3
+  movementAmplitude: 3
   movementPeriod: 3
 --- !u!1 &4013995271037462153
 GameObject:
