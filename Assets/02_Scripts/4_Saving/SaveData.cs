@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 public class SaveableData { }
@@ -11,6 +11,8 @@ public class GameData : SaveableData
 {
     public DateTime firstTimestamp; // Date-Time at which the game was first launched
     public Dictionary<int, LevelData> levelsData = new Dictionary<int, LevelData>(); // The dictionary holding the kvp sceneID - LevelData
+    public float difficultyDebt;   // 0 → no easing, 1 → max easing
+    public int remainingLevels;    // how long it lasts
 }
 
 /// <summary>

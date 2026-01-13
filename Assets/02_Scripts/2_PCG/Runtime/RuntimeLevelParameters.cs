@@ -51,6 +51,20 @@ public static class RuntimeLevelProgression
         return Mathf.Clamp(multiplier, 0.5f, 1f);
     }
 
+    /// <summary>
+    /// Gets the Global difficulty modifier for the level
+    /// </summary>
+    /// <param name="difficultyDebt"></param>
+    /// <returns></returns>
+    static float GetGlobalDifficultyMultiplier(float difficultyDebt)
+    {
+        // Max global relief = 20%
+        float maxRelief = 0.8f;
+
+        // multiplier (1 -> 0.8, [0 -> 1]) => reduces the overall relief
+        return Mathf.Lerp(1f, maxRelief, difficultyDebt);
+    }
+
 
     // -------------------------
     // MAIN FUNCTION
@@ -58,9 +72,9 @@ public static class RuntimeLevelProgression
 
     public static RuntimeLevelParameters GetParametersForLevel(
         int levelIndex,
-        LevelArchetypeDatabase_SO archetypeDatabase,
-        int levelsPerCycle = 30,
-        int livesLostThisLevel = 0, int failedTimes = 0)
+        LevelCycleProgression_SO cycleProgression,
+        int levelsPerCycle = 30, int livesLostThisLevel = 0, int failedTimes = 0,
+        float globalDifficultyDebt = 0)
     {
         RuntimeLevelParameters p = new RuntimeLevelParameters();
 
@@ -71,8 +85,8 @@ public static class RuntimeLevelProgression
         int maxWidth = 10;
         int minHeight = 10;
         int maxHeight = 20;
-        int minStarDistance = 3;
-        int maxStarDistance = 10;
+        int minStarDistance = 1;
+        int maxStarDistance = 8;
 
         // -------------------------
         // CYCLE PROGRESSION
@@ -93,28 +107,40 @@ public static class RuntimeLevelProgression
         int height = minHeight;
         int starDistance = minStarDistance;
 
+        // 0 -> 20% of cycle
+        // --- Increase Width ---
         if (cycleT <= phase0End)
         {
             float t = cycleT / phase0End;
             width = Mathf.RoundToInt(Mathf.Lerp(minWidth, maxWidth, t));
         }
+        // 21 -> 40% of cycle
+        // --- Max Width ---
         else if (cycleT <= phase1End)
         {
             width = maxWidth;
         }
+        // 41 -> 60% of cycle
+        // --- Increase Height + Max Width (+2) ---
         else if (cycleT <= phase2End)
         {
             float t = (cycleT - phase1End) / (phase2End - phase1End);
             width = Mathf.RoundToInt(Mathf.Lerp(maxWidth, maxWidth + 2, t));
             height = Mathf.RoundToInt(Mathf.Lerp(minHeight, maxHeight, t));
         }
+        // 61 -> 80% of cycle
+        // --- Max Height + Max Width (+2) ---
         else if (cycleT <= phase3End)
         {
             width = maxWidth + 2;
             height = maxHeight;
         }
+        // After 80% (81% -> 100%)
+        // --- Increase Star Distance ---
         else
         {
+            width = maxWidth + 2;
+            height = maxHeight;
             float t = (cycleT - phase3End) / (1f - phase3End);
             starDistance = Mathf.RoundToInt(Mathf.Lerp(minStarDistance, maxStarDistance, t));
         }
@@ -125,8 +151,8 @@ public static class RuntimeLevelProgression
 
         bool isRecovery = IsRecoveryLevel(cycleIndex, cycleLevel);
 
-        LevelArchetypeData_SO archetype =
-            SelectArchetype(archetypeDatabase, cycleIndex, cycleLevel, isRecovery);
+        LevelArchetypeData_SO archetype = SelectArchetype(cycleProgression,
+            cycleIndex,cycleLevel,isRecovery);
 
         ApplyArchetypeData(
             archetype,
@@ -140,11 +166,15 @@ public static class RuntimeLevelProgression
         // ADAPTIVE DIFFICULTY
         // -------------------------
 
-        float multiplier = GetDifficultyMultiplier(livesLostThisLevel, failedTimes);
+        float localDifficultyModifier = GetDifficultyMultiplier(livesLostThisLevel, failedTimes);
 
-        emptyRatio *= multiplier;
-        iceRatio *= multiplier;
-        movingPlatformRatio *= multiplier;
+        float globalDifficultyModifier = GetGlobalDifficultyMultiplier(globalDifficultyDebt);
+
+        float finalMultiplier = localDifficultyModifier * globalDifficultyModifier;
+
+        emptyRatio *= finalMultiplier;
+        iceRatio *= finalMultiplier;
+        movingPlatformRatio *= finalMultiplier;
 
         // -------------------------
         // OUTPUT
@@ -174,37 +204,31 @@ public static class RuntimeLevelProgression
     // -------------------------
 
     static LevelArchetypeData_SO SelectArchetype(
-        LevelArchetypeDatabase_SO db,
-        int cycleIndex, int cycleLevel, bool isRecovery)
+     LevelCycleProgression_SO progression,
+     int cycleIndex, int cycleLevel, bool isRecovery)
     {
-        if (db == null)
+        if (isRecovery)
+            return progression.recoveryArchetype;
+
+        if (progression == null || progression.cycles == null || progression.cycles.Count == 0)
         {
-            Debug.LogError("LevelArchetypeDatabase is NULL");
+            Debug.LogError("LevelCycleProgression is NULL or empty");
             return null;
         }
 
-        if (isRecovery)
-            return db.recovery;
+        // Clamp cycle index to last defined cycle
+        int safeCycleIndex = Mathf.Clamp(cycleIndex, 0, progression.cycles.Count - 1);
+        var cycle = progression.cycles[safeCycleIndex];
 
-        bool emptyUnlocked = cycleIndex >= 1;
-        bool iceUnlocked = cycleIndex >= 2;
-        bool movingUnlocked = cycleIndex >= 4;
+        if (cycle.allowedArchetypes == null || cycle.allowedArchetypes.Count == 0)
+        {
+            Debug.LogError($"Cycle {safeCycleIndex} has no archetypes");
+            return null;
+        }
 
-        if (cycleIndex < 3 && emptyUnlocked)
-            return db.precision;
-
-        int pattern = cycleLevel % 3;
-
-        if (pattern == 0 && emptyUnlocked && iceUnlocked)
-            return db.precisionSlippery;
-
-        if (pattern == 1 && iceUnlocked && movingUnlocked)
-            return db.slipperyTiming;
-
-        if (emptyUnlocked && movingUnlocked)
-            return db.precisionTiming;
-
-        return db.precision;
+        // Deterministic selection
+        int archetypeIndex = cycleLevel % cycle.allowedArchetypes.Count;
+        return cycle.allowedArchetypes[archetypeIndex];
     }
 
     // -------------------------

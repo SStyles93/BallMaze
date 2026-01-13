@@ -5,13 +5,19 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public Dictionary<int, LevelData> levelDataDictionnary = new Dictionary<int, LevelData>();
+    
+    [Header("PCG Parameters")]
     [SerializeField] GeneratorParameters_SO generatorParameters;
     [SerializeField] LevelDatabase_SO levelDatabase;
-    [SerializeField] LevelArchetypeDatabase_SO levelArchetypeDatabase;
+
+    [Header("Progression")]
+    [SerializeField] GlobalDifficultyState_SO globalDifficultyModifier;
+    [SerializeField] LevelCycleProgression_SO levelCycleProgression_SO;
     [SerializeField] int levelsPerCycle = 30;
+
+    [Header("Coin & Currencies")]
     [SerializeField] int initialCoinAmount = 30;
     private CellData[,] currentGrid;
-
 
     private LevelData currentLevelData = null;
     private int currentStarCount = 0;
@@ -22,13 +28,14 @@ public class LevelManager : MonoBehaviour
     private int failedTimes = 0;
     private bool wasGamePreviouslyFinished = false;
 
+
     public event Action<int> OnStarCountChanged;
 
-    #region Singleton
+    #region Singleton & Getters
     public static LevelManager Instance { get; private set; }
-    public LevelDatabase_SO LevelDatabase { get => levelDatabase; set => levelDatabase = value; }
-    public int CurrentLevelIndex { get => currentLevelIndex; }
-    public LevelData CurrentLevelData { get => currentLevelData; }
+    public GlobalDifficultyState_SO GlobalDifficultyModifier => globalDifficultyModifier;
+    public LevelData CurrentLevelData => currentLevelData;
+    public int CurrentLevelIndex => currentLevelIndex;
     public int PreviousNumberOfStars => previousNumberOfStarts;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount => currentStarCount;
@@ -133,6 +140,33 @@ public class LevelManager : MonoBehaviour
         return highestFinished;
     }
 
+    #region GLOBAL DIFFICULTY
+
+    void ConsumeGlobalDifficulty()
+    {
+        if (globalDifficultyModifier.remainingLevels <= 0)
+        {
+            globalDifficultyModifier.difficultyDebt = 0f;
+            return;
+        }
+
+        globalDifficultyModifier.remainingLevels--;
+    }
+
+    void UpdateGlobalDifficulty(int livesLost)
+    {
+        if (livesLost <= 0) return;
+        // Losing lives reduces the difficulty
+        float addedDebt = livesLost * 0.1f;
+
+        globalDifficultyModifier.difficultyDebt =
+            Mathf.Clamp01(globalDifficultyModifier.difficultyDebt + addedDebt);
+
+        globalDifficultyModifier.remainingLevels = 4; // lasts next 4 levels
+    }
+
+    #endregion
+
     #region LEVEL DATA (GRADES)
 
     /// <summary>
@@ -178,6 +212,13 @@ public class LevelManager : MonoBehaviour
             currentLevelData.coinsLeftToEarn -= currencyEarned;
         }
 
+        // --- GLOBAL DIFFICULTY MODIFIER ---
+
+        ConsumeGlobalDifficulty();
+        UpdateGlobalDifficulty(livesLostToThisLevel);
+
+        // --- MANAGERS UPDATE (COIN & DATA ---
+
         CoinManager.Instance.IncreaseCurrencyAmount(CoinType.COIN, currencyEarned);
 
         SavingManager.Instance?.SaveGame();
@@ -208,6 +249,8 @@ public class LevelManager : MonoBehaviour
             };
             levelDataDictionnary.Add(currentLevelIndex, currentLevelData);
         }
+
+        UpdateGlobalDifficulty(livesLostToThisLevel);
     }
 
     public void IncreaseLivesLostToThisLevel()
@@ -291,9 +334,10 @@ public class LevelManager : MonoBehaviour
 
         // 2️ Otherwise, generate runtime parameters
         RuntimeLevelParameters runtimeParams =
-            RuntimeLevelProgression.GetParametersForLevel(levelIndex, 
-            levelArchetypeDatabase, levelsPerCycle, 
-            livesLostToThisLevel, failedTimes);
+            RuntimeLevelProgression.GetParametersForLevel(levelIndex,
+            levelCycleProgression_SO,
+            levelsPerCycle, livesLostToThisLevel, failedTimes, 
+            globalDifficultyModifier.difficultyDebt);
 
         // 3️ Apply runtime parameters to generator
         baseParameters.gridWidth = runtimeParams.width;

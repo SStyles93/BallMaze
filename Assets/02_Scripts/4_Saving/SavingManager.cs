@@ -116,7 +116,10 @@ public class SavingManager : MonoBehaviour
                 gameData.levelsData[kvp.Key] = kvp.Value;
             else
                 gameData.levelsData.Add(kvp.Key, kvp.Value);
+
         }
+        gameData.difficultyDebt = LevelManager.Instance.GlobalDifficultyModifier.difficultyDebt;
+        gameData.remainingLevels = LevelManager.Instance.GlobalDifficultyModifier.remainingLevels;
     }
 
     /// <summary>
@@ -316,6 +319,9 @@ public class SavingManager : MonoBehaviour
                     LevelManager.Instance.levelDataDictionnary[kvp.Key] = kvp.Value;
                 }
             }
+
+            LevelManager.Instance.GlobalDifficultyModifier.difficultyDebt = gameData.difficultyDebt;
+            LevelManager.Instance.GlobalDifficultyModifier.remainingLevels = gameData.remainingLevels;
         }
     }
 

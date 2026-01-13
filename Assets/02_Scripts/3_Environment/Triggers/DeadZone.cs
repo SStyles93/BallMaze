@@ -4,7 +4,8 @@ using UnityEngine;
 public class DeadZone : MonoBehaviour
 {
     [SerializeField] private Vector3 spawnPosition = Vector3.zero;
-    [SerializeField] private LifePannel lifePannel;
+
+    bool wasLevelProcessed = false;
 
     private void Start()
     {
@@ -29,6 +30,12 @@ public class DeadZone : MonoBehaviour
             {
                 // Block Player
                 rb.isKinematic = true;
+
+                if (!wasLevelProcessed)
+                {
+                    LevelManager.Instance.MarkLevelAsFailed();
+                    wasLevelProcessed = true;
+                }
             }
             else
             {

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LevelDatabase
   m_EditorClassIdentifier: Assembly-CSharp::LevelDatabase_SO
   levels:
-  - index: 0
+  - index: 1
     gridWidth: 3
     gridHeight: 10
     randomEnd: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
       ground: 0
       overlay: 0
     usedSeed: -160900234
-  - index: 29
+  - index: 30
     gridWidth: 3
     gridHeight: 10
     randomEnd: 1
