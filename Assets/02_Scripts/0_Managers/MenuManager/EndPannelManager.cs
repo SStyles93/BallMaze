@@ -17,7 +17,7 @@ public class EndPannelManager : MonoBehaviour
         levelManager = LevelManager.Instance;
 
         // LVL n°
-        levelText.text = $"Level {levelManager.CurrentLevelIndex+1}";
+        levelText.text = $"Level {levelManager.CurrentLevelIndex}";
 
         // START ( * * * )
         if (levelManager.CurrentLevelData.numberOfStars == 0 || LifeManager.Instance.CurrentLife == 0)

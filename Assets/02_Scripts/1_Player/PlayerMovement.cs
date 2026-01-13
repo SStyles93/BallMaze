@@ -119,8 +119,10 @@ public class PlayerMovement : MonoBehaviour
                 currentPlatform = null;
             }
 
-            if (wasJumpPerformed && playerRigidbody.linearVelocity.y < 0)
+            // Y velocity is generally at -8.smth (if < 0, this part might trigger before falling)
+            if (wasJumpPerformed && playerRigidbody.linearVelocity.y < -2f)
             {
+                Debug.Log(playerRigidbody.linearVelocity);
                 // Calls the LandedSound on the PlayerSound script
                 OnPlayerLanded?.Invoke(hit.collider.tag);
 

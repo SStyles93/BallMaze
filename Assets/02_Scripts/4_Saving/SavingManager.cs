@@ -303,7 +303,7 @@ public class SavingManager : MonoBehaviour
                     failedTimes = 0,
                     wasLevelFinished = true
                 };
-                for (int i = 0; i <= CoreManager.Instance.numberOfLevels; i++)
+                for (int i = 1; i <= CoreManager.Instance.numberOfLevels; i++)
                 {
                     LevelManager.Instance.levelDataDictionnary.Add(i, levelData);
                 }

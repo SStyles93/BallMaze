@@ -24,17 +24,13 @@ public class PlayButton : UIButton
     public void InitializeLastLevelToPlay()
     {
         m_indexOfLevelToPlay = LevelManager.Instance.GetHighestFinishedLevelIndex()+1;
-
-        if (m_indexOfLevelToPlay <= 0) m_indexOfLevelToPlay = 1;
-        m_levelIndexText.text = (m_indexOfLevelToPlay+1).ToString();
+        m_levelIndexText.text = m_indexOfLevelToPlay.ToString();
     }
 
     public void SetIndexOfLevelToPlay(int index)
     {
-        if (m_indexOfLevelToPlay <= 0) m_indexOfLevelToPlay = 1;
-
         m_indexOfLevelToPlay = index;
-        m_levelIndexText.text = (index+1).ToString();
+        m_levelIndexText.text = index.ToString();
     }
 
     private void PlayNextLevel()

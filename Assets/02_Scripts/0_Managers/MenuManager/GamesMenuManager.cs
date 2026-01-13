@@ -44,15 +44,15 @@ public class GamesMenuManager : MonoBehaviour
     {
         int highestFinishedLevel = LevelManager.Instance.GetHighestFinishedLevelIndex();
 
-        // Show up to next playable level (+1 for index) (+2 for next and following locked), 
-        int slotsToShow = Mathf.Max(highestFinishedLevel + 3, 1);
+        // Show up to next playable level (+2: 1 for the next level, 1 for teaser (locked)
+        int slotsToShow = Mathf.Max(highestFinishedLevel + 2, 1);
 
-        for (int i = 0; i < slotsToShow; i++)
+        for (int i = 1; i <= slotsToShow; i++)
         {
             GameObject slotObj = Instantiate(slotPrefab, scrollViewContent.transform);
             bool isLocked;
 
-            if (i == 0)
+            if (i == 1)
             {
                 // First level is always playable
                 isLocked = false;

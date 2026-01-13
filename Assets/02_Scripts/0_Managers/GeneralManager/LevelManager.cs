@@ -110,7 +110,7 @@ public class LevelManager : MonoBehaviour
 
     public bool CanStartLevel(int index)
     {
-        if (index == 0) return true; // First level is always allowed
+        if (index == 1) return true; // First level is always allowed (0 is not a level (empty))
 
         // Check if previous level was finished
         if (!levelDataDictionnary.ContainsKey(index - 1))
@@ -122,7 +122,7 @@ public class LevelManager : MonoBehaviour
     // Return the last index (count) of the LevelDataDictionnary
     public int GetHighestFinishedLevelIndex()
     {
-        int highestFinished = -1;
+        int highestFinished = 0;
 
         foreach (var kvp in levelDataDictionnary)
         {
