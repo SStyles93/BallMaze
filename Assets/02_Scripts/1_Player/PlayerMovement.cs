@@ -88,7 +88,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGrounded) return;
 
-        playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        Vector3 iceDirectionHelper = Vector3.zero;
+        if (currentPlatform.CompareTag("Ice"))
+            iceDirectionHelper = movementInput * 0.5f;
+
+        playerRigidbody.AddForce((Vector3.up + iceDirectionHelper).normalized * jumpForce, ForceMode.Impulse);
         isGrounded = false;
         wasJumpPerformed = true;
 
@@ -110,13 +114,9 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded)
         {
-            if (hit.collider != null && hit.collider.CompareTag("MovingPlatform"))
+            if (hit.collider != null)
             {
                 currentPlatform = hit.collider.transform;
-            }
-            else
-            {
-                currentPlatform = null;
             }
 
             // Y velocity is generally at -8.smth (if < 0, this part might trigger before falling)
@@ -147,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isGrounded)
             return;
 
-        if (currentPlatform != null && !allowRotation)
+        if (currentPlatform != null && !allowRotation && currentPlatform.CompareTag("MovingPlatform"))
         {
             playerRigidbody.angularVelocity =
             Vector3.Lerp(playerRigidbody.angularVelocity, Vector3.zero, 0.4f);

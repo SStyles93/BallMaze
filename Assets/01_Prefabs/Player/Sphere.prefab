@@ -272,8 +272,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 425984
   fallThreshold: -5
-  ballRadius: 10
-  currentPlatform: {fileID: 0}
 --- !u!114 &9137505450509997439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,6 +335,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   maxSpeed: 7.6
   volumeRange: {x: 0, y: 1}
+  GroundPitch: 1.5
+  IcePitch: 1.5
 --- !u!1 &6644927266387035701
 GameObject:
   m_ObjectHideFlags: 0

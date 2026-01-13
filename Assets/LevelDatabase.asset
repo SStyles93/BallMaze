@@ -23,7 +23,7 @@ MonoBehaviour:
     emptyRatio: 0
     iceRation: 0
     movingPlatformRatio: 0
-    coinsToEarn: 30
+    coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
     starsConnectToEnd: 1
@@ -129,7 +129,7 @@ MonoBehaviour:
     emptyRatio: 0
     iceRation: 0
     movingPlatformRatio: 0
-    coinsToEarn: 30
+    coinsToEarn: 60
     starCount: 0
     minStarDistance: 3
     starsConnectToEnd: 1

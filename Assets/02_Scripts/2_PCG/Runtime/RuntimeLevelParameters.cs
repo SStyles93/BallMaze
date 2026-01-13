@@ -82,11 +82,11 @@ public static class RuntimeLevelProgression
         // BASE VALUES
         // -------------------------
         int minWidth = 3;
-        int maxWidth = 10;
+        int maxWidth = 7;
         int minHeight = 10;
-        int maxHeight = 20;
-        int minStarDistance = 1;
-        int maxStarDistance = 8;
+        int maxHeight = 40;
+        int minStarDistance = minHeight/3;
+        int maxStarDistance = maxHeight/3;
 
         // -------------------------
         // CYCLE PROGRESSION
@@ -125,21 +125,21 @@ public static class RuntimeLevelProgression
         else if (cycleT <= phase2End)
         {
             float t = (cycleT - phase1End) / (phase2End - phase1End);
-            width = Mathf.RoundToInt(Mathf.Lerp(maxWidth, maxWidth + 2, t));
+            width = Mathf.RoundToInt(Mathf.Lerp(maxWidth, maxWidth, t));
             height = Mathf.RoundToInt(Mathf.Lerp(minHeight, maxHeight, t));
         }
         // 61 -> 80% of cycle
         // --- Max Height + Max Width (+2) ---
         else if (cycleT <= phase3End)
         {
-            width = maxWidth + 2;
+            width = maxWidth;
             height = maxHeight;
         }
         // After 80% (81% -> 100%)
         // --- Increase Star Distance ---
         else
         {
-            width = maxWidth + 2;
+            width = maxWidth;
             height = maxHeight;
             float t = (cycleT - phase3End) / (1f - phase3End);
             starDistance = Mathf.RoundToInt(Mathf.Lerp(minStarDistance, maxStarDistance, t));

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c14e80bc76a2cf64fb655ff1915e39ec, type: 3}
-  m_Name: 1_LevelCycleProgression
+  m_Name: LevelCycleProgression
   m_EditorClassIdentifier: Assembly-CSharp::LevelCycleProgression_SO
   recoveryArchetype: {fileID: 11400000, guid: 17219e5218ce38949957f40bbb03edac, type: 2}
   cycles:

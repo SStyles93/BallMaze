@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75656b88bfa5c99428acb7c612fed9a4, type: 3}
-  m_Name: 1_Emtpy
-  m_EditorClassIdentifier: Assembly-CSharp::LevelArchetypeData_SO
-  archetypeName: Arc_Emtpy
-  modifiers:
-  - type: 0
-    weight: 1
-  maxActiveModifiers: 1
+  m_Script: {fileID: 11500000, guid: 7d27c6457489e7845b7bbf635a7def18, type: 3}
+  m_Name: Global Difficulty State
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalDifficultyState_SO
+  difficultyDebt: 0
+  remainingLevels: 0

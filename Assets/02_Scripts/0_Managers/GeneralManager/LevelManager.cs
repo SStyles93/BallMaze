@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class LevelManager : MonoBehaviour
 {
     public Dictionary<int, LevelData> levelDataDictionnary = new Dictionary<int, LevelData>();
-    
+
     [Header("PCG Parameters")]
     [SerializeField] GeneratorParameters_SO generatorParameters;
     [SerializeField] LevelDatabase_SO levelDatabase;
@@ -16,17 +17,18 @@ public class LevelManager : MonoBehaviour
     [SerializeField] int levelsPerCycle = 30;
 
     [Header("Coin & Currencies")]
-    [SerializeField] int initialCoinAmount = 30;
+    [SerializeField] int initialCoinAmount = 60;
     private CellData[,] currentGrid;
 
     private LevelData currentLevelData = null;
-    private int currentStarCount = 0;
     private int currentLevelIndex = 0;
-    private int currencyToEarn = 0;
-    private int previousNumberOfStarts = 0;
-    private int livesLostToThisLevel = 0;
+    private int currentStarCount = 0;
+    private int currentLivesLostToThisLevel = 0;
+    private int previousLivesLostToThisLevel = 0;
+    private int previousStarCount = 0;
     private int failedTimes = 0;
     private bool wasGamePreviouslyFinished = false;
+    public int bestCoinGrade;
 
 
     public event Action<int> OnStarCountChanged;
@@ -36,7 +38,7 @@ public class LevelManager : MonoBehaviour
     public GlobalDifficultyState_SO GlobalDifficultyModifier => globalDifficultyModifier;
     public LevelData CurrentLevelData => currentLevelData;
     public int CurrentLevelIndex => currentLevelIndex;
-    public int PreviousNumberOfStars => previousNumberOfStarts;
+    public int PreviousNumberOfStars => previousStarCount;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount => currentStarCount;
     public CellData[,] CurrentGrid => currentGrid;
@@ -101,14 +103,14 @@ public class LevelManager : MonoBehaviour
         // If no LevelData is present, create one with initial values
         InitializeCurrentLevelData(index);
 
+        // Set the Current Level values
         currentLevelIndex = index;
         currentStarCount = 0;
+        currentLivesLostToThisLevel = 0;
 
-        // Get the values of time and currency to earn from the SO
-        currencyToEarn = levelDatabase.GetLevelDataAtIndex(index) == null ? initialCoinAmount : levelDatabase.GetLevelDataAtIndex(index).coinsToEarn;
-        previousNumberOfStarts = levelDataDictionnary[index].numberOfStars;
+        previousStarCount = levelDataDictionnary[index].numberOfStars;
         wasGamePreviouslyFinished = levelDataDictionnary[index].wasLevelFinished;
-        livesLostToThisLevel = levelDataDictionnary[index].livesLostToThisLevel;
+        previousLivesLostToThisLevel = levelDataDictionnary[index].livesLostToThisLevel;
         failedTimes = levelDataDictionnary[index].failedTimes;
 
         //Init level
@@ -174,54 +176,60 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public void ProcessLevelData()
     {
-        currentLevelData.wasLevelFinished = true;
-        currentLevelData.livesLostToThisLevel = livesLostToThisLevel;
-
         // --- STARS ---
 
-        int earnedStars = currentStarCount - previousNumberOfStarts;
+        int earnedStars = currentStarCount - previousStarCount;
         // Make sure that the amount of stars is not negative
         // ex: previous try:3,
         //     current 2     ->     2-3 = -1
         if (earnedStars < 0) earnedStars = 0;
 
-        CoinManager.Instance.IncreaseCurrencyAmount(CoinType.STAR, earnedStars);
-
         // Sets the StarCount for the level accounting for previously obtained stars
-        if (currentStarCount > previousNumberOfStarts)
+        if (currentStarCount > previousStarCount)
             currentLevelData.numberOfStars = currentStarCount;
         else
-            currentStarCount = previousNumberOfStarts;
+            currentStarCount = previousStarCount;
 
 
         // --- COINS ---
 
-        int currencyEarned = CalculateCurrencyEarnedFromGrade(currentStarCount);
-        if (currencyEarned <= 0)
-            return;
+        int currentScore = CalculateGradeScore(currentStarCount, currentLivesLostToThisLevel);
+        int previousScore;
 
-        // If currency earned is bigger that what is left, return what is left
-        if (currencyEarned >= currentLevelData.coinsLeftToEarn)
-        {
-            currencyEarned = currentLevelData.coinsLeftToEarn;
-            currentLevelData.coinsLeftToEarn = 0;
-        }
-        // If what is earned is lower that what is left, return what is earned and remove that amount from what is left
+        // If the level was never finished, treat previous as "nothing earned yet"
+        if (currentLevelData.wasLevelFinished)
+            previousScore = CalculateGradeScore(previousStarCount, previousLivesLostToThisLevel);
         else
-        {
-            currentLevelData.coinsLeftToEarn -= currencyEarned;
-        }
+            previousScore = 0; // first completion always counts
+       
+
+        int currentCoins = GradeToCoins(currentScore);
+        int previousCoins = GradeToCoins(previousScore);
+
+        int currencyEarned = Mathf.Max(0, currentCoins - previousCoins);
+
+        // Ensure there is no gain over the max amount
+        if(currencyEarned >= currentLevelData.coinsLeftToEarn)
+            currencyEarned = currentLevelData.coinsLeftToEarn;
+
+        currentLevelData.coinsLeftToEarn -= currencyEarned;
+
+
 
         // --- GLOBAL DIFFICULTY MODIFIER ---
 
+        currentLevelData.livesLostToThisLevel = currentLivesLostToThisLevel;
         ConsumeGlobalDifficulty();
-        UpdateGlobalDifficulty(livesLostToThisLevel);
+        UpdateGlobalDifficulty(currentLivesLostToThisLevel);
 
-        // --- MANAGERS UPDATE (COIN & DATA ---
 
+        // --- MANAGERS UPDATE - STARS, COINS ---
+
+        currentLevelData.wasLevelFinished = true;
+        CoinManager.Instance.IncreaseCurrencyAmount(CoinType.STAR, earnedStars);
         CoinManager.Instance.IncreaseCurrencyAmount(CoinType.COIN, currencyEarned);
-
         SavingManager.Instance?.SaveGame();
+
     }
 
     /// <summary>
@@ -233,7 +241,7 @@ public class LevelManager : MonoBehaviour
         {
             currentLevelData.wasLevelFinished = false;
             currentLevelData.failedTimes++;
-            currentLevelData.livesLostToThisLevel = livesLostToThisLevel;
+            currentLevelData.livesLostToThisLevel = previousLivesLostToThisLevel;
             levelDataDictionnary[currentLevelIndex] = currentLevelData;
         }
         else
@@ -244,18 +252,18 @@ public class LevelManager : MonoBehaviour
                 numberOfStars = 0,
                 coinsLeftToEarn = initialCoinAmount,
                 wasLevelFinished = false,
-                livesLostToThisLevel = 0,
-                failedTimes = 0
+                livesLostToThisLevel = 3,
+                failedTimes = 1
             };
             levelDataDictionnary.Add(currentLevelIndex, currentLevelData);
         }
 
-        UpdateGlobalDifficulty(livesLostToThisLevel);
+        UpdateGlobalDifficulty(currentLivesLostToThisLevel);
     }
 
     public void IncreaseLivesLostToThisLevel()
     {
-        livesLostToThisLevel++;
+        currentLivesLostToThisLevel++;
     }
 
     /// <summary>
@@ -274,17 +282,50 @@ public class LevelManager : MonoBehaviour
     #region PRIVATE FUNCTIONS
 
     /// <summary>
-    /// Calculates the currency using Grade
+    /// Calculates the Grade
     /// </summary>
     /// <returns></returns>
-    private int CalculateCurrencyEarnedFromGrade(int grade)
+    private int CalculateGradeScore(int starCount, int livesLost)
     {
-        int currencyToReturn = currencyToEarn;
-        currencyToReturn /= 3;
-        currencyToReturn *= (grade - previousNumberOfStarts);
-        currencyToReturn = Mathf.RoundToInt(currencyToReturn);
+        // Star contribution
+        int starScore = 0;
+        switch (starCount)
+        {
+            case 1: starScore = 2; break;
+            case 2: starScore = 4; break;
+            case 3: starScore = 6; break;
+            default: starScore = 0; break; // 0 stars
+        }
 
-        return currencyToReturn;
+        // Lives contribution
+        int livesScore = 0;
+        switch (livesLost)
+        {
+            case 0: livesScore = 3; break;
+            case 1: livesScore = 2; break;
+            case 2: livesScore = 1; break;
+            default: livesScore = 0; break; // 3+ lives lost -> fail
+        }
+
+        return starScore + livesScore;
+    }
+
+
+    private int GradeToCoins(int score)
+    {
+        return score switch
+        {
+            9 => 60,
+            8 => 50,
+            7 => 45,
+            6 => 35,
+            5 => 25,
+            4 => 20,
+            3 => 15,
+            2 => 10,
+            1 => 5,
+            _ => 0
+        };
     }
 
     /// <summary>
@@ -336,7 +377,7 @@ public class LevelManager : MonoBehaviour
         RuntimeLevelParameters runtimeParams =
             RuntimeLevelProgression.GetParametersForLevel(levelIndex,
             levelCycleProgression_SO,
-            levelsPerCycle, livesLostToThisLevel, failedTimes, 
+            levelsPerCycle, previousLivesLostToThisLevel, failedTimes,
             globalDifficultyModifier.difficultyDebt);
 
         // 3️ Apply runtime parameters to generator

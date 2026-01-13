@@ -20,10 +20,10 @@ public class PlayerCamera : MonoBehaviour
     private void Update()
     {
         bool isFalling = transform.position.y < playerMovement.FallThreshold;
-        SetIsFalling(isFalling);
+        SetCameraFollow(isFalling);
     }
 
-    public void SetIsFalling(bool isFalling)
+    public void SetCameraFollow(bool isFalling)
     {
         cinemachineCam.Follow = isFalling ? null : transform;
     }

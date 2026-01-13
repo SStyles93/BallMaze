@@ -735,7 +735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unlockAllLevels: 1
+  unlockAllLevels: 0
   numberOfLevels: 200
 --- !u!1 &567788078
 GameObject:
@@ -1189,8 +1189,9 @@ MonoBehaviour:
   levelDatabase: {fileID: 11400000, guid: 7a2e4b9ee92d5bf42bec9798e4208ea8, type: 2}
   globalDifficultyModifier: {fileID: 11400000, guid: 494dd372dacc24347b67a0b025a09e4d, type: 2}
   levelCycleProgression_SO: {fileID: 11400000, guid: af6ae89333a1ecd4fad27a7d2511c008, type: 2}
-  levelsPerCycle: 30
-  initialCoinAmount: 30
+  levelsPerCycle: 10
+  initialCoinAmount: 60
+  bestCoinGrade: 0
 --- !u!1 &1333845251
 GameObject:
   m_ObjectHideFlags: 0

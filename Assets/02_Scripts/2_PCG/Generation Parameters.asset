@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c00ccb03db46d34980354b4e97b59aa, type: 3}
   m_Name: Generation Parameters
   m_EditorClassIdentifier: Assembly-CSharp::GeneratorParameters_SO
-  gridWidth: 10
-  gridHeight: 10
+  gridWidth: 7
+  gridHeight: 40
   randomEnd: 1
-  fixedEnd: {x: 9, y: 9}
-  endMin: {x: 0, y: 0}
-  endMax: {x: 20, y: 5}
-  inputSeed: 1
-  pathThickness: 0
-  curvePercent: 30
+  fixedEnd: {x: 0, y: 0}
+  endMaxHeightPercent: 10
+  inputSeed: -1
+  emptyRatio: 0
+  iceRatio: 0.64788896
+  movingPlatformRatio: 0
   starCount: 3
+  coinsToEarn: 60
   minStarDistance: 3
   starsConnectToEnd: 1
