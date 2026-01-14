@@ -13,8 +13,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxAngularVelocity = 25f;
 
     [Header("Jump")]
-    [SerializeField] private float jumpForce = 6f;
+    [SerializeField] private float jumpForce = 12f;
     [SerializeField] private float gravityScale = 2f;
+    [SerializeField] private float groundHelp = 0.2f;
+    [SerializeField] private float iceHelp = 0.6f;
 
     [Header("Ground Check")]
     [SerializeField] private float groundCheckDistance = 1.1f;
@@ -27,7 +29,9 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 movementInput;
     private bool isGrounded;
+    // --- Jump ---
     private bool wasJumpPerformed;
+    private float jumpHelpValue = 0.5f;
     // --- Platform ---
     private bool allowRotation;
     private Transform currentPlatform;
@@ -88,11 +92,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGrounded) return;
 
-        Vector3 iceDirectionHelper = Vector3.zero;
-        if (currentPlatform.CompareTag("Ice"))
-            iceDirectionHelper = movementInput * 0.5f;
+        if (currentPlatform != null && currentPlatform.CompareTag("Ice"))
+            jumpHelpValue = iceHelp;
+        else
+        {
+            jumpHelpValue = groundHelp;
+        }
 
-        playerRigidbody.AddForce((Vector3.up + iceDirectionHelper).normalized * jumpForce, ForceMode.Impulse);
+        Vector3 directionHelper = movementInput * jumpHelpValue;
+
+        playerRigidbody.AddForce((Vector3.up + directionHelper).normalized * jumpForce, ForceMode.Impulse);
         isGrounded = false;
         wasJumpPerformed = true;
 

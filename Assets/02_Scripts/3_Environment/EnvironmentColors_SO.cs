@@ -10,8 +10,7 @@ public class EnvironmentColors_SO : ScriptableObject
     public Material emissiveMaterialReference;
 
     public int targetPresetIndex;
-
-    private int lastPresetIndex;
+    public int lastPresetIndex;
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(EnvironmentColors_SO))]

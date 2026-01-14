@@ -182,9 +182,9 @@ public class PhysicalMazeGenerator : MonoBehaviour
     {
         return type switch
         {
-            OverlayType.Start => 1.2f,
-            OverlayType.End => 1.2f,
-            OverlayType.Star => 0.75f,
+            OverlayType.Start => 1.4f,
+            OverlayType.End => 1.4f,
+            OverlayType.Star => 0.9f,
             _ => 0f
         };
     }
@@ -206,11 +206,11 @@ public class PhysicalMazeGenerator : MonoBehaviour
             return;
 
         int rndPresetIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
-        while (rndPresetIndex == previousRndPreset)
+        while (rndPresetIndex == environmentColors_SO.lastPresetIndex)
         {
             rndPresetIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
         }
-        previousRndPreset = rndPresetIndex;
+        environmentColors_SO.lastPresetIndex = rndPresetIndex;
 
         ApplyEnvironmentColors(rndPresetIndex);
     }

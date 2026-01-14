@@ -264,8 +264,11 @@ MonoBehaviour:
   playerRigidbody: {fileID: 6087839670450387137}
   torqueStrength: 100
   maxAngularVelocity: 100
-  jumpForce: 10
+  jumpForce: 12
   gravityScale: 2
+  groundHelp: 0.2
+  iceHelp: 0.6
+  jumpHelpValue: 0
   groundCheckDistance: 1.1
   groundDetectionRadius: 0.35
   groundedLayerMask:
@@ -349,6 +352,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5080327698161584812}
+  - component: {fileID: 6128627591424612650}
   m_Layer: 13
   m_Name: VisualContainer
   m_TagString: Untagged
@@ -371,6 +375,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 569871771093822925}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6128627591424612650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6644927266387035701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e43e2cf9b704c94298ca631f024574b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1001 &6728362703669590761
 PrefabInstance:
   m_ObjectHideFlags: 0
