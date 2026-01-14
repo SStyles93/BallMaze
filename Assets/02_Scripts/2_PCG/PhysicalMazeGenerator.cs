@@ -26,9 +26,11 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     [HideInInspector][SerializeField] private bool isGridGenerated = false;
 
+    private int previousRndPreset;
+
     private void Awake()
     {
-        if(LevelManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
             // Generate the map on Awake
             Generate(LevelManager.Instance.CurrentGrid);
@@ -144,7 +146,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
         );
 
         // Set the value of movement so that is it always coherant with the grid's size
-        if(groundType == GroundType.MovingPlatformH || groundType == GroundType.MovingPlatformV)
+        if (groundType == GroundType.MovingPlatformH || groundType == GroundType.MovingPlatformV)
         {
             ground.GetComponent<PlatformMovement>().MovementAmplitude = cellSize;
         }
@@ -204,6 +206,12 @@ public class PhysicalMazeGenerator : MonoBehaviour
             return;
 
         int rndPresetIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
+        while (rndPresetIndex == previousRndPreset)
+        {
+            rndPresetIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
+        }
+        previousRndPreset = rndPresetIndex;
+
         ApplyEnvironmentColors(rndPresetIndex);
     }
 

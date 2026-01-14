@@ -245,37 +245,37 @@ MonoBehaviour:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 1, g: 0, b: 0.36078432, a: 1}
+    color: {r: 1, g: 0.46037734, b: 0.6550648, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 0, g: 1, b: 0.68235296, a: 1}
+    color: {r: 0.48301888, g: 1, b: 0.8357825, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 1, g: 0.6666667, b: 0, a: 1}
+    color: {r: 1, g: 0.8, b: 0.39999998, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 0.54901963, g: 0, b: 1, a: 1}
+    color: {r: 0.7481318, g: 0.44150943, b: 1, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 0, g: 1, b: 0.96862745, a: 1}
+    color: {r: 0.45283026, g: 1, b: 0.98283386, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 30
     name: 
-    color: {r: 1, g: 0.84313726, b: 0, a: 1}
+    color: {r: 1, g: 0.9206807, b: 0.4943396, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
@@ -299,37 +299,37 @@ MonoBehaviour:
       CoinType: 0
       Amount: 50
     name: 
-    color: {r: 0, g: 1, b: 0.78431374, a: 1}
+    color: {r: 0.24065503, g: 0.9811321, b: 0.8214213, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 50
     name: 
-    color: {r: 1, g: 0.23921569, b: 0, a: 1}
+    color: {r: 0.9811321, g: 0.50510705, b: 0.35542905, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 50
     name: 
-    color: {r: 0.22352941, g: 1, b: 0.078431375, a: 1}
+    color: {r: 0.42769974, g: 1, b: 0.3207547, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 50
     name: 
-    color: {r: 0, g: 1, b: 1, a: 1}
+    color: {r: 0.5056604, g: 1, b: 1, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 50
     name: 
-    color: {r: 0.70980394, g: 0, b: 1, a: 1}
+    color: {r: 0.859579, g: 0.51320755, b: 1, a: 1}
   - isLocked: 1
     price:
       CoinType: 0
       Amount: 50
     name: 
-    color: {r: 1, g: 1, b: 0.24705882, a: 1}
+    color: {r: 1, g: 1, b: 0.48301888, a: 1}
   - isLocked: 1
     price:
       CoinType: 1
@@ -347,16 +347,16 @@ MonoBehaviour:
       CoinType: 1
       Amount: 10
     name: 
-    color: {r: 0, g: 1, b: 0.6156863, a: 1}
+    color: {r: 0.46415097, g: 1, b: 0.79406595, a: 1}
   - isLocked: 1
     price:
       CoinType: 1
       Amount: 10
     name: 
-    color: {r: 1, g: 0.36078432, b: 0.23137255, a: 1}
+    color: {r: 0.99622643, g: 0.6335648, b: 0.56014246, a: 1}
   - isLocked: 1
     price:
       CoinType: 1
       Amount: 10
     name: 
-    color: {r: 1, g: 0.078431375, b: 0.5764706, a: 1}
+    color: {r: 1, g: 0.5584906, b: 0.79709345, a: 1}

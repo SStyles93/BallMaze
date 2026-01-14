@@ -11,6 +11,8 @@ public class EnvironmentColors_SO : ScriptableObject
 
     public int targetPresetIndex;
 
+    private int lastPresetIndex;
+
 #if UNITY_EDITOR
     [CustomEditor(typeof(EnvironmentColors_SO))]
     public class EnvironmentColors_SO_CustomInspector : Editor

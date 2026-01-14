@@ -101,7 +101,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FesnelPower: 0.4
+    - _FesnelPower: 1
     - _Float: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -112,7 +112,7 @@ Material:
     - _OUtline: 0
     - _OUtline_Thickness: 0
     - _OcclusionStrength: 1
-    - _Outline_Thickness: 0.45
+    - _Outline_Thickness: 0.2
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
