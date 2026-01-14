@@ -45,7 +45,7 @@ public class GamesMenuManager : MonoBehaviour
         int highestFinishedLevel = LevelManager.Instance.GetHighestFinishedLevelIndex();
 
         // Show up to next playable level (+2: 1 for the next level, 1 for teaser (locked)
-        int slotsToShow = Mathf.Max(highestFinishedLevel + 2, 1);
+        int slotsToShow = Mathf.Max(highestFinishedLevel + 38, 1);
 
         for (int i = 1; i <= slotsToShow; i++)
         {

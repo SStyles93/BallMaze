@@ -475,7 +475,7 @@ MonoBehaviour:
       overlay: 0
     - isEmpty: 0
       ground: 3
-      overlay: 0
+      overlay: 3
     - isEmpty: 1
       ground: 0
       overlay: 0
@@ -493,7 +493,7 @@ MonoBehaviour:
       overlay: 0
     - isEmpty: 0
       ground: 0
-      overlay: 0
+      overlay: 3
     - isEmpty: 0
       ground: 0
       overlay: 0
@@ -511,7 +511,7 @@ MonoBehaviour:
       overlay: 0
     - isEmpty: 0
       ground: 2
-      overlay: 0
+      overlay: 3
     - isEmpty: 0
       ground: 4
       overlay: 0
@@ -581,7 +581,7 @@ MonoBehaviour:
       overlay: 0
     - isEmpty: 0
       ground: 3
-      overlay: 0
+      overlay: 3
     - isEmpty: 1
       ground: 0
       overlay: 0
@@ -599,7 +599,7 @@ MonoBehaviour:
       overlay: 0
     - isEmpty: 0
       ground: 1
-      overlay: 0
+      overlay: 3
     - isEmpty: 0
       ground: 0
       overlay: 0
@@ -626,7 +626,7 @@ MonoBehaviour:
       overlay: 0
     - isEmpty: 0
       ground: 2
-      overlay: 0
+      overlay: 3
     - isEmpty: 0
       ground: 4
       overlay: 0

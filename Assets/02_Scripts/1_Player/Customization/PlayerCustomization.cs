@@ -151,7 +151,8 @@ public class PlayerCustomization : MonoBehaviour
 
     private void ClearVisualContainer()
     {
-        foreach(Transform child in m_visualContainer.GetComponentInChildren<Transform>())
+        if (m_visualContainer == null) return;
+        foreach (Transform child in m_visualContainer.GetComponentInChildren<Transform>())
         {
             Destroy(child.gameObject);
         }
