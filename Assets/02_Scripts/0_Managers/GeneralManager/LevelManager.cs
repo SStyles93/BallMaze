@@ -28,7 +28,6 @@ public class LevelManager : MonoBehaviour
     private int previousStarCount = 0;
     private int failedTimes = 0;
     private bool wasGamePreviouslyFinished = false;
-    public int bestCoinGrade;
 
 
     public event Action<int> OnStarCountChanged;

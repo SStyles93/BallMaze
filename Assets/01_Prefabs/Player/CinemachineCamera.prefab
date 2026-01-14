@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5693295654109602499}
   - component: {fileID: 2873438339014791461}
   - component: {fileID: 2458476656529592708}
+  - component: {fileID: 4188583864013449926}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -57,7 +58,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 30
     OrthographicSize: 32
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -90,8 +91,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
   TrackerSettings:
     BindingMode: 4
-    PositionDamping: {x: 1, y: 1, z: 1}
+    PositionDamping: {x: 2, y: 2, z: 1}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 14, z: -5}
+  FollowOffset: {x: 0, y: 35, z: -19}
+--- !u!114 &4188583864013449926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712241831638726005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cd1e4b9fe30ecd43a121a1e8e333394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraClamp
+  softZone: 1
+  xLimits: {x: -100, y: 100}

@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelCycleProgression_SO
   recoveryArchetype: {fileID: 11400000, guid: 17219e5218ce38949957f40bbb03edac, type: 2}
   cycles:
+  - cycleName: NONE
+    allowedArchetypes:
+    - {fileID: 11400000, guid: 1c76d658c4ed01c44b714ea2874d0c5d, type: 2}
   - cycleName: Precision Intro (Holes)
     allowedArchetypes:
     - {fileID: 11400000, guid: 4e1ad8b5c019bcb40877ef5d1248584d, type: 2}

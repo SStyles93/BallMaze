@@ -284,6 +284,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70726f693d25f7b4590e244d93d60eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
+  cameraGridLimitsPercentage: {x: 0.25, y: 0.75}
+  softZone: 2
+  cameraLimitsX: {x: -100, y: 100}
 --- !u!114 &5364715522439794130
 MonoBehaviour:
   m_ObjectHideFlags: 0
