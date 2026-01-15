@@ -300,4 +300,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5ba15b0e73aef04092fc79232427f55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StarPannel
-  currencyText: {fileID: 4301746873815571207}
+  text: {fileID: 4301746873815571207}
+  m_coinType: 1

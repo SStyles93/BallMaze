@@ -1,40 +1,14 @@
-using TMPro;
-using UnityEngine;
-
-public class CoinPannel : MonoBehaviour
+public class CoinPannel : CurrencyPannel
 {
-    [SerializeField] private TMP_Text currencyText;
-    private void OnEnable()
+    protected override void Start()
     {
-        CoinManager.Instance.OnCoinSet += SetCurrencyValue;
-        CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
-    }
+        m_coinType = CoinType.COIN;
 
-    private void OnDisable()
-    {
-        CoinManager.Instance.OnCoinSet -= SetCurrencyValue;
-        CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
-    }
-
-    private void Start()
-    {
-        CoinManager coinManager = CoinManager.Instance;
-        if(coinManager != null && coinManager.PreviousCoinAmount != CoinManager.Instance.CoinAmount)
+        if (coinManagerRef != null && coinManagerRef.PreviousCoinAmount != coinManagerRef.CoinAmount)
         {
-            UpdateCurrencyValue(CoinType.COIN, coinManager.CoinAmount, coinManager.PreviousCoinAmount);
-            coinManager.LevelPreviousCoinAmount(CoinType.COIN);
+            UpdateCurrencyValue(m_coinType, coinManagerRef.CoinAmount, coinManagerRef.PreviousCoinAmount);
+            coinManagerRef.LevelPreviousCoinAmount(m_coinType);
         }
     }
-
-    private void SetCurrencyValue(CoinType type, int value)
-    {
-        if (type == CoinType.COIN)
-            currencyText.text = $"{value.ToString()}";
-    }
-
-    private void UpdateCurrencyValue(CoinType type, int value, int previousValue)
-    {
-        if (type == CoinType.COIN)
-            currencyText.AnimateCurrency(previousValue, value, 1.0f);
-    }
 }
+

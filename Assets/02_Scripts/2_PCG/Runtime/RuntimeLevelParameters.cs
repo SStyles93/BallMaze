@@ -84,7 +84,7 @@ public static class RuntimeLevelProgression
         int minWidth = 3;
         int maxWidth = 7;
         int minHeight = 10;
-        int maxHeight = 40;
+        int maxHeight = 30;
         int minStarDistance = minHeight/3;
         int maxStarDistance = maxHeight/3;
 
