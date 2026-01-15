@@ -40,6 +40,11 @@ public class PlayButton : UIButton
         // Normal behaviour
         if (CoinManager.Instance.CanAfford(CoinType.HEART, 1))
         {
+            // Level all the currencies (enables animation afterwards)
+            CoinManager.Instance.LevelPreviousCoinAmount(CoinType.COIN);
+            CoinManager.Instance.LevelPreviousCoinAmount(CoinType.STAR);
+            CoinManager.Instance.LevelPreviousCoinAmount(CoinType.HEART);
+
             LevelManager.Instance.InitializeLevel(m_indexOfLevelToPlay);
 
             if (Enum.TryParse<SceneDatabase.Scenes>(

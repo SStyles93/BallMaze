@@ -356,8 +356,14 @@ public class SavingManager : MonoBehaviour
             goto ShopManager;
         }
         coinManager.SetCurrencyAmount(CoinType.COIN, currentPlayerData.coins);
+        coinManager.LevelPreviousCoinAmount(CoinType.COIN);
+
         coinManager.SetCurrencyAmount(CoinType.STAR, currentPlayerData.stars);
+        coinManager.LevelPreviousCoinAmount(CoinType.STAR);
+
         coinManager.SetCurrencyAmount(CoinType.HEART, currentPlayerData.hearts);
+        coinManager.LevelPreviousCoinAmount(CoinType.HEART);
+
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
         LifeManager.Instance.SetLife();
         

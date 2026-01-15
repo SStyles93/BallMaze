@@ -23,6 +23,7 @@ public class LevelManager : MonoBehaviour
     private LevelData currentLevelData = null;
     private int currentLevelIndex = 0;
     private int currentStarCount = 0;
+    private int currencyEarnedThisLevel = 0;
     private int currentLivesLostToThisLevel = 0;
     private int previousLivesLostToThisLevel = 0;
     private int previousStarCount = 0;
@@ -37,6 +38,7 @@ public class LevelManager : MonoBehaviour
     public GlobalDifficultyState_SO GlobalDifficultyModifier => globalDifficultyModifier;
     public LevelData CurrentLevelData => currentLevelData;
     public int CurrentLevelIndex => currentLevelIndex;
+    public int CurrencyEarnedThisLevel => currencyEarnedThisLevel;
     public int PreviousNumberOfStars => previousStarCount;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount => currentStarCount;
@@ -211,8 +213,11 @@ public class LevelManager : MonoBehaviour
         if(currencyEarned >= currentLevelData.coinsLeftToEarn)
             currencyEarned = currentLevelData.coinsLeftToEarn;
 
+
         currentLevelData.coinsLeftToEarn -= currencyEarned;
 
+        // Used by the UICurrencyAnimator on the End Pannel
+        currencyEarnedThisLevel = currencyEarned;
 
 
         // --- GLOBAL DIFFICULTY MODIFIER ---

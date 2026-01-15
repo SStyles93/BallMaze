@@ -15,12 +15,14 @@ public class HeartPannel : MonoBehaviour
     
     private void OnEnable()
     {
+        CoinManager.Instance.OnCoinSet += SetCurrencyValue;
         CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
         CoinManager.Instance.OnHeartTimerTick += UpdateTimerText;
     }
 
     private void OnDisable()
     {
+        CoinManager.Instance.OnCoinSet -= SetCurrencyValue;
         CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
         CoinManager.Instance.OnHeartTimerTick -= UpdateTimerText;
     }
@@ -28,14 +30,24 @@ public class HeartPannel : MonoBehaviour
     private void Start()
     {
         CoinManager coinManager = CoinManager.Instance;
-        UpdateCurrencyValue(CoinType.HEART, coinManager.HeartAmount);
+        if (coinManager!=null && coinManager.PreviousCoinAmount != CoinManager.Instance.CoinAmount)
+        {
+            UpdateCurrencyValue(CoinType.HEART, coinManager.HeartAmount, coinManager.PreviousHeartAmount);
+            coinManager.LevelPreviousCoinAmount(CoinType.HEART);
+        }
         UpdateTimerText(coinManager.TimeUntilNextHeart());
     }
 
-    private void UpdateCurrencyValue(CoinType type, int value)
+    private void SetCurrencyValue(CoinType type, int value)
+    {
+        if (type == CoinType.HEART)
+            heartAmountText.text = $"{value.ToString()}";
+    }
+
+    private void UpdateCurrencyValue(CoinType type, int value, int previousValue)
     {
         if(type == CoinType.HEART)
-        heartAmountText.text = $"{value.ToString()}";
+        heartAmountText.AnimateCurrency(previousValue, value, 1.0f);
     }
 
     void UpdateTimerText(TimeSpan remaining)
