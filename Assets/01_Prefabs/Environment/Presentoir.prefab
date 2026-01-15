@@ -672,7 +672,7 @@ MonoBehaviour:
   m_color: {r: 0, g: 0, b: 0, a: 0}
   m_visualContainer: {fileID: 6133059397183963696}
   m_meshRenderer: {fileID: 0}
-  glassTintPercent: 15
+  glassTintPercent: 65
   m_playerVisualEffects: {fileID: 0}
 --- !u!114 &8230093531960402944
 MonoBehaviour:

@@ -6,5 +6,7 @@ public class FresnelCorrection : MonoBehaviour
     void Start()
     {
         GetComponentInChildren<MeshRenderer>().material.SetFloat("_FesnelPower", 0.85f);
+        GetComponentInChildren<MeshRenderer>().material.SetFloat("_Outline_Thickness", 0.3f);
+        
     }
 }

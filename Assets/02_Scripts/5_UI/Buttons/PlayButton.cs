@@ -36,6 +36,7 @@ public class PlayButton : UIButton
     private void PlayNextLevel()
     {
         GamesMenuManager.Instance?.SaveScrollbarValues();
+        SavingManager.Instance?.SaveSession();
 
         // Normal behaviour
         if (CoinManager.Instance.CanAfford(CoinType.HEART, 1))
@@ -65,5 +66,6 @@ public class PlayButton : UIButton
                 .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.HeartPannel)
                 .Perform();
         }
+
     }
 }

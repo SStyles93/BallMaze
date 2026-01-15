@@ -161,7 +161,7 @@ public class PlayerCustomization : MonoBehaviour
     private Color TintedColourFrom(Color color)
     {
         Color tintedColor = color;
-        tintedColor.a = glassTintPercent/100.0f;
+        tintedColor *= (glassTintPercent/100.0f);
         return tintedColor;
     } 
 }

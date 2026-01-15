@@ -1191,7 +1191,6 @@ MonoBehaviour:
   levelCycleProgression_SO: {fileID: 11400000, guid: af6ae89333a1ecd4fad27a7d2511c008, type: 2}
   levelsPerCycle: 10
   initialCoinAmount: 60
-  bestCoinGrade: 0
 --- !u!1 &1333845251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,7 +1478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa01fd08fe24a84298f79b8904a0352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
-  PreviousCoinAmount: 0
   maxHeartAmount: 15
   timeToRegainHeartInMinutes: 10
 --- !u!1 &1445328148
@@ -1574,7 +1572,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1585592073
 Transform:
   m_ObjectHideFlags: 0
@@ -1597,7 +1595,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1585592072}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c9625d4970ba284683d2ec8f8a3c541, type: 3}
   m_Name: 
