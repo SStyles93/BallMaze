@@ -16573,6 +16573,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: GamesMenuManager, Assembly-CSharp
       objectReference: {fileID: 0}
+    - target: {fileID: 4714005136286433157, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+      propertyPath: glassTintPercent
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 5861792664922573586, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -16919,7 +16923,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -465
+      value: -700
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16955,7 +16959,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -147.5
+      value: -150
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -16967,22 +16971,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1267283623704268782, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2034139431478441503, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2034139431478441503, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2034139431478441503, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2034139431478441503, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
-      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3159146878797131377, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
@@ -16999,7 +16987,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3185580617426090542, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 83.89994
+      value: 72.15004
       objectReference: {fileID: 0}
     - target: {fileID: 4798486106121915647, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -17020,22 +17008,6 @@ PrefabInstance:
     - target: {fileID: 6789801073319472216, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_Name
       value: Level Scroll View
-      objectReference: {fileID: 0}
-    - target: {fileID: 7433119119640757087, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7433119119640757087, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775796761239370178, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8775796761239370178, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

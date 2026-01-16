@@ -289,6 +289,8 @@ MonoBehaviour:
   cameraGridLimitsPercentage: {x: 0.25, y: 0.75}
   softZone: 2
   cameraLimitsX: {x: -100, y: 100}
+  shakeTimer: 0.1
+  shakeAmplitude: 0.75
 --- !u!114 &5364715522439794130
 MonoBehaviour:
   m_ObjectHideFlags: 0

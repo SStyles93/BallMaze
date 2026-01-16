@@ -55,5 +55,5 @@ MonoBehaviour:
     Emissive: {r: 1.0104778, g: 1.9615157, b: 0.6538386, a: 1}
   materialReference: {fileID: 2100000, guid: d0b5b4e45c472a94981a3234f899fd1c, type: 2}
   emissiveMaterialReference: {fileID: 2100000, guid: 0e0e1eb42e7f8d34382ebc5e7ddc4053, type: 2}
-  targetPresetIndex: 2
-  lastPresetIndex: 3
+  targetPresetIndex: 3
+  lastPresetIndex: 5

@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerCamera : MonoBehaviour
 {
     private CinemachineCamera cinemachineCam;
+    private CinemachineBasicMultiChannelPerlin multiChannelPerlin;
     private CameraClamp camClamp;
     private PlayerMovement playerMovement;
 
@@ -12,12 +13,30 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private float softZone = 1.0f;
     [SerializeField] private Vector2 cameraLimitsX = new Vector2(-100, 100);
 
+    [SerializeField] private float shakeTimer = 0.1f;
+    [SerializeField] private float shakeAmplitude = 0.75f;
+
+    private float currentShakeTimer = 0;
+
     private void Awake()
     {
         cinemachineCam = GameObject.FindFirstObjectByType<CinemachineCamera>();
         if (cinemachineCam != null)
+        {
             camClamp = cinemachineCam.GetComponent<CameraClamp>();
+            multiChannelPerlin = cinemachineCam.GetComponent<CinemachineBasicMultiChannelPerlin>();
+        }
         playerMovement = GetComponent<PlayerMovement>();
+    }
+
+    private void OnEnable()
+    {
+        playerMovement.OnPlayerLanded += Shake;
+    }
+
+    private void OnDisable()
+    {
+        playerMovement.OnPlayerLanded += Shake;
     }
 
     void Start()
@@ -47,10 +66,25 @@ public class PlayerCamera : MonoBehaviour
     {
         bool isFalling = transform.position.y < playerMovement.FallThreshold;
         SetCameraFollow(isFalling);
+
+        if(currentShakeTimer > 0)
+        {
+            currentShakeTimer -= Time.deltaTime;
+            multiChannelPerlin.AmplitudeGain = shakeAmplitude;
+        }
+        else
+        {
+            multiChannelPerlin.AmplitudeGain = 0;
+        }
     }
 
     public void SetCameraFollow(bool isFalling)
     {
         cinemachineCam.Follow = isFalling ? null : transform;
+    }
+
+    private void Shake(string SurfaceTypeNotUsedYet)
+    {
+        currentShakeTimer = shakeTimer;
     }
 }

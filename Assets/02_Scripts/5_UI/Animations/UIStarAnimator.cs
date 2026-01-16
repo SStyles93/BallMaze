@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Coffee.UIExtensions;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 public class UIStarAnimator : MonoBehaviour
 {
     [SerializeField] private List<Image> starImages = new List<Image>();
+    [SerializeField] private UIParticle uiStarParticles;
+
     private int numberOfStars;
 
     private void Start()
@@ -39,5 +42,8 @@ public class UIStarAnimator : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
+
+        if (numberOfStars >= 3)
+            uiStarParticles.Play();
     }
 }

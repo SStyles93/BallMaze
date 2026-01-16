@@ -47,22 +47,25 @@ public class PlayerCustomization : MonoBehaviour
         // if idx is 0 assign material colour
         if (playerSkinData_SO.playerColorIndex == 0)
         {
-            Color newColor = TintedColourFrom(
-                    playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color);
-            m_meshRenderer.material.color = newColor;
-            UpdateTrailColor(newColor);
+            Color originalColor = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color;
+            m_meshRenderer.material.color = m_meshRenderer.sharedMaterial.name.Contains("Fresnel") ?
+                    TintedColourFrom(originalColor) : originalColor;
+
+            UpdateTrailColor(originalColor);
         }
         // Otherwise assign selected colour
         else
         {
-            Color newColor = TintedColourFrom(playerSkinData_SO.playerColor);
-            m_meshRenderer.material.color = newColor;
-            UpdateTrailColor(newColor);
+            Color originalColor = playerSkinData_SO.playerColor;
+            m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
+                    TintedColourFrom(originalColor) : originalColor;
+
+            UpdateTrailColor(playerSkinData_SO.playerColor);
         }
     }
 
     /// <summary>
-    /// Sets the MeshRender directly to the option without passing by tge SkinData_SO
+    /// Sets the MeshRender directly to the option without passing by the SkinData_SO
     /// </summary>
     /// <param name="option">Option passed to be previewed</param>
     public void PreviewOption(CustomizationOption option)
@@ -70,7 +73,8 @@ public class PlayerCustomization : MonoBehaviour
         switch (option)
         {
             case ColorOption colorOpt:
-                m_meshRenderer.material.color = TintedColourFrom(colorOpt.color);
+                m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
+                    TintedColourFrom(colorOpt.color) : colorOpt.color;
                 break;
 
             case SkinOption skinOpt:
@@ -120,7 +124,8 @@ public class PlayerCustomization : MonoBehaviour
     private void AssignColor(Color color)
     {
         playerSkinData_SO.playerColor = color;
-        m_meshRenderer.material.color = TintedColourFrom(color);
+        m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
+            TintedColourFrom(color) : color;
     }
     private void AssignColorIndex(int index)
     {

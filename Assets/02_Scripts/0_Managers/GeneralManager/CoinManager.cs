@@ -97,6 +97,7 @@ public class CoinManager : MonoBehaviour
         }
 
         OnCoinChanged?.Invoke(type, coins[type], previousCoins[type]);
+        LevelPreviousCoinAmount(type);
     }
 
     /// <summary>
@@ -119,6 +120,7 @@ public class CoinManager : MonoBehaviour
         }
 
         OnCoinChanged?.Invoke(type, coins[type], previousCoins[type]);
+        LevelPreviousCoinAmount(type);
     }
 
     /// <summary>
