@@ -13,6 +13,7 @@ public class SceneDatabase : MonoBehaviour
     {
         Null = -1,
         Core,
+        StartMenu,
         GamesMenu,
         Game,
         EndPannel,

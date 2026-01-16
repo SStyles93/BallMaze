@@ -215,7 +215,7 @@ MonoBehaviour:
       CoinType: 0
       Amount: 0
     name: NONE
-    color: {r: 0, g: 0, b: 0, a: 0}
+    color: {r: 0, g: 0, b: 0, a: 1}
   - isLocked: 1
     price:
       CoinType: 0

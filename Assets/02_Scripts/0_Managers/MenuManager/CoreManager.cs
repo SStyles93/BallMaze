@@ -20,7 +20,7 @@ public class CoreManager : MonoBehaviour
         // Load everything like AudioManagers, Save System, ...
         SceneController.Instance
             .NewTransition()
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)
             .Perform();
     }
 }

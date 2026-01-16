@@ -520,7 +520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2116335753717188971, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 999
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2116335753717188971, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -556,6 +556,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2116335753717188971, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3390268785204777926, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
+      propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4405811545274363757, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
@@ -1572,7 +1576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1585592073
 Transform:
   m_ObjectHideFlags: 0
@@ -1595,7 +1599,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1585592072}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c9625d4970ba284683d2ec8f8a3c541, type: 3}
   m_Name: 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -14,19 +15,6 @@ public class ShopManager : MonoBehaviour
         CreateShopSlots();
     }
 
-    private void OnEnable()
-    {
-        ShopIAPManager.Instance.OnProductsFetchedEvent += OnProductsFetched;
-    }
-
-    private void OnDisable()
-    {
-        if (ShopIAPManager.Instance != null)
-        {
-            ShopIAPManager.Instance.OnProductsFetchedEvent -= OnProductsFetched;
-        }
-    }
-
     private void CreateShopSlots()
     {
         foreach (var product in catalog.allProducts)
@@ -37,23 +25,10 @@ public class ShopManager : MonoBehaviour
             );
 
             slotGO.GetComponent<ShopSlot>()
-                .InitializeFromCatalog(product, this);
+                .InitializeFromCatalog(product, this)
+                .SetProductPrice(ShopIAPManager.Instance.Products);
         }
-    }
-
-    private void OnProductsFetched(Product[] products)
-    {
-        foreach (Transform child in shopSlotsContainer)
-        {
-            var slot = child.GetComponent<ShopSlot>();
-            if (slot == null) continue;
-
-            foreach (var product in products)
-            {
-                slot.BindRuntimeProduct(product);
-            }
-        }
-    }
+    } 
 
     public void Buy(string productId)
     {
