@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -13,9 +12,9 @@ public class ValidationPannelManager : MonoBehaviour
     [Header("Insufficient Funds Pannel")]
     [SerializeField] private GameObject insufficientFundsPannel;
 
+    [SerializeField] private GameObject colorTab;
 
     [SerializeField] private CustomizationOption selectedOption = null;
-    private GameObject optionObject;
 
     private void OnEnable()
     {
@@ -92,16 +91,20 @@ public class ValidationPannelManager : MonoBehaviour
         validationText.text = $"Purchase for {option.price.Amount} <sprite index={(int)option.price.CoinType}> ?";
     }
 
-    private void SetSelectedOption(CustomizationOption option)
+    private void SetSelectedOption(CustomizationSlot slot)
     {
-        selectedOption = option;
-        SetBuyButtonText(option);
+        selectedOption = slot.option;
+        SetBuyButtonText(slot);
+        if(slot.option is SkinOption)
+        colorTab.SetActive(slot.option.isColorable);
     }
 
-    private void SetBuyButtonText(CustomizationOption option)
+    private void SetBuyButtonText(CustomizationSlot slot)
     {
-        // Enable the button if locked
-        buyButton.gameObject.SetActive(option.isLocked);
-        buyButtonText.text = $"{selectedOption.price.Amount} <sprite index={(int)option.price.CoinType}>";
+        // Enable the button if locked (not bought) and not locked by level
+        bool showBuyButton = slot.option.isLocked && !slot.isLockedByLevel;
+
+        buyButton.gameObject.SetActive(showBuyButton);
+        buyButtonText.text = $"{selectedOption.price.Amount} <sprite index={(int)slot.option.price.CoinType}>";
     }
 }

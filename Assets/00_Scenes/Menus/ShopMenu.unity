@@ -15895,6 +15895,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   shopSlotPrefab: {fileID: 7636381603028056410, guid: d014f58c2a5ccd346b4284096b089832, type: 3}
   shopSlotsContainer: {fileID: 911601821}
+  coinSprites:
+  - {fileID: 21300000, guid: 22a210695fe615648bd8fd878e96c2cf, type: 3}
+  - {fileID: 21300000, guid: 66fb2cbba859ca44298bd79ae70092db, type: 3}
+  - {fileID: 21300000, guid: 5b2202d8b2374d742a24345e017731f6, type: 3}
+  - {fileID: 21300000, guid: 909a9cc8e7e62e747939e2a8225a645b, type: 3}
+  - {fileID: 21300000, guid: 711292caf193ef641bc9bf7f3cf74df3, type: 3}
 --- !u!1001 &1817654509
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,7 +10,6 @@ public class ShopSlot : MonoBehaviour
     [SerializeField] private Image slotImage;
 
     [Header("ShopSlot Parameters")]
-    [SerializeField] private Sprite coinStackSprite;
     [SerializeField] private TMP_Text coinAmountText;
     [SerializeField] private TMP_Text valueText;
     [SerializeField] private Button buyButton;
@@ -20,12 +19,12 @@ public class ShopSlot : MonoBehaviour
 
     // ---------------- INITIALIZATION ----------------
 
-    public ShopSlot InitializeFromCatalog(ProductCatalogItem item, ShopManager manager)
+    public ShopSlot InitializeFromCatalog(ProductCatalogItem item, ShopManager manager, Sprite coinSprite)
     {
         catalogItem = item;
         shopManager = manager;
 
-        slotImage.sprite = coinStackSprite;
+        slotImage.sprite = coinSprite;
         buyButton.interactable = true;
 
         SetPayoutText(item);

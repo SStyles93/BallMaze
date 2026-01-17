@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,7 +43,7 @@ public class PlayerCustomization : MonoBehaviour
     public void UpdateAppearence()
     {
         // Clear, Create the saved skin
-        UpdateSkinPrefab(playerSkinData_SO.playerSkin);
+        InstanciateNewSkinPrefab(playerSkinData_SO.playerSkin);
 
         // if idx is 0 assign material colour
         if (playerSkinData_SO.playerColorIndex == 0)
@@ -68,9 +69,9 @@ public class PlayerCustomization : MonoBehaviour
     /// Sets the MeshRender directly to the option without passing by the SkinData_SO
     /// </summary>
     /// <param name="option">Option passed to be previewed</param>
-    public void PreviewOption(CustomizationOption option)
+    public void PreviewOption(CustomizationSlot slot)
     {
-        switch (option)
+        switch (slot.option)
         {
             case ColorOption colorOpt:
                 m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
@@ -78,7 +79,8 @@ public class PlayerCustomization : MonoBehaviour
                 break;
 
             case SkinOption skinOpt:
-                UpdateSkinPrefab(skinOpt.skin);
+                InstanciateNewSkinPrefab(skinOpt.skin);
+                if (!skinOpt.isColorable) m_meshRenderer.material.color = skinOpt.color;
                 break;
         }
     }
@@ -98,10 +100,11 @@ public class PlayerCustomization : MonoBehaviour
                 break;
 
             case SkinOption skinOpt:
-                UpdateSkinPrefab(skinOpt.skin);
+                InstanciateNewSkinPrefab(skinOpt.skin);
                 AssignSkin(skinOpt.skin);
                 AssignMaterialIndex(index);
-                Color colorToAssign = skinOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color;
+                Color colorToAssign = skinOpt.isColorable ?
+                    skinOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color : skinOpt.color;
                 AssignColor(colorToAssign);
                 AssignColorIndex(0);
                 break;
@@ -142,7 +145,7 @@ public class PlayerCustomization : MonoBehaviour
         playerSkinData_SO.playerSkinIndex = index;
     }
 
-    private void UpdateSkinPrefab(GameObject skinPrefab)
+    private void InstanciateNewSkinPrefab(GameObject skinPrefab)
     {
         ClearVisualContainer();
         GameObject newVisual = Instantiate(skinPrefab, m_visualContainer.transform);

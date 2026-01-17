@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -6,6 +5,8 @@ public class ShopManager : MonoBehaviour
 {
     [SerializeField] private GameObject shopSlotPrefab;
     [SerializeField] private Transform shopSlotsContainer;
+
+    [SerializeField] private Sprite[] coinSprites = new Sprite[5];
 
     private ProductCatalog catalog;
 
@@ -17,6 +18,8 @@ public class ShopManager : MonoBehaviour
 
     private void CreateShopSlots()
     {
+        int productIndex = 0;
+
         foreach (var product in catalog.allProducts)
         {
             GameObject slotGO = Instantiate(
@@ -25,8 +28,10 @@ public class ShopManager : MonoBehaviour
             );
 
             slotGO.GetComponent<ShopSlot>()
-                .InitializeFromCatalog(product, this)
+                .InitializeFromCatalog(product, this, coinSprites[productIndex])
                 .SetProductPrice(ShopIAPManager.Instance.Products);
+
+            productIndex++;
         }
     } 
 

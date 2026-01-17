@@ -3,26 +3,13 @@ using UnityEngine;
 
 public class DeadZone : MonoBehaviour
 {
-    [SerializeField] private Vector3 spawnPosition = Vector3.zero;
-
     bool wasLevelProcessed = false;
-
-    private void Start()
-    {
-        spawnPosition = GameObject.FindGameObjectWithTag("Respawn").GetComponent<PlayerSpawner>().SpawnPosition;
-    }
-
-    private void Update()
-    {
-        if (spawnPosition == Vector3.zero)
-            spawnPosition = GameObject.FindGameObjectWithTag("Respawn").GetComponent<PlayerSpawner>().SpawnPosition;
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
             Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
+            PlayerMovement pMov = collision.gameObject.GetComponent<PlayerMovement>();
 
             LifeManager.Instance.RemoveLife();
 
@@ -39,9 +26,9 @@ public class DeadZone : MonoBehaviour
             }
             else
             {
-                //Block, respawn and Unblock player
+                // Block, respawn and Unblock player
                 rb.isKinematic = true;
-                collision.gameObject.transform.position = spawnPosition;
+                collision.gameObject.transform.position = pMov.CurrentPlatform.position;
                 rb.isKinematic = false;
             }
         }

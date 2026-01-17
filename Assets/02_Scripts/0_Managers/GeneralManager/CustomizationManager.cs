@@ -12,7 +12,7 @@ public class CustomizationManager : MonoBehaviour
     private CustomizationOption currentOption = null;
     private int currentOptionIndex = 0;
 
-    public event Action<CustomizationOption> OnOptionChanged;
+    public event Action<CustomizationSlot> OnOptionChanged;
     public event Action OnUpdatePlayerOption;
 
     private void Awake()
@@ -33,7 +33,7 @@ public class CustomizationManager : MonoBehaviour
         currentOptionIndex = slot.index;
 
         // This will call the PreviewOption() method on the PlayerCustomization.cs
-        OnOptionChanged?.Invoke(currentOption);
+        OnOptionChanged?.Invoke(currentSlot);
     }
 
     public bool ValidatePurchase()
@@ -91,8 +91,16 @@ public class CustomizationManager : MonoBehaviour
             case SkinOption materialOpt:
                 skinData_SO.playerSkin = materialOpt.skin;
                 skinData_SO.playerSkinIndex = currentOptionIndex;
-                skinData_SO.playerColor = materialOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color;
-                skinData_SO.playerColorIndex = 0;
+                if (!materialOpt.isColorable)
+                {
+                    skinData_SO.playerColor = materialOpt.color;
+                    skinData_SO.playerColorIndex = 0;
+                }
+                else
+                {
+                    skinData_SO.playerColor = materialOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color;
+                    skinData_SO.playerColorIndex = 0;
+                }
                 break;
 
             default:

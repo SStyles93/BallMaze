@@ -42,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float FallThreshold { get => fallThreshold; set => fallThreshold = value; }
     public Rigidbody PlayerRigidbody { get => playerRigidbody; set => playerRigidbody = value; }
+    public Transform CurrentPlatform => currentPlatform;
 
     private void OnEnable()
     {
@@ -92,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGrounded) return;
 
-        if (currentPlatform != null && currentPlatform.CompareTag("Ice"))
+        if (currentPlatform.CompareTag("Ice"))
             jumpHelpValue = iceHelp;
         else
         {
@@ -107,9 +108,6 @@ public class PlayerMovement : MonoBehaviour
 
         // Calls the JumpSound on the PlayerSound script
         OnPlayerJumped?.Invoke();
-        
-        // Unset platform reference when jumping
-        currentPlatform = null;
     }
 
     // ---------------- GROUND ----------------
@@ -143,7 +141,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.red);
-            currentPlatform = null;
         }
     }
 
@@ -156,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isGrounded)
             return;
 
-        if (currentPlatform != null && !allowRotation && currentPlatform.CompareTag("MovingPlatform"))
+        if (!allowRotation && currentPlatform.CompareTag("MovingPlatform"))
         {
             playerRigidbody.angularVelocity =
             Vector3.Lerp(playerRigidbody.angularVelocity, Vector3.zero, 0.4f);

@@ -17,7 +17,7 @@ public class MaterialPannelInitializer : MonoBehaviour
         for (int i = 0; i < customizationData_SO.skins.Length; i++)
         {
             GameObject materialSlot = Instantiate(materialSlotPrefab, materialSlotsContainer.transform);
-            materialSlot.GetComponent<MaterialSlot>().InitializeMaterialSlot(customizationData_SO.skins[i], i, playerCustomization);
+            materialSlot.GetComponent<SkinSlot>().InitializeSkinSlot(customizationData_SO.skins[i], i, playerCustomization);
         }
     }
 }
