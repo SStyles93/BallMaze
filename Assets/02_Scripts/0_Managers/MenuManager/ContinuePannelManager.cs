@@ -2,15 +2,34 @@ using UnityEngine;
 
 public class ContinuePannelManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
+        // Check life left -> 0 disactivate restart -> Active Exit
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ReturnToGamesMenu()
     {
-        
+        LifeManager.Instance.SetLife();
+
+        SceneController.Instance.NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
+            .Unload(SceneDatabase.Scenes.Game)
+            .Unload(SceneDatabase.Scenes.ContinuePannel)
+            .WithOverlay()
+            .WithClearUnusedAssets()
+            .Perform();
+    }
+
+    public void Restart()
+    {
+        LifeManager.Instance.SetLife();
+
+        SceneController.Instance.NewTransition()
+            .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
+            .Unload(SceneDatabase.Scenes.Game)
+            .Unload(SceneDatabase.Scenes.ContinuePannel)
+            .WithOverlay()
+            .WithClearUnusedAssets()
+            .Perform();
     }
 }

@@ -35,6 +35,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00_Scenes/Pannels/HeartPannel.unity
     guid: e194451c222c75048aea48fd018e2846
+  - enabled: 1
+    path: Assets/00_Scenes/Pannels/ContinuePannel.unity
+    guid: ea6adda93e9c00c419e4fe2395172083
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b369852d9e5a62c42aaedf664ffbd4ec, type: 2}
   m_UseUCBPForAssetBundles: 0

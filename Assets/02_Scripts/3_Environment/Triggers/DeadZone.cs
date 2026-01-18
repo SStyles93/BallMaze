@@ -18,6 +18,10 @@ public class DeadZone : MonoBehaviour
                 // Block Player
                 rb.isKinematic = true;
 
+                SceneController.Instance.NewTransition()
+                    .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.ContinuePannel)
+                    .Perform();
+
                 if (!wasLevelProcessed)
                 {
                     LevelManager.Instance.MarkLevelAsFailed();
