@@ -20,7 +20,6 @@ public class CoreManager : MonoBehaviour
         if (SavingManager.Instance == null)
             Debug.Log("Saving Manager does not exist");
         SavingManager.Instance?.LoadSession();
-        AudioManager.Instance?.PlayMusic();
 
         SceneController.Instance
             .NewTransition()

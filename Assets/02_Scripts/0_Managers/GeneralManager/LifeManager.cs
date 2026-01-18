@@ -10,6 +10,7 @@ public class LifeManager : MonoBehaviour
     /// Delegate used in the life pannel (In Game)
     /// </summary>
     public event Action OnRemoveLife;
+    public event Action OnLifeRegained;
 
     #region Singleton
     public static LifeManager Instance { get; private set; }
@@ -23,7 +24,7 @@ public class LifeManager : MonoBehaviour
 
     private void Start()
     {
-        SetLife();
+        ResetLife();
     }
 
     public void RemoveLife()
@@ -37,14 +38,14 @@ public class LifeManager : MonoBehaviour
         LevelManager.Instance.IncreaseLivesLostToThisLevel();
         OnRemoveLife?.Invoke();
 
-        if (currentLife <= 0)
-            KillPlayer();
+        //if (currentLife <= 0)
+        //    KillPlayer();
     }
 
     /// <summary>
     /// Sets the amount of life according to the Heart currency amount
     /// </summary>
-    public void SetLife()
+    public void ResetLife()
     {
         CoinManager currencyManager = CoinManager.Instance;
         // Sets the amount of life according to the Heart currency amount
@@ -54,6 +55,14 @@ public class LifeManager : MonoBehaviour
         else
             currentLife = currencyManager.HeartAmount;
     }
+
+    public void SetLife(int value)
+    {
+        currentLife = value;
+        // Used by the dead zone to resume game
+        OnLifeRegained?.Invoke();
+    }
+
 
     private void KillPlayer()
     {
@@ -67,18 +76,18 @@ public class LifeManager : MonoBehaviour
         SavingManager.Instance.SaveSession();
 
         // Opens the Heart pannel if the player has no more hearts
-        if(!CoinManager.Instance.CanAfford(CoinType.HEART, 1))
-        {
-            SceneController.Instance.NewTransition()
-                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.HeartPannel)
-                .Perform();
-        }
-        else
-        {
-            // Open EndPannel
-            SceneController.Instance.NewTransition()
-                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
-                .Perform();
-        }
+        //if(!CoinManager.Instance.CanAfford(CoinType.HEART, 1))
+        //{
+        //    SceneController.Instance.NewTransition()
+        //        .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.HeartPannel)
+        //        .Perform();
+        //}
+        //else
+        //{
+        //    // Open EndPannel
+        //    SceneController.Instance.NewTransition()
+        //        .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
+        //        .Perform();
+        //}
     }
 }

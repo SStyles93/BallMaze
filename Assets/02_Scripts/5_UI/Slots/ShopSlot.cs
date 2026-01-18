@@ -19,12 +19,11 @@ public class ShopSlot : MonoBehaviour
 
     // ---------------- INITIALIZATION ----------------
 
-    public ShopSlot InitializeFromCatalog(ProductCatalogItem item, ShopManager manager, Sprite coinSprite)
+    public ShopSlot InitializeFromCatalog(ProductCatalogItem item, ShopManager manager)
     {
         catalogItem = item;
         shopManager = manager;
 
-        slotImage.sprite = coinSprite;
         buyButton.interactable = true;
 
         SetPayoutText(item);

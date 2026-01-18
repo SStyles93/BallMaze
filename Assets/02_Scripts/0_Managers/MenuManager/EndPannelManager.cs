@@ -46,7 +46,7 @@ public class EndPannelManager : MonoBehaviour
     {
         levelManager.InitializeLevel(levelManager.CurrentLevelIndex + sceneIndex);
 
-        LifeManager.Instance.SetLife();
+        LifeManager.Instance.ResetLife();
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
@@ -59,7 +59,7 @@ public class EndPannelManager : MonoBehaviour
 
     public void ReturnToGamesMenu()
     {
-        LifeManager.Instance.SetLife();
+        LifeManager.Instance.ResetLife();
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)

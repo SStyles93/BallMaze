@@ -365,7 +365,7 @@ public class SavingManager : MonoBehaviour
         coinManager.LevelPreviousCoinAmount(CoinType.HEART);
 
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
-        LifeManager.Instance.SetLife();
+        LifeManager.Instance.ResetLife();
         
 
         // --- SHOP ---

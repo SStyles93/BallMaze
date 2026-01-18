@@ -10,6 +10,7 @@ public class StartMenuManager : MonoBehaviour
     void Start()
     {
         currentStartTimer = startTimer;
+        AudioManager.Instance?.PlayMusic();
     }
 
     // Update is called once per frame
