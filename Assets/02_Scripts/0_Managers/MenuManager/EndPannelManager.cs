@@ -8,7 +8,6 @@ public class EndPannelManager : MonoBehaviour
     [Header("Object Reference")]
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private GameObject continueButton;
-    [SerializeField] private GameObject retryButton;
 
     private LevelManager levelManager;
 
@@ -19,21 +18,10 @@ public class EndPannelManager : MonoBehaviour
         // LVL n°
         levelText.text = $"Level {levelManager.CurrentLevelIndex}";
 
+        continueButton.SetActive(true);
         // START ( * * * )
-        if (levelManager.CurrentLevelData.numberOfStars == 0 || LifeManager.Instance.CurrentLife == 0)
-        {
-            //GAME OVER
-            retryButton.SetActive(true);
-            continueButton.SetActive(false);
-        }
-        else
-        {
-            // WIN
-            continueButton.SetActive(true);
-            retryButton.SetActive(false);
-
+        if (levelManager.CurrentLevelData.numberOfStars >= 3)
             AudioManager.Instance?.PlayWinSound();
-        }
     }
 
     /// <summary>

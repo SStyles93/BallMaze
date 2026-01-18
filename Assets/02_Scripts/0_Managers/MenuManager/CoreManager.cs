@@ -17,7 +17,11 @@ public class CoreManager : MonoBehaviour
 
     void Start()
     {
-        // Load everything like AudioManagers, Save System, ...
+        if (SavingManager.Instance == null)
+            Debug.Log("Saving Manager does not exist");
+        SavingManager.Instance?.LoadSession();
+        AudioManager.Instance?.PlayMusic();
+
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)

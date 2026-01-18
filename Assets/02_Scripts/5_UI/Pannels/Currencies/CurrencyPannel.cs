@@ -11,14 +11,12 @@ public class CurrencyPannel : MonoBehaviour
     protected virtual void OnEnable()
     {
         coinManagerRef = CoinManager.Instance;
-        if (coinManagerRef == null) return;
         coinManagerRef.OnCoinSet += SetCurrencyValue;
         coinManagerRef.OnCoinChanged += UpdateCurrencyValue;
     }
 
     protected virtual void OnDisable()
     {
-        if (coinManagerRef == null) return;
         coinManagerRef.OnCoinSet -= SetCurrencyValue;
         coinManagerRef.OnCoinChanged -= UpdateCurrencyValue;
     }

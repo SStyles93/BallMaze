@@ -22,11 +22,6 @@ public class GamesMenuManager : MonoBehaviour
 
     private void Start()
     {
-        if (SavingManager.Instance == null)
-            Debug.Log("Saving Manager does not exist");
-        SavingManager.Instance?.LoadSession();
-        AudioManager.Instance?.PlayMusic();
-
         InitializeSlots();
 
         scrollbar.value = scrollbarData.scrollbarValue;

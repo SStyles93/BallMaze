@@ -51,6 +51,7 @@ public class PlayButton : UIButton
             if (Enum.TryParse<SceneDatabase.Scenes>(
                 SceneManager.GetActiveScene().name, out SceneDatabase.Scenes scene))
             {
+
                 SceneController.Instance
                 .NewTransition()
                 .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)

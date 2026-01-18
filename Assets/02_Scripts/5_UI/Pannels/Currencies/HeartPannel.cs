@@ -11,7 +11,7 @@ public class HeartPannel : CurrencyPannel
 
     [Header("Buttons")]
     [SerializeField] private GameObject shopButton;
-    
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -27,16 +27,17 @@ public class HeartPannel : CurrencyPannel
     protected override void Start()
     {
         m_coinType = CoinType.HEART;
-        if (coinManagerRef == null) return;
-
-        if (coinManagerRef.PreviousHeartAmount != coinManagerRef.HeartAmount)
+        if (coinManagerRef != null)
         {
-            UpdateCurrencyValue(m_coinType, coinManagerRef.HeartAmount, coinManagerRef.PreviousHeartAmount);
-            coinManagerRef.LevelPreviousCoinAmount(m_coinType);
-        }
-        else
-        {
-            SetCurrencyValue(m_coinType, coinManagerRef.HeartAmount);
+            if (coinManagerRef.HeartAmount != coinManagerRef.PreviousHeartAmount)
+            {
+                UpdateCurrencyValue(m_coinType, coinManagerRef.HeartAmount, coinManagerRef.PreviousHeartAmount);
+                coinManagerRef.LevelPreviousCoinAmount(m_coinType);
+            }
+            else
+            {
+                SetCurrencyValue(m_coinType, coinManagerRef.HeartAmount);
+            }
         }
 
         UpdateTimerText(coinManagerRef.TimeUntilNextHeart());

@@ -24,7 +24,6 @@ public class StartMenuManager : MonoBehaviour
     }
     private void LoadGameScene()
     {
-        // Load everything like AudioManagers, Save System, ...
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
@@ -32,5 +31,4 @@ public class StartMenuManager : MonoBehaviour
             .WithOverlay()
             .Perform();
     }
-
 }

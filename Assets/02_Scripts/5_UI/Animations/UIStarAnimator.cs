@@ -13,7 +13,7 @@ public class UIStarAnimator : MonoBehaviour
 
     private void Start()
     {
-        numberOfStars = LevelManager.Instance.CurrentLevelData.numberOfStars;
+        numberOfStars = LevelManager.Instance.CurrentStarCount;
 
         // Disable visuals & set scale to 0
         foreach (var star in starImages)
@@ -42,7 +42,7 @@ public class UIStarAnimator : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
 
-        if (numberOfStars >= 3)
+        if (numberOfStars >= 3 && starParticles.Length > 0)
             foreach(var particle in starParticles)
             {
                 particle.Play();

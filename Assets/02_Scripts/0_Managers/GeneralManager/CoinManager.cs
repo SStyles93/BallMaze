@@ -31,7 +31,7 @@ public class CoinManager : MonoBehaviour
     public int PreviousCoinAmount => previousCoins[CoinType.COIN];
     public int PreviousStarAmount => previousCoins[CoinType.STAR];
     public int PreviousHeartAmount => previousCoins[CoinType.HEART];
-    
+
     public int InitialHeartAmount => maxHeartAmount;
     public DateTime LastHeartRefillTime => lastHeartRefillTime;
 
@@ -46,13 +46,19 @@ public class CoinManager : MonoBehaviour
 
     private void Start()
     {
-        coins.Add(CoinType.COIN, 0);
-        coins.Add(CoinType.STAR, 0);
-        coins.Add(CoinType.HEART, 0);
+        if (coins.Count == 0)
+        {
+            coins.Add(CoinType.COIN, 0);
+            coins.Add(CoinType.STAR, 0);
+            coins.Add(CoinType.HEART, 0);
+        }
 
-        previousCoins.Add(CoinType.COIN, 0);
-        previousCoins.Add(CoinType.STAR, 0);
-        previousCoins.Add(CoinType.HEART, 0);
+        if (previousCoins.Count == 0)
+        {
+            previousCoins.Add(CoinType.COIN, 0);
+            previousCoins.Add(CoinType.STAR, 0);
+            previousCoins.Add(CoinType.HEART, 0);
+        }
     }
 
     private void Update()
@@ -106,9 +112,9 @@ public class CoinManager : MonoBehaviour
     /// <param name="type">Type of currency to reduce</param>
     /// <param name="amount">amount to reduce by</param>
     public void ReduceCurrencyAmount(CoinType type, int amount)
-    {   
+    {
         coins[type] -= amount;
-        
+
         if (type == CoinType.HEART)
         {
             if (coins[CoinType.HEART] == maxHeartAmount - 1)
@@ -168,7 +174,7 @@ public class CoinManager : MonoBehaviour
         if (heartsToAdd <= 0)
             return;
 
-        int totalHeartsAmount= Mathf.Min(coins[CoinType.HEART] + heartsToAdd, maxHeartAmount);
+        int totalHeartsAmount = Mathf.Min(coins[CoinType.HEART] + heartsToAdd, maxHeartAmount);
 
         SetCurrencyAmount(CoinType.HEART, totalHeartsAmount);
 
@@ -177,8 +183,8 @@ public class CoinManager : MonoBehaviour
             heartsToAdd * timeToRegainHeartInMinutes
         );
 
-        if(isDataLoaded)
-        SavingManager.Instance?.SavePlayer();
+        if (isDataLoaded)
+            SavingManager.Instance?.SavePlayer();
     }
     private void StartTimer()
     {
