@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class ValidationPannelManager : MonoBehaviour
 {
+    [Header("Player Data")]
+    [SerializeField] private PlayerSkinData_SO playerSkinData_SO;
+
     [Header("Validation Pannel")]
     [SerializeField] private GameObject validationPannel;
     [SerializeField] private GameObject buyButton;
@@ -14,7 +17,7 @@ public class ValidationPannelManager : MonoBehaviour
 
     [SerializeField] private GameObject colorTab;
 
-    [SerializeField] private CustomizationOption selectedOption = null;
+    private CustomizationOption selectedOption = null;
 
     private void OnEnable()
     {
@@ -36,6 +39,9 @@ public class ValidationPannelManager : MonoBehaviour
         validationPannel.SetActive(false);
         insufficientFundsPannel.SetActive(false);
         buyButton.SetActive(false);
+
+        bool showTab = !playerSkinData_SO.skinOption.isPremium;
+        colorTab.SetActive(showTab);
     }
 
     /// <summary>
@@ -80,23 +86,20 @@ public class ValidationPannelManager : MonoBehaviour
     private void InitializePannelWithOption(CustomizationOption option)
     {
         selectedOption = option;
-
-       //TODO: OptionObject has to be passed here
-
         InitializeText(option);
     }
 
     private void InitializeText(CustomizationOption option)
     {
-        validationText.text = $"Purchase for {option.price.Amount} <sprite index={(int)option.price.CoinType}> ?";
+        validationText.text = $"Purchase for <sprite index={(int)option.price.CoinType}> {option.price.Amount} ?";
     }
 
     private void SetSelectedOption(CustomizationSlot slot)
     {
         selectedOption = slot.option;
         SetBuyButtonText(slot);
-        if(slot.option is SkinOption)
-        colorTab.SetActive(slot.option.isColorable);
+        bool showTab = !playerSkinData_SO.skinOption.isPremium;
+        colorTab.SetActive(showTab);
     }
 
     private void SetBuyButtonText(CustomizationSlot slot)
@@ -105,6 +108,6 @@ public class ValidationPannelManager : MonoBehaviour
         bool showBuyButton = slot.option.isLocked && !slot.isLockedByLevel;
 
         buyButton.gameObject.SetActive(showBuyButton);
-        buyButtonText.text = $"{selectedOption.price.Amount} <sprite index={(int)slot.option.price.CoinType}>";
+        buyButtonText.text = $"<sprite index={(int)slot.option.price.CoinType}> {selectedOption.price.Amount}";
     }
 }

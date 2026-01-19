@@ -16,12 +16,12 @@ public class InsufficientFundsPannelManager : MonoBehaviour
             case CoinType.COIN:
                 shopButton.SetActive(true);
                 homeButton.SetActive(false);
-                pannelText.text = $"Insufficient <sprite index={(int)coinType}> go to shop ?";
+                pannelText.text = $"Insufficient <sprite index={(int)coinType}>";
                 break;
             case CoinType.STAR:
                 homeButton.SetActive(true);
                 shopButton.SetActive(false);
-                pannelText.text = $"Insufficient <sprite index={(int)coinType}> go to levels ?";
+                pannelText.text = $"Insufficient <sprite index={(int)coinType}>";
                 break;
         }
     }

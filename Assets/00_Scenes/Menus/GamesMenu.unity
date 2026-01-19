@@ -332,8 +332,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -363.7, y: 0}
-  m_SizeDelta: {x: 512, y: 512}
+  m_AnchoredPosition: {x: -363.19995, y: -0.5}
+  m_SizeDelta: {x: 511, y: 513}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &435486657
 MonoBehaviour:
@@ -5651,6 +5651,7 @@ GameObject:
   - component: {fileID: 1148761338}
   - component: {fileID: 1148761340}
   - component: {fileID: 1148761339}
+  - component: {fileID: 1148761341}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5768,6 +5769,18 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1148761341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1148761337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99313d3fd080cc24c96063fe35d82bcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!224 &1238991926 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1775512563004007454, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
@@ -16973,6 +16986,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2034139431478441503, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034139431478441503, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034139431478441503, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034139431478441503, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3159146878797131377, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -16992,6 +17021,22 @@ PrefabInstance:
     - target: {fileID: 6789801073319472216, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
       propertyPath: m_Name
       value: Level Scroll View
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433119119640757087, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433119119640757087, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775796761239370178, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8775796761239370178, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

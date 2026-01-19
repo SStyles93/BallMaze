@@ -1,6 +1,7 @@
 ﻿using Unity.Services.LevelPlay;
 using UnityEngine;
 using TMPro;
+using MyBox;
 
 public class AdsManager : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class AdsManager : MonoBehaviour
     public LevelPlayRewardedAd RewardedVideoAd;
 
     [SerializeField] private TMP_Text adsDebugText;
+    [SerializeField] private bool isDebug = false;
+    [ConditionalField("isDebug")][SerializeField] private int debugPixelHeight;
 
     // -------- Banner layout authority --------
     public static int CurrentBannerHeightPx { get; private set; }
@@ -40,6 +43,16 @@ public class AdsManager : MonoBehaviour
         LevelPlay.OnInitFailed += SdkInitializationFailedEvent;
 
         LevelPlay.Init(AdConfig.AppKey);
+    }
+
+    private void Update()
+    {
+        if (isDebug)
+        {
+            CurrentBannerHeightPx = debugPixelHeight;
+            ApplyBannerAreaSize();
+            OnBannerHeightChanged?.Invoke(debugPixelHeight);
+        }
     }
 
     #region SDK Init

@@ -20,7 +20,7 @@ public class SkinSlot : CustomizationSlot
 
         skinData = option;
         slotImage.sprite = option.sprite;
-        // typesImage 0 => isColorable (paint brush) / 1 = Premium !Colorable
-        typeImageRef.sprite = option.isColorable ? typeImages[0] : typeImages[1];
+        // typesImage == 1 = Premium(star) / 0 = Colorable(brush)
+        typeImageRef.sprite = option.isPremium ? typeImages[1] : typeImages[0];
     }
 }

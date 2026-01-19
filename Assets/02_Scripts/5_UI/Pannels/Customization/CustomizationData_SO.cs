@@ -9,9 +9,9 @@ public class CustomizationData_SO : ScriptableObject
     public ColorOption[] colors;
 }
 
+[System.Serializable]
 public class CustomizationOption
 {
-    public bool isColorable;
     public bool isLocked;
     public int levelToUnlock;
     public CoinQuantityPair price;
@@ -23,7 +23,8 @@ public class SkinOption : CustomizationOption
 {
     public GameObject skin;
     public Sprite sprite;
-    [ConditionalField("isColorable", true)] public Color color = Color.white;
+    public bool isPremium = false;
+    [ConditionalField("isPremium")] public Color color = Color.white;
 }
 
 [System.Serializable]

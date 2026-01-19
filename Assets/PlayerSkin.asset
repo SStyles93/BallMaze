@@ -12,8 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 960823be51cfab64aa0fe5f1860323fd, type: 3}
   m_Name: PlayerSkin
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkinData_SO
-  playerSkin: {fileID: 2043128687369127624, guid: eda84d7c4fdf24042a2db3ec85cc0ed1, type: 3}
-  playerColor: {r: 1, g: 1, b: 1, a: 1}
-  playerSkinIndex: 0
+  skinOption:
+    isLocked: 0
+    levelToUnlock: 25
+    price:
+      CoinType: 0
+      Amount: 600
+    name: 
+    skin: {fileID: 6602769584495123945, guid: 487ccdda00bfbc34d8479fedc0e9cafd, type: 3}
+    sprite: {fileID: 21300000, guid: 355e11820da92ab4b885fd0a9552795b, type: 3}
+    isPremium: 1
+    color: {r: 0.6716981, g: 0.6716981, b: 0.6716981, a: 1}
+  playerSkinIndex: 19
+  colorOption:
+    isLocked: 0
+    levelToUnlock: 0
+    price:
+      CoinType: 0
+      Amount: 90
+    name: 
+    color: {r: 0.99215686, g: 0.8784314, b: 0.2784314, a: 1}
   playerColorIndex: 0
   firstSkin: {fileID: 2043128687369127624, guid: eda84d7c4fdf24042a2db3ec85cc0ed1, type: 3}

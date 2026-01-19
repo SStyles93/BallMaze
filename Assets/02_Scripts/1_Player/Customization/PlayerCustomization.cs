@@ -10,7 +10,7 @@ public class PlayerCustomization : MonoBehaviour
     [SerializeField] private Color m_color;
     [SerializeField] private GameObject m_visualContainer;
     [SerializeField] private MeshRenderer m_meshRenderer;
-    [Range(0,100)]
+    [Range(0, 100)]
     [SerializeField] private int glassTintPercent = 15;
 
     [SerializeField] private PlayerVisualEffects m_playerVisualEffects;
@@ -43,26 +43,26 @@ public class PlayerCustomization : MonoBehaviour
     public void UpdateAppearence()
     {
         // Clear, Create the saved skin
-        InstanciateNewSkinPrefab(playerSkinData_SO.playerSkin);
+        InstanciateNewSkinPrefab(playerSkinData_SO.skinOption.skin);
 
-        // if idx is 0 assign material colour
-        if (playerSkinData_SO.playerColorIndex == 0)
+        Color originalColor;
+        // Sets the colour depending on if the skin is premium or not
+        if (playerSkinData_SO.skinOption.isPremium)
         {
-            Color originalColor = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color;
-            m_meshRenderer.material.color = m_meshRenderer.sharedMaterial.name.Contains("Fresnel") ?
-                    TintedColourFrom(originalColor) : originalColor;
-
-            UpdateTrailColor(originalColor);
+            originalColor = playerSkinData_SO.skinOption.color;
         }
-        // Otherwise assign selected colour
         else
         {
-            Color originalColor = playerSkinData_SO.playerColor;
-            m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
-                    TintedColourFrom(originalColor) : originalColor;
-
-            UpdateTrailColor(playerSkinData_SO.playerColor);
+            if (playerSkinData_SO.playerColorIndex == 0)
+                originalColor = playerSkinData_SO.skinOption.skin.GetComponent<MeshRenderer>().sharedMaterial.color;
+            else
+                originalColor = playerSkinData_SO.colorOption.color;
         }
+
+        m_meshRenderer.material.color = m_meshRenderer.sharedMaterial.name.Contains("Fresnel") ?
+                TintedColourFrom(originalColor) : originalColor;
+
+        UpdateTrailColor(originalColor);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public class PlayerCustomization : MonoBehaviour
 
             case SkinOption skinOpt:
                 InstanciateNewSkinPrefab(skinOpt.skin);
-                if (!skinOpt.isColorable) m_meshRenderer.material.color = skinOpt.color;
+                if (skinOpt.isPremium) m_meshRenderer.material.color = skinOpt.color;
                 break;
         }
     }
@@ -95,18 +95,12 @@ public class PlayerCustomization : MonoBehaviour
         switch (option)
         {
             case ColorOption colorOpt:
-                AssignColor(colorOpt.color);
-                AssignColorIndex(index);
+                AssignColorOption(colorOpt, index);
                 break;
 
             case SkinOption skinOpt:
                 InstanciateNewSkinPrefab(skinOpt.skin);
-                AssignSkin(skinOpt.skin);
-                AssignMaterialIndex(index);
-                Color colorToAssign = skinOpt.isColorable ?
-                    skinOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color : skinOpt.color;
-                AssignColor(colorToAssign);
-                AssignColorIndex(0);
+                AssignSkinOption(skinOpt, index);
                 break;
         }
     }
@@ -116,33 +110,21 @@ public class PlayerCustomization : MonoBehaviour
     /// </summary>
     public void AssignOriginalColor()
     {
-        Color color = playerSkinData_SO.playerSkin.GetComponent<MeshRenderer>().sharedMaterial.color;
-        playerSkinData_SO.playerColor = color;
         playerSkinData_SO.playerColorIndex = 0;
         UpdateAppearence();
     }
 
     // --- PRIVATE METHODS ---
 
-    private void AssignColor(Color color)
+    private void AssignColorOption(ColorOption colorOpt, int colorIndex)
     {
-        playerSkinData_SO.playerColor = color;
-        m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
-            TintedColourFrom(color) : color;
+        playerSkinData_SO.colorOption = colorOpt;
+        playerSkinData_SO.playerColorIndex = colorIndex;
     }
-    private void AssignColorIndex(int index)
+    private void AssignSkinOption(SkinOption skinOpt, int skinIndex)
     {
-        playerSkinData_SO.playerColorIndex = index;
-    }
-
-    private void AssignSkin(GameObject skin)
-    {
-        //m_meshRenderer.sharedMaterial = skin;
-        playerSkinData_SO.playerSkin = skin;
-    }
-    private void AssignMaterialIndex(int index)
-    {
-        playerSkinData_SO.playerSkinIndex = index;
+        playerSkinData_SO.skinOption = skinOpt;
+        playerSkinData_SO.playerSkinIndex = skinIndex;
     }
 
     private void InstanciateNewSkinPrefab(GameObject skinPrefab)
@@ -153,8 +135,8 @@ public class PlayerCustomization : MonoBehaviour
     }
     private void UpdateTrailColor(Color color)
     {
-        if(m_playerVisualEffects != null)
-        m_playerVisualEffects.SetTrailColor(color);
+        if (m_playerVisualEffects != null)
+            m_playerVisualEffects.SetTrailColor(color);
     }
 
     private void ClearVisualContainer()
@@ -169,7 +151,7 @@ public class PlayerCustomization : MonoBehaviour
     private Color TintedColourFrom(Color color)
     {
         Color tintedColor = color;
-        tintedColor *= (glassTintPercent/100.0f);
+        tintedColor *= (glassTintPercent / 100.0f);
         return tintedColor;
-    } 
+    }
 }

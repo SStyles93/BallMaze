@@ -30,6 +30,9 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     private void Awake()
     {
+        // Safe Guard in case the state was wrong before entering the game
+        GameStateManager.Instance?.SetState(GameState.Playing);
+
         if (LevelManager.Instance != null)
         {
             // Generate the map on Awake

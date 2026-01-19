@@ -9,8 +9,8 @@ public class LifeManager : MonoBehaviour
     /// <summary>
     /// Delegate used in the life pannel (In Game)
     /// </summary>
-    public event Action OnRemoveLife;
-    public event Action OnLifeRegained;
+    public event Action OnLifeRemoved;
+    public event Action OnLifeIncreased;
 
     #region Singleton
     public static LifeManager Instance { get; private set; }
@@ -36,7 +36,7 @@ public class LifeManager : MonoBehaviour
         }
 
         LevelManager.Instance.IncreaseLivesLostToThisLevel();
-        OnRemoveLife?.Invoke();
+        OnLifeRemoved?.Invoke();
 
         //if (currentLife <= 0)
         //    KillPlayer();
@@ -58,36 +58,7 @@ public class LifeManager : MonoBehaviour
 
     public void SetLife(int value)
     {
+        OnLifeIncreased?.Invoke();
         currentLife = value;
-        // Used by the dead zone to resume game
-        OnLifeRegained?.Invoke();
-    }
-
-
-    private void KillPlayer()
-    {
-        LevelManager levelManager = LevelManager.Instance;
-
-        // Remove Level Data from saving
-        if (levelManager.PreviousNumberOfStars == 0 && levelManager.WasGamePreviouslyFinished == false)
-            LevelManager.Instance.MarkLevelAsFailed();
-
-        // Save Session
-        SavingManager.Instance.SaveSession();
-
-        // Opens the Heart pannel if the player has no more hearts
-        //if(!CoinManager.Instance.CanAfford(CoinType.HEART, 1))
-        //{
-        //    SceneController.Instance.NewTransition()
-        //        .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.HeartPannel)
-        //        .Perform();
-        //}
-        //else
-        //{
-        //    // Open EndPannel
-        //    SceneController.Instance.NewTransition()
-        //        .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
-        //        .Perform();
-        //}
     }
 }

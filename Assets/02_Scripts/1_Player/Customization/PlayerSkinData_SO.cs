@@ -4,11 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerSkin", menuName = "Customization/PlayerSkin")]
 public class PlayerSkinData_SO : ScriptableObject
 {
-    [SerializeField] public GameObject playerSkin;
-    [SerializeField] public Color playerColor;
+    [SerializeField] public SkinOption skinOption;
     [SerializeField] public int playerSkinIndex;
+    [SerializeField] public ColorOption colorOption;
     [SerializeField] public int playerColorIndex;
+
     [SerializeField] private GameObject firstSkin;
+
 
 #if UNITY_EDITOR
     [CustomEditor(typeof(PlayerSkinData_SO))]
@@ -21,9 +23,10 @@ public class PlayerSkinData_SO : ScriptableObject
 
             if (GUILayout.Button("Reset Data"))
             {
-                _target.playerSkin = _target.firstSkin;
-                _target.playerColor = Color.white;
+                _target.skinOption.skin = _target.firstSkin;
                 _target.playerSkinIndex = 0;
+
+                _target.colorOption.color = Color.white;
                 _target.playerColorIndex = 0;
 
                 EditorUtility.SetDirty(_target);

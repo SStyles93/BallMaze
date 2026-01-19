@@ -376,10 +376,10 @@ public class SavingManager : MonoBehaviour
             //Debug.Log("No ShopManager instance available");
             return;
         }
-        shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentPlayerData.colorIndex].color;
-        shopManager.skinData_SO.playerSkin = shopManager.customizationData_SO.skins[currentPlayerData.skinIndex].skin;
-        shopManager.skinData_SO.playerColorIndex = currentPlayerData.colorIndex;
+        shopManager.skinData_SO.skinOption = shopManager.customizationData_SO.skins[currentPlayerData.skinIndex];
         shopManager.skinData_SO.playerSkinIndex = currentPlayerData.skinIndex;
+        shopManager.skinData_SO.colorOption = shopManager.customizationData_SO.colors[currentPlayerData.colorIndex];
+        shopManager.skinData_SO.playerColorIndex = currentPlayerData.colorIndex;
     }
 
     /// <summary>

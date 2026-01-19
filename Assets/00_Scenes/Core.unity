@@ -739,7 +739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unlockAllLevels: 0
+  unlockAllLevels: 1
   numberOfLevels: 200
 --- !u!1 &567788078
 GameObject:
@@ -1195,6 +1195,51 @@ MonoBehaviour:
   levelCycleProgression_SO: {fileID: 11400000, guid: af6ae89333a1ecd4fad27a7d2511c008, type: 2}
   levelsPerCycle: 10
   initialCoinAmount: 60
+--- !u!1 &1312464703
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1312464704}
+  - component: {fileID: 1312464705}
+  m_Layer: 0
+  m_Name: GameStateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1312464704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312464703}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1441058359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1312464705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312464703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f37b4bca1696284fba47fad107a7f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameStateManager
+  currentGameState: 0
 --- !u!1 &1333845251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,14 +1472,16 @@ Transform:
   m_Children:
   - {fileID: 1585592073}
   - {fileID: 726726292}
-  - {fileID: 453198341}
   - {fileID: 1441120721}
+  - {fileID: 453198341}
+  - {fileID: 263602415}
+  - {fileID: 1312464704}
+  - {fileID: 2080865586}
   - {fileID: 1230751199}
   - {fileID: 1943483671}
   - {fileID: 2109442887}
   - {fileID: 1179760690}
   - {fileID: 1445328149}
-  - {fileID: 263602415}
   - {fileID: 1192641769}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1482,8 +1529,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa01fd08fe24a84298f79b8904a0352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
-  maxHeartAmount: 15
-  timeToRegainHeartInMinutes: 10
+  maxHeartAmount: 9
+  timeToRegainHeartInMinutes: 20
 --- !u!1 &1445328148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1606,6 +1653,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AdsManager
   adsArea: {fileID: 1361026683}
   adsDebugText: {fileID: 134108503}
+  isDebug: 0
+  debugPixelHeight: 0
 --- !u!1 &1900290287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1817,6 +1866,52 @@ Transform:
   - {fileID: 849186765}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2080865585
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2080865586}
+  - component: {fileID: 2080865587}
+  m_Layer: 0
+  m_Name: GooglePlayGames
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2080865586
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080865585}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1441058359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2080865587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080865585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 319283688c7838841a54fd88f3235528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  GooglePlayToken: 
+  GooglePlayError: 
 --- !u!1 &2109442886
 GameObject:
   m_ObjectHideFlags: 0
