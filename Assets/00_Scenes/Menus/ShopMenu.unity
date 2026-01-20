@@ -694,7 +694,7 @@ GameObject:
   m_Component:
   - component: {fileID: 911601821}
   - component: {fileID: 911601823}
-  - component: {fileID: 911601822}
+  - component: {fileID: 911601824}
   m_Layer: 5
   m_Name: ShopSlotContainer
   m_TagString: Untagged
@@ -719,22 +719,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.000061035156, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 317.0796, y: 1200}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &911601822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 911601820}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!114 &911601823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -755,10 +741,22 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 1200, y: 1200}
-  m_Spacing: {x: -200, y: 40}
+  m_CellSize: {x: 1000, y: 1200}
+  m_Spacing: {x: 0, y: 40}
   m_Constraint: 2
   m_ConstraintCount: 1
+--- !u!114 &911601824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911601820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7647aa5772f27f42a2c49275b152fe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &917227558
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,8 +796,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00012207031}
-  m_SizeDelta: {x: 0, y: -0.00024414062}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &917227560
 MonoBehaviour:
@@ -875,7 +873,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 3840, y: 2160}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -16538,7 +16536,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7847480615943305115}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9866333
+  m_Size: 0.9866334
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -17177,7 +17175,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8566718407142047360}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9207301
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

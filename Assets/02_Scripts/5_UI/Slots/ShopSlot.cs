@@ -57,7 +57,7 @@ public class ShopSlot : MonoBehaviour
             if (payout.type ==
                 ProductCatalogPayout.ProductCatalogPayoutType.Currency)
             {
-                coinAmountText.text = $"{payout.quantity} <sprite index=0>";
+                coinAmountText.text = $"<sprite index=0> {payout.quantity}";
                 return;
             }
         }

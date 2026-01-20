@@ -268,8 +268,8 @@ MonoBehaviour:
   gravityScale: 2
   groundHelp: 0.2
   iceHelp: 0.5
-  groundCheckDistance: 1.1
-  groundDetectionRadius: 0.35
+  groundCheckDistance: 1
+  groundDetectionRadius: 0.5
   groundedLayerMask:
     serializedVersion: 2
     m_Bits: 425984
