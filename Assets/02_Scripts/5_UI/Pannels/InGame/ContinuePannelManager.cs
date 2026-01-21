@@ -13,12 +13,14 @@ public class ContinuePannelManager : MonoBehaviour
     [Space(10)]
     [SerializeField] int heartValueInCoins = 300;
 
+    private int numberOfTrials = 1;
+
     private void OnEnable()
     {
-        if (CoinManager.Instance.CanAfford(CoinType.COIN, heartValueInCoins))
+        if (CoinManager.Instance.CanAfford(CoinType.COIN, heartValueInCoins * numberOfTrials))
         {
             continueButton.SetActive(true);
-            continueText.text = $"{heartValueInCoins} <sprite index=0>  (<sprite index=2> + 1)";
+            continueText.text = $"{heartValueInCoins * numberOfTrials} <sprite index=0>  (<sprite index=2> + 1)";
         }
         else
         {
@@ -40,7 +42,7 @@ public class ContinuePannelManager : MonoBehaviour
 
     public void Continue()
     {
-        if (CoinManager.Instance.CanAfford(CoinType.COIN, heartValueInCoins))
+        if (CoinManager.Instance.CanAfford(CoinType.COIN, heartValueInCoins * numberOfTrials))
         {
             CoinManager.Instance.IncreaseCurrencyAmount(CoinType.HEART, 1);
             CoinManager.Instance.ReduceCurrencyAmount(CoinType.COIN, heartValueInCoins);
@@ -48,6 +50,9 @@ public class ContinuePannelManager : MonoBehaviour
             LifeManager.Instance.SetLife(1);
 
             GameStateManager.Instance?.SetState(GameState.Playing);
+
+            numberOfTrials++;
+
             this.gameObject.SetActive(false);
         }
     }
@@ -55,7 +60,9 @@ public class ContinuePannelManager : MonoBehaviour
     public void ReturnToGamesMenu()
     {
         LifeManager.Instance.ResetLife();
+        
         LevelManager.Instance.MarkLevelAsFailed();
+        
         GameStateManager.Instance?.SetState(GameState.Playing);
 
         SceneController.Instance.NewTransition()
@@ -69,6 +76,9 @@ public class ContinuePannelManager : MonoBehaviour
     public void Restart()
     {
         LifeManager.Instance.ResetLife();
+        
+        LevelManager.Instance.CurrentStarCount = 0;
+
         GameStateManager.Instance?.SetState(GameState.Playing);
 
         SceneController.Instance.NewTransition()

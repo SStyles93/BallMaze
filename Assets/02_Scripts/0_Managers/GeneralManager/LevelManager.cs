@@ -41,7 +41,7 @@ public class LevelManager : MonoBehaviour
     public int CurrencyEarnedThisLevel => currencyEarnedThisLevel;
     public int PreviousNumberOfStars => previousStarCount;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
-    public int CurrentStarCount => currentStarCount;
+    public int CurrentStarCount { get => currentStarCount; set => currentStarCount = value; }
     public CellData[,] CurrentGrid => currentGrid;
 
 
