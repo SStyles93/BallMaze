@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &320001688794963242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1914237982770698019}
+  - component: {fileID: 2348463104574418101}
+  m_Layer: 0
+  m_Name: PhysicalMazeGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1914237982770698019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320001688794963242}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2348463104574418101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320001688794963242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f6ee56df5d9d2441862dc2f22d86a9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhysicalMazeGenerator
+  wallPrefab: {fileID: 0}
+  floorPrefab: {fileID: 3363912154842587231, guid: cf74b047c8c89b44fbe3d7b4a2336747, type: 3}
+  icePrefab: {fileID: 8329032435540354753, guid: 62a8787662ffe204a905bff7dfdc9820, type: 3}
+  movingPlatformPrefabH: {fileID: 3363912154842587231, guid: 7af8315d2295c3242980828225175ed3, type: 3}
+  movingPlatformPrefabV: {fileID: 3363912154842587231, guid: fdd9f00c7d7b23c488b4dfe05c941935, type: 3}
+  startPrefab: {fileID: 839851351414052169, guid: 71d9a997e250b584e94d1ae44a3efb43, type: 3}
+  endPrefab: {fileID: 839851351414052169, guid: 29acc65d504401e4d88b0827385a419b, type: 3}
+  starPrefab: {fileID: 3102653523287797894, guid: f5147e29e7531614bbb3b478e45ae50f, type: 3}
+  cellSize: 2.95
+  clearPrevious: 1
+  environmentColors_SO: {fileID: 11400000, guid: 22cf0413d1085ed4aabc7775cc128e86, type: 2}
+  material: {fileID: 2100000, guid: d0b5b4e45c472a94981a3234f899fd1c, type: 2}
+  emissiveBandMaterial: {fileID: 2100000, guid: 0e0e1eb42e7f8d34382ebc5e7ddc4053, type: 2}
+  isGridGenerated: 1
