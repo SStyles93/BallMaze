@@ -4,13 +4,13 @@ using UnityEngine.EventSystems;
 
 public class CustomizationSlot : BaseUISlot
 {
-    private TMP_Text priceText;
-
     protected PlayerCustomization playerCustomization;
-
     public CustomizationOption option;
-
+    public bool isLockedByLevel = false;
     public int index;
+
+    [SerializeField] private TMP_Text levelText;
+
 
     public virtual void InitializeSlot(CustomizationOption option, int optionIndex, PlayerCustomization playerCustomization)
     {
@@ -20,10 +20,17 @@ public class CustomizationSlot : BaseUISlot
 
         this.playerCustomization = playerCustomization;
 
-        priceText ??= transform.GetComponentInChildren<TMP_Text>();
-        priceText.enabled = false;
-        priceText.text = $"{option.price.Amount} <sprite index={(int)option.price.CoinType}>";
+        isLockedByLevel = option.levelToUnlock > LevelManager.Instance.GetHighestFinishedLevelIndex();
+        // Locked by level
+        if (isLockedByLevel)
+        {
+            levelText.text = option.levelToUnlock.ToString();
+            levelText.enabled = true;
+        }
+        else
+            levelText.enabled = false;
 
+        // Locked by purchase
         if (option.isLocked)
         {
             this.isLocked = option.isLocked;
@@ -31,9 +38,7 @@ public class CustomizationSlot : BaseUISlot
             lockImage.color = lockColor;
         }
         else
-        {
             lockImage.enabled = false;
-        }
     }
 
     public override void OnPointerEnter(PointerEventData eventData)
@@ -42,12 +47,10 @@ public class CustomizationSlot : BaseUISlot
 
         if (isLocked)
         {
-            priceText.enabled = true;
-
             //Reduce Visibility of the Lock & Slot
             ChangeImageVisibility(slotImage, .3f);
             ChangeImageVisibility(lockImage, .5f);
-            
+
             return;
         }
         transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
@@ -60,8 +63,6 @@ public class CustomizationSlot : BaseUISlot
 
         if (isLocked)
         {
-            priceText.enabled = false;
-
             ChangeImageVisibility(slotImage, 1f);
             ChangeImageVisibility(lockImage, 1f);
 
@@ -93,7 +94,7 @@ public class CustomizationSlot : BaseUISlot
         else if (isMouseOver)
         {
             //Reset rotation of the viewer
-            playerCustomization.transform.localRotation = Quaternion.Euler(new Vector3(0,180,0));
+            playerCustomization.transform.localRotation = Quaternion.Euler(new Vector3(0, 180, 0));
 
             // Material is given to shop manager (not yet unlocked)
             if (isLocked)

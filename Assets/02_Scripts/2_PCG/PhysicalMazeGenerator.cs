@@ -26,9 +26,14 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     [HideInInspector][SerializeField] private bool isGridGenerated = false;
 
+    private int previousRndPreset;
+
     private void Awake()
     {
-        if(LevelManager.Instance != null)
+        // Safe Guard in case the state was wrong before entering the game
+        GameStateManager.Instance?.SetState(GameState.Playing);
+
+        if (LevelManager.Instance != null)
         {
             // Generate the map on Awake
             Generate(LevelManager.Instance.CurrentGrid);
@@ -144,7 +149,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
         );
 
         // Set the value of movement so that is it always coherant with the grid's size
-        if(groundType == GroundType.MovingPlatformH || groundType == GroundType.MovingPlatformV)
+        if (groundType == GroundType.MovingPlatformH || groundType == GroundType.MovingPlatformV)
         {
             ground.GetComponent<PlatformMovement>().MovementAmplitude = cellSize;
         }
@@ -180,9 +185,9 @@ public class PhysicalMazeGenerator : MonoBehaviour
     {
         return type switch
         {
-            OverlayType.Start => 1.2f,
-            OverlayType.End => 1.2f,
-            OverlayType.Star => 0.75f,
+            OverlayType.Start => 1.4f,
+            OverlayType.End => 1.4f,
+            OverlayType.Star => 0.9f,
             _ => 0f
         };
     }
@@ -204,6 +209,12 @@ public class PhysicalMazeGenerator : MonoBehaviour
             return;
 
         int rndPresetIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
+        while (rndPresetIndex == environmentColors_SO.lastPresetIndex)
+        {
+            rndPresetIndex = UnityEngine.Random.Range(0, environmentColors_SO.Presets.Length);
+        }
+        environmentColors_SO.lastPresetIndex = rndPresetIndex;
+
         ApplyEnvironmentColors(rndPresetIndex);
     }
 

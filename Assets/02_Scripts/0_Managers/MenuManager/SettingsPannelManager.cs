@@ -8,6 +8,7 @@ public class SettingsPannelManager : MonoBehaviour
 
         SceneController.Instance?.NewTransition()
             .Unload(SceneDatabase.Scenes.SettingsPannel)
+            .SetActive(SceneDatabase.Scenes.GamesMenu)
             .Perform();
     }
 

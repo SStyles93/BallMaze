@@ -31,6 +31,15 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.bindings.openimageio": {
+      "version": "1.0.2",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.collections": "1.2.4"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.burst": {
       "version": "1.8.25",
       "depth": 2,
@@ -60,7 +69,7 @@
     },
     "com.unity.collections": {
       "version": "2.6.2",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.burst": "1.8.23",
@@ -138,7 +147,7 @@
     },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.5",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -172,6 +181,17 @@
         "com.unity.modules.androidjni": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
         "com.unity.modules.unitywebrequest": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.recorder": {
+      "version": "5.1.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.8.7",
+        "com.unity.collections": "1.2.4",
+        "com.unity.bindings.openimageio": "1.0.2"
       },
       "url": "https://packages.unity.com"
     },
@@ -223,6 +243,18 @@
       "depth": 2,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.services.authentication": {
+      "version": "3.5.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.services.core": "1.15.1",
+        "com.unity.nuget.newtonsoft-json": "3.2.1",
+        "com.unity.modules.unitywebrequest": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.services.core": {
@@ -284,7 +316,7 @@
     },
     "com.unity.test-framework.performance": {
       "version": "3.2.0",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.33",

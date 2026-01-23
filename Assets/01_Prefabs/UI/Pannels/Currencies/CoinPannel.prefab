@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 124.8
+  m_fontSize: 65.2
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -226,7 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76821006359872e4d9bc78cec89d00b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  currencyText: {fileID: 3733378538290545897}
+  text: {fileID: 3733378538290545897}
+  m_coinType: 0
 --- !u!1 &5123113102157232176
 GameObject:
   m_ObjectHideFlags: 0

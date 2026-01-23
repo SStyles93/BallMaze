@@ -1,41 +1,42 @@
-using System;
+using System.Collections;
 using UnityEngine;
 
 public class DeadZone : MonoBehaviour
 {
-    [SerializeField] private Vector3 spawnPosition = Vector3.zero;
-    [SerializeField] private LifePannel lifePannel;
+    [SerializeField] private GameObject continuePannel;
 
-    private void Start()
-    {
-        spawnPosition = GameObject.FindGameObjectWithTag("Respawn").GetComponent<PlayerSpawner>().SpawnPosition;
-    }
+    private Rigidbody playerRigidbody;
+    private PlayerMovement playerMovement;
 
-    private void Update()
+    private void ReplacePlayer()
     {
-        if (spawnPosition == Vector3.zero)
-            spawnPosition = GameObject.FindGameObjectWithTag("Respawn").GetComponent<PlayerSpawner>().SpawnPosition;
+        // Block, respawn and Unblock player
+        playerRigidbody.isKinematic = true;
+        playerRigidbody.gameObject.transform.position = playerMovement.CurrentPlatform.position;
+        playerRigidbody.isKinematic = false;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
+
         if (collision.gameObject.CompareTag("Player"))
         {
-            Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
+            if(playerRigidbody == null) playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
+            if(playerMovement == null) playerMovement = collision.gameObject.GetComponent<PlayerMovement>();
 
             LifeManager.Instance.RemoveLife();
 
-            if (LifeManager.Instance.CurrentLife == 0)
+            if (LifeManager.Instance.CurrentLife > 0)
             {
-                // Block Player
-                rb.isKinematic = true;
+                // Block, respawn and Unblock player
+                ReplacePlayer();
             }
             else
             {
-                //Block, respawn and Unblock player
-                rb.isKinematic = true;
-                collision.gameObject.transform.position = spawnPosition;
-                rb.isKinematic = false;
+                GameStateManager.Instance.SetState(GameState.WaitingForContinue);
+                ReplacePlayer();
+                continuePannel.SetActive(true);
             }
         }
     }

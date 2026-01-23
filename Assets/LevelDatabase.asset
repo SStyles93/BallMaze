@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LevelDatabase
   m_EditorClassIdentifier: Assembly-CSharp::LevelDatabase_SO
   levels:
-  - index: 0
+  - index: 1
     gridWidth: 3
     gridHeight: 10
     randomEnd: 0
@@ -23,7 +23,7 @@ MonoBehaviour:
     emptyRatio: 0
     iceRation: 0
     movingPlatformRatio: 0
-    coinsToEarn: 30
+    coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
     starsConnectToEnd: 1
@@ -119,19 +119,19 @@ MonoBehaviour:
       ground: 0
       overlay: 0
     usedSeed: -160900234
-  - index: 29
+  - index: 10
     gridWidth: 3
     gridHeight: 10
-    randomEnd: 1
-    fixedEnd: {x: 9, y: 9}
-    endMinHeightPercent: 20
-    inputSeed: -1
+    randomEnd: 0
+    fixedEnd: {x: 1, y: 0}
+    endMinHeightPercent: 0
+    inputSeed: -160900234
     emptyRatio: 0
     iceRation: 0
     movingPlatformRatio: 0
-    coinsToEarn: 30
+    coinsToEarn: 60
     starCount: 0
-    minStarDistance: 3
+    minStarDistance: 2
     starsConnectToEnd: 1
     gridData:
     - isEmpty: 0
@@ -152,40 +152,13 @@ MonoBehaviour:
     - isEmpty: 0
       ground: 0
       overlay: 0
-    - isEmpty: 0
+    - isEmpty: 1
       ground: 0
       overlay: 0
-    - isEmpty: 0
+    - isEmpty: 1
       ground: 0
       overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 3
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
+    - isEmpty: 1
       ground: 0
       overlay: 0
     - isEmpty: 0
@@ -203,6 +176,33 @@ MonoBehaviour:
     - isEmpty: 0
       ground: 0
       overlay: 3
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
     - isEmpty: 0
       ground: 0
       overlay: 0
@@ -224,4 +224,654 @@ MonoBehaviour:
     - isEmpty: 0
       ground: 0
       overlay: 0
-    usedSeed: 2092948473
+    usedSeed: -160900234
+  - index: 20
+    gridWidth: 3
+    gridHeight: 10
+    randomEnd: 0
+    fixedEnd: {x: 1, y: 0}
+    endMinHeightPercent: 0
+    inputSeed: -160900234
+    emptyRatio: 0
+    iceRation: 0
+    movingPlatformRatio: 0
+    coinsToEarn: 60
+    starCount: 0
+    minStarDistance: 2
+    starsConnectToEnd: 1
+    gridData:
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 2
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 3
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 3
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 3
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 1
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    usedSeed: -160900234
+  - index: 30
+    gridWidth: 3
+    gridHeight: 10
+    randomEnd: 0
+    fixedEnd: {x: 1, y: 0}
+    endMinHeightPercent: 0
+    inputSeed: -160900234
+    emptyRatio: 0
+    iceRation: 0
+    movingPlatformRatio: 0
+    coinsToEarn: 60
+    starCount: 0
+    minStarDistance: 2
+    starsConnectToEnd: 1
+    gridData:
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 2
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 1
+      ground: 1
+      overlay: 0
+    - isEmpty: 1
+      ground: 1
+      overlay: 0
+    - isEmpty: 1
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 3
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 1
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    usedSeed: -160900234
+  - index: 40
+    gridWidth: 3
+    gridHeight: 10
+    randomEnd: 0
+    fixedEnd: {x: 1, y: 0}
+    endMinHeightPercent: 0
+    inputSeed: -160900234
+    emptyRatio: 0
+    iceRation: 0
+    movingPlatformRatio: 0
+    coinsToEarn: 60
+    starCount: 0
+    minStarDistance: 2
+    starsConnectToEnd: 1
+    gridData:
+    - isEmpty: 1
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 2
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 3
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 3
+      overlay: 3
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 2
+      overlay: 3
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 1
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    usedSeed: -160900234
+  - index: 50
+    gridWidth: 3
+    gridHeight: 10
+    randomEnd: 0
+    fixedEnd: {x: 1, y: 0}
+    endMinHeightPercent: 0
+    inputSeed: -160900234
+    emptyRatio: 0
+    iceRation: 0
+    movingPlatformRatio: 0
+    coinsToEarn: 60
+    starCount: 0
+    minStarDistance: 2
+    starsConnectToEnd: 1
+    gridData:
+    - isEmpty: 1
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 2
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 3
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 3
+      overlay: 3
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 3
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 2
+      overlay: 3
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 1
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    usedSeed: -160900234
+  - index: 9999
+    gridWidth: 7
+    gridHeight: 10
+    randomEnd: 1
+    fixedEnd: {x: 0, y: 0}
+    endMinHeightPercent: 10
+    inputSeed: 106493837
+    emptyRatio: 0
+    iceRation: 0
+    movingPlatformRatio: 0
+    coinsToEarn: 60
+    starCount: 0
+    minStarDistance: 3
+    starsConnectToEnd: 1
+    gridData:
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 2
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 2
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 2
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 2
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 2
+      overlay: 0
+    - isEmpty: 0
+      ground: 4
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 1
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    usedSeed: 106493837

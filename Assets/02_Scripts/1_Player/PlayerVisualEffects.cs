@@ -9,7 +9,6 @@ public class PlayerVisualEffects : MonoBehaviour
     [SerializeField] private Color m_trailColor;
     [SerializeField] private Material[] m_trailMaterials;
 
-
     private PlayerMovement playerMovement;
     private Tween scaleTween;
     private TrailRenderer[] trailRenderers;
@@ -42,6 +41,8 @@ public class PlayerVisualEffects : MonoBehaviour
 
     private void Update()
     {
+        if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
+
         bool shouldShrink = transform.position.y < playerMovement.FallThreshold;
 
         if (shouldShrink && state == ScaleState.Normal)

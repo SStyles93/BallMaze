@@ -1,28 +1,21 @@
 using TMPro;
 using UnityEngine;
 
-public class StarPannel : MonoBehaviour
+public class StarPannel : CurrencyPannel
 {
-    [SerializeField] private TMP_Text currencyText;
-
-    private void OnEnable()
+    protected override void Start()
     {
-        CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
-    }
+        m_coinType = CoinType.STAR;
+        if (coinManagerRef == null) return;
 
-    private void OnDisable()
-    {
-        CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
-    }
-
-    private void Start()
-    {
-        UpdateCurrencyValue(CoinType.STAR, CoinManager.Instance.StarAmount);
-    }
-
-    private void UpdateCurrencyValue(CoinType type, int value)
-    {
-        if(type == CoinType.STAR)
-        currencyText.text = $"{value.ToString()}";
+        if (coinManagerRef.PreviousStarAmount != coinManagerRef.StarAmount)
+        {
+            UpdateCurrencyValue(m_coinType, coinManagerRef.StarAmount, coinManagerRef.PreviousStarAmount);
+            coinManagerRef.LevelPreviousCoinAmount(m_coinType);
+        }
+        else
+        {
+            SetCurrencyValue(m_coinType, coinManagerRef.StarAmount);
+        }
     }
 }

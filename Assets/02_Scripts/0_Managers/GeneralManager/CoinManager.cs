@@ -6,7 +6,7 @@ using UnityEngine;
 public class CoinManager : MonoBehaviour
 {
     private Dictionary<CoinType, int> coins = new Dictionary<CoinType, int>();
-    public int PreviousCoinAmount;
+    private Dictionary<CoinType, int> previousCoins = new Dictionary<CoinType, int>();
 
     [Header("Hearts Parameters")]
     [SerializeField] int maxHeartAmount = 15;
@@ -19,17 +19,24 @@ public class CoinManager : MonoBehaviour
     /// <summary>
     /// Delegate (Action) used to notify the different pannels (LifePannel, CurrencyPannel, StarPannel)
     /// </summary>
-    public event Action<CoinType, int> OnCoinChanged;
+    public event Action<CoinType, int, int> OnCoinChanged;
+    public event Action<CoinType, int> OnCoinSet;
 
     public event Action<TimeSpan> OnHeartTimerTick;
 
     public int CoinAmount => coins[CoinType.COIN];
     public int StarAmount => coins[CoinType.STAR];
     public int HeartAmount => coins[CoinType.HEART];
+
+    public int PreviousCoinAmount => previousCoins[CoinType.COIN];
+    public int PreviousStarAmount => previousCoins[CoinType.STAR];
+    public int PreviousHeartAmount => previousCoins[CoinType.HEART];
+
     public int InitialHeartAmount => maxHeartAmount;
     public DateTime LastHeartRefillTime => lastHeartRefillTime;
 
     public static CoinManager Instance { get; private set; }
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -39,9 +46,19 @@ public class CoinManager : MonoBehaviour
 
     private void Start()
     {
-        coins.Add(CoinType.COIN, 0);
-        coins.Add(CoinType.STAR, 0);
-        coins.Add(CoinType.HEART, 0);
+        if (coins.Count == 0)
+        {
+            coins.Add(CoinType.COIN, 0);
+            coins.Add(CoinType.STAR, 0);
+            coins.Add(CoinType.HEART, 0);
+        }
+
+        if (previousCoins.Count == 0)
+        {
+            previousCoins.Add(CoinType.COIN, 0);
+            previousCoins.Add(CoinType.STAR, 0);
+            previousCoins.Add(CoinType.HEART, 0);
+        }
     }
 
     private void Update()
@@ -79,14 +96,14 @@ public class CoinManager : MonoBehaviour
     /// <param name="amount">amount to increase by</param>
     public void IncreaseCurrencyAmount(CoinType type, int amount)
     {
-        if (type == CoinType.COIN)
-            PreviousCoinAmount = coins[CoinType.COIN];
         coins[type] += amount;
         if (type == CoinType.HEART)
         {
             RecalculateHearts();
         }
-        OnCoinChanged?.Invoke(type, coins[type]);
+
+        OnCoinChanged?.Invoke(type, coins[type], previousCoins[type]);
+        LevelPreviousCoinAmount(type);
     }
 
     /// <summary>
@@ -96,11 +113,8 @@ public class CoinManager : MonoBehaviour
     /// <param name="amount">amount to reduce by</param>
     public void ReduceCurrencyAmount(CoinType type, int amount)
     {
-        if (type == CoinType.COIN)
-            PreviousCoinAmount = coins[CoinType.COIN];
-        
         coins[type] -= amount;
-        
+
         if (type == CoinType.HEART)
         {
             if (coins[CoinType.HEART] == maxHeartAmount - 1)
@@ -111,7 +125,8 @@ public class CoinManager : MonoBehaviour
             RecalculateHearts();
         }
 
-        OnCoinChanged?.Invoke(type, coins[type]);
+        OnCoinChanged?.Invoke(type, coins[type], previousCoins[type]);
+        LevelPreviousCoinAmount(type);
     }
 
     /// <summary>
@@ -121,20 +136,18 @@ public class CoinManager : MonoBehaviour
     /// <param name="value">final value of the given currency type held by the currency manager</param>
     public void SetCurrencyAmount(CoinType type, int value)
     {
-        if (type == CoinType.COIN)
-            PreviousCoinAmount = coins[CoinType.COIN];
         coins[type] = value;
-        OnCoinChanged?.Invoke(type, coins[type]);
+        OnCoinSet?.Invoke(type, value);
     }
 
     /// <summary>
-    /// Sets the previous currency to be the actual one (Used in text animations)
+    /// Levels the previous amount to the current one
     /// </summary>
-    public void UpdatePreviousCoinAmount()
+    /// <param name="type">Type of coin to level</param>
+    public void LevelPreviousCoinAmount(CoinType type)
     {
-        PreviousCoinAmount = coins[CoinType.COIN];
+        previousCoins[type] = coins[type];
     }
-
 
 
     public void SetLastHeartRefillTime(DateTime dateTime)
@@ -161,7 +174,7 @@ public class CoinManager : MonoBehaviour
         if (heartsToAdd <= 0)
             return;
 
-        int totalHeartsAmount= Mathf.Min(coins[CoinType.HEART] + heartsToAdd, maxHeartAmount);
+        int totalHeartsAmount = Mathf.Min(coins[CoinType.HEART] + heartsToAdd, maxHeartAmount);
 
         SetCurrencyAmount(CoinType.HEART, totalHeartsAmount);
 
@@ -170,8 +183,8 @@ public class CoinManager : MonoBehaviour
             heartsToAdd * timeToRegainHeartInMinutes
         );
 
-        if(isDataLoaded)
-        SavingManager.Instance?.SavePlayer();
+        if (isDataLoaded)
+            SavingManager.Instance?.SavePlayer();
     }
     private void StartTimer()
     {

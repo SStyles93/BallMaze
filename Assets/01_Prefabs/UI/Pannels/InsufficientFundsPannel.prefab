@@ -160,10 +160,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Insufficient <sprite index=0>go to shop ?
+  m_text: Insufficient <sprite index=0> go to shop ?
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0b9a94f59b1cfdc408cec57dd7b076ee, type: 2}
-  m_sharedMaterial: {fileID: -1296612248654450652, guid: 0b9a94f59b1cfdc408cec57dd7b076ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9882ebed56d8a7f41958f15d8a76b904, type: 2}
+  m_sharedMaterial: {fileID: 184713176012697816, guid: 9882ebed56d8a7f41958f15d8a76b904, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -179,7 +179,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 11400000, guid: 24eee33ac0660f647a3dd3af32bab135, type: 2}
+  m_spriteAsset: {fileID: 11400000, guid: b21c5f80d4bd24042adf0ae833af2f1f, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901

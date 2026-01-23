@@ -264,16 +264,16 @@ MonoBehaviour:
   playerRigidbody: {fileID: 6087839670450387137}
   torqueStrength: 100
   maxAngularVelocity: 100
-  jumpForce: 10
+  jumpForce: 12
   gravityScale: 2
-  groundCheckDistance: 1.1
-  groundDetectionRadius: 0.35
+  groundHelp: 0.2
+  iceHelp: 0.5
+  groundCheckDistance: 1
+  groundDetectionRadius: 0.5
   groundedLayerMask:
     serializedVersion: 2
     m_Bits: 425984
   fallThreshold: -5
-  ballRadius: 10
-  currentPlatform: {fileID: 0}
 --- !u!114 &9137505450509997439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +286,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70726f693d25f7b4590e244d93d60eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
+  cameraGridLimitsPercentage: {x: 0.25, y: 0.75}
+  softZone: 2
+  cameraLimitsX: {x: -100, y: 100}
+  shakeTimer: 0.1
+  shakeAmplitude: 0.75
 --- !u!114 &5364715522439794130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -302,7 +307,7 @@ MonoBehaviour:
   m_color: {r: 0, g: 0, b: 0, a: 0}
   m_visualContainer: {fileID: 6644927266387035701}
   m_meshRenderer: {fileID: 0}
-  glassTintPercent: 15
+  glassTintPercent: 100
   m_playerVisualEffects: {fileID: 959544580089661260}
 --- !u!114 &959544580089661260
 MonoBehaviour:
@@ -337,6 +342,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   maxSpeed: 7.6
   volumeRange: {x: 0, y: 1}
+  GroundPitch: 1.5
+  IcePitch: 1.5
 --- !u!1 &6644927266387035701
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,6 +353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5080327698161584812}
+  - component: {fileID: 6128627591424612650}
   m_Layer: 13
   m_Name: VisualContainer
   m_TagString: Untagged
@@ -368,6 +376,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 569871771093822925}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6128627591424612650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6644927266387035701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e43e2cf9b704c94298ca631f024574b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1001 &6728362703669590761
 PrefabInstance:
   m_ObjectHideFlags: 0

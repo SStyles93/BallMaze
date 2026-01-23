@@ -6,6 +6,8 @@ TagManager:
   tags:
   - AdBanner
   - DeadZone
+  - Ground
+  - Ice
   - MovingPlatform
   layers:
   - Default

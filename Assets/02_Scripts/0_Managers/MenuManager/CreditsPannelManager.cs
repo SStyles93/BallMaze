@@ -6,6 +6,7 @@ public class CreditsPannelManager : MonoBehaviour
     {
         SceneController.Instance?.NewTransition()
             .Unload(SceneDatabase.Scenes.CreditsPannel)
+            .SetActive(SceneDatabase.Scenes.SettingsPannel)
             .Perform();
     }
 }

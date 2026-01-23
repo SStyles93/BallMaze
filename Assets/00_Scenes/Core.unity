@@ -470,6 +470,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CustomizationManager
   customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
   skinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
+  currentSlot: {fileID: 0}
+  currentOption:
+    isLocked: 0
+    levelToUnlock: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    name: 
 --- !u!1001 &332380840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -520,7 +528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2116335753717188971, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 999
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2116335753717188971, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -556,6 +564,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2116335753717188971, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3390268785204777926, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
+      propertyPath: m_Alpha
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4405811545274363757, guid: 2212968ffff8a2b4ca59e458a7e5609c, type: 3}
@@ -1187,9 +1199,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   generatorParameters: {fileID: 11400000, guid: 56084ab9538960249bd360380bfaa0d6, type: 2}
   levelDatabase: {fileID: 11400000, guid: 7a2e4b9ee92d5bf42bec9798e4208ea8, type: 2}
-  levelArchetypeDatabase: {fileID: 11400000, guid: 0a1c78290774def4fbb92994b282579f, type: 2}
-  levelsPerCycle: 30
-  initialCoinAmount: 30
+  globalDifficultyModifier: {fileID: 11400000, guid: 494dd372dacc24347b67a0b025a09e4d, type: 2}
+  levelCycleProgression_SO: {fileID: 11400000, guid: af6ae89333a1ecd4fad27a7d2511c008, type: 2}
+  levelsPerCycle: 10
+  initialCoinAmount: 60
+--- !u!1 &1312464703
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1312464704}
+  - component: {fileID: 1312464705}
+  m_Layer: 0
+  m_Name: GameStateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1312464704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312464703}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1441058359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1312464705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312464703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f37b4bca1696284fba47fad107a7f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameStateManager
+  currentGameState: 0
 --- !u!1 &1333845251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1422,14 +1480,15 @@ Transform:
   m_Children:
   - {fileID: 1585592073}
   - {fileID: 726726292}
-  - {fileID: 453198341}
   - {fileID: 1441120721}
+  - {fileID: 453198341}
+  - {fileID: 263602415}
+  - {fileID: 1312464704}
   - {fileID: 1230751199}
   - {fileID: 1943483671}
   - {fileID: 2109442887}
   - {fileID: 1179760690}
   - {fileID: 1445328149}
-  - {fileID: 263602415}
   - {fileID: 1192641769}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1477,9 +1536,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa01fd08fe24a84298f79b8904a0352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
-  PreviousCoinAmount: 0
-  maxHeartAmount: 15
-  timeToRegainHeartInMinutes: 10
+  maxHeartAmount: 9
+  timeToRegainHeartInMinutes: 20
 --- !u!1 &1445328148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1602,6 +1660,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AdsManager
   adsArea: {fileID: 1361026683}
   adsDebugText: {fileID: 134108503}
+  isDebug: 0
+  debugPixelHeight: 0
 --- !u!1 &1900290287
 GameObject:
   m_ObjectHideFlags: 0
@@ -1857,6 +1917,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2c772e122bb564e9d1213a4404a558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentGameData:
+    difficultyDebt: 0
+    remainingLevels: 0
   currentPlayerData:
     coins: 0
     stars: 0

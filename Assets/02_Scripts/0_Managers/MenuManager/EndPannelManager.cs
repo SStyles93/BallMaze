@@ -1,14 +1,11 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class EndPannelManager : MonoBehaviour
 {
     [Header("Object Reference")]
     [SerializeField] private TMP_Text levelText;
     [SerializeField] private GameObject continueButton;
-    [SerializeField] private GameObject retryButton;
 
     private LevelManager levelManager;
 
@@ -17,23 +14,12 @@ public class EndPannelManager : MonoBehaviour
         levelManager = LevelManager.Instance;
 
         // LVL n°
-        levelText.text = $"Level {levelManager.CurrentLevelIndex+1}";
+        levelText.text = $"Level {levelManager.CurrentLevelIndex}";
 
+        continueButton.SetActive(true);
         // START ( * * * )
-        if (levelManager.CurrentLevelData.numberOfStars == 0 || LifeManager.Instance.CurrentLife == 0)
-        {
-            //GAME OVER
-            retryButton.SetActive(true);
-            continueButton.SetActive(false);
-        }
-        else
-        {
-            // WIN
-            continueButton.SetActive(true);
-            retryButton.SetActive(false);
-
+        if (levelManager.CurrentLevelData.numberOfStars >= 3)
             AudioManager.Instance?.PlayWinSound();
-        }
     }
 
     /// <summary>
@@ -60,9 +46,7 @@ public class EndPannelManager : MonoBehaviour
     {
         levelManager.InitializeLevel(levelManager.CurrentLevelIndex + sceneIndex);
 
-        LifeManager.Instance.SetLife();
-
-        CoinManager.Instance.UpdatePreviousCoinAmount();
+        LifeManager.Instance.ResetLife();
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
@@ -75,9 +59,7 @@ public class EndPannelManager : MonoBehaviour
 
     public void ReturnToGamesMenu()
     {
-        LifeManager.Instance.SetLife();
-
-        CoinManager.Instance.UpdatePreviousCoinAmount();
+        LifeManager.Instance.ResetLife();
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)

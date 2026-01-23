@@ -1,3 +1,5 @@
+using PxP.Draw;
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -11,8 +13,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxAngularVelocity = 25f;
 
     [Header("Jump")]
-    [SerializeField] private float jumpForce = 6f;
+    [SerializeField] private float jumpForce = 12f;
     [SerializeField] private float gravityScale = 2f;
+    [SerializeField] private float groundHelp = 0.2f;
+    [SerializeField] private float iceHelp = 0.6f;
 
     [Header("Ground Check")]
     [SerializeField] private float groundCheckDistance = 1.1f;
@@ -25,16 +29,20 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 movementInput;
     private bool isGrounded;
+    // --- Jump ---
     private bool wasJumpPerformed;
+    private float jumpHelpValue = 0.5f;
     // --- Platform ---
     private bool allowRotation;
     private Transform currentPlatform;
 
-
+    public event Action<string> OnPlayerLanded;
+    public event Action OnPlayerJumped;
 
 
     public float FallThreshold { get => fallThreshold; set => fallThreshold = value; }
     public Rigidbody PlayerRigidbody { get => playerRigidbody; set => playerRigidbody = value; }
+    public Transform CurrentPlatform => currentPlatform;
 
     private void OnEnable()
     {
@@ -85,12 +93,21 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isGrounded) return;
 
-        playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if (currentPlatform.CompareTag("Ice"))
+            jumpHelpValue = iceHelp;
+        else
+        {
+            jumpHelpValue = groundHelp;
+        }
+
+        Vector3 directionHelper = movementInput * jumpHelpValue;
+
+        playerRigidbody.AddForce((Vector3.up + directionHelper).normalized * jumpForce, ForceMode.Impulse);
         isGrounded = false;
         wasJumpPerformed = true;
 
-        // Unset platform reference when jumping
-        currentPlatform = null;
+        // Calls the JumpSound on the PlayerSound script
+        OnPlayerJumped?.Invoke();
     }
 
     // ---------------- GROUND ----------------
@@ -104,34 +121,26 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded)
         {
-            if (hit.collider != null && hit.collider.CompareTag("MovingPlatform"))
+            if (hit.collider != null)
             {
                 currentPlatform = hit.collider.transform;
             }
-            else
+
+            // Y velocity is generally at -8.smth (if < 0, this part might trigger before falling)
+            if (wasJumpPerformed && playerRigidbody.linearVelocity.y < -2f)
             {
-                currentPlatform = null;
-            }
+                //Debug.Log(playerRigidbody.linearVelocity);
+                // Calls the LandedSound on the PlayerSound script
+                OnPlayerLanded?.Invoke(hit.collider.tag);
 
-            if (wasJumpPerformed && playerRigidbody.linearVelocity.y < 0)
-            {
-                float fallSpeed = Mathf.Abs(playerRigidbody.linearVelocity.y);
-
-                // Tune these values
-                float minSpeed = 2f;   // soft landing
-                float maxSpeed = 10f;  // hard landing
-
-                float volume = Mathf.InverseLerp(minSpeed, maxSpeed, fallSpeed);
-                volume = Mathf.Clamp01(volume);
-
-
-                AudioManager.Instance?.PlayThumpSound(volume);
                 wasJumpPerformed = false;
             }
+
+            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.green);
         }
         else
         {
-            currentPlatform = null;
+            DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.red);
         }
     }
 
@@ -144,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isGrounded)
             return;
 
-        if (currentPlatform != null && !allowRotation)
+        if (!allowRotation && currentPlatform.CompareTag("MovingPlatform"))
         {
             playerRigidbody.angularVelocity =
             Vector3.Lerp(playerRigidbody.angularVelocity, Vector3.zero, 0.4f);

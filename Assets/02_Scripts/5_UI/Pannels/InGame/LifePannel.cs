@@ -8,19 +8,21 @@ public class LifePannel : MonoBehaviour
 
     private void OnEnable()
     {
-        if(LifeManager.Instance != null)
-        LifeManager.Instance.OnRemoveLife += RemoveLife;
+        if (LifeManager.Instance == null) return;
+        LifeManager.Instance.OnLifeRemoved += RemoveLife;
+        LifeManager.Instance.OnLifeIncreased += IncreaseLife;
     }
 
     private void OnDisable()
     {
-        if (LifeManager.Instance != null)
-            LifeManager.Instance.OnRemoveLife -= RemoveLife;
+        if (LifeManager.Instance == null) return;
+        LifeManager.Instance.OnLifeRemoved -= RemoveLife;
+        LifeManager.Instance.OnLifeIncreased -= IncreaseLife;
     }
 
     private void Start()
     {
-        LifeManager.Instance.SetLife();
+        LifeManager.Instance.ResetLife();
 
         if(LifeManager.Instance != null)
             for (int i = 0; i < lifeImages.Count; i++)
@@ -36,5 +38,11 @@ public class LifePannel : MonoBehaviour
     {
         if (LifeManager.Instance != null)
             lifeImages[LifeManager.Instance.CurrentLife].enabled = false;
+    }
+
+    public void IncreaseLife()
+    {
+        if (LifeManager.Instance != null)
+            lifeImages[LifeManager.Instance.CurrentLife].enabled = true;
     }
 }

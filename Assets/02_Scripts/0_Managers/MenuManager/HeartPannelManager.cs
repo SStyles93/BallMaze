@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HeartPannelManager : MonoBehaviour
 {
-    [SerializeField] int heartValue = 3000;
+    [SerializeField] int heartValue = 600;
     [SerializeField] private TMP_Text heartTimerText;
     [SerializeField] private TMP_Text heartAmountText;
     [SerializeField] private TMP_Text coinAmountText;
@@ -14,12 +14,14 @@ public class HeartPannelManager : MonoBehaviour
 
     private void OnEnable()
     {
+        CoinManager.Instance.OnCoinSet += SetCurrencyValue;
         CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
         CoinManager.Instance.OnHeartTimerTick += UpdateTimerText;
     }
 
     private void OnDisable()
     {
+        CoinManager.Instance.OnCoinSet += SetCurrencyValue;
         CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
         CoinManager.Instance.OnHeartTimerTick -= UpdateTimerText;
     }
@@ -28,19 +30,27 @@ public class HeartPannelManager : MonoBehaviour
     private void Start()
     {
         CoinManager coinManager = CoinManager.Instance;
-        UpdateCurrencyValue(CoinType.HEART, coinManager.HeartAmount);
-        UpdateTimerText(coinManager.TimeUntilNextHeart());
+        if (coinManager != null)
+        {
+            SetCurrencyValue(CoinType.HEART, coinManager.HeartAmount);
+        }
 
+        UpdateTimerText(coinManager.TimeUntilNextHeart());
         UpdateCoinValueText();
 
         AdsManager.Instance.RewardedVideoAd.OnAdRewarded += GrantRewardAndClosePannel;
     }
 
-
-    private void UpdateCurrencyValue(CoinType type, int value)
+    private void SetCurrencyValue(CoinType type, int value)
     {
         if (type == CoinType.HEART)
             heartAmountText.text = $"{value.ToString()}";
+    }
+
+    private void UpdateCurrencyValue(CoinType type, int value, int previousAmount)
+    {
+        if (type == CoinType.HEART)
+            heartAmountText.AnimateCurrency(previousAmount, value, 1.0f);
     }
 
     void UpdateTimerText(TimeSpan remaining)
@@ -80,6 +90,7 @@ public class HeartPannelManager : MonoBehaviour
         {
             SceneController.Instance?.NewTransition()
                 .Unload(SceneDatabase.Scenes.HeartPannel)
+                .SetActive(SceneDatabase.Scenes.GamesMenu)
                 .Perform();
         }
     }
@@ -97,9 +108,9 @@ public class HeartPannelManager : MonoBehaviour
 
     public void ValidateHeartPurchase()
     {
-        if(CoinManager.Instance.CanAfford(CoinType.COIN, heartValue))
+        if (CoinManager.Instance.CanAfford(CoinType.COIN, heartValue))
         {
-            CoinManager.Instance.IncreaseCurrencyAmount(CoinType.HEART, 3);
+            CoinManager.Instance.IncreaseCurrencyAmount(CoinType.HEART, 1);
             CoinManager.Instance.ReduceCurrencyAmount(CoinType.COIN, heartValue);
             ExitHeartPannel();
         }

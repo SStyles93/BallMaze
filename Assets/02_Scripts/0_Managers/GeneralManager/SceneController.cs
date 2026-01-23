@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -99,6 +98,12 @@ public class SceneController : MonoBehaviour
             }
         }
 
+        if(plan.ActiveScene != SceneManager.GetActiveScene().name)
+        {
+            Scene activeScene = SceneManager.GetSceneByName(plan.ActiveScene);
+            SceneManager.SetActiveScene(activeScene);
+        }
+
         if (plan.Overlay)
         {
             yield return loadingOverlay.FadeOutBlack();
@@ -131,6 +136,8 @@ public class SceneController : MonoBehaviour
                 SceneManager.SetActiveScene(newScene);
             }
         }
+
+        loadedSceneBySlot[slot] = sceneName;
     }
 
     private IEnumerator UnloadSceneRoutine(string sceneName)
@@ -194,6 +201,12 @@ public class SceneController : MonoBehaviour
             SceneToUnload.Add(scene.ToString());
             return this;
         }
+
+        public SceneTransitionPlan SetActive(SceneDatabase.Scenes scene)
+        {
+            ActiveScene = scene.ToString();
+            return this;
+        }
         public SceneTransitionPlan WithOverlay()
         {
             Overlay = true;
@@ -209,18 +222,5 @@ public class SceneController : MonoBehaviour
         {
             SceneController.Instance.StartCoroutine(SceneController.Instance.ExecutePlan(this));
         }
-    }
-
-    // --- Helper ---
-    // to get scene name from enum (assuming SceneDatabase.Scenes is an enum of scene names)
-    private string GetSceneNameFromEnum(SceneDatabase.Scenes sceneEnum)
-    {
-        return sceneEnum.ToString();
-    }
-
-    private SceneDatabase.Scenes GetEnumFromSceneName(string sceneName)
-    {
-        Enum.TryParse(sceneName, out SceneDatabase.Scenes scene);
-        return scene;
     }
 }

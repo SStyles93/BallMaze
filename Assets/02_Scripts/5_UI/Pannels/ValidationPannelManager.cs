@@ -1,9 +1,11 @@
-using System;
 using TMPro;
 using UnityEngine;
 
 public class ValidationPannelManager : MonoBehaviour
 {
+    [Header("Player Data")]
+    [SerializeField] private PlayerSkinData_SO playerSkinData_SO;
+
     [Header("Validation Pannel")]
     [SerializeField] private GameObject validationPannel;
     [SerializeField] private GameObject buyButton;
@@ -13,9 +15,9 @@ public class ValidationPannelManager : MonoBehaviour
     [Header("Insufficient Funds Pannel")]
     [SerializeField] private GameObject insufficientFundsPannel;
 
+    [SerializeField] private GameObject colorTab;
 
-    [SerializeField] private CustomizationOption selectedOption = null;
-    private GameObject optionObject;
+    private CustomizationOption selectedOption = null;
 
     private void OnEnable()
     {
@@ -37,6 +39,9 @@ public class ValidationPannelManager : MonoBehaviour
         validationPannel.SetActive(false);
         insufficientFundsPannel.SetActive(false);
         buyButton.SetActive(false);
+
+        bool showTab = !playerSkinData_SO.skinOption.isPremium;
+        colorTab.SetActive(showTab);
     }
 
     /// <summary>
@@ -81,27 +86,28 @@ public class ValidationPannelManager : MonoBehaviour
     private void InitializePannelWithOption(CustomizationOption option)
     {
         selectedOption = option;
-
-       //TODO: OptionObject has to be passed here
-
         InitializeText(option);
     }
 
     private void InitializeText(CustomizationOption option)
     {
-        validationText.text = $"Purchase for {option.price.Amount} <sprite index={(int)option.price.CoinType}> ?";
+        validationText.text = $"Purchase for <sprite index={(int)option.price.CoinType}> {option.price.Amount} ?";
     }
 
-    private void SetSelectedOption(CustomizationOption option)
+    private void SetSelectedOption(CustomizationSlot slot)
     {
-        selectedOption = option;
-        SetBuyButtonText(option);
+        selectedOption = slot.option;
+        SetBuyButtonText(slot);
+        bool showTab = !playerSkinData_SO.skinOption.isPremium;
+        colorTab.SetActive(showTab);
     }
 
-    private void SetBuyButtonText(CustomizationOption option)
+    private void SetBuyButtonText(CustomizationSlot slot)
     {
-        // Enable the button if locked
-        buyButton.gameObject.SetActive(option.isLocked);
-        buyButtonText.text = $"{selectedOption.price.Amount} <sprite index={(int)option.price.CoinType}>";
+        // Enable the button if locked (not bought) and not locked by level
+        bool showBuyButton = slot.option.isLocked && !slot.isLockedByLevel;
+
+        buyButton.gameObject.SetActive(showBuyButton);
+        buyButtonText.text = $"<sprite index={(int)slot.option.price.CoinType}> {selectedOption.price.Amount}";
     }
 }

@@ -1,3 +1,4 @@
+using MyBox;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,9 +9,11 @@ public class CustomizationData_SO : ScriptableObject
     public ColorOption[] colors;
 }
 
+[System.Serializable]
 public class CustomizationOption
 {
     public bool isLocked;
+    public int levelToUnlock;
     public CoinQuantityPair price;
     public string name;
 }
@@ -20,6 +23,8 @@ public class SkinOption : CustomizationOption
 {
     public GameObject skin;
     public Sprite sprite;
+    public bool isPremium = false;
+    [ConditionalField("isPremium")] public Color color = Color.white;
 }
 
 [System.Serializable]

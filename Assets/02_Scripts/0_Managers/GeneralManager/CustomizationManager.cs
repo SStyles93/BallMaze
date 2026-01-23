@@ -8,11 +8,11 @@ public class CustomizationManager : MonoBehaviour
     public CustomizationData_SO customizationData_SO;
     public PlayerSkinData_SO skinData_SO;
 
-    private CustomizationSlot currentSlot = null;
-    private CustomizationOption currentOption = null;
+    [SerializeField] private CustomizationSlot currentSlot = null;
+    [SerializeField] private CustomizationOption currentOption = null;
     private int currentOptionIndex = 0;
 
-    public event Action<CustomizationOption> OnOptionChanged;
+    public event Action<CustomizationSlot> OnOptionChanged;
     public event Action OnUpdatePlayerOption;
 
     private void Awake()
@@ -33,7 +33,7 @@ public class CustomizationManager : MonoBehaviour
         currentOptionIndex = slot.index;
 
         // This will call the PreviewOption() method on the PlayerCustomization.cs
-        OnOptionChanged?.Invoke(currentOption);
+        OnOptionChanged?.Invoke(currentSlot);
     }
 
     public bool ValidatePurchase()
@@ -64,17 +64,17 @@ public class CustomizationManager : MonoBehaviour
     /// <param name="optionIndex"></param>
     private void UnlockOption(CustomizationOption option, int optionIndex)
     {
-        if(option is ColorOption colorOption)
+        if (option is ColorOption colorOption)
         {
             customizationData_SO.colors[optionIndex].isLocked = false;
         }
-        if(option is SkinOption matOption)
+        if (option is SkinOption matOption)
         {
             customizationData_SO.skins[optionIndex].isLocked = false;
         }
         currentSlot.Unlock();
     }
-    
+
     /// <summary>
     /// Updates the SkinData_SO with the given option
     /// </summary>
@@ -84,14 +84,13 @@ public class CustomizationManager : MonoBehaviour
         switch (option)
         {
             case ColorOption colorOpt:
-                skinData_SO.playerColor = colorOpt.color;
+                skinData_SO.colorOption = colorOpt;
                 skinData_SO.playerColorIndex = currentOptionIndex;
                 break;
 
-            case SkinOption materialOpt:
-                skinData_SO.playerSkin = materialOpt.skin;
+            case SkinOption skinOpt:
+                skinData_SO.skinOption = skinOpt;
                 skinData_SO.playerSkinIndex = currentOptionIndex;
-                skinData_SO.playerColor = materialOpt.skin.GetComponent<MeshRenderer>().sharedMaterial.color;
                 skinData_SO.playerColorIndex = 0;
                 break;
 

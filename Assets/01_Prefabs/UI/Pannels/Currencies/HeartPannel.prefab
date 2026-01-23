@@ -240,6 +240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e683c10c4ea40df40824c578c6c5905c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeartPannel
+  text: {fileID: 815748285569757464}
+  m_coinType: 2
   timerPannel: {fileID: 5142053142948994895}
   timerText: {fileID: 738563078742385903}
   heartAmountText: {fileID: 815748285569757464}

@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Purchasing;
 
 public class ShopManager : MonoBehaviour
 {
-    [SerializeField] private GameObject shopSlotPrefab;
+    [SerializeField] private List<GameObject> shopSlotPrefabs;
     [SerializeField] private Transform shopSlotsContainer;
 
     private ProductCatalog catalog;
@@ -14,46 +15,24 @@ public class ShopManager : MonoBehaviour
         CreateShopSlots();
     }
 
-    private void OnEnable()
-    {
-        ShopIAPManager.Instance.OnProductsFetchedEvent += OnProductsFetched;
-    }
-
-    private void OnDisable()
-    {
-        if (ShopIAPManager.Instance != null)
-        {
-            ShopIAPManager.Instance.OnProductsFetchedEvent -= OnProductsFetched;
-        }
-    }
-
     private void CreateShopSlots()
     {
+        int productIndex = 0;
+
         foreach (var product in catalog.allProducts)
         {
             GameObject slotGO = Instantiate(
-                shopSlotPrefab,
+                shopSlotPrefabs[productIndex],
                 shopSlotsContainer
             );
 
             slotGO.GetComponent<ShopSlot>()
-                .InitializeFromCatalog(product, this);
-        }
-    }
+                .InitializeFromCatalog(product, this)
+                .SetProductPrice(ShopIAPManager.Instance.Products);
 
-    private void OnProductsFetched(Product[] products)
-    {
-        foreach (Transform child in shopSlotsContainer)
-        {
-            var slot = child.GetComponent<ShopSlot>();
-            if (slot == null) continue;
-
-            foreach (var product in products)
-            {
-                slot.BindRuntimeProduct(product);
-            }
+            productIndex++;
         }
-    }
+    } 
 
     public void Buy(string productId)
     {

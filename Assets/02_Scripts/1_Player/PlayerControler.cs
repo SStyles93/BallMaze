@@ -53,6 +53,9 @@ public class PlayerControler : MonoBehaviour
     }
     public void OnMove(InputAction.CallbackContext ctx)
     {
+        if (GameStateManager.Instance?.CurrentGameState != GameState.Playing)
+            return;
+
         if (ctx.performed)
         {
             movementDirection = ctx.ReadValue<Vector2>();
@@ -68,6 +71,9 @@ public class PlayerControler : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext ctx)
     {
+        if (GameStateManager.Instance?.CurrentGameState != GameState.Playing)
+            return;
+
         if (ctx.performed)
         {
             OnJumpPerformed?.Invoke();

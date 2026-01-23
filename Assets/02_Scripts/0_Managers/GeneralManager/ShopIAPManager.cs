@@ -10,12 +10,12 @@ public class ShopIAPManager : MonoBehaviour
 
     private StoreController storeController;
     private ProductCatalog catalog;
+    private List<Product> products;
 
     private bool isConnected;
     public bool IsInitialized => storeController != null && isConnected;
 
-    // Event used by ShopManager
-    public event Action<Product[]> OnProductsFetchedEvent;
+    public List<Product> Products { get => products; set => products = value; }
 
     private void Awake()
     {
@@ -51,9 +51,9 @@ public class ShopIAPManager : MonoBehaviour
         FetchProductsFromCatalog();
     }
 
-    // ---------------- FETCH PRODUCTS ----------------
+    // --- FETCH PRODUCTS ---
 
-    void FetchProductsFromCatalog()
+    public void FetchProductsFromCatalog()
     {
         var productsToFetch = new List<ProductDefinition>();
 
@@ -71,7 +71,7 @@ public class ShopIAPManager : MonoBehaviour
         storeController.FetchProducts(productsToFetch);
     }
 
-    // ---------------- BUY ----------------
+    // --- BUY ---
 
     public void BuyProduct(string productId)
     {
@@ -84,7 +84,7 @@ public class ShopIAPManager : MonoBehaviour
         storeController.PurchaseProduct(productId);
     }
 
-    // ---------------- PURCHASE FLOW ----------------
+    // --- PURCHASE FLOW ---
 
     void OnPurchasePending(PendingOrder order)
     {
@@ -96,8 +96,6 @@ public class ShopIAPManager : MonoBehaviour
         }
 
         Debug.Log($"Purchase pending: {product.definition.id}");
-
-        GrantPayouts(product.definition.id);
         storeController.ConfirmPurchase(order);
     }
 
@@ -106,6 +104,10 @@ public class ShopIAPManager : MonoBehaviour
         if (order is ConfirmedOrder)
         {
             Debug.Log("Purchase confirmed.");
+
+            var product = GetFirstProduct(order);
+            GrantPayouts(product.definition.id);
+            SavingManager.Instance.SavePlayer();
         }
         else if (order is FailedOrder failed)
         {
@@ -125,7 +127,7 @@ public class ShopIAPManager : MonoBehaviour
         );
     }
 
-    // ---------------- PAYOUTS ----------------
+    // --- PAYOUTS ---
 
     void GrantPayouts(string productId)
     {
@@ -157,7 +159,7 @@ public class ShopIAPManager : MonoBehaviour
     }
 
 
-    // ---------------- HELPERS ----------------
+    // --- HELPERS ---
 
     Product GetFirstProduct(Order order)
     {
@@ -167,8 +169,8 @@ public class ShopIAPManager : MonoBehaviour
 
     void OnProductsFetched(List<Product> products)
     {
+        this.products = products;
         Debug.Log($"Products fetched successfully: {products.Count}");
-        OnProductsFetchedEvent?.Invoke(products.ToArray());
     }
 
     void OnProductsFetchFailed(ProductFetchFailed failure)

@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Purchasing;
+using UnityEngine.UI;
 
 public class ShopSlot : MonoBehaviour
 {
@@ -9,43 +10,42 @@ public class ShopSlot : MonoBehaviour
     [SerializeField] private Image slotImage;
 
     [Header("ShopSlot Parameters")]
-    [SerializeField] private Sprite coinStackSprite;
     [SerializeField] private TMP_Text coinAmountText;
     [SerializeField] private TMP_Text valueText;
     [SerializeField] private Button buyButton;
 
     private ProductCatalogItem catalogItem;
-    private Product runtimeProduct;
     private ShopManager shopManager;
 
     // ---------------- INITIALIZATION ----------------
 
-    public void InitializeFromCatalog(ProductCatalogItem item, ShopManager manager)
+    public ShopSlot InitializeFromCatalog(ProductCatalogItem item, ShopManager manager)
     {
         catalogItem = item;
         shopManager = manager;
 
-        slotImage.sprite = coinStackSprite;
-        valueText.text = "...";
-        buyButton.interactable = false;
+        buyButton.interactable = true;
 
         SetPayoutText(item);
 
         buyButton.onClick.RemoveAllListeners();
         buyButton.onClick.AddListener(OnBuyClicked);
+
+        return this;
     }
 
     // ---------------- RUNTIME PRODUCT BIND ----------------
 
-    public void BindRuntimeProduct(Product product)
+    public ShopSlot SetProductPrice(List<Product> products)
     {
-        if (product.definition.id != catalogItem.id)
-            return;
-
-        runtimeProduct = product;
-
-        valueText.text = product.metadata.localizedPriceString;
-        buyButton.interactable = product.availableToPurchase;
+        foreach (var product in products)
+        {
+            if (product.definition.id != catalogItem.id)
+                continue;
+            valueText.text = product.metadata.localizedPriceString;
+            buyButton.interactable = product.availableToPurchase;
+        }
+        return this;
     }
 
     // ---------------- UI HELPERS ----------------
@@ -57,7 +57,7 @@ public class ShopSlot : MonoBehaviour
             if (payout.type ==
                 ProductCatalogPayout.ProductCatalogPayoutType.Currency)
             {
-                coinAmountText.text = payout.quantity.ToString();
+                coinAmountText.text = $"<sprite index=0> {payout.quantity}";
                 return;
             }
         }

@@ -3,39 +3,44 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class HeartPannel : MonoBehaviour
+public class HeartPannel : CurrencyPannel
 {
     [Header("Timer")]
     [SerializeField] private GameObject timerPannel;
     [SerializeField] private TMP_Text timerText;
 
-    [Header("Heart")]
-    [SerializeField] private TMP_Text heartAmountText;
+    [Header("Buttons")]
     [SerializeField] private GameObject shopButton;
-    
-    private void OnEnable()
+
+    protected override void OnEnable()
     {
-        CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
-        CoinManager.Instance.OnHeartTimerTick += UpdateTimerText;
+        base.OnEnable();
+        coinManagerRef.OnHeartTimerTick += UpdateTimerText;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        CoinManager.Instance.OnCoinChanged -= UpdateCurrencyValue;
-        CoinManager.Instance.OnHeartTimerTick -= UpdateTimerText;
+        base.OnDisable();
+        coinManagerRef.OnHeartTimerTick -= UpdateTimerText;
     }
 
-    private void Start()
+    protected override void Start()
     {
-        CoinManager coinManager = CoinManager.Instance;
-        UpdateCurrencyValue(CoinType.HEART, coinManager.HeartAmount);
-        UpdateTimerText(coinManager.TimeUntilNextHeart());
-    }
+        m_coinType = CoinType.HEART;
+        if (coinManagerRef != null)
+        {
+            if (coinManagerRef.HeartAmount != coinManagerRef.PreviousHeartAmount)
+            {
+                UpdateCurrencyValue(m_coinType, coinManagerRef.HeartAmount, coinManagerRef.PreviousHeartAmount);
+                coinManagerRef.LevelPreviousCoinAmount(m_coinType);
+            }
+            else
+            {
+                SetCurrencyValue(m_coinType, coinManagerRef.HeartAmount);
+            }
+        }
 
-    private void UpdateCurrencyValue(CoinType type, int value)
-    {
-        if(type == CoinType.HEART)
-        heartAmountText.text = $"{value.ToString()}";
+        UpdateTimerText(coinManagerRef.TimeUntilNextHeart());
     }
 
     void UpdateTimerText(TimeSpan remaining)

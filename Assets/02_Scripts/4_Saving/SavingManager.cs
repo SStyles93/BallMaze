@@ -116,7 +116,10 @@ public class SavingManager : MonoBehaviour
                 gameData.levelsData[kvp.Key] = kvp.Value;
             else
                 gameData.levelsData.Add(kvp.Key, kvp.Value);
+
         }
+        gameData.difficultyDebt = LevelManager.Instance.GlobalDifficultyModifier.difficultyDebt;
+        gameData.remainingLevels = LevelManager.Instance.GlobalDifficultyModifier.remainingLevels;
     }
 
     /// <summary>
@@ -303,7 +306,7 @@ public class SavingManager : MonoBehaviour
                     failedTimes = 0,
                     wasLevelFinished = true
                 };
-                for (int i = 0; i <= CoreManager.Instance.numberOfLevels; i++)
+                for (int i = 1; i <= CoreManager.Instance.numberOfLevels; i++)
                 {
                     LevelManager.Instance.levelDataDictionnary.Add(i, levelData);
                 }
@@ -316,6 +319,9 @@ public class SavingManager : MonoBehaviour
                     LevelManager.Instance.levelDataDictionnary[kvp.Key] = kvp.Value;
                 }
             }
+
+            LevelManager.Instance.GlobalDifficultyModifier.difficultyDebt = gameData.difficultyDebt;
+            LevelManager.Instance.GlobalDifficultyModifier.remainingLevels = gameData.remainingLevels;
         }
     }
 
@@ -350,10 +356,16 @@ public class SavingManager : MonoBehaviour
             goto ShopManager;
         }
         coinManager.SetCurrencyAmount(CoinType.COIN, currentPlayerData.coins);
+        coinManager.LevelPreviousCoinAmount(CoinType.COIN);
+
         coinManager.SetCurrencyAmount(CoinType.STAR, currentPlayerData.stars);
+        coinManager.LevelPreviousCoinAmount(CoinType.STAR);
+
         coinManager.SetCurrencyAmount(CoinType.HEART, currentPlayerData.hearts);
+        coinManager.LevelPreviousCoinAmount(CoinType.HEART);
+
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
-        LifeManager.Instance.SetLife();
+        LifeManager.Instance.ResetLife();
         
 
         // --- SHOP ---
@@ -364,10 +376,10 @@ public class SavingManager : MonoBehaviour
             //Debug.Log("No ShopManager instance available");
             return;
         }
-        shopManager.skinData_SO.playerColor = shopManager.customizationData_SO.colors[currentPlayerData.colorIndex].color;
-        shopManager.skinData_SO.playerSkin = shopManager.customizationData_SO.skins[currentPlayerData.skinIndex].skin;
-        shopManager.skinData_SO.playerColorIndex = currentPlayerData.colorIndex;
+        shopManager.skinData_SO.skinOption = shopManager.customizationData_SO.skins[currentPlayerData.skinIndex];
         shopManager.skinData_SO.playerSkinIndex = currentPlayerData.skinIndex;
+        shopManager.skinData_SO.colorOption = shopManager.customizationData_SO.colors[currentPlayerData.colorIndex];
+        shopManager.skinData_SO.playerColorIndex = currentPlayerData.colorIndex;
     }
 
     /// <summary>
