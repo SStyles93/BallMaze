@@ -9,6 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+/ProjectSettings/**
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -59,6 +60,10 @@ sysinfo.txt
 *.apk
 *.aab
 *.unitypackage
+*.ninja_deps
+*.ninja_log
+*.bin
+.utmp/**
 
 # Crashlytics generated file
 crashlytics-build.properties
@@ -101,3 +106,5 @@ Assets/Resources/Baloo2-VariableFont_wght SDF.asset
 Assets/Resources/Baloo2-VariableFont_wght SDF_OUTLINE.asset
 Assets/04_Materials/Trail/M_VFX_URP_Trail_04.mat
 Assets/04_Materials/Trail/M_VFX_URP_Trail_03.mat
+Assets/01_Prefabs/Environment/PhysicalMazeGenerator.prefab
+Assets/EnvironmentColors.asset
