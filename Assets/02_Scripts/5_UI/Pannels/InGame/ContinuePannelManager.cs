@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ContinuePannelManager : MonoBehaviour
 {
+    [SerializeField] private TMP_Text levelText;
+    
+    [Header("Buttons")]
     [SerializeField] private GameObject continueButton;
     [SerializeField] private TMP_Text continueText;
     [SerializeField] private GameObject restartButton;
@@ -17,10 +20,12 @@ public class ContinuePannelManager : MonoBehaviour
 
     private void OnEnable()
     {
+        levelText.text = $"Level {LevelManager.Instance.CurrentLevelIndex}";
+
         if (CoinManager.Instance.CanAfford(CoinType.COIN, heartValueInCoins * numberOfTrials))
         {
             continueButton.SetActive(true);
-            continueText.text = $"{heartValueInCoins * numberOfTrials} <sprite index=0>  (<sprite index=2> + 1)";
+            continueText.text = $"<sprite index=0> {heartValueInCoins * numberOfTrials} <sprite index=2> + 1";
         }
         else
         {

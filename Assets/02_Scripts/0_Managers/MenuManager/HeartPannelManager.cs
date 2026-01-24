@@ -67,7 +67,7 @@ public class HeartPannelManager : MonoBehaviour
 
     void UpdateCoinValueText()
     {
-        coinAmountText.text = $"{heartValue} <sprite index=0>";
+        coinAmountText.text = $"<sprite index=0> {heartValue}";
     }
 
 

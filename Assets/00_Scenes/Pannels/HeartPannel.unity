@@ -1376,7 +1376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 269bf2d4d7d90ca4bb5c7944c0ebd37c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  heartValue: 600
+  heartValue: 150
   heartTimerText: {fileID: 568577754}
   heartAmountText: {fileID: 776825377478866334}
   coinAmountText: {fileID: 1111192368}
