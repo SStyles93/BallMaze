@@ -19,6 +19,8 @@ public class HeartPannelManager : MonoBehaviour
         CoinManager.Instance.OnCoinSet += SetCurrencyValue;
         CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
         CoinManager.Instance.OnHeartTimerTick += UpdateTimerText;
+
+        wasRewardGained = false;
     }
 
     private void OnDisable()
@@ -132,7 +134,6 @@ public class HeartPannelManager : MonoBehaviour
 
         if (manager.RewardedVideoAd.IsAdReady())
         {
-            wasRewardGained = false;
             manager.RewardedVideoAd.ShowAd();
         }
     }
