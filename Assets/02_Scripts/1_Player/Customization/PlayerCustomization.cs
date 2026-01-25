@@ -12,6 +12,7 @@ public class PlayerCustomization : MonoBehaviour
     [SerializeField] private MeshRenderer m_meshRenderer;
     [Range(0, 100)]
     [SerializeField] private int glassTintPercent = 15;
+    [SerializeField] private float emissionStrenght = 2.0f;
 
     [SerializeField] private PlayerVisualEffects m_playerVisualEffects;
 
@@ -61,6 +62,10 @@ public class PlayerCustomization : MonoBehaviour
 
         m_meshRenderer.material.color = m_meshRenderer.sharedMaterial.name.Contains("Fresnel") ?
                 TintedColourFrom(originalColor) : originalColor;
+        if (m_meshRenderer.sharedMaterial.IsKeywordEnabled("_EMISSION"))
+        {
+            m_meshRenderer.material.SetColor("_EmissionColor", originalColor * emissionStrenght);
+        }
 
         UpdateTrailColor(originalColor);
     }
@@ -76,8 +81,12 @@ public class PlayerCustomization : MonoBehaviour
             case ColorOption colorOpt:
                 if(slot.index != 0)
                 {
-                    m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
+                    m_meshRenderer.material.color = m_meshRenderer.sharedMaterial.name.Contains("Fresnel") ?
                         TintedColourFrom(colorOpt.color) : colorOpt.color;
+                    if (m_meshRenderer.sharedMaterial.IsKeywordEnabled("_EMISSION"))
+                    {
+                        m_meshRenderer.material.SetColor("_EmissionColor", colorOpt.color * emissionStrenght);
+                    }
                 }
                 else // Special Case with "NONE" Colour
                 {
@@ -90,6 +99,10 @@ public class PlayerCustomization : MonoBehaviour
             case SkinOption skinOpt:
                 InstanciateNewSkinPrefab(skinOpt.skin);
                 if (skinOpt.isPremium) m_meshRenderer.material.color = skinOpt.color;
+                if (m_meshRenderer.sharedMaterial.IsKeywordEnabled("_EMISSION"))
+                {
+                    m_meshRenderer.material.SetColor("_EmissionColor", m_meshRenderer.material.color * emissionStrenght);
+                }
                 break;
 
             default:
