@@ -23,7 +23,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 0c4c5b8f00780ae43b42891e26c371b1, type: 3}
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
-  - isLocked: 0
+  - isLocked: 1
     levelToUnlock: 0
     price:
       CoinType: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 5
+    levelToUnlock: 0
     price:
       CoinType: 0
       Amount: 150
@@ -44,7 +44,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 5
+    levelToUnlock: 0
     price:
       CoinType: 0
       Amount: 150
@@ -54,7 +54,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 8
+    levelToUnlock: 0
     price:
       CoinType: 0
       Amount: 150
@@ -64,7 +64,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 8
+    levelToUnlock: 0
     price:
       CoinType: 0
       Amount: 150
@@ -74,7 +74,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 10
+    levelToUnlock: 0
     price:
       CoinType: 0
       Amount: 150
@@ -84,7 +84,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 10
+    levelToUnlock: 0
     price:
       CoinType: 0
       Amount: 150
@@ -94,7 +94,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 12
+    levelToUnlock: 8
     price:
       CoinType: 0
       Amount: 300
@@ -104,7 +104,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 12
+    levelToUnlock: 8
     price:
       CoinType: 0
       Amount: 300
@@ -114,7 +114,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 15
+    levelToUnlock: 10
     price:
       CoinType: 0
       Amount: 300
@@ -124,7 +124,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - isLocked: 1
-    levelToUnlock: 15
+    levelToUnlock: 10
     price:
       CoinType: 0
       Amount: 300
@@ -133,6 +133,46 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: cd2114be9eba84441836b5cdce3adb2f, type: 3}
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
+  - isLocked: 1
+    levelToUnlock: 12
+    price:
+      CoinType: 0
+      Amount: 450
+    name: 
+    skin: {fileID: 2043128687369127624, guid: 3c38ad989c380f1499d09dc0fe6ff644, type: 3}
+    sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
+    isPremium: 0
+    color: {r: 0.61960787, g: 0.007843138, b: 0.007843138, a: 1}
+  - isLocked: 1
+    levelToUnlock: 12
+    price:
+      CoinType: 0
+      Amount: 450
+    name: 
+    skin: {fileID: 2043128687369127624, guid: fb38d19dce4cc634d87661e08580085b, type: 3}
+    sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
+    isPremium: 0
+    color: {r: 0.61960787, g: 0.007843138, b: 0.007843138, a: 1}
+  - isLocked: 1
+    levelToUnlock: 15
+    price:
+      CoinType: 0
+      Amount: 450
+    name: 
+    skin: {fileID: 2043128687369127624, guid: 950735c5209630048bcebf292d737960, type: 3}
+    sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
+    isPremium: 0
+    color: {r: 0.61960787, g: 0.007843138, b: 0.007843138, a: 1}
+  - isLocked: 1
+    levelToUnlock: 15
+    price:
+      CoinType: 0
+      Amount: 450
+    name: 
+    skin: {fileID: 2043128687369127624, guid: 163085b534ae5e149996ca9f1f6d71d5, type: 3}
+    sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
+    isPremium: 0
+    color: {r: 0.61960787, g: 0.007843138, b: 0.007843138, a: 1}
   - isLocked: 1
     levelToUnlock: 18
     price:
@@ -214,7 +254,7 @@ MonoBehaviour:
     isPremium: 1
     color: {r: 0.43137255, g: 0.1764706, b: 0.68235296, a: 1}
   - isLocked: 1
-    levelToUnlock: 40
+    levelToUnlock: 30
     price:
       CoinType: 1
       Amount: 20
@@ -224,7 +264,7 @@ MonoBehaviour:
     isPremium: 1
     color: {r: 0, g: 0.58431375, b: 0.09019608, a: 1}
   - isLocked: 1
-    levelToUnlock: 40
+    levelToUnlock: 30
     price:
       CoinType: 1
       Amount: 20
@@ -234,7 +274,7 @@ MonoBehaviour:
     isPremium: 1
     color: {r: 0.30980393, g: 0, b: 0.63529414, a: 1}
   - isLocked: 1
-    levelToUnlock: 45
+    levelToUnlock: 40
     price:
       CoinType: 1
       Amount: 30
@@ -244,7 +284,7 @@ MonoBehaviour:
     isPremium: 1
     color: {r: 0.6666667, g: 0.2509804, b: 0.2509804, a: 1}
   - isLocked: 1
-    levelToUnlock: 45
+    levelToUnlock: 40
     price:
       CoinType: 1
       Amount: 30
@@ -274,7 +314,7 @@ MonoBehaviour:
     isPremium: 1
     color: {r: 0.30980393, g: 0.49803922, b: 0.6117647, a: 1}
   - isLocked: 1
-    levelToUnlock: 55
+    levelToUnlock: 60
     price:
       CoinType: 1
       Amount: 40
@@ -284,7 +324,7 @@ MonoBehaviour:
     isPremium: 1
     color: {r: 0.5529412, g: 0.25882354, b: 0.36078432, a: 1}
   - isLocked: 1
-    levelToUnlock: 55
+    levelToUnlock: 60
     price:
       CoinType: 1
       Amount: 40

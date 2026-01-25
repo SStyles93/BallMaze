@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MaterialPannelInitializer : MonoBehaviour
+public class MaterialPannelManager : MonoBehaviour
 {
+    [Header("Project References")]
+    [SerializeField] private CustomizationData_SO customizationData_SO;
 
-    // Reference to the player customization
+    [Header("Scene References")]
     [SerializeField] PlayerCustomization playerCustomization;
-
     [SerializeField] private GameObject materialSlotsContainer;
     [SerializeField] private GameObject materialSlotPrefab;
 
-    [SerializeField] private CustomizationData_SO customizationData_SO;
 
     private void Start()
     {

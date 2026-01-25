@@ -13,7 +13,7 @@ public class CustomizationManager : MonoBehaviour
     private int currentOptionIndex = 0;
 
     public event Action<CustomizationSlot> OnOptionChanged;
-    public event Action OnUpdatePlayerOption;
+    public event Action OnUpdatePlayerSkinOption;
 
     private void Awake()
     {
@@ -51,7 +51,8 @@ public class CustomizationManager : MonoBehaviour
             // TODO: Validation (V+S FX)
             AudioManager.Instance?.PlayValidate();
 
-            UpdatePlayerOption(currentOption);
+            // Called to update UI buttons
+            OnOptionChanged?.Invoke(currentSlot);
 
             return true;
         }
@@ -79,7 +80,7 @@ public class CustomizationManager : MonoBehaviour
     /// Updates the SkinData_SO with the given option
     /// </summary>
     /// <param name="option">the current option to be passed to the SkinData</param>
-    private void UpdatePlayerOption(CustomizationOption option)
+    public void UpdatePlayerSkinDataWithOption(CustomizationOption option)
     {
         switch (option)
         {
@@ -95,9 +96,9 @@ public class CustomizationManager : MonoBehaviour
                 break;
 
             default:
-                return;
+                break;
         }
 
-        OnUpdatePlayerOption?.Invoke();
+        OnUpdatePlayerSkinOption?.Invoke();
     }
 }

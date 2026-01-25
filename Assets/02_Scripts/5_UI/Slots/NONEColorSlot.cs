@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class NONEColorSlot : CustomizationSlot
 {
     [SerializeField] private PlayerCustomization playerCustomizationRef;
+    [SerializeField] private CustomizationData_SO customizationData_SO;
 
     private void Start()
     {
@@ -15,8 +16,11 @@ public class NONEColorSlot : CustomizationSlot
         // If the click released when over the slot
         if (!eventData.dragging && isMouseOver)
         {
+            this.index = 0;
+            this.option = customizationData_SO.colors[0];
+            this.isLocked = false;
             // Option is assigned to the player (is unlocked)
-            playerCustomization.AssignOriginalColor();
+            CustomizationManager.Instance.SetCurrentCustomizationSlot(this);
             //Debug.Log($"PointerUp on {this.gameObject.name}");
         }
     }

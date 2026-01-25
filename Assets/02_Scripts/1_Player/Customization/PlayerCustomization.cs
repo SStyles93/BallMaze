@@ -17,13 +17,13 @@ public class PlayerCustomization : MonoBehaviour
 
     private void OnEnable()
     {
-        CustomizationManager.Instance.OnUpdatePlayerOption += UpdateAppearence;
+        CustomizationManager.Instance.OnUpdatePlayerSkinOption += UpdateAppearence;
         CustomizationManager.Instance.OnOptionChanged += PreviewOption;
     }
 
     private void OnDisable()
     {
-        CustomizationManager.Instance.OnUpdatePlayerOption -= UpdateAppearence;
+        CustomizationManager.Instance.OnUpdatePlayerSkinOption -= UpdateAppearence;
         CustomizationManager.Instance.OnOptionChanged -= PreviewOption;
     }
 
@@ -74,58 +74,30 @@ public class PlayerCustomization : MonoBehaviour
         switch (slot.option)
         {
             case ColorOption colorOpt:
-                m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
-                    TintedColourFrom(colorOpt.color) : colorOpt.color;
+                if(slot.index != 0)
+                {
+                    m_meshRenderer.material.color = m_meshRenderer.material.name.Contains("Fresnel") ?
+                        TintedColourFrom(colorOpt.color) : colorOpt.color;
+                }
+                else // Special Case with "NONE" Colour
+                {
+                    Color originalColor = playerSkinData_SO.skinOption.skin.GetComponent<MeshRenderer>().sharedMaterial.color;
+                    m_meshRenderer.material.color = m_meshRenderer.sharedMaterial.name.Contains("Fresnel") ?
+                    TintedColourFrom(originalColor) : originalColor;
+                }
                 break;
 
             case SkinOption skinOpt:
                 InstanciateNewSkinPrefab(skinOpt.skin);
                 if (skinOpt.isPremium) m_meshRenderer.material.color = skinOpt.color;
                 break;
-        }
-    }
 
-    /// <summary>
-    /// Assigns the Option to the MeshRender AND the SKinData_SO
-    /// </summary>
-    /// <param name="option">Option to pass</param>
-    /// <param name="index">Index of the option to pass</param>
-    public void AssignOption(CustomizationOption option, int index)
-    {
-        switch (option)
-        {
-            case ColorOption colorOpt:
-                AssignColorOption(colorOpt, index);
-                break;
-
-            case SkinOption skinOpt:
-                InstanciateNewSkinPrefab(skinOpt.skin);
-                AssignSkinOption(skinOpt, index);
+            default:
                 break;
         }
-    }
-
-    /// <summary>
-    /// Assign the original color of the material
-    /// </summary>
-    public void AssignOriginalColor()
-    {
-        playerSkinData_SO.playerColorIndex = 0;
-        UpdateAppearence();
     }
 
     // --- PRIVATE METHODS ---
-
-    private void AssignColorOption(ColorOption colorOpt, int colorIndex)
-    {
-        playerSkinData_SO.colorOption = colorOpt;
-        playerSkinData_SO.playerColorIndex = colorIndex;
-    }
-    private void AssignSkinOption(SkinOption skinOpt, int skinIndex)
-    {
-        playerSkinData_SO.skinOption = skinOpt;
-        playerSkinData_SO.playerSkinIndex = skinIndex;
-    }
 
     private void InstanciateNewSkinPrefab(GameObject skinPrefab)
     {

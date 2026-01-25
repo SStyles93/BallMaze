@@ -1,5 +1,7 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ValidationPannelManager : MonoBehaviour
 {
@@ -8,16 +10,17 @@ public class ValidationPannelManager : MonoBehaviour
 
     [Header("Validation Pannel")]
     [SerializeField] private GameObject validationPannel;
+    [SerializeField] private TMP_Text validationText;
     [SerializeField] private GameObject buyButton;
     [SerializeField] private TMP_Text buyButtonText = null;
-    [SerializeField] private TMP_Text validationText;
+    [SerializeField] private GameObject lockImage;
+    [SerializeField] private TMP_Text lockText = null;
 
     [Header("Insufficient Funds Pannel")]
     [SerializeField] private GameObject insufficientFundsPannel;
 
-    [SerializeField] private GameObject colorTab;
 
-    private CustomizationOption selectedOption = null;
+    [SerializeField] private CustomizationOption selectedOption = null;
 
     private void OnEnable()
     {
@@ -30,8 +33,8 @@ public class ValidationPannelManager : MonoBehaviour
 
     private void Awake()
     {
-        if(buyButton != null && buyButtonText == null)
-            buyButtonText = buyButton.GetComponent<TMP_Text>();
+        if (buyButton != null && buyButtonText == null)
+            buyButtonText = buyButton.GetComponentInChildren<TMP_Text>();
     }
 
     private void Start()
@@ -39,21 +42,21 @@ public class ValidationPannelManager : MonoBehaviour
         validationPannel.SetActive(false);
         insufficientFundsPannel.SetActive(false);
         buyButton.SetActive(false);
-
-        bool showTab = !playerSkinData_SO.skinOption.isPremium;
-        colorTab.SetActive(showTab);
     }
 
     /// <summary>
     /// Opens and Initializes the Validation Pannel with the selected Option
     /// </summary>
     /// <remarks>Method called from the "BUY" button in the customization scene</remarks>
-    public void OnBuyButtonClicked()
+    public void OpenValidationPannel()
     {
         validationPannel.SetActive(true);
         InitializePannelWithOption(selectedOption);
     }
 
+    /// <summary>
+    /// Method called by pannel Button
+    /// </summary>
     public void ClosePannel()
     {
         validationPannel.SetActive(false);
@@ -66,17 +69,13 @@ public class ValidationPannelManager : MonoBehaviour
     {
         if (CustomizationManager.Instance.ValidatePurchase())
         {
-            // Disables the Buy button
             buyButton.gameObject.SetActive(false);
-
             validationPannel.SetActive(false);
-
         }
         else
         {
             insufficientFundsPannel.SetActive(true);
             insufficientFundsPannel.GetComponent<InsufficientFundsPannelManager>().InitializePannel(selectedOption.price.CoinType);
-
             validationPannel.SetActive(false);
         }
     }
@@ -97,17 +96,75 @@ public class ValidationPannelManager : MonoBehaviour
     private void SetSelectedOption(CustomizationSlot slot)
     {
         selectedOption = slot.option;
-        SetBuyButtonText(slot);
-        bool showTab = !playerSkinData_SO.skinOption.isPremium;
-        colorTab.SetActive(showTab);
+        if (slot.option.isLocked)
+        {
+            buyButton.SetActive(true);
+            SetBuyButtonText(selectedOption);
+
+            // NOT LOCKED BY LEVEL
+            if (!slot.isLockedByLevel)
+            {
+                SetBuyButtonActive(true);
+                lockImage.SetActive(false);
+            }
+            else
+            {
+                SetLockText(selectedOption);
+                lockImage.SetActive(true);
+                SetBuyButtonActive(false);
+            }
+        }
+        else
+        {
+            buyButton.SetActive(false);
+            lockImage.SetActive(false);
+        }
     }
 
-    private void SetBuyButtonText(CustomizationSlot slot)
+    private void SetBuyButtonActive(bool isBuyActive)
     {
-        // Enable the button if locked (not bought) and not locked by level
-        bool showBuyButton = slot.option.isLocked && !slot.isLockedByLevel;
+        if (isBuyActive)
+        {
+            
+            buyButton.GetComponent<Button>().interactable = true;
+            buyButton.SetImageAlphaValue(255);
+            buyButtonText.SetTextAlphaValue(255);
+        }
+        else
+        {
+            buyButton.GetComponent<Button>().interactable = false;
+            buyButton.SetImageAlphaValue(50);
+            buyButtonText.SetTextAlphaValue(50);
+        }
+    }
 
-        buyButton.gameObject.SetActive(showBuyButton);
-        buyButtonText.text = $"<sprite index={(int)slot.option.price.CoinType}> {selectedOption.price.Amount}";
+    private void SetBuyButtonText(CustomizationOption option)
+    {
+        buyButtonText.text = $"<sprite index={(int)option.price.CoinType}> {option.price.Amount}";
+    }
+
+    private void SetLockText(CustomizationOption option)
+    {
+        lockText.text = $"Unlock at level {option.levelToUnlock}";
+    }
+}
+
+public static class GameObjectExtensions
+{
+    public static void SetImageAlphaValue(this GameObject gameObject, int alphaValue)
+    {
+        Image image = gameObject.GetComponent<Image>();
+        if (image == null) return;
+
+        Color tintedColor = image.color;
+        tintedColor.a = 1.0f / 255.0f * alphaValue;
+        image.color = tintedColor;
+    }
+
+    public static void SetTextAlphaValue(this TMP_Text text, int alphaValue)
+    {
+        Color tintedColor = text.color;
+        tintedColor.a = 1.0f/255.0f * alphaValue;
+        text.color = tintedColor;
     }
 }
