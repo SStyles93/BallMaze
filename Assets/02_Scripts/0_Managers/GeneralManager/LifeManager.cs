@@ -37,9 +37,6 @@ public class LifeManager : MonoBehaviour
 
         LevelManager.Instance.IncreaseLivesLostToThisLevel();
         OnLifeRemoved?.Invoke();
-
-        //if (currentLife <= 0)
-        //    KillPlayer();
     }
 
     /// <summary>
@@ -48,12 +45,8 @@ public class LifeManager : MonoBehaviour
     public void ResetLife()
     {
         CoinManager currencyManager = CoinManager.Instance;
-        // Sets the amount of life according to the Heart currency amount
-        if (currencyManager.HeartAmount >= 3)
-            //(max 3 hearts in game)
-            currentLife = 3;
-        else
-            currentLife = currencyManager.HeartAmount;
+        // Sets the amount of life according to the Heart currency amount 
+        currentLife = Mathf.Clamp(currencyManager.HeartAmount, 0, 3); //(max 3 hearts in game)
     }
 
     public void SetLife(int value)

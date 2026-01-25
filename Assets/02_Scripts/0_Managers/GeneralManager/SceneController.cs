@@ -29,6 +29,8 @@ public class SceneController : MonoBehaviour
     private Dictionary<string, string> loadedSceneBySlot = new();
     private bool isBusy = false;
 
+    public SceneDatabase.Scenes PreviousActiveScene;
+
     // --- API ---
 
     public bool IsGameLoaded()
@@ -98,7 +100,7 @@ public class SceneController : MonoBehaviour
             }
         }
 
-        if(plan.ActiveScene != SceneManager.GetActiveScene().name)
+        if (plan.ActiveScene != SceneManager.GetActiveScene().name)
         {
             Scene activeScene = SceneManager.GetSceneByName(plan.ActiveScene);
             SceneManager.SetActiveScene(activeScene);
@@ -130,6 +132,7 @@ public class SceneController : MonoBehaviour
 
         if (setActive)
         {
+            PreviousActiveScene = DatabaseSceneFromScene(SceneManager.GetActiveScene());
             Scene newScene = SceneManager.GetSceneByName(sceneName);
             if (newScene.IsValid() && newScene.isLoaded)
             {
@@ -222,5 +225,15 @@ public class SceneController : MonoBehaviour
         {
             SceneController.Instance.StartCoroutine(SceneController.Instance.ExecutePlan(this));
         }
+
+    }
+    private SceneDatabase.Scenes DatabaseSceneFromScene(Scene scene)
+    {
+        if (Enum.TryParse<SceneDatabase.Scenes>(
+               scene.name, out SceneDatabase.Scenes databaseScene))
+        {
+            return databaseScene;
+        }
+        else return SceneDatabase.Scenes.Null;
     }
 }
