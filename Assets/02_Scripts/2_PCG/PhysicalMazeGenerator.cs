@@ -185,9 +185,9 @@ public class PhysicalMazeGenerator : MonoBehaviour
     {
         return type switch
         {
-            OverlayType.Start => 1.4f,
-            OverlayType.End => 1.4f,
-            OverlayType.Star => 0.9f,
+            OverlayType.Start => 1.52f,
+            OverlayType.End => 1.52f,
+            OverlayType.Star => 1.0f,
             _ => 0f
         };
     }
