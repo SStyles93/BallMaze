@@ -308,6 +308,7 @@ MonoBehaviour:
   m_visualContainer: {fileID: 6644927266387035701}
   m_meshRenderer: {fileID: 0}
   glassTintPercent: 100
+  emissionStrenght: 2.25
   m_playerVisualEffects: {fileID: 959544580089661260}
 --- !u!114 &959544580089661260
 MonoBehaviour:

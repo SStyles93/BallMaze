@@ -747,7 +747,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unlockAllLevels: 0
+  unlockAllLevels: 1
   numberOfLevels: 200
 --- !u!1 &567788078
 GameObject:
@@ -1109,6 +1109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingOverlay: {fileID: 332380844}
+  PreviousActiveScene: 0
 --- !u!1 &1192641768
 GameObject:
   m_ObjectHideFlags: 0

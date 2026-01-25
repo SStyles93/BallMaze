@@ -850,7 +850,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5241054628349258133
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1245,6 +1245,7 @@ MonoBehaviour:
   m_visualContainer: {fileID: 6133059397183963696}
   m_meshRenderer: {fileID: 0}
   glassTintPercent: 100
+  emissionStrenght: 2.25
   m_playerVisualEffects: {fileID: 0}
 --- !u!114 &8230093531960402944
 MonoBehaviour:
