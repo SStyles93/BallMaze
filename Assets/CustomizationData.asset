@@ -23,7 +23,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 0c4c5b8f00780ae43b42891e26c371b1, type: 3}
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
-  - isLocked: 1
+  - isLocked: 0
     levelToUnlock: 0
     price:
       CoinType: 0
