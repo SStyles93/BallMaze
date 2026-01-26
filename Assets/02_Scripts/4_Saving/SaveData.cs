@@ -48,8 +48,8 @@ public class PlayerData : SaveableData
 [System.Serializable]
 public class SkinShopData : SaveableData
 {
-    public List<bool> colorsLockedState;
-    public List<bool> skinsLockedState;
+    public Dictionary<string, bool> skinsLockedState;
+    public Dictionary<string, bool> colorsLockedState;
 }
 
 /// <summary>

@@ -9,11 +9,15 @@ using UnityEngine.InputSystem.EnhancedTouch;
 public class PlayerControler : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
-    private Vector2 movementDirection = Vector2.zero;
 
     #region Touch
     [SerializeField] private float joystickDeadZone = 20f; // pixels
     [SerializeField] private float tapMaxDuration = 0.25f;
+    [SerializeField] private float tapWindowTime = 1.0f; // seconds
+
+    private Vector2 movementDirection = Vector2.zero;
+    private Vector2 lastMovementDirection = Vector2.zero;
+    private float lastMovementTimer = 0f;
 
     private Finger joystickFinger;
     private Vector2 joystickStartPos;
@@ -71,6 +75,9 @@ public class PlayerControler : MonoBehaviour
 
     private void Update()
     {
+        if (lastMovementTimer > 0f)
+            lastMovementTimer -= Time.deltaTime;
+
         foreach (var touch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
         {
             switch (touch.phase)
@@ -88,6 +95,11 @@ public class PlayerControler : MonoBehaviour
                     OnFingerUp(touch.finger);
                     break;
             }
+        }
+
+        if (joystickFinger != null && !joystickFinger.isActive)
+        {
+            ResetJoystick();
         }
     }
 
@@ -135,6 +147,8 @@ public class PlayerControler : MonoBehaviour
 
     private void OnFingerDown(Finger finger)
     {
+        if (IsPointerOverUI()) return;
+
         Vector2 pos = finger.screenPosition;
 
         if (joystickFinger == null)
@@ -163,11 +177,13 @@ public class PlayerControler : MonoBehaviour
             return;
 
         Vector2 normalized = Vector2.ClampMagnitude(delta / joystickDeadZone, 1f);
-        OnMovePerfromed?.Invoke(normalized);
+        SendMovement(normalized);
     }
 
     private void OnFingerUp(Finger finger)
     {
+        if (IsPointerOverUI()) return;
+
         float duration = (float)(
             finger.currentTouch.time - finger.currentTouch.startTime
         );
@@ -180,17 +196,16 @@ public class PlayerControler : MonoBehaviour
         // Joystick finger released
         if (finger == joystickFinger)
         {
-            joystickFinger = null;
-            OnTouchStopped?.Invoke();
-            OnMovePerfromed?.Invoke(Vector2.zero);
-
-            // TAP → jump
-            if (!joystickFingerDragged &&
+            bool isTapJump = !joystickFingerDragged &&
                 duration <= tapMaxDuration &&
-                distance <= joystickDeadZone)
+                distance <= joystickDeadZone;
+
+            if (isTapJump)
             {
-                OnJumpPerformed?.Invoke();
+                PerformJump();
             }
+
+            ResetJoystick();
 
             return;
         }
@@ -198,15 +213,45 @@ public class PlayerControler : MonoBehaviour
         // Any other finger → jump
         if (duration <= tapMaxDuration && distance <= joystickDeadZone)
         {
-            if (!IsPointerOverUI(finger.screenPosition))
-                OnJumpPerformed?.Invoke();
+            PerformJump();
         }
     }
-    #endregion
 
-    private bool IsPointerOverUI(Vector2 screenPosition)
+    // --- PRIVATE METHODS ---
+
+    private void SendMovement(Vector2 input)
+    {
+        if (input.magnitude > 0.2f)
+        {
+            lastMovementDirection = input;
+            lastMovementTimer = tapWindowTime;
+        }
+
+        OnMovePerfromed?.Invoke(input);
+    }
+
+    private void PerformJump()
+    {
+        if (lastMovementTimer > 0f)
+        {
+            // Re-emit last movement so jump uses it
+            OnMovePerfromed?.Invoke(lastMovementDirection);
+        }
+
+        OnJumpPerformed?.Invoke();
+    }
+
+    private void ResetJoystick()
+    {
+        joystickFinger = null;
+        joystickFingerDragged = false;
+        SendMovement(Vector2.zero);
+        OnTouchStopped?.Invoke();
+    }
+
+    private bool IsPointerOverUI()
     {
         return EventSystem.current.IsPointerOverGameObject();
     }
-
+    #endregion
 }

@@ -149,10 +149,14 @@ public static class RuntimeLevelProgression
         // ENVIRONMENTAL DIFFICULTY
         // -------------------------
 
-        bool isRecovery = IsRecoveryLevel(cycleIndex, cycleLevel);
+        bool hasMaxRelief = HasMaxDifficultyRelief(
+            livesLostThisLevel, failedTimes, globalDifficultyDebt);
 
-        LevelArchetypeData_SO archetype = SelectArchetype(cycleProgression,
-            cycleIndex,cycleLevel,isRecovery);
+        bool isRecovery = IsRecoveryLevel(
+            cycleIndex, cycleLevel, hasMaxRelief);
+
+        LevelArchetypeData_SO archetype = SelectArchetype(
+            cycleProgression, cycleIndex, cycleLevel, isRecovery);
 
         ApplyArchetypeData(
             archetype,
@@ -193,8 +197,12 @@ public static class RuntimeLevelProgression
     // RECOVERY LOGIC
     // -------------------------
 
-    static bool IsRecoveryLevel(int cycleIndex, int cycleLevel)
+    static bool IsRecoveryLevel(
+    int cycleIndex,int cycleLevel,bool hasMaxRelief)
     {
+        if (!hasMaxRelief)
+            return false;
+
         int recoveryFrequency = Mathf.Clamp(6 - cycleIndex, 3, 6);
         return (cycleLevel % recoveryFrequency) == recoveryFrequency - 1;
     }
@@ -263,5 +271,14 @@ public static class RuntimeLevelProgression
                     break;
             }
         }
+    }
+
+    static bool HasMaxDifficultyRelief(
+    int livesLostThisLevel,int failedTimes,float globalDifficultyDebt)
+    {
+        bool maxLocalRelief = livesLostThisLevel >= 3;
+        bool maxGlobalRelief = globalDifficultyDebt >= 1f;
+
+        return maxLocalRelief && maxGlobalRelief;
     }
 }

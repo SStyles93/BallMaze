@@ -201,20 +201,21 @@ public class SavingManager : MonoBehaviour
 
         SkinShopData shopData = new SkinShopData
         {
-            colorsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length),
-            skinsLockedState = new List<bool>(CustomizationManager.Instance.customizationData_SO.colors.Length)
+            colorsLockedState = new Dictionary<string, bool>(),
+            skinsLockedState = new Dictionary<string, bool>()
         };
+
+
+        // Save materials state (un-locked)
+        foreach (var skinOption in currentDataSO.skins)
+        {
+            shopData.skinsLockedState[skinOption.Id] = skinOption.isLocked;
+        }
 
         // Save colors state (un-locked)
         foreach (var colorOption in currentDataSO.colors)
         {
-            shopData.colorsLockedState.Add(colorOption.isLocked);
-        }
-
-        // Save materials state (un-locked)
-        foreach (var materialOption in currentDataSO.skins)
-        {
-            shopData.skinsLockedState.Add(materialOption.isLocked);
+            shopData.colorsLockedState[colorOption.Id] = colorOption.isLocked;
         }
 
         currentSkinData = shopData;
@@ -429,19 +430,30 @@ public class SavingManager : MonoBehaviour
             return;
         }
 
-        // Restore colors state (un-locked)
-        for (int i = 0; i < dataSO.colors.Count(); i++)
+        // Restore skins state (un-locked)
+        foreach (var skinOption in dataSO.skins)
         {
-            // Ensure saved list has the same size
-            if (i < currentSkinData.colorsLockedState.Count)
-                dataSO.colors[i].isLocked = currentSkinData.colorsLockedState[i];
+            if (currentSkinData.skinsLockedState.TryGetValue(skinOption.Id, out bool locked))
+            {
+                skinOption.isLocked = locked;
+            }
+            else // new Skin => Locked by default
+            {
+                skinOption.isLocked = true;
+            }
         }
 
-        // Restore materials state (un-locked)
-        for (int i = 0; i < dataSO.skins.Count(); i++)
+        // Restore colors state (un-locked)
+        foreach (var colorOption in dataSO.colors)
         {
-            if (i < currentSkinData.skinsLockedState.Count)
-                dataSO.skins[i].isLocked = currentSkinData.skinsLockedState[i];
+            if (currentSkinData.colorsLockedState.TryGetValue(colorOption.Id, out bool locked))
+            {
+                colorOption.isLocked = locked;
+            }
+            else // new color added => locked by default
+            {
+                colorOption.isLocked = true;
+            }
         }
     }
 

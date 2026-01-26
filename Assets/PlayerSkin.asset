@@ -13,24 +13,24 @@ MonoBehaviour:
   m_Name: PlayerSkin
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkinData_SO
   skinOption:
-    isLocked: 0
+    id: marble_type01_m_03
+    isLocked: 1
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 150
-    name: 
+      Amount: 0
     skin: {fileID: 2043128687369127624, guid: d21b3a85df215eb4b9fda965208772be, type: 3}
-    sprite: {fileID: 21300000, guid: 609922154c5d6784cb6e8d08327c8016, type: 3}
+    sprite: {fileID: 21300000, guid: 2d355c05a2d01d447bf2bce00d806c6f, type: 3}
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   playerSkinIndex: 0
   colorOption:
+    id: NONE
     isLocked: 0
     levelToUnlock: 0
     price:
       CoinType: 0
       Amount: 0
-    name: NONE
     color: {r: 1, g: 1, b: 1, a: 1}
   playerColorIndex: 0
   firstSkin: {fileID: 2043128687369127624, guid: d21b3a85df215eb4b9fda965208772be, type: 3}

@@ -12,10 +12,13 @@ public class CustomizationData_SO : ScriptableObject
 [System.Serializable]
 public class CustomizationOption
 {
+    [SerializeField] private string id;
     public bool isLocked;
     public int levelToUnlock;
     public CoinQuantityPair price;
-    public string name;
+
+    public string Id => id;
+    public void SetID(string id) { this.id = id; }
 }
 
 [System.Serializable]
@@ -42,7 +45,13 @@ public class CustomizationData_SO_CustomInspectior : Editor
         base.OnInspectorGUI();
         CustomizationData_SO _target = (CustomizationData_SO)target;
 
-        if (GUILayout.Button("Reset Data"))
+        GUIStyle style = new GUIStyle(GUI.skin.button);
+        style.normal.textColor = Color.white;
+        style.fontStyle = FontStyle.Bold;
+
+
+        GUI.color = Color.green;
+        if (GUILayout.Button("Reset Data", style, GUILayout.ExpandWidth(true)))
         {
             for (int i = 1; i < _target.skins.Length; i++)
             {
@@ -58,7 +67,8 @@ public class CustomizationData_SO_CustomInspectior : Editor
             AssetDatabase.Refresh();
         }
 
-        if (GUILayout.Button("Unlock All"))
+        GUI.color = Color.yellow;
+        if (GUILayout.Button("Unlock All", style, GUILayout.ExpandWidth(true)))
         {
             for (int i = 0; i < _target.skins.Length; i++)
             {
@@ -73,6 +83,22 @@ public class CustomizationData_SO_CustomInspectior : Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+
+        GUILayout.Space(20);
+
+        GUI.color = Color.red;
+        if (GUILayout.Button("Set All Skins ID", style, GUILayout.ExpandWidth(true)))
+        {
+            for (int i = 0; i < _target.skins.Length; i++)
+            {
+                _target.skins[i].SetID(_target.skins[i].skin.name.ToLower());
+            }
+
+            EditorUtility.SetDirty(_target);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+        GUI.color = Color.white;
     }
 }
 #endif
