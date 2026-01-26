@@ -141,6 +141,7 @@ public class SavingManager : MonoBehaviour
         playerSaveData.stars = coinManager.StarAmount;
         playerSaveData.hearts = coinManager.HeartAmount;
         playerSaveData.lastHeartRefillTime = coinManager.LastHeartRefillTime;
+        playerSaveData.hasReceivedGift = coinManager.HasPlayerReceivedGift;
 
 
         // --- SHOP ---
@@ -343,6 +344,7 @@ public class SavingManager : MonoBehaviour
                 hearts = CoinManager.Instance.InitialHeartAmount,
                 colorIndex = 0,
                 skinIndex = 0,
+                hasReceivedGift = false,
 
             };
             //Debug.Log("Current Session Data does not exist, creating new PlayerData");
@@ -367,7 +369,8 @@ public class SavingManager : MonoBehaviour
 
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
         LifeManager.Instance.ResetLife();
-        
+
+        coinManager.HasPlayerReceivedGift = currentPlayerData.hasReceivedGift;
 
         // --- SHOP ---
         ShopManager:

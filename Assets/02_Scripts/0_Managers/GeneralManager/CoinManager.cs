@@ -12,6 +12,8 @@ public class CoinManager : MonoBehaviour
     [SerializeField] int maxHeartAmount = 15;
     [Tooltip("Time to regain a heart (in Secondd) 1m = 60")]
     [SerializeField] private int timeToRegainHeartInMinutes = 10;
+    public bool HasPlayerReceivedGift = false;
+        
     private DateTime lastHeartRefillTime;
     Coroutine timerCoroutine;
     bool isDataLoaded = false;

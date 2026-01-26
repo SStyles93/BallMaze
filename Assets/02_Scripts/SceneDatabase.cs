@@ -21,6 +21,7 @@ public class SceneDatabase : MonoBehaviour
         SettingsPannel,
         ShopMenu,
         CreditsPannel,
-        HeartPannel
+        HeartPannel,
+        GiftPannel
     }
 }

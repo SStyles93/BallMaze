@@ -31,6 +31,8 @@ public class SceneController : MonoBehaviour
 
     public SceneDatabase.Scenes PreviousActiveScene;
 
+    public bool IsBusy => isBusy;
+
     // --- API ---
 
     public bool IsGameLoaded()

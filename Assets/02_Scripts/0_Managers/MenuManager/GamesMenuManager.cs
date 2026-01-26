@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,8 +27,21 @@ public class GamesMenuManager : MonoBehaviour
 
         scrollbar.value = scrollbarData.scrollbarValue;
         scrollbar.size = scrollbarData.scrollbarSize;
-
         playButton.InitializeLastLevelToPlay();
+
+        if (!CoinManager.Instance.HasPlayerReceivedGift)
+            StartCoroutine(LoadGiftPannelRoutine());
+    }
+
+    private IEnumerator LoadGiftPannelRoutine()
+    {
+        // Wait until scene controller is ready
+        yield return new WaitUntil(() => !SceneController.Instance.IsBusy);
+
+        //// Optional delay for pacing / polish
+        //yield return new WaitForSeconds(0.2f);
+        
+        OpenGiftPannel();
     }
 
     public void SetLevelToPlay(int index)
@@ -115,6 +129,14 @@ public class GamesMenuManager : MonoBehaviour
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.HeartPannel)
+            .Perform();
+    }
+
+    public void OpenGiftPannel()
+    {
+        SceneController.Instance
+            .NewTransition()
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GiftPannel)
             .Perform();
     }
 

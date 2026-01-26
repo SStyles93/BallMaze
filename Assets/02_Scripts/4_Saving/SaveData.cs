@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine.Rendering.Universal;
 
 public class SaveableData { }
 
@@ -40,6 +41,7 @@ public class PlayerData : SaveableData
     public int hearts;
     public int colorIndex;
     public int skinIndex;
+    public bool hasReceivedGift;
 }
 
 /// <summary>
