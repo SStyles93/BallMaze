@@ -1,6 +1,9 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+
 
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerControler : MonoBehaviour
@@ -8,18 +11,13 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private PlayerInput playerInput;
     private Vector2 movementDirection = Vector2.zero;
 
-
     #region Touch
-    [SerializeField] private float tapMaxDistance = 0.5f;   // world units
-    [SerializeField] private float tapMaxDuration = 0.2f;   // seconds
+    [SerializeField] private float joystickDeadZone = 20f; // pixels
+    [SerializeField] private float tapMaxDuration = 0.25f;
 
-    private Vector3 m_startPosition = new Vector3();
-    private Vector3 m_currentPosition = new Vector3();
-
-    private bool isFirstTouch = true;
-    public static bool isTouchUsed = false;
-    private bool isDragging;
-    private float touchStartTime;
+    private Finger joystickFinger;
+    private Vector2 joystickStartPos;
+    private bool joystickFingerDragged;
 
 
     /// <summary>
@@ -61,12 +59,44 @@ public class PlayerControler : MonoBehaviour
             playerInput = GetComponent<PlayerInput>();
     }
 
+    private void OnEnable()
+    {
+        EnhancedTouchSupport.Enable();
+    }
+
+    private void OnDisable()
+    {
+        EnhancedTouchSupport.Disable();
+    }
+
+    private void Update()
+    {
+        foreach (var touch in UnityEngine.InputSystem.EnhancedTouch.Touch.activeTouches)
+        {
+            switch (touch.phase)
+            {
+                case UnityEngine.InputSystem.TouchPhase.Began:
+                    OnFingerDown(touch.finger);
+                    break;
+
+                case UnityEngine.InputSystem.TouchPhase.Moved:
+                    OnFingerMove(touch.finger);
+                    break;
+
+                case UnityEngine.InputSystem.TouchPhase.Ended:
+                case UnityEngine.InputSystem.TouchPhase.Canceled:
+                    OnFingerUp(touch.finger);
+                    break;
+            }
+        }
+    }
+
     public void ControlsChanged(PlayerInput input)
     {
         OnControlsChanged?.Invoke(input.currentControlScheme);
     }
-    
-    
+
+
     #region Gamepad & Keyboard
 
     public void OnMove(InputAction.CallbackContext ctx)
@@ -103,86 +133,80 @@ public class PlayerControler : MonoBehaviour
 
     #region Touch
 
-    public void TouchPosition(InputAction.CallbackContext ctx)
+    private void OnFingerDown(Finger finger)
     {
-        if (!ctx.performed) return;
+        Vector2 pos = finger.screenPosition;
 
-        Vector2 screenPosition = ctx.ReadValue<Vector2>();
-        Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3
-                (screenPosition.x, screenPosition.y, -Camera.main.transform.position.z));
-
-        if (isFirstTouch)
+        if (joystickFinger == null)
         {
-            //*********************************************************************
-            //Updates the state of action and gets the start position of touch
-            //*********************************************************************
+            joystickFinger = finger;
+            joystickStartPos = pos;
+            joystickFingerDragged = false;
 
-            m_startPosition = touchPosition;
-            m_currentPosition = touchPosition;
+            OnTouchStarted?.Invoke(pos);
+        }
+    }
 
-            touchStartTime = Time.time;
-            isDragging = false;
+    private void OnFingerMove(Finger finger)
+    {
+        if (finger != joystickFinger)
+            return;
 
-            isFirstTouch = false;
+        Vector2 delta = finger.screenPosition - joystickStartPos;
 
-            //*********************************************************************
+        if (!joystickFingerDragged && delta.magnitude > joystickDeadZone)
+        {
+            joystickFingerDragged = true;
+        }
 
-            OnTouchStarted?.Invoke(m_startPosition);
+        if (!joystickFingerDragged)
+            return;
+
+        Vector2 normalized = Vector2.ClampMagnitude(delta / joystickDeadZone, 1f);
+        OnMovePerfromed?.Invoke(normalized);
+    }
+
+    private void OnFingerUp(Finger finger)
+    {
+        float duration = (float)(
+            finger.currentTouch.time - finger.currentTouch.startTime
+        );
+
+        float distance = Vector2.Distance(
+            finger.currentTouch.startScreenPosition,
+            finger.screenPosition
+        );
+
+        // Joystick finger released
+        if (finger == joystickFinger)
+        {
+            joystickFinger = null;
+            OnTouchStopped?.Invoke();
+            OnMovePerfromed?.Invoke(Vector2.zero);
+
+            // TAP → jump
+            if (!joystickFingerDragged &&
+                duration <= tapMaxDuration &&
+                distance <= joystickDeadZone)
+            {
+                OnJumpPerformed?.Invoke();
+            }
+
             return;
         }
 
-        //*********************************************************************
-        //Updates the state of action and gets the current position of touch
-        //*********************************************************************
-
-        m_currentPosition = touchPosition;
-
-        float distance = Vector3.Distance(m_currentPosition, m_startPosition);
-
-        // Only switch to PERFORMED if player actually drags
-        if (!isDragging && distance > tapMaxDistance)
+        // Any other finger → jump
+        if (duration <= tapMaxDuration && distance <= joystickDeadZone)
         {
-            isDragging = true;
+            if (!IsPointerOverUI(finger.screenPosition))
+                OnJumpPerformed?.Invoke();
         }
-
-        if (isDragging)
-        {
-            movementDirection =  m_currentPosition - m_startPosition;
-
-            OnMovePerfromed?.Invoke(movementDirection);
-        }
-
-        //*********************************************************************
     }
-
-    public void TouchPress(InputAction.CallbackContext ctx)
-    {
-        if (!ctx.canceled) return;
-
-        float touchDuration = Time.time - touchStartTime;
-        float distance = Vector3.Distance(m_currentPosition, m_startPosition);
-
-
-        //*********************************************************************
-        //Updates the state of action and gets the last position of touch
-        //*********************************************************************
-        if (!isDragging && touchDuration <= tapMaxDuration && distance <= tapMaxDistance)
-        {
-            // Jump
-            OnJumpPerformed?.Invoke();
-        }
-        else
-        {
-            OnTouchStopped?.Invoke();
-        }
-
-        // -- Reset --
-        isFirstTouch = true;
-        isDragging = false;
-        //*********************************************************************
-        // Other Updates depending of controls have to be under this line
-    }
-
-
     #endregion
+
+    private bool IsPointerOverUI(Vector2 screenPosition)
+    {
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+
 }

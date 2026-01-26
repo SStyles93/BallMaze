@@ -48,12 +48,14 @@ public class PlayerMovement : MonoBehaviour
     {
         PlayerControler.OnMovePerfromed += SetMovementValue;
         PlayerControler.OnJumpPerformed += Jump;
+        PlayerControler.OnTouchStopped += ResetMovementValue;
     }
 
     private void OnDisable()
     {
         PlayerControler.OnMovePerfromed -= SetMovementValue;
         PlayerControler.OnJumpPerformed -= Jump;
+        PlayerControler.OnTouchStopped -= ResetMovementValue;
     }
 
     private void Awake()
@@ -167,6 +169,11 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 mapped = DirectionMapper.MapTo8CardinalPoints(input);
         movementInput = new Vector3(mapped.x, 0, mapped.y);
+    }
+
+    private void ResetMovementValue()
+    {
+        movementInput = Vector3.zero;
     }
 
     // ---------------- GRAVITY ----------------
