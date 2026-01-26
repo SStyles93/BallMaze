@@ -1,19 +1,13 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class CanvasController : MonoBehaviour
+public class PlayerUIManager : MonoBehaviour
 {
     string currentControlScheme = string.Empty;
-    [SerializeField] private CanvasGroup canvasGroup = null;
-
-    private void Awake()
-    {
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
-
+    [SerializeField] private GameObject mobileUI;
     private void OnEnable()
     {
         PlayerControler.OnControlsChanged += AssignControlScheme;
+
     }
 
     private void OnDisable()
@@ -24,9 +18,7 @@ public class CanvasController : MonoBehaviour
     private void AssignControlScheme(string controlScheme)
     {
         currentControlScheme = controlScheme;
-#if UNITY_WEBGL
-        if (currentControlScheme == "Keyboard&Mouse") canvasGroup.alpha = 0.0f;
-        else canvasGroup.alpha = 1.0f;
-#endif
+        if (currentControlScheme == "Keyboard&Mouse") mobileUI.SetActive(false);
+        else mobileUI.SetActive(true);
     }
 }

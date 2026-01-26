@@ -1,56 +1,74 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System;
 
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerControler : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
-
     private Vector2 movementDirection = Vector2.zero;
 
+
     #region Touch
-    //private Vector3 m_startPosition = new Vector3();
-    //private Vector3 m_currentPosition = new Vector3();
-    //private bool isFirstTouch = true;
+    [SerializeField] private float tapMaxDistance = 0.5f;   // world units
+    [SerializeField] private float tapMaxDuration = 0.2f;   // seconds
 
-    //public static bool isTouchUsed = false;
-    //public static Vector3 deltaPosition = Vector3.zero;
+    private Vector3 m_startPosition = new Vector3();
+    private Vector3 m_currentPosition = new Vector3();
 
-    ///// <summary>
-    ///// Delegate used to transmit START touch position to other scripts
-    ///// </summary>
-    //public static event Action<Vector3> TouchStarted = delegate { };
+    private bool isFirstTouch = true;
+    public static bool isTouchUsed = false;
+    private bool isDragging;
+    private float touchStartTime;
 
-    ///// <summary>
-    ///// Delegate used to transmit CURRENT Touch Position
-    ///// </summary>
-    //public static event Action<Vector3> TouchPerformed = delegate { };
 
-    ///// <summary>
-    ///// Delegate used to transmit END of Touch
-    ///// </summary>
-    //public static event Action TouchStopped = delegate { };
+    /// <summary>
+    /// Delegate used to transmit START touch position to other scripts
+    /// </summary>
+    public static event Action<Vector3> OnTouchStarted = delegate { };
+
+    /// <summary>
+    /// Delegate used to transmit CURRENT Touch Position
+    /// </summary>
+    public static event Action<Vector3> OnTouchPerformed = delegate { };
+
+    /// <summary>
+    /// Delegate used to transmit END of Touch
+    /// </summary>
+    public static event Action OnTouchStopped = delegate { };
     #endregion
+
 
     /// <summary>
     /// Delegate used to Transmit movement
     /// </summary>
     public static event Action<Vector2> OnMovePerfromed;
+
     /// <summary>
     /// Delegate used to transmit Jump action
     /// </summary>
     public static event Action OnJumpPerformed;
 
+    /// <summary>
+    /// Delegate used to transmit control changes
+    /// </summary>
     public static event Action<string> OnControlsChanged;
+
 
     private void Awake()
     {
-        if(playerInput == null)
-        playerInput = GetComponent<PlayerInput>();
+        if (playerInput == null)
+            playerInput = GetComponent<PlayerInput>();
     }
+
+    public void ControlsChanged(PlayerInput input)
+    {
+        OnControlsChanged?.Invoke(input.currentControlScheme);
+    }
+    
+    
+    #region Gamepad & Keyboard
+
     public void OnMove(InputAction.CallbackContext ctx)
     {
         if (GameStateManager.Instance?.CurrentGameState != GameState.Playing)
@@ -81,68 +99,90 @@ public class PlayerControler : MonoBehaviour
         }
     }
 
-    public void ControlsChanged(PlayerInput input)
-    {
-        OnControlsChanged?.Invoke(input.currentControlScheme);
-    }
+    #endregion
 
     #region Touch
-    //public void TouchPosition(InputAction.CallbackContext ctx)
-    //{
-    //    if (ctx.performed)
-    //    {
-    //        Vector2 screenPosition = ctx.ReadValue<Vector2>();
-    //        Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3
-    //                (screenPosition.x, screenPosition.y, -Camera.main.transform.position.z));
-    //        if (isFirstTouch)
-    //        {
-    //            //*********************************************************************
-    //            //Updates the state of action and gets the start position of touch
-    //            //*********************************************************************
-    //            m_startPosition = touchPosition;
-    //            isFirstTouch = false;
-    //            //m_currentActionState = ActionState.STARTED;
-    //            //*********************************************************************
-    //            // Other Updates depending of controls have to be under this line 
 
-    //            //objectManager.UpdateControls();
+    public void TouchPosition(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.performed) return;
 
-    //            TouchStarted(m_startPosition);
-    //            Debug.Log("Started");
-    //            isTouchUsed = true;
-    //        }
-    //        //*********************************************************************
-    //        //Updates the state of action and gets the current position of touch
-    //        //*********************************************************************
-    //        m_currentPosition = touchPosition;
+        Vector2 screenPosition = ctx.ReadValue<Vector2>();
+        Vector3 touchPosition = Camera.main.ScreenToWorldPoint(new Vector3
+                (screenPosition.x, screenPosition.y, -Camera.main.transform.position.z));
 
-    //        //Send Message
-    //        TouchPerformed(m_currentPosition);
-    //        Debug.Log("Started");
+        if (isFirstTouch)
+        {
+            //*********************************************************************
+            //Updates the state of action and gets the start position of touch
+            //*********************************************************************
 
-    //        //Set Static variables
-    //        deltaPosition = m_currentPosition - m_startPosition;
-    //        isTouchUsed = true;
-    //    }
+            m_startPosition = touchPosition;
+            m_currentPosition = touchPosition;
 
-    //}
-    //public void TouchPress(InputAction.CallbackContext ctx)
-    //{
-    //    if (ctx.canceled)
-    //    {
-    //        //*********************************************************************
-    //        // Reset the value of isTouched 
-    //        //*********************************************************************
-    //        isFirstTouch = true;
-    //        // Send message
-    //        TouchStopped();
-    //        Debug.Log("Stopped");
+            touchStartTime = Time.time;
+            isDragging = false;
 
-    //        //Reset static variables
-    //        deltaPosition = Vector3.zero;
-    //        isTouchUsed = false;
-    //    }
-    //}
+            isFirstTouch = false;
+
+            //*********************************************************************
+
+            OnTouchStarted?.Invoke(m_startPosition);
+            return;
+        }
+
+        //*********************************************************************
+        //Updates the state of action and gets the current position of touch
+        //*********************************************************************
+
+        m_currentPosition = touchPosition;
+
+        float distance = Vector3.Distance(m_currentPosition, m_startPosition);
+
+        // Only switch to PERFORMED if player actually drags
+        if (!isDragging && distance > tapMaxDistance)
+        {
+            isDragging = true;
+        }
+
+        if (isDragging)
+        {
+            movementDirection =  m_currentPosition - m_startPosition;
+
+            OnMovePerfromed?.Invoke(movementDirection);
+        }
+
+        //*********************************************************************
+    }
+
+    public void TouchPress(InputAction.CallbackContext ctx)
+    {
+        if (!ctx.canceled) return;
+
+        float touchDuration = Time.time - touchStartTime;
+        float distance = Vector3.Distance(m_currentPosition, m_startPosition);
+
+
+        //*********************************************************************
+        //Updates the state of action and gets the last position of touch
+        //*********************************************************************
+        if (!isDragging && touchDuration <= tapMaxDuration && distance <= tapMaxDistance)
+        {
+            // Jump
+            OnJumpPerformed?.Invoke();
+        }
+        else
+        {
+            OnTouchStopped?.Invoke();
+        }
+
+        // -- Reset --
+        isFirstTouch = true;
+        isDragging = false;
+        //*********************************************************************
+        // Other Updates depending of controls have to be under this line
+    }
+
 
     #endregion
 }
