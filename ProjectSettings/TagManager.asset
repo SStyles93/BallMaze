@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Ice
   - MovingPlatform
+  - End
   layers:
   - Default
   - TransparentFX

@@ -43,6 +43,9 @@ public class LevelManager : MonoBehaviour
     public int CurrentStarCount { get => currentStarCount; set => currentStarCount = value; }
     public CellData[,] CurrentGrid => currentGrid;
 
+    public event Action<int> OnLifeLostToThisLevel;
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -266,6 +269,9 @@ public class LevelManager : MonoBehaviour
     public void IncreaseLivesLostToThisLevel()
     {
         currentLivesLostToThisLevel++;
+
+        //Used by the PlayerMovement to increase the ground radius detection (help player)
+        OnLifeLostToThisLevel?.Invoke(currentLivesLostToThisLevel);
     }
 
     /// <summary>

@@ -12,7 +12,7 @@ public class DeadZone : MonoBehaviour
     {
         // Block, respawn and Unblock player
         playerRigidbody.isKinematic = true;
-        playerRigidbody.gameObject.transform.position = playerMovement.CurrentPlatform.position;
+        playerRigidbody.gameObject.transform.position = playerMovement.LastSafePlatform.position;
         playerRigidbody.isKinematic = false;
     }
 

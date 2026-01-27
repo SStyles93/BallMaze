@@ -39,7 +39,7 @@ MonoBehaviour:
     price:
       CoinType: 0
       Amount: 0
-    skin: {fileID: 2043128687369127624, guid: d21b3a85df215eb4b9fda965208772be, type: 3}
+    skin: {fileID: 2043128687369127624, guid: d83722138f8a56f40a5e0c546599325d, type: 3}
     sprite: {fileID: 21300000, guid: 2d355c05a2d01d447bf2bce00d806c6f, type: 3}
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}

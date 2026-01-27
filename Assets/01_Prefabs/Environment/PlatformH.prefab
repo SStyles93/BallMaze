@@ -97,8 +97,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   groundType: 2
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  cycleDuration: 3
   movementAmplitude: 3
-  movementPeriod: 3
+  pauseDuration: 0.25
+  slopeThreshold: 0.05
 --- !u!1 &4013995271037462153
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +174,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4013995271037462153}
-  m_Mesh: {fileID: 6954898932599665382, guid: 8ef71bd01fc914548b07619bd65b61b7, type: 3}
+  m_Mesh: {fileID: 712545472282261695, guid: 2fe5514698767a147ba65ebee12cd248, type: 3}
 --- !u!23 &536740685159562755
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -200,7 +235,7 @@ GameObject:
   - component: {fileID: 6535670974240003265}
   - component: {fileID: 7884925650325029236}
   m_Layer: 0
-  m_Name: BM_Platform_Ice_Base_001
+  m_Name: BM_Platform_Base_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -228,7 +263,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8269672894913709292}
-  m_Mesh: {fileID: -1528828033524978146, guid: 8ef71bd01fc914548b07619bd65b61b7, type: 3}
+  m_Mesh: {fileID: -3441182868614120850, guid: 2fe5514698767a147ba65ebee12cd248, type: 3}
 --- !u!23 &7884925650325029236
 MeshRenderer:
   m_ObjectHideFlags: 0

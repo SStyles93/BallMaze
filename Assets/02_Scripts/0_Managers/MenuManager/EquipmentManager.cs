@@ -67,7 +67,7 @@ public class EquipmentManager : MonoBehaviour
             isEquipped = playerSkinData.skinOption == skinOption;
             
             textToDisplay = isEquipped ?
-                "Using" : "Use";
+                "In Use" : "Use";
         }
         // APPLY || APPLIED 
         if (option is ColorOption colorOption)

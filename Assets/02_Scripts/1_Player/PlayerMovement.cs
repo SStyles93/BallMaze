@@ -15,12 +15,13 @@ public class PlayerMovement : MonoBehaviour
     [Header("Jump")]
     [SerializeField] private float jumpForce = 12f;
     [SerializeField] private float gravityScale = 2f;
+    // Helping values are used to direct jumps accroding to input
     [SerializeField] private float groundHelp = 0.2f;
     [SerializeField] private float iceHelp = 0.6f;
 
     [Header("Ground Check")]
     [SerializeField] private float groundCheckDistance = 1.1f;
-    [SerializeField] private float groundDetectionRadius = 0.35f;
+    [SerializeField] private float groundDetectionRadius = 0.75f;
     [SerializeField] private LayerMask groundedLayerMask;
 
     [Header("Fall")]
@@ -35,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
     // --- Platform ---
     private bool allowRotation;
     private Transform currentPlatform;
+    [SerializeField] private Transform lastSafePlatform;
 
     public event Action<string> OnPlayerLanded;
     public event Action OnPlayerJumped;
@@ -43,12 +45,15 @@ public class PlayerMovement : MonoBehaviour
     public float FallThreshold { get => fallThreshold; set => fallThreshold = value; }
     public Rigidbody PlayerRigidbody { get => playerRigidbody; set => playerRigidbody = value; }
     public Transform CurrentPlatform => currentPlatform;
+    public Transform LastSafePlatform => lastSafePlatform;
 
     private void OnEnable()
     {
         PlayerControler.OnMovePerfromed += SetMovementValue;
         PlayerControler.OnJumpPerformed += Jump;
         PlayerControler.OnTouchStopped += ResetMovementValue;
+
+        LevelManager.Instance.OnLifeLostToThisLevel += SetGroundRadiusHelp;
     }
 
     private void OnDisable()
@@ -56,6 +61,8 @@ public class PlayerMovement : MonoBehaviour
         PlayerControler.OnMovePerfromed -= SetMovementValue;
         PlayerControler.OnJumpPerformed -= Jump;
         PlayerControler.OnTouchStopped -= ResetMovementValue;
+
+        LevelManager.Instance.OnLifeLostToThisLevel -= SetGroundRadiusHelp;
     }
 
     private void Awake()
@@ -126,6 +133,11 @@ public class PlayerMovement : MonoBehaviour
             if (hit.collider != null)
             {
                 currentPlatform = hit.collider.transform;
+                // Save platform for respawn on a safe area
+                if (!hit.collider.CompareTag("MovingPlatform") && !hit.collider.CompareTag("End"))
+                {
+                    lastSafePlatform = hit.collider.transform;
+                }
             }
 
             // Y velocity is generally at -8.smth (if < 0, this part might trigger before falling)
@@ -143,6 +155,18 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             DebugDraw.Capsule(ray, groundDetectionRadius, groundCheckDistance, Color.red);
+        }
+    }
+
+    /// <summary>
+    /// Increases the ground radius when lives are lost to the current level
+    /// </summary>
+    /// <param name="numberOfLivesLost">lives lost</param>
+    private void SetGroundRadiusHelp(int numberOfLivesLost)
+    {
+        if (numberOfLivesLost >= 2) 
+        {
+            groundDetectionRadius = 0.95f;
         }
     }
 

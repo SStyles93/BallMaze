@@ -472,12 +472,12 @@ MonoBehaviour:
   skinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
   currentSlot: {fileID: 0}
   currentOption:
+    id: 
     isLocked: 0
     levelToUnlock: 0
     price:
       CoinType: 0
       Amount: 0
-    name: 
 --- !u!1001 &332380840
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1552,6 +1552,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
   maxHeartAmount: 9
   timeToRegainHeartInMinutes: 20
+  HasPlayerReceivedGift: 0
 --- !u!1 &1445328148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1940,9 +1941,7 @@ MonoBehaviour:
     hearts: 0
     colorIndex: 0
     skinIndex: 0
-  currentSkinData:
-    colorsLockedState: 
-    skinsLockedState: 
+    hasReceivedGift: 0
   currentSettingsData:
     isAudioOn: 1
     isMusicOn: 1
