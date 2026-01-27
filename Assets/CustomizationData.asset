@@ -48,7 +48,7 @@ MonoBehaviour:
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 150
+      Amount: 60
     skin: {fileID: 2043128687369127624, guid: fa9f3653a2061254993cfc6ecda3ab89, type: 3}
     sprite: {fileID: 21300000, guid: 609922154c5d6784cb6e8d08327c8016, type: 3}
     isPremium: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 150
+      Amount: 120
     skin: {fileID: 6109598120643743865, guid: 541225d60f0edff49b5fb636c10abe01, type: 3}
     sprite: {fileID: 21300000, guid: 6718683eb73253b41806322e92975b53, type: 3}
     isPremium: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 150
+      Amount: 120
     skin: {fileID: 4797490445053699381, guid: b831549669affcc4ba9dc90c88308208, type: 3}
     sprite: {fileID: 21300000, guid: 2bde4cf67d4a19e4c896c21fb276a29b, type: 3}
     isPremium: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 150
+      Amount: 120
     skin: {fileID: 3799089009430960778, guid: 1c47343c42155c64b89e3f706ebe0257, type: 3}
     sprite: {fileID: 21300000, guid: a2c6ef595ce1cf0409d96e9caea5db3b, type: 3}
     isPremium: 0
@@ -262,7 +262,7 @@ MonoBehaviour:
     skin: {fileID: 6602769584495123945, guid: 17193aa03fad9cc4ab4dbe9c0ec27f89, type: 3}
     sprite: {fileID: 21300000, guid: d90b38f3dbd0cc0449bb9f842c70448e, type: 3}
     isPremium: 1
-    color: {r: 0.63529414, g: 0.3254902, b: 0, a: 1}
+    color: {r: 0.89056605, g: 0.4308428, b: 0.03360624, a: 1}
   - id: marble_type02_veins
     isLocked: 1
     levelToUnlock: 22
@@ -272,7 +272,7 @@ MonoBehaviour:
     skin: {fileID: 6602769584495123945, guid: eb00c51d31842e34baa1125b2cae8b4f, type: 3}
     sprite: {fileID: 21300000, guid: 70c493f4c0397ac458069778db881e71, type: 3}
     isPremium: 1
-    color: {r: 0.12941177, g: 0.45882353, b: 0.47843137, a: 1}
+    color: {r: 0.06923463, g: 0.83396226, b: 0.8300605, a: 1}
   - id: marble_type02_cosmic
     isLocked: 1
     levelToUnlock: 25
@@ -282,7 +282,7 @@ MonoBehaviour:
     skin: {fileID: 6602769584495123945, guid: 3ab2a445f8a04a742b9c3597e3203a6b, type: 3}
     sprite: {fileID: 21300000, guid: abb0a1ca23080e445af008844bec4c12, type: 3}
     isPremium: 1
-    color: {r: 0.24313726, g: 0.15294118, b: 0.49411765, a: 1}
+    color: {r: 0.22264153, g: 0.25221497, b: 1, a: 1}
   - id: marble_type02_disco
     isLocked: 1
     levelToUnlock: 25
@@ -292,7 +292,7 @@ MonoBehaviour:
     skin: {fileID: 6602769584495123945, guid: 487ccdda00bfbc34d8479fedc0e9cafd, type: 3}
     sprite: {fileID: 21300000, guid: 355e11820da92ab4b885fd0a9552795b, type: 3}
     isPremium: 1
-    color: {r: 0.43137255, g: 0.1764706, b: 0.68235296, a: 1}
+    color: {r: 0.5032428, g: 0.086274505, b: 0.8666667, a: 1}
   - id: marble_type04_infinity
     isLocked: 1
     levelToUnlock: 30
@@ -302,17 +302,17 @@ MonoBehaviour:
     skin: {fileID: 625979079707677755, guid: 1a0675e598f1b614b933983e6c93d9cf, type: 3}
     sprite: {fileID: 21300000, guid: 6efaf0f28d87bf148977203b0f92b2c4, type: 3}
     isPremium: 1
-    color: {r: 0, g: 0.58431375, b: 0.09019608, a: 1}
+    color: {r: 0.039131366, g: 0.86415094, b: 0.41955703, a: 1}
   - id: marble_type04_diamond
     isLocked: 1
     levelToUnlock: 30
     price:
       CoinType: 1
       Amount: 20
-    skin: {fileID: 8883132156341426583, guid: 9156a7e9975a99f4eaf21a2be2cf3c1a, type: 3}
+    skin: {fileID: 2043128687369127624, guid: d21b3a85df215eb4b9fda965208772be, type: 3}
     sprite: {fileID: 21300000, guid: 2e4deeab4ef23b4459fb6ddd5badaa1b, type: 3}
     isPremium: 1
-    color: {r: 0.30980393, g: 0, b: 0.63529414, a: 1}
+    color: {r: 0.43529046, g: 0.1061161, b: 0.78113204, a: 1}
   - id: marble_type04_heart
     isLocked: 1
     levelToUnlock: 40
@@ -322,7 +322,7 @@ MonoBehaviour:
     skin: {fileID: 8175672573599236831, guid: 1d0330782166cd24fbc79b25d6456e08, type: 3}
     sprite: {fileID: 21300000, guid: 8a96623600dc5c043bc94e5a537d5952, type: 3}
     isPremium: 1
-    color: {r: 0.6666667, g: 0.2509804, b: 0.2509804, a: 1}
+    color: {r: 0.88301885, g: 0.14328226, b: 0.31328377, a: 1}
   - id: marble_type04_star
     isLocked: 1
     levelToUnlock: 40
@@ -332,7 +332,7 @@ MonoBehaviour:
     skin: {fileID: 2334731125251935483, guid: caefe7ebbb7fdbc4fad2533ac62f058f, type: 3}
     sprite: {fileID: 21300000, guid: 2c7bc6053cdc0df45a1651c6d2f8c544, type: 3}
     isPremium: 1
-    color: {r: 0.5568628, g: 0.45882353, b: 0.011764706, a: 1}
+    color: {r: 0.9169811, g: 0.86422503, b: 0.14187258, a: 1}
   - id: marble_type04_duck
     isLocked: 1
     levelToUnlock: 50
@@ -342,7 +342,7 @@ MonoBehaviour:
     skin: {fileID: 5664766208951650563, guid: 16691e9e08a83b542ac5b1425cf93507, type: 3}
     sprite: {fileID: 21300000, guid: beef02e360b010b44a6052f77a091a38, type: 3}
     isPremium: 1
-    color: {r: 0.6431373, g: 0.4745098, b: 0.007843138, a: 1}
+    color: {r: 0.8627451, g: 0.77308536, b: 0.11764705, a: 1}
   - id: marble_type04_ducksleepy
     isLocked: 1
     levelToUnlock: 50
@@ -352,7 +352,7 @@ MonoBehaviour:
     skin: {fileID: 5664766208951650563, guid: 4da800c9bc9c30748a06ebcac35a8c43, type: 3}
     sprite: {fileID: 21300000, guid: dfa7380e8f9da8e44b4324faaa85c57f, type: 3}
     isPremium: 1
-    color: {r: 0.30980393, g: 0.49803922, b: 0.6117647, a: 1}
+    color: {r: 0.10215738, g: 0.5352982, b: 0.79622644, a: 1}
   - id: marble_type04_duckangel
     isLocked: 1
     levelToUnlock: 60
@@ -362,7 +362,7 @@ MonoBehaviour:
     skin: {fileID: 5664766208951650563, guid: a0d71f4cb85ebed459a8e3be40ce9f15, type: 3}
     sprite: {fileID: 21300000, guid: 9281755ad9b329943ae581c009c49aca, type: 3}
     isPremium: 1
-    color: {r: 0.5529412, g: 0.25882354, b: 0.36078432, a: 1}
+    color: {r: 0.8113208, g: 0.3551442, b: 0.5132853, a: 1}
   - id: marble_type04_duckdemon
     isLocked: 1
     levelToUnlock: 60
@@ -372,7 +372,7 @@ MonoBehaviour:
     skin: {fileID: 5664766208951650563, guid: 3b14bc7fbd128c14abf54b65752ba9c8, type: 3}
     sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
     isPremium: 1
-    color: {r: 0.61960787, g: 0.007843138, b: 0.007843138, a: 1}
+    color: {r: 0.78113204, g: 0.13706657, b: 0.03537202, a: 1}
   colors:
   - id: NONE
     isLocked: 0
@@ -457,7 +457,7 @@ MonoBehaviour:
     price:
       CoinType: 0
       Amount: 60
-    color: {r: 0.11764706, g: 0.2509804, b: 0.6862745, a: 1}
+    color: {r: 0.13000001, g: 0.2733332, b: 0.75, a: 1}
   - id: palette_v4_1
     isLocked: 1
     levelToUnlock: 0
@@ -492,7 +492,7 @@ MonoBehaviour:
     price:
       CoinType: 1
       Amount: 20
-    color: {r: 0.22745098, g: 0.30980393, b: 0.47843137, a: 1}
+    color: {r: 0.17500001, g: 0.28164062, b: 0.5, a: 1}
   - id: palette_v5_2
     isLocked: 1
     levelToUnlock: 0
