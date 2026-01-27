@@ -30,7 +30,6 @@ public class LevelManager : MonoBehaviour
     private int failedTimes = 0;
     private bool wasGamePreviouslyFinished = false;
 
-
     public event Action<int> OnStarCountChanged;
 
     #region Singleton & Getters
@@ -43,7 +42,6 @@ public class LevelManager : MonoBehaviour
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount { get => currentStarCount; set => currentStarCount = value; }
     public CellData[,] CurrentGrid => currentGrid;
-
 
     private void Awake()
     {

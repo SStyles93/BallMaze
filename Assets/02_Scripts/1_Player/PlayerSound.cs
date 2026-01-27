@@ -17,6 +17,8 @@ public class PlayerSound : MonoBehaviour
     [SerializeField] private float GroundPitch = 2.8f;
     [SerializeField] private float IcePitch = 5f;
 
+    private bool isPlayerGrounded;
+
     private void OnEnable()
     {
         playerMovement.OnPlayerJumped += PlayJumpSound;
@@ -40,11 +42,13 @@ public class PlayerSound : MonoBehaviour
     {
         float speed = rb.linearVelocity.magnitude;
         float rollingVolume = speed / maxSpeed;
-        AudioManager.Instance.SetRollingVolume(rollingVolume);
+        if (isPlayerGrounded)
+            AudioManager.Instance.SetRollingVolume(rollingVolume);
     }
 
     private void PlayJumpSound()
     {
+        isPlayerGrounded = false;
         AudioManager.Instance?.PlayJumpSound();
     }
 
@@ -60,5 +64,7 @@ public class PlayerSound : MonoBehaviour
         };
 
         AudioManager.Instance?.PlayThumpSound(pitch);
+
+        isPlayerGrounded = true;
     }
 }
