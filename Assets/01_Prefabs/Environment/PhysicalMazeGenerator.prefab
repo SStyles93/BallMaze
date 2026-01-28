@@ -52,7 +52,7 @@ MonoBehaviour:
   startPrefab: {fileID: 839851351414052169, guid: 71d9a997e250b584e94d1ae44a3efb43, type: 3}
   endPrefab: {fileID: 839851351414052169, guid: 29acc65d504401e4d88b0827385a419b, type: 3}
   starPrefab: {fileID: 3102653523287797894, guid: f5147e29e7531614bbb3b478e45ae50f, type: 3}
-  cellSize: 3
+  cellSize: 4
   clearPrevious: 1
   environmentColors_SO: {fileID: 11400000, guid: 22cf0413d1085ed4aabc7775cc128e86, type: 2}
   material: {fileID: 2100000, guid: d0b5b4e45c472a94981a3234f899fd1c, type: 2}
