@@ -67,6 +67,8 @@ public class ContinuePannelManager : MonoBehaviour
         LifeManager.Instance.ResetLife();
         
         LevelManager.Instance.MarkLevelAsFailed();
+
+        SavingManager.Instance.SaveSession();
         
         GameStateManager.Instance?.SetState(GameState.Playing);
 

@@ -38,7 +38,7 @@ MonoBehaviour:
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 0
+      Amount: 60
     skin: {fileID: 2043128687369127624, guid: d83722138f8a56f40a5e0c546599325d, type: 3}
     sprite: {fileID: 21300000, guid: 2d355c05a2d01d447bf2bce00d806c6f, type: 3}
     isPremium: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 120
+      Amount: 150
     skin: {fileID: 3799089009430960778, guid: 1c47343c42155c64b89e3f706ebe0257, type: 3}
     sprite: {fileID: 21300000, guid: a2c6ef595ce1cf0409d96e9caea5db3b, type: 3}
     isPremium: 0
@@ -98,7 +98,7 @@ MonoBehaviour:
     levelToUnlock: 8
     price:
       CoinType: 0
-      Amount: 300
+      Amount: 180
     skin: {fileID: 7087721238642170287, guid: 77470115b69fc784fbf3b15fa0dec1ae, type: 3}
     sprite: {fileID: 21300000, guid: 7ae9a71510507e14796ce1b498899f94, type: 3}
     isPremium: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
     levelToUnlock: 8
     price:
       CoinType: 0
-      Amount: 300
+      Amount: 180
     skin: {fileID: 2708720960975619737, guid: ed42d559ad6052d47899716904fcc930, type: 3}
     sprite: {fileID: 21300000, guid: 69243548122fccf4bb023aee3420284f, type: 3}
     isPremium: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
     levelToUnlock: 10
     price:
       CoinType: 0
-      Amount: 300
+      Amount: 200
     skin: {fileID: 4946249313151242146, guid: 1e44450e45d51924287a84db0ccb8c9d, type: 3}
     sprite: {fileID: 21300000, guid: 3403f63b0dba19240b074272a3db8bc7, type: 3}
     isPremium: 0
@@ -128,7 +128,7 @@ MonoBehaviour:
     levelToUnlock: 10
     price:
       CoinType: 0
-      Amount: 300
+      Amount: 200
     skin: {fileID: 62556195984210938, guid: e371d64155b4a714faa8be9104d1c3fe, type: 3}
     sprite: {fileID: 21300000, guid: f243648cbe534ef46b88576a30862955, type: 3}
     isPremium: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
     levelToUnlock: 10
     price:
       CoinType: 0
-      Amount: 300
+      Amount: 250
     skin: {fileID: 3812359246577375380, guid: 86ad21605ef86714b8bfd4c6abdf4b0c, type: 3}
     sprite: {fileID: 21300000, guid: 243f51c26a579274b9812ed1ef8c22ff, type: 3}
     isPremium: 0
@@ -148,7 +148,7 @@ MonoBehaviour:
     levelToUnlock: 10
     price:
       CoinType: 0
-      Amount: 300
+      Amount: 250
     skin: {fileID: 4178191745075800099, guid: bc15ab3d800c3504591a6a0248d3145e, type: 3}
     sprite: {fileID: 21300000, guid: fe49f5bd1bbdb9746921df0c1e9a32ec, type: 3}
     isPremium: 0
@@ -178,7 +178,7 @@ MonoBehaviour:
     levelToUnlock: 12
     price:
       CoinType: 0
-      Amount: 450
+      Amount: 340
     skin: {fileID: 2043128687369127624, guid: 3c38ad989c380f1499d09dc0fe6ff644, type: 3}
     sprite: {fileID: 21300000, guid: b0c2818103ea36846a3a89ce7b2c0c23, type: 3}
     isPremium: 0
@@ -188,7 +188,7 @@ MonoBehaviour:
     levelToUnlock: 12
     price:
       CoinType: 0
-      Amount: 450
+      Amount: 340
     skin: {fileID: 2043128687369127624, guid: fb38d19dce4cc634d87661e08580085b, type: 3}
     sprite: {fileID: 21300000, guid: 1972382cf37b3374ea3271128f7b9d83, type: 3}
     isPremium: 0
@@ -198,7 +198,7 @@ MonoBehaviour:
     levelToUnlock: 15
     price:
       CoinType: 0
-      Amount: 450
+      Amount: 360
     skin: {fileID: 2043128687369127624, guid: 950735c5209630048bcebf292d737960, type: 3}
     sprite: {fileID: 21300000, guid: eb70b7ced3f7b2b4fbcef4468edf4513, type: 3}
     isPremium: 0
@@ -208,7 +208,7 @@ MonoBehaviour:
     levelToUnlock: 15
     price:
       CoinType: 0
-      Amount: 450
+      Amount: 360
     skin: {fileID: 2043128687369127624, guid: 163085b534ae5e149996ca9f1f6d71d5, type: 3}
     sprite: {fileID: 21300000, guid: 4ce156b6b0134e14aac2d723855cc0cb, type: 3}
     isPremium: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
     levelToUnlock: 18
     price:
       CoinType: 0
-      Amount: 450
+      Amount: 400
     skin: {fileID: 2614528600740271649, guid: 1ac6c636649be8843afc51410723e8e6, type: 3}
     sprite: {fileID: 21300000, guid: a035fc4dbd34e5c4fb1fd4fe49c1d401, type: 3}
     isPremium: 0
@@ -228,7 +228,7 @@ MonoBehaviour:
     levelToUnlock: 18
     price:
       CoinType: 0
-      Amount: 450
+      Amount: 400
     skin: {fileID: 2950550033954876258, guid: 4d26a12b1b3ccc449ab1509f14ebca66, type: 3}
     sprite: {fileID: 21300000, guid: 30d3702cc2008e245a5e5c56f6fec98a, type: 3}
     isPremium: 0
@@ -238,7 +238,7 @@ MonoBehaviour:
     levelToUnlock: 20
     price:
       CoinType: 0
-      Amount: 450
+      Amount: 400
     skin: {fileID: 908311158772364723, guid: df0a6adc7b58c934e8a98ba0d2b3bee9, type: 3}
     sprite: {fileID: 21300000, guid: 3705c711b841f754b94950f46d325770, type: 3}
     isPremium: 0
@@ -248,7 +248,7 @@ MonoBehaviour:
     levelToUnlock: 20
     price:
       CoinType: 0
-      Amount: 450
+      Amount: 400
     skin: {fileID: 1031290884618149033, guid: 8a9bcc2daf7512841980a3fa8ecc62c2, type: 3}
     sprite: {fileID: 21300000, guid: b5788fbdbc887ab4eab4782360a84173, type: 3}
     isPremium: 0
@@ -258,7 +258,7 @@ MonoBehaviour:
     levelToUnlock: 22
     price:
       CoinType: 0
-      Amount: 600
+      Amount: 540
     skin: {fileID: 6602769584495123945, guid: 17193aa03fad9cc4ab4dbe9c0ec27f89, type: 3}
     sprite: {fileID: 21300000, guid: d90b38f3dbd0cc0449bb9f842c70448e, type: 3}
     isPremium: 1
@@ -268,7 +268,7 @@ MonoBehaviour:
     levelToUnlock: 22
     price:
       CoinType: 0
-      Amount: 600
+      Amount: 540
     skin: {fileID: 6602769584495123945, guid: eb00c51d31842e34baa1125b2cae8b4f, type: 3}
     sprite: {fileID: 21300000, guid: 70c493f4c0397ac458069778db881e71, type: 3}
     isPremium: 1
@@ -278,7 +278,7 @@ MonoBehaviour:
     levelToUnlock: 25
     price:
       CoinType: 0
-      Amount: 600
+      Amount: 580
     skin: {fileID: 6602769584495123945, guid: 3ab2a445f8a04a742b9c3597e3203a6b, type: 3}
     sprite: {fileID: 21300000, guid: abb0a1ca23080e445af008844bec4c12, type: 3}
     isPremium: 1
@@ -288,7 +288,7 @@ MonoBehaviour:
     levelToUnlock: 25
     price:
       CoinType: 0
-      Amount: 600
+      Amount: 580
     skin: {fileID: 6602769584495123945, guid: 487ccdda00bfbc34d8479fedc0e9cafd, type: 3}
     sprite: {fileID: 21300000, guid: 355e11820da92ab4b885fd0a9552795b, type: 3}
     isPremium: 1
@@ -309,7 +309,7 @@ MonoBehaviour:
     price:
       CoinType: 1
       Amount: 20
-    skin: {fileID: 2043128687369127624, guid: d21b3a85df215eb4b9fda965208772be, type: 3}
+    skin: {fileID: 8883132156341426583, guid: 9156a7e9975a99f4eaf21a2be2cf3c1a, type: 3}
     sprite: {fileID: 21300000, guid: 2e4deeab4ef23b4459fb6ddd5badaa1b, type: 3}
     isPremium: 1
     color: {r: 0.43529046, g: 0.1061161, b: 0.78113204, a: 1}
@@ -394,7 +394,7 @@ MonoBehaviour:
     price:
       CoinType: 0
       Amount: 25
-    color: {r: 0.69803923, g: 0.4862745, b: 0.54901963, a: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}
   - id: palette_v1_3
     isLocked: 1
     levelToUnlock: 0

@@ -13,7 +13,11 @@ public class CoinManager : MonoBehaviour
     [Tooltip("Time to regain a heart (in Secondd) 1m = 60")]
     [SerializeField] private int timeToRegainHeartInMinutes = 10;
     public bool HasPlayerReceivedGift = false;
-        
+
+    //[SerializeField] int coinAmount;
+    //[SerializeField] int starAmount;
+    //[SerializeField] int heartAmount;
+
     private DateTime lastHeartRefillTime;
     Coroutine timerCoroutine;
     bool isDataLoaded = false;
@@ -65,6 +69,11 @@ public class CoinManager : MonoBehaviour
 
     private void Update()
     {
+
+        //coinAmount = coins[CoinType.COIN];
+        //starAmount = coins[CoinType.STAR];
+        //heartAmount = coins[CoinType.HEART];
+
         // Update calculations & timer (visuals)
         if (Application.isFocused)
         {

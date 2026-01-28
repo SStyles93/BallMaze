@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2873438339014791461}
   - component: {fileID: 4147319095587458330}
   - component: {fileID: 4188583864013449926}
+  - component: {fileID: 1008212919430448572}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -89,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886251e9a18ece04ea8e61686c173e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePositionComposer
-  CameraDistance: 45
+  CameraDistance: 38
   DeadZoneDepth: 0
   Composition:
     ScreenPosition: {x: 0, y: 0.1}
@@ -122,3 +123,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CameraClamp
   softZone: 1
   xLimits: {x: -100, y: 100}
+--- !u!114 &1008212919430448572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712241831638726005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
+  NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 0
+  FrequencyGain: 1
+  m_NoiseOffsets: {x: 0, y: 0, z: 0}

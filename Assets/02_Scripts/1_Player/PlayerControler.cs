@@ -12,8 +12,9 @@ public class PlayerControler : MonoBehaviour
 
     #region Touch
     [SerializeField] private float joystickDeadZone = 20f; // pixels
-    [SerializeField] private float tapMaxDuration = 0.25f;
+    [SerializeField] private float tapMaxDistance = 35f;   // pixels
     [SerializeField] private float tapWindowTime = 1.0f; // seconds
+    [SerializeField] private float tapMaxDuration = 0.25f;
 
     private Vector2 movementDirection = Vector2.zero;
     private Vector2 lastMovementDirection = Vector2.zero;
@@ -21,6 +22,7 @@ public class PlayerControler : MonoBehaviour
 
     private Finger joystickFinger;
     private Vector2 joystickStartPos;
+    private double joystickStartTime;
     private bool joystickFingerDragged;
 
 
@@ -155,7 +157,9 @@ public class PlayerControler : MonoBehaviour
         {
             joystickFinger = finger;
             joystickStartPos = pos;
+            joystickStartTime = Time.timeAsDouble;
             joystickFingerDragged = false;
+
             OnTouchStarted?.Invoke(pos);
             return;
         }
@@ -191,18 +195,13 @@ public class PlayerControler : MonoBehaviour
         if (finger != joystickFinger)
             return;
 
-        float duration =
-            (float)(finger.currentTouch.time - finger.currentTouch.startTime);
-
-        float distance = Vector2.Distance(
-            finger.currentTouch.startScreenPosition,
-            finger.screenPosition
-        );
+        float duration = (float)(Time.timeAsDouble - joystickStartTime);
+        float distance = Vector2.Distance(joystickStartPos, finger.screenPosition);
 
         bool isTapJump =
             !joystickFingerDragged &&
             duration <= tapMaxDuration &&
-            distance <= joystickDeadZone;
+            distance <= tapMaxDistance;
 
         if (isTapJump)
             PerformJump();
