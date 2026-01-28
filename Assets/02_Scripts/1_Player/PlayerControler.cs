@@ -156,9 +156,12 @@ public class PlayerControler : MonoBehaviour
             joystickFinger = finger;
             joystickStartPos = pos;
             joystickFingerDragged = false;
-
             OnTouchStarted?.Invoke(pos);
+            return;
         }
+
+        // Any other finger → jump immediately
+        PerformJump();
     }
 
     private void OnFingerMove(Finger finger)
@@ -184,38 +187,29 @@ public class PlayerControler : MonoBehaviour
     {
         if (IsPointerOverUI()) return;
 
-        float duration = (float)(
-            finger.currentTouch.time - finger.currentTouch.startTime
-        );
+        // Only joystick finger can jump on release
+        if (finger != joystickFinger)
+            return;
+
+        float duration =
+            (float)(finger.currentTouch.time - finger.currentTouch.startTime);
 
         float distance = Vector2.Distance(
             finger.currentTouch.startScreenPosition,
             finger.screenPosition
         );
 
-        // Joystick finger released
-        if (finger == joystickFinger)
-        {
-            bool isTapJump = !joystickFingerDragged &&
-                duration <= tapMaxDuration &&
-                distance <= joystickDeadZone;
+        bool isTapJump =
+            !joystickFingerDragged &&
+            duration <= tapMaxDuration &&
+            distance <= joystickDeadZone;
 
-            if (isTapJump)
-            {
-                PerformJump();
-            }
-
-            ResetJoystick();
-
-            return;
-        }
-
-        // Any other finger → jump
-        if (duration <= tapMaxDuration && distance <= joystickDeadZone)
-        {
+        if (isTapJump)
             PerformJump();
-        }
+
+        ResetJoystick();
     }
+
 
     // --- PRIVATE METHODS ---
 

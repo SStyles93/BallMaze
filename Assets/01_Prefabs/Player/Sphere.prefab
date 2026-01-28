@@ -267,7 +267,7 @@ MonoBehaviour:
   playerRigidbody: {fileID: 6087839670450387137}
   torqueStrength: 100
   maxAngularVelocity: 100
-  jumpForce: 12
+  jumpForce: 15
   gravityScale: 2
   groundHelp: 0.2
   iceHelp: 0.5
@@ -277,6 +277,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   fallThreshold: -5
+  lastSafePlatform: {fileID: 0}
 --- !u!114 &9137505450509997439
 MonoBehaviour:
   m_ObjectHideFlags: 0
