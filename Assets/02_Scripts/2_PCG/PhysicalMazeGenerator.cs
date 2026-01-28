@@ -9,6 +9,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
     public GameObject icePrefab;
     public GameObject movingPlatformPrefabH;
     public GameObject movingPlatformPrefabV;
+    public GameObject piquesPrefab;
     public GameObject startPrefab;
     public GameObject endPrefab;
     public GameObject starPrefab;
@@ -100,17 +101,17 @@ public class PhysicalMazeGenerator : MonoBehaviour
     // ======================================
     private void SpawnCell(CellData cell, Vector3 basePosition, int x, int y)
     {
-        // 1️⃣ Wall overrides everything
+        // 1️ Wall overrides everything
         if (cell.isEmpty)
         {
             SpawnWall(basePosition, x, y);
             return;
         }
 
-        // 2️⃣ Ground always exists
+        // 2️ Ground always exists
         SpawnGround(cell.ground, basePosition, x, y);
 
-        // 3️⃣ Overlay (optional)
+        // 3️ Overlay (optional)
         if (cell.overlay != OverlayType.None)
             SpawnOverlay(cell.overlay, basePosition, x, y);
     }
@@ -136,6 +137,10 @@ public class PhysicalMazeGenerator : MonoBehaviour
             GroundType.Ice => icePrefab,
             GroundType.MovingPlatformH => movingPlatformPrefabH,
             GroundType.MovingPlatformV => movingPlatformPrefabV,
+            GroundType.Piques => piquesPrefab,
+            // **************************
+            // ADD ANY PREFAB TYPE HER
+            // **************************
             _ => null
         };
 

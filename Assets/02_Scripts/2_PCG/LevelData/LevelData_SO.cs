@@ -16,8 +16,9 @@ public class LevelData_SO
 
     [Header("Path Parameters")]
     public float emptyRatio;
-    public float iceRation;
+    public float iceRatio;
     public float movingPlatformRatio;
+    public float piqueRatio;
 
     [Header("Star & Currencies Parameters")]
     public int coinsToEarn;

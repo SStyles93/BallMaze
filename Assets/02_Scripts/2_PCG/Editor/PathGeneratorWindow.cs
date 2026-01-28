@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Security.Cryptography;
 using UnityEditor;
+using UnityEngine;
 
 public class PathGeneratorWindow : EditorWindow
 {
@@ -197,6 +198,13 @@ public class PathGeneratorWindow : EditorWindow
         parameters.movingPlatformRatio =
             EditorGUILayout.Slider("Moving Platform %", parameters.movingPlatformRatio, 0, 1);
 
+        parameters.piquesRatio =
+            EditorGUILayout.Slider("Pique %", parameters.piquesRatio, 0, 1);
+        
+        // **************************
+        // ADD ANY MODIFIER TYPE HER
+        // **************************
+
         if (EditorGUI.EndChangeCheck())
             Regenerate();
     }
@@ -255,6 +263,10 @@ public class PathGeneratorWindow : EditorWindow
                     GroundType.MovingPlatformH => Color.magenta,
                     GroundType.MovingPlatformV => Color.magenta,
                     GroundType.PlatformSide => Color.magenta * 0.75f,
+                    GroundType.Piques => Color.black,
+                    // **************************
+                    // ADD ANY GROUND TYPE HER
+                    // **************************
                     _ => Color.pink
                 };
 
@@ -414,7 +426,6 @@ public class PathGeneratorWindow : EditorWindow
             {
                 cell.isEmpty = true;  // then turn into wall
             }
-
         }
         Repaint();
         e.Use();
@@ -454,9 +465,19 @@ public class PathGeneratorWindow : EditorWindow
         data.endMinHeightPercent = parameters.endMaxHeightPercent;
         data.inputSeed = parameters.inputSeed;
 
+        // Star fields
         data.coinsToEarn = parameters.coinsToEarn;
         data.minStarDistance = parameters.minStarDistance;
         data.starsConnectToEnd = parameters.starsConnectToEnd;
+
+        // Platform field
+        data.emptyRatio = parameters.emptyRatio;
+        data.iceRatio = parameters.iceRatio;
+        data.movingPlatformRatio = parameters.movingPlatformRatio;
+        data.piqueRatio = parameters.piquesRatio;
+        // **************************
+        // ADD ANY MODIFIER TYPE HER
+        // **************************
 
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
@@ -495,12 +516,19 @@ public class PathGeneratorWindow : EditorWindow
         parameters.fixedEnd = data.fixedEnd;
         parameters.endMaxHeightPercent = data.endMinHeightPercent;
 
-
         parameters.inputSeed = data.usedSeed;
 
         parameters.coinsToEarn = data.coinsToEarn;
         parameters.minStarDistance = data.minStarDistance;
         parameters.starsConnectToEnd = data.starsConnectToEnd;
+
+        parameters.emptyRatio = data.emptyRatio;
+        parameters.iceRatio = data.iceRatio;
+        parameters.movingPlatformRatio = data.movingPlatformRatio;
+        parameters.piquesRatio = data.piqueRatio;
+        // **************************
+        // ADD ANY MODIFIER TYPE HER
+        // **************************
 
         // Load from flattened grid (for serialization)
         grid = new CellData[data.gridWidth, data.gridHeight];

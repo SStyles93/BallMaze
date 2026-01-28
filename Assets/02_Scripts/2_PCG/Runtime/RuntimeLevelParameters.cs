@@ -10,6 +10,10 @@ public struct RuntimeLevelParameters
     public float emptyRatio;
     public float iceRatio;
     public float movingPlatformRatio;
+    public float piqueRatio;
+    // **************************
+    // ADD ANY MODIFIER TYPE HER
+    // **************************
 }
 
 public static class RuntimeLevelProgression
@@ -21,6 +25,10 @@ public static class RuntimeLevelProgression
     const float MAX_EMPTY = 0.5f;
     const float MAX_ICE = 1.0f;
     const float MAX_MOVING = 0.5f;
+    const float MAX_PIQUES = 0.5f;
+    // **************************
+    // ADD ANY MODIFIER TYPE HER
+    // **************************
 
     // -------------------------
     // ADAPTIVE DIFFICULTY
@@ -85,8 +93,8 @@ public static class RuntimeLevelProgression
         int maxWidth = 7;
         int minHeight = 10;
         int maxHeight = 30;
-        int minStarDistance = minHeight/3;
-        int maxStarDistance = maxHeight/3;
+        int minStarDistance = minHeight / 3;
+        int maxStarDistance = maxHeight / 3;
 
         // -------------------------
         // CYCLE PROGRESSION
@@ -163,8 +171,12 @@ public static class RuntimeLevelProgression
             cycleT,
             out float emptyRatio,
             out float iceRatio,
-            out float movingPlatformRatio
-        );
+            out float movingPlatformRatio,
+            out float piqueRatio
+            // **************************
+            // ADD ANY MODIFIER TYPE HER
+            // **************************
+            );
 
         // -------------------------
         // ADAPTIVE DIFFICULTY
@@ -179,6 +191,10 @@ public static class RuntimeLevelProgression
         emptyRatio *= finalMultiplier;
         iceRatio *= finalMultiplier;
         movingPlatformRatio *= finalMultiplier;
+        piqueRatio *= finalMultiplier;
+        // **************************
+        // ADD ANY MODIFIER TYPE HER
+        // **************************
 
         // -------------------------
         // OUTPUT
@@ -189,6 +205,10 @@ public static class RuntimeLevelProgression
         p.emptyRatio = emptyRatio;
         p.iceRatio = iceRatio;
         p.movingPlatformRatio = movingPlatformRatio;
+        p.piqueRatio = piqueRatio;
+        // **************************
+        // ADD ANY MODIFIER TYPE HER
+        // **************************
 
         return p;
     }
@@ -198,7 +218,7 @@ public static class RuntimeLevelProgression
     // -------------------------
 
     static bool IsRecoveryLevel(
-    int cycleIndex,int cycleLevel,bool hasMaxRelief)
+    int cycleIndex, int cycleLevel, bool hasMaxRelief)
     {
         if (!hasMaxRelief)
             return false;
@@ -245,9 +265,16 @@ public static class RuntimeLevelProgression
 
     static void ApplyArchetypeData(
         LevelArchetypeData_SO data, float t,
-        out float empty, out float ice, out float moving)
+        out float empty, 
+        out float ice, 
+        out float moving, 
+        out float piques
+        // **************************
+        // ADD ANY MODIFIER TYPE HER
+        // **************************
+        )
     {
-        empty = ice = moving = 0f;
+        empty = ice = moving = piques = 0f;
 
         if (data == null || data.modifiers == null)
             return;
@@ -269,12 +296,20 @@ public static class RuntimeLevelProgression
                 case ModifierType.Moving:
                     moving = Mathf.Min(MAX_MOVING, scaled * MAX_MOVING);
                     break;
+
+                case ModifierType.Piques:
+                    piques = Mathf.Min(MAX_PIQUES, scaled * MAX_PIQUES);
+                    break;
+
+                    // **************************
+                    // ADD ANY MODIFIER TYPE HER
+                    // **************************
             }
         }
     }
 
     static bool HasMaxDifficultyRelief(
-    int livesLostThisLevel,int failedTimes,float globalDifficultyDebt)
+    int livesLostThisLevel, int failedTimes, float globalDifficultyDebt)
     {
         bool maxLocalRelief = livesLostThisLevel >= 3;
         bool maxGlobalRelief = globalDifficultyDebt >= 1f;

@@ -4,7 +4,8 @@ public enum GroundType
     Ice,
     MovingPlatformH, // horizontal
     MovingPlatformV, // vertical
-    PlatformSide
+    PlatformSide,
+    Piques
 }
 
 public enum OverlayType

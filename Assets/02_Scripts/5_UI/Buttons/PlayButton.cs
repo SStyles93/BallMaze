@@ -1,12 +1,25 @@
+using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class PlayButton : UIButton
 {
     [SerializeField] private TMP_Text m_levelIndexText;
+
+    [Header("Animation")]
+    [SerializeField] public float scaleUp = 1.15f;
+    [SerializeField] public float duration = 0.15f;
+
     private int m_indexOfLevelToPlay = 0;
+    Vector3 initialScale;
+
+    private void Awake()
+    {
+        initialScale = transform.localScale;
+    }
 
     protected override void Start()
     {
@@ -31,6 +44,9 @@ public class PlayButton : UIButton
     {
         m_indexOfLevelToPlay = index;
         m_levelIndexText.text = index.ToString();
+        // Scale
+        PlayHighlight();
+
     }
 
     private void PlayNextLevel()
@@ -68,5 +84,17 @@ public class PlayButton : UIButton
                 .Perform();
         }
 
+    }
+
+    private void PlayHighlight()
+    {
+        transform
+            .DOScale(initialScale * scaleUp, duration)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                transform.DOScale(initialScale, duration)
+                         .SetEase(Ease.InBack);
+            });
     }
 }

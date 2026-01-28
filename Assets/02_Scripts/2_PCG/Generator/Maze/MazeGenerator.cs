@@ -57,9 +57,18 @@ namespace PxP.PCG
 
                 ref var cell = ref grid[pos.x, pos.y];
                 cell.isEmpty = false;
-                cell.ground = rng.NextDouble() < p.iceRatio
-                    ? GroundType.Ice
-                    : GroundType.Floor;
+
+                double roll = rng.NextDouble();
+
+                if (roll < p.iceRatio)
+                    cell.ground = GroundType.Ice;
+                else if (roll < p.iceRatio + p.piquesRatio)
+                    cell.ground = GroundType.Piques;
+                else
+                    cell.ground = GroundType.Floor;
+                // **************************
+                // ADD ANY MODIFIER TYPE HER
+                // **************************
             }
         }
 

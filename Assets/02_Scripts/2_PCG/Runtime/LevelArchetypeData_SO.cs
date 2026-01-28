@@ -5,7 +5,11 @@ public enum ModifierType
 {
     Empty,
     Ice,
-    Moving
+    Moving,
+    Piques
+    // **************************
+    // ADD ANY MODIFIER TYPE HER
+    // **************************
 }
 
 [CreateAssetMenu(menuName = "Level Progression/Level Archetype")]

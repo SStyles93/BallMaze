@@ -23,6 +23,7 @@ public class GeneratorParameters_SO : ScriptableObject
     [Range(0f, 1f)] public float emptyRatio = 0;
     [Range(0f, 1f)] public float iceRatio = 0;
     [Range(0f, 1f)] public float movingPlatformRatio = 0;
+    [Range(0f, 1f)] public float piquesRatio = 0;
 
     [Header("Stars & Currencies")]
     [Range(0, 20)]
