@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -7,29 +9,13 @@ public struct RuntimeLevelParameters
     public int width;
     public int height;
     public int minStarDistance;
-    public float emptyRatio;
-    public float iceRatio;
-    public float movingPlatformRatio;
-    public float piqueRatio;
-    // **************************
-    // ADD ANY MODIFIER TYPE HER
-    // **************************
+
+    // Flexible dictionary for any tile type
+    public Dictionary<GroundType, float> tileRatios;
 }
 
 public static class RuntimeLevelProgression
 {
-    // -------------------------
-    // DESIGN CONSTANTS
-    // -------------------------
-
-    const float MAX_EMPTY = 0.5f;
-    const float MAX_ICE = 1.0f;
-    const float MAX_MOVING = 0.5f;
-    const float MAX_PIQUES = 0.5f;
-    // **************************
-    // ADD ANY MODIFIER TYPE HER
-    // **************************
-
     // -------------------------
     // ADAPTIVE DIFFICULTY
     // -------------------------
@@ -80,6 +66,7 @@ public static class RuntimeLevelProgression
 
     public static RuntimeLevelParameters GetParametersForLevel(
         int levelIndex,
+        TileDatabase_SO tileDatabase,
         LevelCycleProgression_SO cycleProgression,
         int levelsPerCycle = 30, int livesLostThisLevel = 0, int failedTimes = 0,
         float globalDifficultyDebt = 0)
@@ -166,35 +153,29 @@ public static class RuntimeLevelProgression
         LevelArchetypeData_SO archetype = SelectArchetype(
             cycleProgression, cycleIndex, cycleLevel, isRecovery);
 
-        ApplyArchetypeData(
-            archetype,
-            cycleT,
-            out float emptyRatio,
-            out float iceRatio,
-            out float movingPlatformRatio,
-            out float piqueRatio
-            // **************************
-            // ADD ANY MODIFIER TYPE HER
-            // **************************
-            );
+        // -------------------------
+        // APPLY ARCHETYPE DATA
+        // -------------------------
+
+        ApplyArchetypeData(archetype, cycleT, 
+            tileDatabase, out Dictionary<GroundType, float> tileRatios);
+
 
         // -------------------------
         // ADAPTIVE DIFFICULTY
         // -------------------------
 
         float localDifficultyModifier = GetDifficultyMultiplier(livesLostThisLevel, failedTimes);
-
         float globalDifficultyModifier = GetGlobalDifficultyMultiplier(globalDifficultyDebt);
-
         float finalMultiplier = localDifficultyModifier * globalDifficultyModifier;
 
-        emptyRatio *= finalMultiplier;
-        iceRatio *= finalMultiplier;
-        movingPlatformRatio *= finalMultiplier;
-        piqueRatio *= finalMultiplier;
-        // **************************
-        // ADD ANY MODIFIER TYPE HER
-        // **************************
+        if (tileRatios != null)
+        {
+            foreach (var key in tileRatios.Keys.ToList())
+            {
+                tileRatios[key] *= finalMultiplier;
+            }
+        }
 
         // -------------------------
         // OUTPUT
@@ -202,13 +183,7 @@ public static class RuntimeLevelProgression
         p.width = width;
         p.height = height;
         p.minStarDistance = Mathf.Clamp(starDistance, 1, 10);
-        p.emptyRatio = emptyRatio;
-        p.iceRatio = iceRatio;
-        p.movingPlatformRatio = movingPlatformRatio;
-        p.piqueRatio = piqueRatio;
-        // **************************
-        // ADD ANY MODIFIER TYPE HER
-        // **************************
+        p.tileRatios = tileRatios;
 
         return p;
     }
@@ -232,8 +207,8 @@ public static class RuntimeLevelProgression
     // -------------------------
 
     static LevelArchetypeData_SO SelectArchetype(
-     LevelCycleProgression_SO progression,
-     int cycleIndex, int cycleLevel, bool isRecovery)
+        LevelCycleProgression_SO progression,
+        int cycleIndex, int cycleLevel, bool isRecovery)
     {
         if (isRecovery)
             return progression.recoveryArchetype;
@@ -264,47 +239,26 @@ public static class RuntimeLevelProgression
     // -------------------------
 
     static void ApplyArchetypeData(
-        LevelArchetypeData_SO data, float t,
-        out float empty, 
-        out float ice, 
-        out float moving, 
-        out float piques
-        // **************************
-        // ADD ANY MODIFIER TYPE HER
-        // **************************
-        )
+    LevelArchetypeData_SO data, float t,
+    TileDatabase_SO tileDatabase,
+    out Dictionary<GroundType, float> tileRatios)
     {
-        empty = ice = moving = piques = 0f;
+        tileRatios = new Dictionary<GroundType, float>();
 
         if (data == null || data.modifiers == null)
             return;
 
         foreach (var mod in data.modifiers)
         {
+            var tileDef = tileDatabase.GetByGround(mod.groundType);
+            if (tileDef == null)
+                continue;
+
             float scaled = Mathf.Clamp01(mod.weight * t);
+            float maxRatio = tileDef.maxRatio;
 
-            switch (mod.type)
-            {
-                case ModifierType.Empty:
-                    empty = Mathf.Min(MAX_EMPTY, scaled * MAX_EMPTY);
-                    break;
-
-                case ModifierType.Ice:
-                    ice = Mathf.Min(MAX_ICE, scaled * MAX_ICE);
-                    break;
-
-                case ModifierType.Moving:
-                    moving = Mathf.Min(MAX_MOVING, scaled * MAX_MOVING);
-                    break;
-
-                case ModifierType.Piques:
-                    piques = Mathf.Min(MAX_PIQUES, scaled * MAX_PIQUES);
-                    break;
-
-                    // **************************
-                    // ADD ANY MODIFIER TYPE HER
-                    // **************************
-            }
+            tileRatios[mod.groundType] =
+                Mathf.Min(maxRatio, scaled * maxRatio);
         }
     }
 

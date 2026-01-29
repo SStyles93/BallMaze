@@ -3,16 +3,8 @@ using UnityEngine;
 
 public class PhysicalMazeGenerator : MonoBehaviour
 {
-    [Header("Prefabs")]
-    public GameObject wallPrefab;
-    public GameObject floorPrefab;
-    public GameObject icePrefab;
-    public GameObject movingPlatformPrefabH;
-    public GameObject movingPlatformPrefabV;
-    public GameObject piquesPrefab;
-    public GameObject startPrefab;
-    public GameObject endPrefab;
-    public GameObject starPrefab;
+    [Header("Prefabs \"Tile Database\"")]
+    public TileDatabase_SO tileDatabase_SO;
 
     [Header("Layout")]
     public float cellSize = 1f;
@@ -101,10 +93,11 @@ public class PhysicalMazeGenerator : MonoBehaviour
     // ======================================
     private void SpawnCell(CellData cell, Vector3 basePosition, int x, int y)
     {
-        // 1️ Wall overrides everything
+        // Wall overrides everything
         if (cell.isEmpty)
         {
-            SpawnWall(basePosition, x, y);
+            // WALLS WOULD BE SPAWNED HERE
+            // (not in the game design, but could happen)
             return;
         }
 
@@ -112,51 +105,26 @@ public class PhysicalMazeGenerator : MonoBehaviour
         SpawnGround(cell.ground, basePosition, x, y);
 
         // 3️ Overlay (optional)
-        if (cell.overlay != OverlayType.None)
+        if (cell.overlay != OverlayType.NONE)
             SpawnOverlay(cell.overlay, basePosition, x, y);
-    }
-
-    private void SpawnWall(Vector3 basePosition, int x, int y)
-    {
-        if (wallPrefab == null) return;
-
-        GameObject wall = Instantiate(
-            wallPrefab,
-            basePosition,
-            Quaternion.identity,
-            transform
-        );
-        wall.name = $"Wall_{x}_{y}";
     }
 
     private void SpawnGround(GroundType groundType, Vector3 basePosition, int x, int y)
     {
-        GameObject prefab = groundType switch
+        if (tileDatabase_SO == null) return;
+
+        TileDefinition_SO tileDef = tileDatabase_SO.GetByGround(groundType);
+        if (tileDef == null || tileDef.prefab == null) return;
+
+        GameObject ground = Instantiate(tileDef.prefab,
+            basePosition, Quaternion.identity,
+            transform);
+
+        // Moving platforms: set movement amplitude
+        if (tileDef.requiresThreeTiles)
         {
-            GroundType.Floor => floorPrefab,
-            GroundType.Ice => icePrefab,
-            GroundType.MovingPlatformH => movingPlatformPrefabH,
-            GroundType.MovingPlatformV => movingPlatformPrefabV,
-            GroundType.Piques => piquesPrefab,
-            // **************************
-            // ADD ANY PREFAB TYPE HER
-            // **************************
-            _ => null
-        };
-
-        if (prefab == null) return;
-
-        GameObject ground = Instantiate(
-            prefab,
-            basePosition,
-            Quaternion.identity,
-            transform
-        );
-
-        // Set the value of movement so that is it always coherant with the grid's size
-        if (groundType == GroundType.MovingPlatformH || groundType == GroundType.MovingPlatformV)
-        {
-            ground.GetComponent<PlatformMovement>().MovementAmplitude = cellSize;
+            if (ground.TryGetComponent<PlatformMovement>(out var pm))
+                pm.MovementAmplitude = cellSize;
         }
 
         ground.name = $"{groundType}_{x}_{y}";
@@ -164,37 +132,19 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     private void SpawnOverlay(OverlayType overlayType, Vector3 basePosition, int x, int y)
     {
-        GameObject prefab = overlayType switch
-        {
-            OverlayType.Start => startPrefab,
-            OverlayType.End => endPrefab,
-            OverlayType.Star => starPrefab,
-            _ => null
-        };
+        if (tileDatabase_SO == null) return;
 
-        if (prefab == null) return;
+        TileDefinition_SO tileDef = tileDatabase_SO.GetByOverlay(overlayType);
+        if (tileDef == null || tileDef.prefab == null) return;
 
-        basePosition.y += GetOverlayHeight(overlayType);
-
-        GameObject overlay = Instantiate(
-            prefab,
+        GameObject overlayGO = Instantiate(
+            tileDef.prefab,
             basePosition,
             Quaternion.identity,
             transform
         );
 
-        overlay.name = $"{overlayType}_{x}_{y}";
-    }
-
-    private float GetOverlayHeight(OverlayType type)
-    {
-        return type switch
-        {
-            OverlayType.Start => 1.52f,
-            OverlayType.End => 1.52f,
-            OverlayType.Star => 1.0f,
-            _ => 0f
-        };
+        overlayGO.name = $"{overlayType}_{x}_{y}";
     }
 
     // ======================================

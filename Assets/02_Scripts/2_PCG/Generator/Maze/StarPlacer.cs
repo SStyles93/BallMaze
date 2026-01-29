@@ -21,7 +21,7 @@ namespace PxP.PCG
             foreach (var pos in candidates)
             {
                 if (placed.Count >= p.starCount) break;
-                if (grid[pos.x, pos.y].overlay != OverlayType.None) continue;
+                if (grid[pos.x, pos.y].overlay != OverlayType.NONE) continue;
 
                 if (placed.Any(s => Vector2Int.Distance(s, pos) < p.minStarDistance))
                     continue;
@@ -36,7 +36,7 @@ namespace PxP.PCG
                 foreach (var pos in candidates)
                 {
                     if (placed.Count >= p.starCount) break;
-                    if (grid[pos.x, pos.y].overlay != OverlayType.None) continue;
+                    if (grid[pos.x, pos.y].overlay != OverlayType.NONE) continue;
                     if (placed.Contains(pos)) continue;
 
                     grid[pos.x, pos.y].overlay = OverlayType.Star;

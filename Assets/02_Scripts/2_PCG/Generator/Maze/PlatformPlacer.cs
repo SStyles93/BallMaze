@@ -8,17 +8,28 @@ namespace PxP.PCG
     {
         public static void PlaceMovingPlatforms(CellData[,] grid, GeneratorParameters_SO p, System.Random rng)
         {
-            if (p.movingPlatformRatio <= 0f)
+            if (p.tileDatabase == null)
                 return;
 
-            int width = grid.GetLength(0);
-            int height = grid.GetLength(1);
+            // Fetch tile definition instead of parameter
+            TileDefinition_SO platformDef =
+                p.tileDatabase.GetByGround(GroundType.MovingPlatformH);
 
-            int maxPlatforms = Mathf.Max(1, Mathf.RoundToInt(CountWalkableTiles(grid) * p.movingPlatformRatio / 3f));
+            if (platformDef == null || platformDef.ratio <= 0f)
+                return;
+
+            float ratio = Mathf.Clamp01(platformDef.ratio);
+
+
+            int walkableCount = CountWalkableTiles(grid);
+
+            int maxPlatforms = Mathf.Max(1,Mathf.RoundToInt(walkableCount * ratio / 3f));
 
             var candidates = CollectCandidates(grid);
-
             Shuffle(candidates, rng);
+            
+            int width = grid.GetLength(0);
+            int height = grid.GetLength(1);
 
             bool[,] reserved = new bool[width, height];
             int placed = 0;
@@ -39,7 +50,7 @@ namespace PxP.PCG
         {
             int count = 0;
             foreach (var cell in grid)
-                if (!cell.isEmpty && cell.overlay == OverlayType.None)
+                if (!cell.isEmpty && cell.overlay == OverlayType.NONE)
                     count++;
             return count;
         }
@@ -119,7 +130,7 @@ namespace PxP.PCG
 
         private static bool IsWalkable(CellData[,] grid, int x, int y)
         {
-            return !grid[x, y].isEmpty && grid[x, y].overlay == OverlayType.None;
+            return !grid[x, y].isEmpty && grid[x, y].overlay == OverlayType.NONE;
         }
 
         private static bool IsOverlapping(bool[,] reserved, (Vector2Int center, bool horizontal) c)

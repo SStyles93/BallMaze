@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ public class PathGeneratorWindow : EditorWindow
 
     private PaintMode paintMode = PaintMode.Ground;
     private GroundType selectedGround = GroundType.Floor;
-    private OverlayType selectedOverlay = OverlayType.None;
+    private OverlayType selectedOverlay = OverlayType.NONE;
 
     private enum PaintMode
     {
@@ -187,27 +188,35 @@ public class PathGeneratorWindow : EditorWindow
     }
     private void DrawPathSettings()
     {
+        if (parameters.tileDatabase == null)
+        {
+            EditorGUILayout.HelpBox(
+                "TileDatabase is missing from GeneratorParameters.",
+                MessageType.Warning);
+            return;
+        }
+
+
         EditorGUI.BeginChangeCheck();
+        foreach (var tile in parameters.tileDatabase.Tiles)
+        {
+            if (tile.groundType == GroundType.Floor || 
+                tile.overlayType != OverlayType.NONE || 
+                !tile.hasRatio) continue;
 
-        parameters.emptyRatio =
-            EditorGUILayout.Slider("Emtpy %", parameters.emptyRatio, 0, 1);
+            string label = $"{tile.groundType} %";
 
-        parameters.iceRatio =
-            EditorGUILayout.Slider("Ice %", parameters.iceRatio, 0, 1);
-
-        parameters.movingPlatformRatio =
-            EditorGUILayout.Slider("Moving Platform %", parameters.movingPlatformRatio, 0, 1);
-
-        parameters.piquesRatio =
-            EditorGUILayout.Slider("Pique %", parameters.piquesRatio, 0, 1);
-        
-        // **************************
-        // ADD ANY MODIFIER TYPE HER
-        // **************************
+            tile.ratio = EditorGUILayout.Slider(label,
+                tile.ratio, 0f, tile.maxRatio);
+        }
 
         if (EditorGUI.EndChangeCheck())
+        {
+            EditorUtility.SetDirty(parameters.tileDatabase);
             Regenerate();
+        }
     }
+
     private void DrawStarSettings()
     {
         EditorGUI.BeginChangeCheck();
@@ -229,7 +238,7 @@ public class PathGeneratorWindow : EditorWindow
     }
     private void DrawGrid()
     {
-        if (grid == null)
+        if (grid == null || parameters.tileDatabase == null)
             return;
 
         Rect rect = GUILayoutUtility.GetRect(
@@ -256,19 +265,11 @@ public class PathGeneratorWindow : EditorWindow
                 );
 
                 // --- Draw ground ---
-                Color groundColor = cell.ground switch
-                {
-                    GroundType.Floor => Color.green,
-                    GroundType.Ice => Color.cyan,
-                    GroundType.MovingPlatformH => Color.magenta,
-                    GroundType.MovingPlatformV => Color.magenta,
-                    GroundType.PlatformSide => Color.magenta * 0.75f,
-                    GroundType.Piques => Color.black,
-                    // **************************
-                    // ADD ANY GROUND TYPE HER
-                    // **************************
-                    _ => Color.pink
-                };
+                Color groundColor;
+
+                var def = parameters.tileDatabase.GetByGround(cell.ground);
+                groundColor = def != null ? 
+                    def.editorColor : Color.pink;
 
                 if (cell.isEmpty)
                     groundColor = Color.gray;
@@ -279,7 +280,7 @@ public class PathGeneratorWindow : EditorWindow
 
 
                 // --- Draw overlays ---
-                if (cell.overlay != OverlayType.None)
+                if (cell.overlay != OverlayType.NONE)
                 {
                     Color overlayColor = cell.overlay switch
                     {
@@ -418,9 +419,9 @@ public class PathGeneratorWindow : EditorWindow
         // RIGHT CLICK → first remove overlay, then wall
         if (e.button == 1)
         {
-            if (cell.overlay != OverlayType.None)
+            if (cell.overlay != OverlayType.NONE)
             {
-                cell.overlay = OverlayType.None; // remove overlay first
+                cell.overlay = OverlayType.NONE; // remove overlay first
             }
             else
             {
@@ -470,15 +471,23 @@ public class PathGeneratorWindow : EditorWindow
         data.minStarDistance = parameters.minStarDistance;
         data.starsConnectToEnd = parameters.starsConnectToEnd;
 
-        // Platform field
-        data.emptyRatio = parameters.emptyRatio;
-        data.iceRatio = parameters.iceRatio;
-        data.movingPlatformRatio = parameters.movingPlatformRatio;
-        data.piqueRatio = parameters.piquesRatio;
-        // **************************
-        // ADD ANY MODIFIER TYPE HER
-        // **************************
+        // --- TILES RATIOS ---
+        data.tileRatios.Clear();
 
+        if (parameters.tileRatios != null)
+        {
+            foreach (var kvp in parameters.tileRatios)
+            {
+                data.tileRatios.Add(
+                    new TileRatioData{
+                        groundType = kvp.Key,
+                        ratio = kvp.Value
+                    });
+            }
+        }
+
+
+        // -- Size ---
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
         data.gridWidth = width;
@@ -522,13 +531,17 @@ public class PathGeneratorWindow : EditorWindow
         parameters.minStarDistance = data.minStarDistance;
         parameters.starsConnectToEnd = data.starsConnectToEnd;
 
-        parameters.emptyRatio = data.emptyRatio;
-        parameters.iceRatio = data.iceRatio;
-        parameters.movingPlatformRatio = data.movingPlatformRatio;
-        parameters.piquesRatio = data.piqueRatio;
-        // **************************
-        // ADD ANY MODIFIER TYPE HER
-        // **************************
+        // --- TILES RATIOS ---
+        parameters.tileRatios = new Dictionary<GroundType, float>();
+
+        foreach (var entry in data.tileRatios)
+        {
+            // Ignore tiles that no longer exist
+            if (parameters.tileDatabase.GetByGround(entry.groundType) != null)
+            {
+                parameters.tileRatios[entry.groundType] = entry.ratio;
+            }
+        }
 
         // Load from flattened grid (for serialization)
         grid = new CellData[data.gridWidth, data.gridHeight];

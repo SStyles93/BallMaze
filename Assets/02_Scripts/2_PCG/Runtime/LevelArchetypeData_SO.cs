@@ -1,24 +1,13 @@
 using UnityEngine;
 using System;
 
-public enum ModifierType
-{
-    Empty,
-    Ice,
-    Moving,
-    Piques
-    // **************************
-    // ADD ANY MODIFIER TYPE HER
-    // **************************
-}
-
 [CreateAssetMenu(menuName = "Level Progression/Level Archetype")]
 public class LevelArchetypeData_SO : ScriptableObject
 {
     [Serializable]
     public struct ModifierWeight
     {
-        public ModifierType type;
+        public GroundType groundType;
         [Range(0f, 1f)]
         public float weight; // 0 = inactive, 1 = dominant
     }

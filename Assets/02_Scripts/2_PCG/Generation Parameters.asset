@@ -18,9 +18,7 @@ MonoBehaviour:
   fixedEnd: {x: 0, y: 0}
   endMaxHeightPercent: 10
   inputSeed: -1
-  emptyRatio: 0
-  iceRatio: 0.64788896
-  movingPlatformRatio: 0
+  tileDatabase: {fileID: 11400000, guid: dcde8a4c58da6054cbbc67578ebde83b, type: 2}
   starCount: 3
   coinsToEarn: 60
   minStarDistance: 3

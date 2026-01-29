@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace PxP.PCG
 {
     public static class MazeGenerator
     {
-        public static HashSet<Vector2Int> GenerateKruskalMaze(int width,int height, System.Random rng)
+        public static HashSet<Vector2Int> GenerateKruskalMaze(int width, int height, System.Random rng)
         {
             var cells = new List<Vector2Int>();
             var edges = new List<Edge>();
@@ -23,33 +24,37 @@ namespace PxP.PCG
             void TryAddEdge(Vector2Int a, Vector2Int delta)
             {
                 Vector2Int b = a + delta;
-
-                if (b.x < 0 || b.x >= width ||
-                    b.y < 0 || b.y >= height)
+                if (b.x < 0 || b.x >= width || b.y < 0 || b.y >= height)
                     return;
-
                 edges.Add(new Edge { a = a, b = b });
             }
 
             GridUtils.Shuffle(edges, rng);
-
             var uf = new UnionFind<Vector2Int>(cells);
             var carved = new HashSet<Vector2Int>();
-
             foreach (var e in edges)
             {
                 if (!uf.Union(e.a, e.b)) continue;
-
                 carved.Add(e.a);
                 carved.Add(e.b);
                 carved.Add((e.a + e.b) / 2);
             }
-
             return carved;
         }
 
-        public static void ApplyMaze(CellData[,] grid, HashSet<Vector2Int> carved,GeneratorParameters_SO p, System.Random rng)
+        public static void ApplyMaze(CellData[,] grid, HashSet<Vector2Int> carved, GeneratorParameters_SO p, System.Random rng)
         {
+            Debug.LogWarning("HAS TO BE COMPLETED !! ");
+
+            var ratioTiles = p.tileDatabase.GetRatioTiles(); // tiles with ratio > 0, excluding Floor
+            float totalRatio = 0f;
+
+            foreach (var tile in ratioTiles)
+                totalRatio += tile.ratio;
+
+            // Floor ratio is the remaining probability
+            float floorRatio = Mathf.Max(0f, 1f - totalRatio);
+
             foreach (var pos in carved)
             {
                 if (!GridUtils.IsInsideGrid(pos, grid))
@@ -58,20 +63,34 @@ namespace PxP.PCG
                 ref var cell = ref grid[pos.x, pos.y];
                 cell.isEmpty = false;
 
-                double roll = rng.NextDouble();
+                // Build cumulative distribution
+                List<(GroundType type, float cumulative)> cumulativeList = new List<(GroundType, float)>();
+                float acc = 0f;
 
-                if (roll < p.iceRatio)
-                    cell.ground = GroundType.Ice;
-                else if (roll < p.iceRatio + p.piquesRatio)
-                    cell.ground = GroundType.Piques;
-                else
-                    cell.ground = GroundType.Floor;
-                // **************************
-                // ADD ANY MODIFIER TYPE HER
-                // **************************
+                foreach (var tile in ratioTiles)
+                {
+                    acc += tile.ratio / Mathf.Max(totalRatio, 1f); // normalize others if total > 1
+                    cumulativeList.Add((tile.groundType, acc));
+                }
+
+                // Add floor at the end
+                acc += floorRatio;
+                cumulativeList.Add((GroundType.Floor, acc));
+
+                // Roll
+                float roll = (float)rng.NextDouble();
+
+                // Pick first tile whose cumulative >= roll
+                foreach (var entry in cumulativeList)
+                {
+                    if (roll <= entry.cumulative)
+                    {
+                        cell.ground = entry.type;
+                        break;
+                    }
+                }
             }
         }
-
         private struct Edge
         {
             public Vector2Int a;

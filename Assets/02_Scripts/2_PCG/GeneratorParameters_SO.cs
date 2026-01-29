@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(
@@ -20,10 +21,8 @@ public class GeneratorParameters_SO : ScriptableObject
     public int inputSeed = -1;
 
     [Header("Path Settings")]
-    [Range(0f, 1f)] public float emptyRatio = 0;
-    [Range(0f, 1f)] public float iceRatio = 0;
-    [Range(0f, 1f)] public float movingPlatformRatio = 0;
-    [Range(0f, 1f)] public float piquesRatio = 0;
+    public TileDatabase_SO tileDatabase;
+    public Dictionary<GroundType, float> tileRatios;
 
     [Header("Stars & Currencies")]
     [Range(0, 20)]

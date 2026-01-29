@@ -1,4 +1,14 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+
+[Serializable]
+public struct TileRatioData
+{
+    public GroundType groundType;
+    public float ratio;
+}
 
 [System.Serializable]
 public class LevelData_SO
@@ -15,10 +25,7 @@ public class LevelData_SO
     public int inputSeed;
 
     [Header("Path Parameters")]
-    public float emptyRatio;
-    public float iceRatio;
-    public float movingPlatformRatio;
-    public float piqueRatio;
+    public List<TileRatioData> tileRatios = new();
 
     [Header("Star & Currencies Parameters")]
     public int coinsToEarn;
