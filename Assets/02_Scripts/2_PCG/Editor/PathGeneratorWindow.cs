@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
 
@@ -189,10 +190,6 @@ public class PathGeneratorWindow : EditorWindow
     {
         EditorGUI.BeginChangeCheck();
 
-
-        parameters.iceRatio =
-            EditorGUILayout.Slider("Ice %", parameters.iceRatio, 0, 1);
-
         parameters.piquesRatio =
             EditorGUILayout.Slider("Pique %", parameters.piquesRatio, 0, 1);
 
@@ -213,8 +210,11 @@ public class PathGeneratorWindow : EditorWindow
 
 
         if (EditorGUI.EndChangeCheck())
+        {
             Regenerate();
+        }
     }
+
     private void DrawStarSettings()
     {
         EditorGUI.BeginChangeCheck();
@@ -490,6 +490,7 @@ public class PathGeneratorWindow : EditorWindow
         // ADD ANY MODIFIER TYPE HER
         // **************************
 
+        // -- Size ---
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
         data.gridWidth = width;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace PxP.PCG
@@ -24,33 +25,31 @@ namespace PxP.PCG
             void TryAddEdge(Vector2Int a, Vector2Int delta)
             {
                 Vector2Int b = a + delta;
-
-                if (b.x < 0 || b.x >= width ||
-                    b.y < 0 || b.y >= height)
+                if (b.x < 0 || b.x >= width || b.y < 0 || b.y >= height)
                     return;
-
                 edges.Add(new Edge { a = a, b = b });
             }
 
             GridUtils.Shuffle(edges, rng);
-
             var uf = new UnionFind<Vector2Int>(cells);
             var carved = new HashSet<Vector2Int>();
-
             foreach (var e in edges)
             {
                 if (!uf.Union(e.a, e.b)) continue;
-
                 carved.Add(e.a);
                 carved.Add(e.b);
                 carved.Add((e.a + e.b) / 2);
             }
-
             return carved;
         }
 
         public static void ApplyMaze(CellData[,] grid, HashSet<Vector2Int> carved, GeneratorParameters_SO p, System.Random rng)
         {
+            float totalRatio = 1.0f;
+
+            // Floor ratio is the remaining probability
+            float floorRatio = Mathf.Max(0f, 1f - totalRatio);
+
             foreach (var pos in carved)
             {
                 if (!GridUtils.IsInsideGrid(pos, grid))
@@ -60,7 +59,6 @@ namespace PxP.PCG
                 cell.isEmpty = false;
 
                 // Floor ratio is always "whatever is left"
-                float floorRatio = 1;
                 float totalModifiers = p.iceRatio + p.piquesRatio + p.doorDownRatio + p.doorUpRatio;
 
                 // Ensure modifiers don’t exceed 1

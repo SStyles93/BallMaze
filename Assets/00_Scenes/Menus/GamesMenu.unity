@@ -429,7 +429,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7e3ddfa4f74c8c41a03ba4f7f3531af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  button: {fileID: 435486657}
   m_levelIndexText: {fileID: 621948259}
+  scaleUp: 1.15
+  duration: 0.15
 --- !u!1 &621948257
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,7 +519,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 119.1
+  m_fontSize: 125.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16579,6 +16582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64501367f6417d64d95cea2b6689582e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIButton
+  button: {fileID: 0}
 --- !u!1001 &827572929941656373
 PrefabInstance:
   m_ObjectHideFlags: 0

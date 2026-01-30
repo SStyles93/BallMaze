@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnvironmentColors", menuName = "Procedural Generation/Colors")]
+[CreateAssetMenu(fileName = "EnvironmentColors", menuName = "Procedural Generation/Environment Colors")]
 public class EnvironmentColors_SO : ScriptableObject
 {
     public ColorPreset[] Presets;

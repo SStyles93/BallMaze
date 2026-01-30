@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelArchetypeData_SO
   archetypeName: Arc_Emtpy
   modifiers:
-  - type: 0
+  - groundType: 6
     weight: 1
   maxActiveModifiers: 1

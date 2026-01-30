@@ -20,7 +20,7 @@ public class LevelArchetypeData_SO : ScriptableObject
     [Serializable]
     public struct ModifierWeight
     {
-        public ModifierType type;
+        public ModifierType modifierType;
         [Range(0f, 1f)]
         public float weight; // 0 = inactive, 1 = dominant
     }

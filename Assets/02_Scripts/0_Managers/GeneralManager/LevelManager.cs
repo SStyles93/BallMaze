@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
     [Header("PCG Parameters")]
     [SerializeField] GeneratorParameters_SO generatorParameters;
     [SerializeField] LevelDatabase_SO levelDatabase;
+    [SerializeField] TileDatabase_SO tileDatabase_SO;
 
     [Header("Progression")]
     [SerializeField] GlobalDifficultyState_SO globalDifficultyModifier;
@@ -44,7 +45,6 @@ public class LevelManager : MonoBehaviour
     public CellData[,] CurrentGrid => currentGrid;
 
     public event Action<int> OnLifeLostToThisLevel;
-
 
     private void Awake()
     {
@@ -383,9 +383,9 @@ public class LevelManager : MonoBehaviour
 
         // 2️ Otherwise, generate runtime parameters
         RuntimeLevelParameters runtimeParams =
-            RuntimeLevelProgression.GetParametersForLevel(levelIndex,
-            levelCycleProgression_SO,
-            levelsPerCycle, previousLivesLostToThisLevel, failedTimes,
+            RuntimeLevelProgression.GetParametersForLevel(levelIndex,tileDatabase_SO,
+            levelCycleProgression_SO, levelsPerCycle, 
+            previousLivesLostToThisLevel, failedTimes,
             globalDifficultyModifier.difficultyDebt);
 
         // 3️ Apply runtime parameters to generator
@@ -396,6 +396,9 @@ public class LevelManager : MonoBehaviour
         baseParameters.emptyRatio = runtimeParams.emptyRatio;
         baseParameters.iceRatio = runtimeParams.iceRatio;
         baseParameters.movingPlatformRatio = runtimeParams.movingPlatformRatio;
+        baseParameters.piquesRatio = runtimeParams.piqueRatio;
+        baseParameters.doorDownRatio= runtimeParams.doorDownRatio;
+        baseParameters.doorUpRatio = runtimeParams.doorUpRatio;
 
         // Star Settings
         baseParameters.minStarDistance = runtimeParams.minStarDistance;

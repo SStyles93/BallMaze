@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cde1c08d0f875b4986b86eca230ec5a, type: 3}
+  m_Name: 0_Ground
+  m_EditorClassIdentifier: Assembly-CSharp::TileDefinition
+  groundType: 0
+  overlayType: 0
+  prefab: {fileID: 3363912154842587231, guid: cf74b047c8c89b44fbe3d7b4a2336747, type: 3}
+  editorColor: {r: 0, g: 1, b: 0, a: 1}
+  ratio: 1
+  maxRatio: 1
+  hasRatio: 0
+  requiresThreeTiles: 0
+  isWalkable: 1
+  allowsOverlay: 1

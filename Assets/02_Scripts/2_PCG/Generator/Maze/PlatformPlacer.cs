@@ -8,17 +8,16 @@ namespace PxP.PCG
     {
         public static void PlaceMovingPlatforms(CellData[,] grid, GeneratorParameters_SO p, System.Random rng)
         {
-            if (p.movingPlatformRatio <= 0f)
-                return;
 
-            int width = grid.GetLength(0);
-            int height = grid.GetLength(1);
+            int walkableCount = CountWalkableTiles(grid);
 
-            int maxPlatforms = Mathf.Max(1, Mathf.RoundToInt(CountWalkableTiles(grid) * p.movingPlatformRatio / 3f));
+            int maxPlatforms = Mathf.Max(1,Mathf.RoundToInt(walkableCount * p.movingPlatformRatio / 3f));
 
             var candidates = CollectCandidates(grid);
-
             Shuffle(candidates, rng);
+            
+            int width = grid.GetLength(0);
+            int height = grid.GetLength(1);
 
             bool[,] reserved = new bool[width, height];
             int placed = 0;

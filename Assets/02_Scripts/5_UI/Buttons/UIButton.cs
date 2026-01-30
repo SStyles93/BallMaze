@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class UIButton : MonoBehaviour
 {
-    protected Button button;
+    [SerializeField] protected Button button;
 
     protected virtual void Awake()
     {

@@ -1,4 +1,14 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+
+[Serializable]
+public struct TileRatioData
+{
+    public GroundType groundType;
+    public float ratio;
+}
 
 [System.Serializable]
 public class LevelData_SO

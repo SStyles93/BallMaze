@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [Serializable]
 public struct RuntimeLevelParameters
@@ -84,6 +87,7 @@ public static class RuntimeLevelProgression
 
     public static RuntimeLevelParameters GetParametersForLevel(
         int levelIndex,
+        TileDatabase_SO tileDatabase,
         LevelCycleProgression_SO cycleProgression,
         int levelsPerCycle = 30, int livesLostThisLevel = 0, int failedTimes = 0,
         float globalDifficultyDebt = 0)
@@ -189,9 +193,7 @@ public static class RuntimeLevelProgression
         // -------------------------
 
         float localDifficultyModifier = GetDifficultyMultiplier(livesLostThisLevel, failedTimes);
-
         float globalDifficultyModifier = GetGlobalDifficultyMultiplier(globalDifficultyDebt);
-
         float finalMultiplier = localDifficultyModifier * globalDifficultyModifier;
 
         emptyRatio *= finalMultiplier;
@@ -242,8 +244,8 @@ public static class RuntimeLevelProgression
     // -------------------------
 
     static LevelArchetypeData_SO SelectArchetype(
-     LevelCycleProgression_SO progression,
-     int cycleIndex, int cycleLevel, bool isRecovery)
+        LevelCycleProgression_SO progression,
+        int cycleIndex, int cycleLevel, bool isRecovery)
     {
         if (isRecovery)
             return progression.recoveryArchetype;
@@ -275,9 +277,9 @@ public static class RuntimeLevelProgression
 
     static void ApplyArchetypeData(
         LevelArchetypeData_SO data, float t,
-        out float empty, 
-        out float ice, 
-        out float moving, 
+        out float empty,
+        out float ice,
+        out float moving,
         out float piques,
         out float doorDown,
         out float doorUp
@@ -291,24 +293,21 @@ public static class RuntimeLevelProgression
         if (data == null || data.modifiers == null)
             return;
 
-        foreach (var mod in data.modifiers)
+        foreach (var modifier in data.modifiers)
         {
-            float scaled = Mathf.Clamp01(mod.weight * t);
+            float scaled = Mathf.Clamp01(modifier.weight * t);
 
-            switch (mod.type)
+            switch (modifier.modifierType)
             {
-                case ModifierType.Empty:
-                    empty = Mathf.Min(MAX_EMPTY, scaled * MAX_EMPTY);
-                    break;
-
                 case ModifierType.Ice:
-                    ice = Mathf.Min(MAX_ICE, scaled * MAX_ICE);
+                    doorDown = Mathf.Min(MAX_ICE, scaled * MAX_ICE);
                     break;
-
                 case ModifierType.Moving:
-                    moving = Mathf.Min(MAX_MOVING, scaled * MAX_MOVING);
+                    doorUp = Mathf.Min(MAX_MOVING, scaled * MAX_MOVING);
                     break;
-
+                case ModifierType.Empty:
+                    doorUp = Mathf.Min(MAX_EMPTY, scaled * MAX_EMPTY);
+                    break;
                 case ModifierType.Piques:
                     piques = Mathf.Min(MAX_PIQUES, scaled * MAX_PIQUES);
                     break;
@@ -318,10 +317,6 @@ public static class RuntimeLevelProgression
                 case ModifierType.DoorUp:
                     doorUp = Mathf.Min(MAX_PIQUES, scaled * MAX_DOORUP);
                     break;
-
-                    // **************************
-                    // ADD ANY MODIFIER TYPE HER
-                    // **************************
             }
         }
     }
@@ -335,3 +330,4 @@ public static class RuntimeLevelProgression
         return maxLocalRelief && maxGlobalRelief;
     }
 }
+

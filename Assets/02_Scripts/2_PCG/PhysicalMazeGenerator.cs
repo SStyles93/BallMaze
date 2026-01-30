@@ -103,10 +103,11 @@ public class PhysicalMazeGenerator : MonoBehaviour
     // ======================================
     private void SpawnCell(CellData cell, Vector3 basePosition, int x, int y)
     {
-        // 1️ Wall overrides everything
+        // Wall overrides everything
         if (cell.isEmpty)
         {
-            SpawnWall(basePosition, x, y);
+            // WALLS WOULD BE SPAWNED HERE
+            // (not in the game design, but could happen)
             return;
         }
 
@@ -116,19 +117,6 @@ public class PhysicalMazeGenerator : MonoBehaviour
         // 3️ Overlay (optional)
         if (cell.overlay != OverlayType.None)
             SpawnOverlay(cell.overlay, basePosition, x, y);
-    }
-
-    private void SpawnWall(Vector3 basePosition, int x, int y)
-    {
-        if (wallPrefab == null) return;
-
-        GameObject wall = Instantiate(
-            wallPrefab,
-            basePosition,
-            Quaternion.identity,
-            transform
-        );
-        wall.name = $"Wall_{x}_{y}";
     }
 
     private void SpawnGround(GroundType groundType, Vector3 basePosition, int x, int y)
@@ -148,19 +136,16 @@ public class PhysicalMazeGenerator : MonoBehaviour
             _ => null
         };
 
-        if (prefab == null) return;
 
-        GameObject ground = Instantiate(
-            prefab,
-            basePosition,
-            Quaternion.identity,
-            transform
-        );
+        GameObject ground = Instantiate(prefab,
+            basePosition, Quaternion.identity,
+            transform);
 
-        // Set the value of movement so that is it always coherant with the grid's size
+        // Moving platforms: set movement amplitude
         if (groundType == GroundType.MovingPlatformH || groundType == GroundType.MovingPlatformV)
         {
-            ground.GetComponent<PlatformMovement>().MovementAmplitude = cellSize;
+            if (ground.TryGetComponent<PlatformMovement>(out var pm))
+                pm.MovementAmplitude = cellSize;
         }
 
         ground.name = $"{groundType}_{x}_{y}";
@@ -173,32 +158,21 @@ public class PhysicalMazeGenerator : MonoBehaviour
             OverlayType.Start => startPrefab,
             OverlayType.End => endPrefab,
             OverlayType.Star => starPrefab,
+            // **************************
+            // ADD ANY PREFAB TYPE HER
+            // **************************
             _ => null
         };
 
-        if (prefab == null) return;
 
-        basePosition.y += GetOverlayHeight(overlayType);
-
-        GameObject overlay = Instantiate(
+        GameObject overlayGO = Instantiate(
             prefab,
             basePosition,
             Quaternion.identity,
             transform
         );
 
-        overlay.name = $"{overlayType}_{x}_{y}";
-    }
-
-    private float GetOverlayHeight(OverlayType type)
-    {
-        return type switch
-        {
-            OverlayType.Start => 1.52f,
-            OverlayType.End => 1.52f,
-            OverlayType.Star => 1.0f,
-            _ => 0f
-        };
+        overlayGO.name = $"{overlayType}_{x}_{y}";
     }
 
     // ======================================
