@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ namespace PxP.PCG
 {
     public static class MazeGenerator
     {
-        public static HashSet<Vector2Int> GenerateKruskalMaze(int width,int height, System.Random rng)
+        public static HashSet<Vector2Int> GenerateKruskalMaze(int width, int height, System.Random rng)
         {
             var cells = new List<Vector2Int>();
             var edges = new List<Edge>();
@@ -48,7 +49,7 @@ namespace PxP.PCG
             return carved;
         }
 
-        public static void ApplyMaze(CellData[,] grid, HashSet<Vector2Int> carved,GeneratorParameters_SO p, System.Random rng)
+        public static void ApplyMaze(CellData[,] grid, HashSet<Vector2Int> carved, GeneratorParameters_SO p, System.Random rng)
         {
             foreach (var pos in carved)
             {
@@ -58,19 +59,44 @@ namespace PxP.PCG
                 ref var cell = ref grid[pos.x, pos.y];
                 cell.isEmpty = false;
 
+                // Floor ratio is always "whatever is left"
+                float floorRatio = 1;
+                float totalModifiers = p.iceRatio + p.piquesRatio + p.doorDownRatio + p.doorUpRatio;
+
+                // Ensure modifiers don’t exceed 1
+                float clampedTotal = Math.Min(totalModifiers, floorRatio);
+
+                // Compute actual modifier probabilities scaled to total left for modifiers
+                float scale = floorRatio > 0 ? clampedTotal / totalModifiers : 0f;
+
+                float iceProb = p.iceRatio * scale;
+                float piquesProb = p.piquesRatio * scale;
+                float doorDownProb = p.doorDownRatio * scale;
+                float doorUpProb = p.doorUpRatio * scale;
+
+                // Floor gets the leftover
+                float floorProb = floorRatio - (iceProb + piquesProb + doorDownProb + doorUpProb);
+
+                // Roll
                 double roll = rng.NextDouble();
 
-                if (roll < p.iceRatio)
+                if (roll < iceProb)
                     cell.ground = GroundType.Ice;
-                else if (roll < p.iceRatio + p.piquesRatio)
+                else if (roll < iceProb + piquesProb)
                     cell.ground = GroundType.Piques;
+                else if (roll < iceProb + piquesProb + doorDownProb)
+                    cell.ground = GroundType.DoorDown;
+                else if (roll < iceProb + piquesProb + doorDownProb + doorUpProb)
+                    cell.ground = GroundType.DoorUp;
                 else
                     cell.ground = GroundType.Floor;
+
                 // **************************
-                // ADD ANY MODIFIER TYPE HER
+                // ADD ANY MODIFIER TYPE HERE
                 // **************************
             }
         }
+
 
         private struct Edge
         {

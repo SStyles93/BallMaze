@@ -35,6 +35,11 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 9d677956335b77e48a02f10ceebf64da, type: 2}
     - {fileID: 11400000, guid: 26c1ddcb209a52849ba04eaa9f95e80e, type: 2}
     - {fileID: 11400000, guid: 622082026a8e1af43828ce072ee2b328, type: 2}
+  - cycleName: Doors
+    allowedArchetypes:
+    - {fileID: 11400000, guid: 6af09eda5aeec33498498c4c604e502e, type: 2}
+    - {fileID: 11400000, guid: b9cf9eb25788cd54c9d04bc877f9e35d, type: 2}
+    - {fileID: 11400000, guid: a6fbe142573f8ba478c0dd84343c491c, type: 2}
   - cycleName: Full Pool
     allowedArchetypes:
     - {fileID: 11400000, guid: 4e1ad8b5c019bcb40877ef5d1248584d, type: 2}

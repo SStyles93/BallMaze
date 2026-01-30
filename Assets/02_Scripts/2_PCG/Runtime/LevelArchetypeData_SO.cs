@@ -6,7 +6,9 @@ public enum ModifierType
     Empty,
     Ice,
     Moving,
-    Piques
+    Piques,
+    DoorDown,
+    DoorUp
     // **************************
     // ADD ANY MODIFIER TYPE HER
     // **************************

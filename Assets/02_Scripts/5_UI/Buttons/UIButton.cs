@@ -5,7 +5,7 @@ public class UIButton : MonoBehaviour
 {
     protected Button button;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if(button == null) button = GetComponent<Button>();
 

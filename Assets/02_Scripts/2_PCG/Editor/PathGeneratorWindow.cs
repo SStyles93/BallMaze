@@ -189,21 +189,28 @@ public class PathGeneratorWindow : EditorWindow
     {
         EditorGUI.BeginChangeCheck();
 
-        parameters.emptyRatio =
-            EditorGUILayout.Slider("Emtpy %", parameters.emptyRatio, 0, 1);
 
         parameters.iceRatio =
             EditorGUILayout.Slider("Ice %", parameters.iceRatio, 0, 1);
 
-        parameters.movingPlatformRatio =
-            EditorGUILayout.Slider("Moving Platform %", parameters.movingPlatformRatio, 0, 1);
-
         parameters.piquesRatio =
             EditorGUILayout.Slider("Pique %", parameters.piquesRatio, 0, 1);
-        
+
+        parameters.doorDownRatio =
+            EditorGUILayout.Slider("DoorD %", parameters.doorDownRatio, 0, 1);
+
+        parameters.doorUpRatio =
+            EditorGUILayout.Slider("DoorD %", parameters.doorUpRatio, 0, 1);
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************
+
+        parameters.movingPlatformRatio =
+            EditorGUILayout.Slider("Moving Platform %", parameters.movingPlatformRatio, 0, 1);
+        
+        parameters.emptyRatio =
+            EditorGUILayout.Slider("Emtpy %", parameters.emptyRatio, 0, 1);
+
 
         if (EditorGUI.EndChangeCheck())
             Regenerate();
@@ -264,6 +271,8 @@ public class PathGeneratorWindow : EditorWindow
                     GroundType.MovingPlatformV => Color.magenta,
                     GroundType.PlatformSide => Color.magenta * 0.75f,
                     GroundType.Piques => Color.black,
+                    GroundType.DoorDown => Color.orange,
+                    GroundType.DoorUp => Color.softRed,
                     // **************************
                     // ADD ANY GROUND TYPE HER
                     // **************************
@@ -475,6 +484,8 @@ public class PathGeneratorWindow : EditorWindow
         data.iceRatio = parameters.iceRatio;
         data.movingPlatformRatio = parameters.movingPlatformRatio;
         data.piqueRatio = parameters.piquesRatio;
+        data.doorDownRatio = parameters.doorDownRatio;
+        data.doorUpRatio = parameters.doorUpRatio;
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************
@@ -526,6 +537,8 @@ public class PathGeneratorWindow : EditorWindow
         parameters.iceRatio = data.iceRatio;
         parameters.movingPlatformRatio = data.movingPlatformRatio;
         parameters.piquesRatio = data.piqueRatio;
+        parameters.doorDownRatio = data.doorDownRatio;
+        parameters.doorUpRatio= data.doorUpRatio;
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************

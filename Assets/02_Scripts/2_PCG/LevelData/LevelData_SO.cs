@@ -15,10 +15,12 @@ public class LevelData_SO
     public int inputSeed;
 
     [Header("Path Parameters")]
-    public float emptyRatio;
     public float iceRatio;
-    public float movingPlatformRatio;
     public float piqueRatio;
+    public float doorDownRatio;
+    public float doorUpRatio;
+    public float movingPlatformRatio;
+    public float emptyRatio;
 
     [Header("Star & Currencies Parameters")]
     public int coinsToEarn;

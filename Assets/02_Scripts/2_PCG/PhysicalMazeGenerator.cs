@@ -10,6 +10,8 @@ public class PhysicalMazeGenerator : MonoBehaviour
     public GameObject movingPlatformPrefabH;
     public GameObject movingPlatformPrefabV;
     public GameObject piquesPrefab;
+    public GameObject doorDownPrefab;
+    public GameObject doorUpPrefab;
     public GameObject startPrefab;
     public GameObject endPrefab;
     public GameObject starPrefab;
@@ -138,6 +140,8 @@ public class PhysicalMazeGenerator : MonoBehaviour
             GroundType.MovingPlatformH => movingPlatformPrefabH,
             GroundType.MovingPlatformV => movingPlatformPrefabV,
             GroundType.Piques => piquesPrefab,
+            GroundType.DoorDown => doorDownPrefab,
+            GroundType.DoorUp => doorUpPrefab,
             // **************************
             // ADD ANY PREFAB TYPE HER
             // **************************

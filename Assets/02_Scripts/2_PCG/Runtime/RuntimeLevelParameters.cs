@@ -7,10 +7,12 @@ public struct RuntimeLevelParameters
     public int width;
     public int height;
     public int minStarDistance;
-    public float emptyRatio;
     public float iceRatio;
-    public float movingPlatformRatio;
     public float piqueRatio;
+    public float doorDownRatio;
+    public float doorUpRatio;
+    public float movingPlatformRatio;
+    public float emptyRatio;
     // **************************
     // ADD ANY MODIFIER TYPE HER
     // **************************
@@ -26,6 +28,8 @@ public static class RuntimeLevelProgression
     const float MAX_ICE = 1.0f;
     const float MAX_MOVING = 0.5f;
     const float MAX_PIQUES = 0.5f;
+    const float MAX_DOORDOWN = 0.5f;
+    const float MAX_DOORUP = 0.5f;
     // **************************
     // ADD ANY MODIFIER TYPE HER
     // **************************
@@ -172,7 +176,9 @@ public static class RuntimeLevelProgression
             out float emptyRatio,
             out float iceRatio,
             out float movingPlatformRatio,
-            out float piqueRatio
+            out float piqueRatio,
+            out float doorDownRatio,
+            out float doorUpRatio
             // **************************
             // ADD ANY MODIFIER TYPE HER
             // **************************
@@ -192,6 +198,8 @@ public static class RuntimeLevelProgression
         iceRatio *= finalMultiplier;
         movingPlatformRatio *= finalMultiplier;
         piqueRatio *= finalMultiplier;
+        doorDownRatio *= finalMultiplier;
+        doorUpRatio *= finalMultiplier;
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************
@@ -206,6 +214,8 @@ public static class RuntimeLevelProgression
         p.iceRatio = iceRatio;
         p.movingPlatformRatio = movingPlatformRatio;
         p.piqueRatio = piqueRatio;
+        p.doorDownRatio = doorDownRatio;
+        p.doorUpRatio = doorUpRatio;
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************
@@ -268,13 +278,15 @@ public static class RuntimeLevelProgression
         out float empty, 
         out float ice, 
         out float moving, 
-        out float piques
+        out float piques,
+        out float doorDown,
+        out float doorUp
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************
         )
     {
-        empty = ice = moving = piques = 0f;
+        empty = ice = moving = piques = doorDown = doorUp = 0f;
 
         if (data == null || data.modifiers == null)
             return;
@@ -299,6 +311,12 @@ public static class RuntimeLevelProgression
 
                 case ModifierType.Piques:
                     piques = Mathf.Min(MAX_PIQUES, scaled * MAX_PIQUES);
+                    break;
+                case ModifierType.DoorDown:
+                    doorDown = Mathf.Min(MAX_PIQUES, scaled * MAX_DOORDOWN);
+                    break;
+                case ModifierType.DoorUp:
+                    doorUp = Mathf.Min(MAX_PIQUES, scaled * MAX_DOORUP);
                     break;
 
                     // **************************

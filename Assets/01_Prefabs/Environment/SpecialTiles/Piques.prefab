@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5699417869027438319}
   m_Layer: 0
   m_Name: BM_Platform_Pic08
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 6404731780173114696}
   m_Layer: 0
   m_Name: BM_Platform_Pic06
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 6066004025089067824}
   m_Layer: 0
   m_Name: BM_Platform_Obstacle01_001
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 8589621365659801708}
   m_Layer: 0
   m_Name: BM_Platform_Pic05
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -370,7 +370,7 @@ GameObject:
   - component: {fileID: 938165609900804752}
   m_Layer: 0
   m_Name: BM_Platform_Pic09
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -456,9 +456,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1901737271597451044}
   - component: {fileID: 2341495127775092641}
+  - component: {fileID: 1462515010667405576}
   m_Layer: 15
   m_Name: Piques
-  m_TagString: Ground
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -471,9 +472,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4036120709231136218}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1, y: 2, z: 0}
-  m_LocalScale: {x: 2.5, y: 1, z: 2.5}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2602310650239478282}
@@ -502,6 +503,56 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 1.4, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1462515010667405576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4036120709231136218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f643af5a27458eb429c2417f4ac231be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  piques: {fileID: 3155161951108334445}
+  animCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  cycleDuration: 2
+  piquesYOffset: 1.31
+  pauseDuration: 1
+  keyThreshold: 0.005
 --- !u!1 &5673727225235272117
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,9 +562,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3155161951108334445}
-  m_Layer: 0
+  - component: {fileID: 3628333356841703996}
+  - component: {fileID: 1538838819542903139}
+  m_Layer: 16
   m_Name: BM_Platform_Obstacle01_Pics_001
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -527,7 +580,7 @@ Transform:
   m_GameObject: {fileID: 5673727225235272117}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.74, z: 0}
+  m_LocalPosition: {x: 0, y: -0.55, z: 0}
   m_LocalScale: {x: 1, y: 2.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -542,6 +595,39 @@ Transform:
   - {fileID: 5681556262480379379}
   m_Father: {fileID: 1901737271597451044}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3628333356841703996
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5673727225235272117}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.3, y: 0.3, z: 1.3}
+  m_Center: {x: 0, y: 0.15, z: 0}
+--- !u!114 &1538838819542903139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5673727225235272117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e614ccc208480f45875f44aa59b9678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &5708397503218359491
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,7 +641,7 @@ GameObject:
   - component: {fileID: 2661868718950863084}
   m_Layer: 0
   m_Name: BM_Platform_Pic01
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -644,7 +730,7 @@ GameObject:
   - component: {fileID: 7081916786977666859}
   m_Layer: 0
   m_Name: BM_Platform_Pic02
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -733,7 +819,7 @@ GameObject:
   - component: {fileID: 4610023582195825500}
   m_Layer: 0
   m_Name: BM_Platform_Obstacle01_Emissive_001
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -822,7 +908,7 @@ GameObject:
   - component: {fileID: 2533480593125489093}
   m_Layer: 0
   m_Name: BM_Platform_Pic03
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -912,7 +998,7 @@ GameObject:
   - component: {fileID: 4837972499403639197}
   m_Layer: 0
   m_Name: PiqueHoles
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1023,7 +1109,7 @@ GameObject:
   - component: {fileID: 7967055435243853808}
   m_Layer: 0
   m_Name: BM_Platform_Pic07
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1112,7 +1198,7 @@ GameObject:
   - component: {fileID: 2129396239876394997}
   m_Layer: 0
   m_Name: BM_Platform_Pic04
-  m_TagString: Untagged
+  m_TagString: Hazard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -20,10 +20,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: 1131133792
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0.696
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -127,10 +129,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 0
     inputSeed: -160900234
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -234,10 +238,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: 1131133792
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -341,10 +347,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: 1131133792
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -508,10 +516,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: 1131133792
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -675,10 +685,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: 1131133792
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -842,10 +854,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: 1131133792
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -1084,10 +1098,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: 1131133792
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -1326,10 +1342,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: -1
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -1613,10 +1631,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 20
     inputSeed: -1
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -1930,10 +1950,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 0
     inputSeed: -160900234
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -2037,10 +2059,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 0
     inputSeed: -160900234
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -2144,10 +2168,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 0
     inputSeed: -160900234
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -2251,10 +2277,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 0
     inputSeed: -160900234
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -2358,10 +2386,12 @@ MonoBehaviour:
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 0
     inputSeed: -160900234
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 2
@@ -2458,6 +2488,235 @@ MonoBehaviour:
       ground: 0
       overlay: 0
     usedSeed: -160900234
+  - index: 200
+    gridWidth: 7
+    gridHeight: 10
+    randomEnd: 1
+    fixedEnd: {x: 0, y: 0}
+    endMinHeightPercent: 10
+    inputSeed: -1839211211
+    iceRatio: 0
+    piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
+    coinsToEarn: 30
+    starCount: 0
+    minStarDistance: 10
+    starsConnectToEnd: 1
+    gridData:
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 2
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 7
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 6
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 1
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+    usedSeed: -1839211211
   - index: 9999
     gridWidth: 7
     gridHeight: 10
@@ -2465,10 +2724,12 @@ MonoBehaviour:
     fixedEnd: {x: 0, y: 0}
     endMinHeightPercent: 10
     inputSeed: 106493837
-    emptyRatio: 0
     iceRatio: 0
-    movingPlatformRatio: 0
     piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
     coinsToEarn: 60
     starCount: 0
     minStarDistance: 3

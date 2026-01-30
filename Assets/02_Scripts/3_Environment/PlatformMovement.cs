@@ -1,22 +1,19 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlatformMovement : MonoBehaviour
 {
     [SerializeField] private GroundType groundType = GroundType.MovingPlatformH;
-    [SerializeField] private AnimationCurve movementCurve;
+    [SerializeField] private AnimationCurve movementCurve; // 0 = start, 1 = max
     [SerializeField] private float cycleDuration = 4f;
     [SerializeField] private float movementAmplitude = 3f;
     [SerializeField] private float pauseDuration = 0.25f;
-    [SerializeField] private float slopeThreshold = 0.05f;
 
     private Rigidbody rb;
     private Vector3 startPosition;
     private float timer;
     private float pauseTimer = 0f;
     private bool isPaused = false;
-    
 
     public float MovementAmplitude { get => movementAmplitude; set => movementAmplitude = value; }
 
@@ -30,16 +27,18 @@ public class PlatformMovement : MonoBehaviour
     private void Start()
     {
         startPosition = rb.position;
+
+        // Start at the beginning of movement
         switch (groundType)
         {
             case GroundType.MovingPlatformH:
                 startPosition.x -= movementAmplitude;
                 break;
-
             case GroundType.MovingPlatformV:
                 startPosition.z -= movementAmplitude;
                 break;
         }
+
         rb.position = startPosition;
     }
 
@@ -49,46 +48,39 @@ public class PlatformMovement : MonoBehaviour
         {
             pauseTimer -= Time.fixedDeltaTime;
             if (pauseTimer <= 0f)
-            {
                 isPaused = false;
-            }
             else
-            {
                 return; // Skip movement while paused
-            }
         }
 
         timer += Time.fixedDeltaTime;
-
         float t = (timer % cycleDuration) / cycleDuration;
-        float normalizedOffset = Mathf.Clamp(movementCurve.Evaluate(t), 0f, 1f);
 
-        // Calculate slope (approximate derivative)
-        float deltaT = 0.001f; // Small step for derivative
-        float slope = (movementCurve.Evaluate(Mathf.Clamp01(t + deltaT)) - normalizedOffset) / deltaT;
+        // Evaluate the curve
+        float normalizedOffset = Mathf.Clamp01(movementCurve.Evaluate(t));
 
-        // Pause when slope is near zero (platform is "stopped")
-        if (Mathf.Abs(slope) < slopeThreshold)
-        {
-            isPaused = true;
-            pauseTimer = pauseDuration;
-        }
-
-
-
+        // Apply position
         Vector3 targetPosition = startPosition;
-
         switch (groundType)
         {
             case GroundType.MovingPlatformH:
                 targetPosition.x += normalizedOffset * movementAmplitude * 2;
                 break;
-
             case GroundType.MovingPlatformV:
                 targetPosition.z += normalizedOffset * movementAmplitude * 2;
                 break;
         }
-
         rb.MovePosition(targetPosition);
+
+        // Check for pause at keyframes
+        foreach (Keyframe key in movementCurve.keys)
+        {
+            if (Mathf.Abs(t - key.time) < 0.001f) // tiny threshold
+            {
+                isPaused = true;
+                pauseTimer = pauseDuration;
+                break;
+            }
+        }
     }
 }

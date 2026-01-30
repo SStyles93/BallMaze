@@ -16,8 +16,9 @@ public class PlayButton : UIButton
     private int m_indexOfLevelToPlay = 0;
     Vector3 initialScale;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         initialScale = transform.localScale;
     }
 

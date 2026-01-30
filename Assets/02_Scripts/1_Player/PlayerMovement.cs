@@ -134,7 +134,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 currentPlatform = hit.collider.transform;
                 // Save platform for respawn on a safe area
-                if (!hit.collider.CompareTag("MovingPlatform") && !hit.collider.CompareTag("End"))
+                if (!hit.collider.CompareTag("Hazard") &&
+                    !hit.collider.CompareTag("MovingPlatform") &&
+                    !hit.collider.CompareTag("End"))
                 {
                     lastSafePlatform = hit.collider.transform;
                 }

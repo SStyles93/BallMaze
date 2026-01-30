@@ -5,7 +5,9 @@ public enum GroundType
     MovingPlatformH, // horizontal
     MovingPlatformV, // vertical
     PlatformSide,
-    Piques
+    Piques,
+    DoorUp,
+    DoorDown,
 }
 
 public enum OverlayType
