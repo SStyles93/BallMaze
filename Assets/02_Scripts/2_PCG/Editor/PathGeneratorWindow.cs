@@ -190,6 +190,9 @@ public class PathGeneratorWindow : EditorWindow
     {
         EditorGUI.BeginChangeCheck();
 
+        parameters.iceRatio =
+            EditorGUILayout.Slider("Ice %", parameters.iceRatio, 0, 1);
+
         parameters.piquesRatio =
             EditorGUILayout.Slider("Pique %", parameters.piquesRatio, 0, 1);
 
@@ -197,7 +200,7 @@ public class PathGeneratorWindow : EditorWindow
             EditorGUILayout.Slider("DoorD %", parameters.doorDownRatio, 0, 1);
 
         parameters.doorUpRatio =
-            EditorGUILayout.Slider("DoorD %", parameters.doorUpRatio, 0, 1);
+            EditorGUILayout.Slider("DoorU %", parameters.doorUpRatio, 0, 1);
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************
@@ -480,12 +483,12 @@ public class PathGeneratorWindow : EditorWindow
         data.starsConnectToEnd = parameters.starsConnectToEnd;
 
         // Platform field
-        data.emptyRatio = parameters.emptyRatio;
         data.iceRatio = parameters.iceRatio;
-        data.movingPlatformRatio = parameters.movingPlatformRatio;
         data.piqueRatio = parameters.piquesRatio;
         data.doorDownRatio = parameters.doorDownRatio;
         data.doorUpRatio = parameters.doorUpRatio;
+        data.movingPlatformRatio = parameters.movingPlatformRatio;
+        data.emptyRatio = parameters.emptyRatio;
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************
@@ -534,12 +537,12 @@ public class PathGeneratorWindow : EditorWindow
         parameters.minStarDistance = data.minStarDistance;
         parameters.starsConnectToEnd = data.starsConnectToEnd;
 
-        parameters.emptyRatio = data.emptyRatio;
         parameters.iceRatio = data.iceRatio;
-        parameters.movingPlatformRatio = data.movingPlatformRatio;
         parameters.piquesRatio = data.piqueRatio;
         parameters.doorDownRatio = data.doorDownRatio;
         parameters.doorUpRatio= data.doorUpRatio;
+        parameters.movingPlatformRatio = data.movingPlatformRatio;
+        parameters.emptyRatio = data.emptyRatio;
         // **************************
         // ADD ANY MODIFIER TYPE HER
         // **************************

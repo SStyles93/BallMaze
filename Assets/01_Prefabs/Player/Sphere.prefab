@@ -250,8 +250,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 5038209041127989002}
   joystickDeadZone: 20
-  tapMaxDuration: 0.2
+  tapMaxDistance: 35
   tapWindowTime: 1
+  tapMaxDuration: 0.2
 --- !u!114 &5788141387175152010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,6 +278,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   fallThreshold: -5
+  State: 0
   lastSafePlatform: {fileID: 0}
 --- !u!114 &9137505450509997439
 MonoBehaviour:
@@ -327,6 +329,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   shrinkDuration: 1
+  blinkDuration: 0.1
+  blinkCount: 6
+  visualsParent: {fileID: 6644927266387035701}
   m_trail: {fileID: 8964272737421717648}
   m_trailVelocityThreshold: 1
   m_trailColor: {r: 0, g: 0, b: 0, a: 0}

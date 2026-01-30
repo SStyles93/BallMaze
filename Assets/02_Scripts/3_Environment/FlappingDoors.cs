@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FlapingDoors : MonoBehaviour
+public class FlapingDoorsAnimation : MonoBehaviour
 {
     [Header("Door References")]
     [SerializeField] private Transform leftDoor;
@@ -9,10 +9,10 @@ public class FlapingDoors : MonoBehaviour
     [Header("Animation Settings")]
     [SerializeField] private AnimationCurve openCurve;
     [SerializeField] private float openDuration = 1f;
+    [SerializeField] private float openPauseDuration = 0.5f;
     [SerializeField] private AnimationCurve closeCurve;
     [SerializeField] private float closeDuration = 1f;
-    [Space(10)]
-    [SerializeField] private float pauseDuration = 0.5f;
+    [SerializeField] private float closePauseDuration = 0.5f;
     [Space(10)]
     [SerializeField] private float flapAngle = 90f;
 
@@ -51,8 +51,11 @@ public class FlapingDoors : MonoBehaviour
                 break;
 
             case DoorState.PausingOpen:
+                if (stateTimer >= openPauseDuration)
+                    NextState();
+                break;
             case DoorState.PausingClosed:
-                if (stateTimer >= pauseDuration)
+                if (stateTimer >= closePauseDuration)
                     NextState();
                 break;
         }

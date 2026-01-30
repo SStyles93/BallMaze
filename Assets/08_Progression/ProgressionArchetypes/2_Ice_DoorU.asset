@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelArchetypeData_SO
   archetypeName: Ice_DoorU
   modifiers:
-  - type: 1
+  - modifierType: 1
     weight: 1
-  - type: 5
+  - modifierType: 5
     weight: 1
   maxActiveModifiers: 2

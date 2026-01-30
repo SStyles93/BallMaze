@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 6256783748300777327}
   - component: {fileID: 6111264296819903174}
   - component: {fileID: 7914536311214705368}
+  - component: {fileID: 9054208602086168295}
   m_Layer: 15
   m_Name: BM_Platform_Obstacle03_DoorL_001
   m_TagString: Hazard
@@ -156,7 +157,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -382652638819485698, guid: afdaa54b19982394895dc6abb13fe0d0, type: 3}
+  - {fileID: 2100000, guid: b06e776d386c02d43bb24e1e16d8d279, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -200,6 +201,44 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.2, z: 2}
   m_Center: {x: -0.35, y: -0.07, z: 0}
+--- !u!114 &9054208602086168295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315103076016635661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9eb6cd3fc3f28b4c968b9b09acbb541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  maxPushForce: 12
+  forceFromAngularSpeed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.066449
+      outSlope: 3.066449
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.047154427
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxAngularSpeed: 90
 --- !u!1 &4712522342983740015
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +251,7 @@ GameObject:
   - component: {fileID: 998688401922917196}
   - component: {fileID: 2912665289451217926}
   - component: {fileID: 7879826298981205991}
+  - component: {fileID: 7752452578741818633}
   m_Layer: 15
   m_Name: BM_Platform_Obstacle03_DoorR_001
   m_TagString: Hazard
@@ -267,7 +307,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -382652638819485698, guid: afdaa54b19982394895dc6abb13fe0d0, type: 3}
+  - {fileID: 2100000, guid: b06e776d386c02d43bb24e1e16d8d279, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -311,6 +351,44 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.2, z: 2}
   m_Center: {x: 0.35, y: -0.07, z: 0}
+--- !u!114 &7752452578741818633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712522342983740015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9eb6cd3fc3f28b4c968b9b09acbb541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorAngularPush
+  maxPushForce: 12
+  forceFromAngularSpeed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 3.066449
+      outSlope: 3.066449
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.047154427
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxAngularSpeed: 90
 --- !u!1 &4896003729149593231
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,40 +560,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorFlapWithKeyframes
   leftDoor: {fileID: 4100424391634287185}
   rightDoor: {fileID: 7458659396011826229}
-  flapCurve:
+  openCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.2
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  cycleDuration: 1.5
+  openDuration: 0.1
+  openPauseDuration: 0.5
+  closeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  closeDuration: 1
+  closePauseDuration: 1.5
   flapAngle: -90
-  pauseDuration: 1
-  keyThreshold: 0.005

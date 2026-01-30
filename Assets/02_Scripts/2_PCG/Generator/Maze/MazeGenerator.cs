@@ -45,11 +45,6 @@ namespace PxP.PCG
 
         public static void ApplyMaze(CellData[,] grid, HashSet<Vector2Int> carved, GeneratorParameters_SO p, System.Random rng)
         {
-            float totalRatio = 1.0f;
-
-            // Floor ratio is the remaining probability
-            float floorRatio = Mathf.Max(0f, 1f - totalRatio);
-
             foreach (var pos in carved)
             {
                 if (!GridUtils.IsInsideGrid(pos, grid))
@@ -59,6 +54,7 @@ namespace PxP.PCG
                 cell.isEmpty = false;
 
                 // Floor ratio is always "whatever is left"
+                float floorRatio = 1; // Assuming p.floorRatio = 1
                 float totalModifiers = p.iceRatio + p.piquesRatio + p.doorDownRatio + p.doorUpRatio;
 
                 // Ensure modifiers don’t exceed 1
@@ -94,6 +90,7 @@ namespace PxP.PCG
                 // **************************
             }
         }
+
 
 
         private struct Edge

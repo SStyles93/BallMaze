@@ -8,14 +8,6 @@ public class DeadZone : MonoBehaviour
     private Rigidbody playerRigidbody;
     private PlayerMovement playerMovement;
 
-    private void ReplacePlayer()
-    {
-        // Block, respawn and Unblock player
-        playerRigidbody.isKinematic = true;
-        playerRigidbody.gameObject.transform.position = playerMovement.LastSafePlatform.position;
-        playerRigidbody.isKinematic = false;
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
@@ -25,18 +17,22 @@ public class DeadZone : MonoBehaviour
             if(playerRigidbody == null) playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
             if(playerMovement == null) playerMovement = collision.gameObject.GetComponent<PlayerMovement>();
 
-            LifeManager.Instance.RemoveLife();
+            if (!CoreManager.Instance.isDebugPlay)
+                LifeManager.Instance.RemoveLife();
+
+            if (playerMovement.State == PlayerMovement.PlayerState.IsDying) return;
+            playerMovement.State = PlayerMovement.PlayerState.IsDying;
 
             if (LifeManager.Instance.CurrentLife > 0)
             {
                 // Block, respawn and Unblock player
-                ReplacePlayer();
+                playerMovement.ReplacePlayer();
             }
             else
             {
                 GameStateManager.Instance.SetState(GameState.WaitingForContinue);
-                ReplacePlayer();
                 continuePannel.SetActive(true);
+                playerMovement.ReplacePlayer();
             }
         }
     }

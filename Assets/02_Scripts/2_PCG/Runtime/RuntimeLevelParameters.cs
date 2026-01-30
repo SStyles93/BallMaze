@@ -97,7 +97,7 @@ public static class RuntimeLevelProgression
         // -------------------------
         // BASE VALUES
         // -------------------------
-        int minWidth = 3;
+        //int minWidth = 3;
         int maxWidth = 7;
         int minHeight = 10;
         int maxHeight = 30;
@@ -111,55 +111,55 @@ public static class RuntimeLevelProgression
         int cycleLevel = levelIndex % levelsPerCycle;
         float cycleT = (float)cycleLevel / (levelsPerCycle - 1);
 
-        // -------------------------
-        // PHASE TIMING
-        // -------------------------
-        float phase0End = 0.20f;
-        float phase1End = 0.40f;
-        float phase2End = 0.60f;
-        float phase3End = 0.80f;
+        //// -------------------------
+        //// PHASE TIMING
+        //// -------------------------
+        //float phase0End = 0.20f;
+        //float phase1End = 0.40f;
+        //float phase2End = 0.60f;
+        //float phase3End = 0.80f;
 
-        int width = minWidth;
-        int height = minHeight;
-        int starDistance = minStarDistance;
+        //int width = minWidth;
+        //int height = minHeight;
+        //int starDistance = minStarDistance;
 
-        // 0 -> 20% of cycle
-        // --- Increase Width ---
-        if (cycleT <= phase0End)
-        {
-            float t = cycleT / phase0End;
-            width = Mathf.RoundToInt(Mathf.Lerp(minWidth, maxWidth, t));
-        }
-        // 21 -> 40% of cycle
-        // --- Max Width ---
-        else if (cycleT <= phase1End)
-        {
-            width = maxWidth;
-        }
-        // 41 -> 60% of cycle
-        // --- Increase Height + Max Width (+2) ---
-        else if (cycleT <= phase2End)
-        {
-            float t = (cycleT - phase1End) / (phase2End - phase1End);
-            width = Mathf.RoundToInt(Mathf.Lerp(maxWidth, maxWidth, t));
-            height = Mathf.RoundToInt(Mathf.Lerp(minHeight, maxHeight, t));
-        }
-        // 61 -> 80% of cycle
-        // --- Max Height + Max Width (+2) ---
-        else if (cycleT <= phase3End)
-        {
-            width = maxWidth;
-            height = maxHeight;
-        }
-        // After 80% (81% -> 100%)
-        // --- Increase Star Distance ---
-        else
-        {
-            width = maxWidth;
-            height = maxHeight;
-            float t = (cycleT - phase3End) / (1f - phase3End);
-            starDistance = Mathf.RoundToInt(Mathf.Lerp(minStarDistance, maxStarDistance, t));
-        }
+        //// 0 -> 20% of cycle
+        //// --- Increase Width ---
+        //if (cycleT <= phase0End)
+        //{
+        //    float t = cycleT / phase0End;
+        //    width = Mathf.RoundToInt(Mathf.Lerp(minWidth, maxWidth, t));
+        //}
+        //// 21 -> 40% of cycle
+        //// --- Max Width ---
+        //else if (cycleT <= phase1End)
+        //{
+        //    width = maxWidth;
+        //}
+        //// 41 -> 60% of cycle
+        //// --- Increase Height + Max Width (+2) ---
+        //else if (cycleT <= phase2End)
+        //{
+        //    float t = (cycleT - phase1End) / (phase2End - phase1End);
+        //    width = Mathf.RoundToInt(Mathf.Lerp(maxWidth, maxWidth, t));
+        //    height = Mathf.RoundToInt(Mathf.Lerp(minHeight, maxHeight, t));
+        //}
+        //// 61 -> 80% of cycle
+        //// --- Max Height + Max Width (+2) ---
+        //else if (cycleT <= phase3End)
+        //{
+        //    width = maxWidth;
+        //    height = maxHeight;
+        //}
+        //// After 80% (81% -> 100%)
+        //// --- Increase Star Distance ---
+        //else
+        //{
+        //    width = maxWidth;
+        //    height = maxHeight;
+        //    float t = (cycleT - phase3End) / (1f - phase3End);
+        //    starDistance = Mathf.RoundToInt(Mathf.Lerp(minStarDistance, maxStarDistance, t));
+        //}
 
         // -------------------------
         // ENVIRONMENTAL DIFFICULTY
@@ -209,9 +209,10 @@ public static class RuntimeLevelProgression
         // -------------------------
         // OUTPUT
         // -------------------------
-        p.width = width;
-        p.height = height;
-        p.minStarDistance = Mathf.Clamp(starDistance, 1, 10);
+        p.width = maxWidth;
+        p.height = maxHeight;
+        //p.minStarDistance = Mathf.Clamp(starDistance, 1, 10);
+        p.minStarDistance = minStarDistance;
         p.emptyRatio = emptyRatio;
         p.iceRatio = iceRatio;
         p.movingPlatformRatio = movingPlatformRatio;

@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class CoreManager : MonoBehaviour
 {
     [Header("DEBUG")]
+    [SerializeField] public bool isDebugPlay = false;
     [SerializeField] public bool unlockAllLevels = false;
     [SerializeField] public int numberOfLevels = 100;
 

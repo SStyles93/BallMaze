@@ -8,6 +8,7 @@ namespace PxP.PCG
     {
         public static void PlaceMovingPlatforms(CellData[,] grid, GeneratorParameters_SO p, System.Random rng)
         {
+            if (p.movingPlatformRatio <= 0) return;
 
             int walkableCount = CountWalkableTiles(grid);
 

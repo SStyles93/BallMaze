@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelArchetypeData_SO
   archetypeName: Door Down
   modifiers:
-  - type: 4
+  - modifierType: 4
     weight: 1
   maxActiveModifiers: 1

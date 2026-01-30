@@ -64,8 +64,8 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        bool isFalling = transform.position.y < playerMovement.FallThreshold;
-        SetCameraFollow(isFalling);
+        bool isCameraFollowing = playerMovement.State == PlayerMovement.PlayerState.Alive ? true : false;
+        SetCameraFollow(isCameraFollowing);
 
         if(currentShakeTimer > 0)
         {
@@ -78,9 +78,9 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
-    public void SetCameraFollow(bool isFalling)
+    public void SetCameraFollow(bool value)
     {
-        cinemachineCam.Follow = isFalling ? null : transform;
+        cinemachineCam.Follow = value ? transform : null;
     }
 
     private void Shake(string SurfaceTypeNotUsedYet)

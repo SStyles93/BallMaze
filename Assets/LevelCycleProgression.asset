@@ -25,7 +25,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: f21de6c545a2b0844b2d6d9a58353b77, type: 2}
   - cycleName: Mixed Basics
     allowedArchetypes:
-    - {fileID: 11400000, guid: 4e566a4861927d340b1ff1d701b2722f, type: 2}
     - {fileID: 11400000, guid: 622082026a8e1af43828ce072ee2b328, type: 2}
   - cycleName: Precision Intro (Holes)
     allowedArchetypes:
@@ -42,9 +41,11 @@ MonoBehaviour:
     - {fileID: 11400000, guid: a6fbe142573f8ba478c0dd84343c491c, type: 2}
   - cycleName: Full Pool
     allowedArchetypes:
-    - {fileID: 11400000, guid: 4e1ad8b5c019bcb40877ef5d1248584d, type: 2}
-    - {fileID: 11400000, guid: 4e566a4861927d340b1ff1d701b2722f, type: 2}
-    - {fileID: 11400000, guid: f21de6c545a2b0844b2d6d9a58353b77, type: 2}
+    - {fileID: 11400000, guid: 955b9bec10871a944830ac4f7472e39e, type: 2}
+    - {fileID: 11400000, guid: d088ce4124699d9489c60af259c8d45e, type: 2}
     - {fileID: 11400000, guid: 9d677956335b77e48a02f10ceebf64da, type: 2}
     - {fileID: 11400000, guid: 26c1ddcb209a52849ba04eaa9f95e80e, type: 2}
+    - {fileID: 11400000, guid: 0fad8781a97cfd5489e55e13f36dd145, type: 2}
+    - {fileID: 11400000, guid: fe569ca15dd3c594ba288e4a432a878c, type: 2}
     - {fileID: 11400000, guid: 622082026a8e1af43828ce072ee2b328, type: 2}
+    - {fileID: 11400000, guid: 66f1dceb8a19f2c4499b804c1e921065, type: 2}

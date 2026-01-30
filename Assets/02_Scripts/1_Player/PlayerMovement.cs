@@ -27,6 +27,15 @@ public class PlayerMovement : MonoBehaviour
     [Header("Fall")]
     [SerializeField] private float fallThreshold = -5f;
 
+    public PlayerState State = PlayerState.Alive;
+
+    public enum PlayerState
+    {
+        Alive,
+        IsFalling,
+        IsDying
+    }
+
 
     private Vector3 movementInput;
     private bool isGrounded;
@@ -53,7 +62,8 @@ public class PlayerMovement : MonoBehaviour
         PlayerControler.OnJumpPerformed += Jump;
         PlayerControler.OnTouchStopped += ResetMovementValue;
 
-        LevelManager.Instance.OnLifeLostToThisLevel += SetGroundRadiusHelp;
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnLifeLostToThisLevel += SetGroundRadiusHelp;
     }
 
     private void OnDisable()
@@ -62,7 +72,8 @@ public class PlayerMovement : MonoBehaviour
         PlayerControler.OnJumpPerformed -= Jump;
         PlayerControler.OnTouchStopped -= ResetMovementValue;
 
-        LevelManager.Instance.OnLifeLostToThisLevel -= SetGroundRadiusHelp;
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnLifeLostToThisLevel -= SetGroundRadiusHelp;
     }
 
     private void Awake()
@@ -72,6 +83,14 @@ public class PlayerMovement : MonoBehaviour
 
         playerRigidbody.maxAngularVelocity = maxAngularVelocity;
         playerRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+    }
+
+    private void Update()
+    {
+        if (transform.position.y < fallThreshold)
+        {
+            State = PlayerState.IsFalling;
+        }
     }
 
     private void FixedUpdate()
@@ -84,10 +103,29 @@ public class PlayerMovement : MonoBehaviour
 
         if (allowRotation) Roll();
     }
+
+    // ---------------- PUBLIC METHODS ----------------
+
+    public void ReplacePlayer()
+    {
+        playerRigidbody.isKinematic = true;
+
+        Vector3 respawnPosition = LastSafePlatform.position;
+        respawnPosition.y = 3.0f;
+        playerRigidbody.gameObject.transform.position = respawnPosition;
+        playerRigidbody.position = respawnPosition;
+        playerRigidbody.isKinematic = false;
+
+        State = PlayerState.Alive;
+    }
+
+
     // ---------------- ROLLING ----------------
 
     private void Roll()
     {
+        if (State == PlayerState.IsDying) return;
+
         if (!isGrounded || movementInput.sqrMagnitude < 0.01f)
             return;
 
@@ -100,6 +138,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+        if (State == PlayerState.IsDying) return;
+
         if (!isGrounded) return;
 
         if (currentPlatform.CompareTag("Ice"))
@@ -123,6 +163,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckGrounded()
     {
+        if (State == PlayerState.IsDying) return;
+
         Ray ray = new Ray(transform.position, Vector3.down);
         RaycastHit hit;
 
@@ -166,7 +208,7 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="numberOfLivesLost">lives lost</param>
     private void SetGroundRadiusHelp(int numberOfLivesLost)
     {
-        if (numberOfLivesLost >= 2) 
+        if (numberOfLivesLost >= 2)
         {
             groundDetectionRadius = 0.95f;
         }
@@ -186,7 +228,7 @@ public class PlayerMovement : MonoBehaviour
             playerRigidbody.angularVelocity =
             Vector3.Lerp(playerRigidbody.angularVelocity, Vector3.zero, 0.4f);
         }
-        
+
     }
 
     // ---------------- INPUT ----------------

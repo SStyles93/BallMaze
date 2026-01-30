@@ -11,8 +11,8 @@ public class TileDatabase_SO : ScriptableObject
 
     [SerializeField] private List<OverlayDefinition_SO> overlays;
 
-    Dictionary<GroundType, Color> groundColors;
-    Dictionary<OverlayType, Color> overlayColors;
+    private Dictionary<GroundType, Color> groundColors;
+    private Dictionary<OverlayType, Color> overlayColors;
 
     public TileDefinition_SO FloorTile => floorTile;
     public List<HazardTileDefinition_SO> HazardTiles => hazardTiles;
@@ -45,20 +45,20 @@ public class TileDatabase_SO : ScriptableObject
         if (floorTile != null)
             groundColors[floorTile.groundType] = floorTile.tileEditorColor;
 
-        foreach (var h in hazardTiles)
-            groundColors[h.groundType] = h.tileEditorColor;
+        if (hazardTiles != null)
+            foreach (var h in hazardTiles)
+                groundColors[h.groundType] = h.tileEditorColor;
 
-        foreach (var o in overlays)
-            overlayColors[o.overlayType] = o.overlayEditorColor;
+        if (overlays != null)
+            foreach (var o in overlays)
+                overlayColors[o.overlayType] = o.overlayEditorColor;
     }
 
     public Color GetGroundColor(GroundType type)
-        => groundColors != null && groundColors.TryGetValue(type, out var c)
-            ? c
-            : Color.magenta;
+        => groundColors != null && groundColors.TryGetValue(type, out var c) ? 
+        c : Color.magenta;
 
     public Color GetOverlayColor(OverlayType type)
-        => overlayColors != null && overlayColors.TryGetValue(type, out var c)
-            ? c
-            : Color.white;
+        => overlayColors != null && overlayColors.TryGetValue(type, out var c) ? 
+        c : Color.white;
 }

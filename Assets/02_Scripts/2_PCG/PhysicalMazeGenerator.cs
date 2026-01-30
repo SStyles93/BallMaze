@@ -27,9 +27,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     public static event Action OnGenerationFinished;
 
-    [HideInInspector][SerializeField] private bool isGridGenerated = false;
-
-    private int previousRndPreset;
+    [SerializeField] private bool isGridGenerated = false;
 
     private void Awake()
     {
@@ -136,6 +134,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
             _ => null
         };
 
+        if (prefab == null) return;
 
         GameObject ground = Instantiate(prefab,
             basePosition, Quaternion.identity,
@@ -164,10 +163,17 @@ public class PhysicalMazeGenerator : MonoBehaviour
             _ => null
         };
 
+        float heightOffset = overlayType switch
+        {
+            OverlayType.Start => 2.25f,
+            OverlayType.End => 2.25f,
+            OverlayType.Star => 1.75f,
+            _ => 0.0f
+        };
 
         GameObject overlayGO = Instantiate(
             prefab,
-            basePosition,
+            basePosition + (Vector3.up * heightOffset),
             Quaternion.identity,
             transform
         );

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelArchetypeData_SO
   archetypeName: Empty_Moving
   modifiers:
-  - groundType: 6
+  - modifierType: 0
     weight: 0.5
-  - groundType: 2
+  - modifierType: 2
     weight: 1
   maxActiveModifiers: 2

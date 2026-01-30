@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelArchetypeData_SO
   archetypeName: Ice_Move
   modifiers:
-  - groundType: 1
+  - modifierType: 1
     weight: 1
-  - groundType: 2
+  - modifierType: 2
     weight: 1
   maxActiveModifiers: 2
