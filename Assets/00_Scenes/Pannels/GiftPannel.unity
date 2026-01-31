@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &59751749
 RectTransform:
   m_ObjectHideFlags: 0
@@ -146,8 +146,8 @@ RectTransform:
   m_GameObject: {fileID: 59751748}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 555766890}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -178,22 +178,22 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Welcome \n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bfcb5972a454f5f4d96f091366af1bc1, type: 2}
-  m_sharedMaterial: {fileID: 184713176012697816, guid: bfcb5972a454f5f4d96f091366af1bc1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9882ebed56d8a7f41958f15d8a76b904, type: 2}
+  m_sharedMaterial: {fileID: 184713176012697816, guid: 9882ebed56d8a7f41958f15d8a76b904, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
+    rgba: 4294506744
+  m_fontColor: {r: 0.972549, g: 0.972549, b: 0.972549, a: 1}
+  m_enableVertexGradient: 1
+  m_colorMode: 2
   m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    topLeft: {r: 1, g: 0.972549, b: 0.972549, a: 0.972549}
+    topRight: {r: 1, g: 0.972549, b: 0.972549, a: 0.972549}
+    bottomLeft: {r: 0.654902, g: 0.54509807, b: 0.98039216, a: 1}
+    bottomRight: {r: 0.654902, g: 0.54509807, b: 0.98039216, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 11400000, guid: b21c5f80d4bd24042adf0ae833af2f1f, type: 2}
   m_tintAllSprites: 0
@@ -427,7 +427,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 88, y: -64}
+  m_AnchoredPosition: {x: 21, y: 116}
   m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &80698866
@@ -604,7 +604,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -88, y: -518}
+  m_AnchoredPosition: {x: -25, y: -587.7}
   m_SizeDelta: {x: 800, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &409431217
@@ -1000,7 +1000,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -132}
+  m_AnchoredPosition: {x: 0, y: 122}
   m_SizeDelta: {x: 1024, y: 1024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &945534900
