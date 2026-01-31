@@ -34,7 +34,7 @@ public class MovingPlatformAudio : MonoBehaviour
             if (!audioSource.isPlaying)
                 audioSource.Play();
 
-            audioSource.volume = 1.0f;
+            audioSource.volume = 0.5f;
         }
     }
 }

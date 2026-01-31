@@ -33,6 +33,8 @@ public class FlapingDoorsAnimation : MonoBehaviour
     private Quaternion leftClosedRotation;
     private Quaternion rightClosedRotation;
 
+    private bool isOpening = false;
+
     public DoorState State => state;
     public float StateTimer => stateTimer;
 
@@ -51,11 +53,16 @@ public class FlapingDoorsAnimation : MonoBehaviour
         switch (state)
         {
             case DoorState.Opening:
-                OnDoorOpening?.Invoke();
+                if (!isOpening)
+                {
+                    OnDoorOpening?.Invoke();
+                    isOpening = true;
+                }
                 Animate(openCurve, openDuration, DoorState.PausingOpen);
                 break;
 
             case DoorState.Closing:
+                isOpening = false;
                 Animate(closeCurve, closeDuration, DoorState.PausingClosed);
                 break;
 
