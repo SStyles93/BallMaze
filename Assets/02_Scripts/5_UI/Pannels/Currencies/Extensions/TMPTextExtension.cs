@@ -1,5 +1,6 @@
-using TMPro;
 using DG.Tweening;
+using System;
+using TMPro;
 public static class TMPTextExtensions
 {
     /// <summary>
@@ -30,9 +31,12 @@ public static class TMPTextExtensions
     public static Tweener AnimateCoin(
         this TMP_Text text,
         int start, int end,
-        float duration, CoinType coinType)
+        float duration, CoinType coinType,
+        Action<bool> onAnimationEnabled = null)
     {
         text.DOKill();
+
+        onAnimationEnabled?.Invoke(true);
 
         int currentValue = start;
 
@@ -43,6 +47,10 @@ public static class TMPTextExtensions
         },
         end,
         duration)
-        .SetEase(Ease.OutCubic);
+        .SetEase(Ease.OutCubic)
+        .OnComplete(() =>
+        {
+            onAnimationEnabled?.Invoke(false);
+        });
     }
 }

@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.007843138}
+  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.03137255}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -435,7 +435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.007843138}
+  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.03137255}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -895,6 +895,7 @@ GameObject:
   - component: {fileID: 2772516670458248290}
   - component: {fileID: 5647098658357369473}
   - component: {fileID: 1134963539725086437}
+  - component: {fileID: 6956696682919648680}
   m_Layer: 5
   m_Name: CoinText
   m_TagString: Untagged
@@ -1020,6 +1021,103 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!82 &6956696682919648680
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5043170003115385567}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5061000883782329693
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,7 +1177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.007843138}
+  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.03137255}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1169,7 +1267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.007843138}
+  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.03137255}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1470,7 +1568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.007843138}
+  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.03137255}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1513,11 +1611,12 @@ GameObject:
   - component: {fileID: 4323410281142819993}
   - component: {fileID: 2592260550537944340}
   - component: {fileID: 2123617365436628784}
+  - component: {fileID: 2578373503887501223}
   - component: {fileID: 262829287776692747}
   - component: {fileID: 6679797757833099865}
-  - component: {fileID: 1985975944193728327}
-  - component: {fileID: 2578373503887501223}
   - component: {fileID: 2597081495345172114}
+  - component: {fileID: 1985975944193728327}
+  - component: {fileID: 8166223256264113171}
   m_Layer: 5
   m_Name: ScorePannel
   m_TagString: Untagged
@@ -1609,7 +1708,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: dc5861e87811bb44ba2f659883952c6d, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1693,6 +1792,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2578373503887501223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6855863930205751938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7647aa5772f27f42a2c49275b152fe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AdUIScaler
 --- !u!114 &262829287776692747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1733,32 +1844,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   delayBetweenStarPop: 0.4
---- !u!114 &1985975944193728327
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6855863930205751938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6481de668b12492409d2705bbf400fe3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  scoreText: {fileID: 1134963539725086437}
-  animationDuration: 2
---- !u!114 &2578373503887501223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6855863930205751938}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7647aa5772f27f42a2c49275b152fe7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AdUIScaler
 --- !u!114 &2597081495345172114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1773,8 +1858,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   starAudioSource: {fileID: 2123617365436628784}
   starAnimator: {fileID: 6679797757833099865}
-  starPopSound: {fileID: 8300000, guid: c48119bffca0f864795ee5feea7e0d19, type: 3}
-  starGlitterSound: {fileID: 8300000, guid: dc5861e87811bb44ba2f659883952c6d, type: 3}
+  starPopClip: {fileID: 8300000, guid: c48119bffca0f864795ee5feea7e0d19, type: 3}
+  starGlitterClip: {fileID: 8300000, guid: dc5861e87811bb44ba2f659883952c6d, type: 3}
+--- !u!114 &1985975944193728327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6855863930205751938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6481de668b12492409d2705bbf400fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  starAnimator: {fileID: 6679797757833099865}
+  scoreText: {fileID: 1134963539725086437}
+  animationDuration: 2
+--- !u!114 &8166223256264113171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6855863930205751938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e82a577a0bb3f9941adfb01fd7b0a148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  coinAudioSource: {fileID: 6956696682919648680}
+  coinAnimator: {fileID: 1985975944193728327}
+  coinPopClip: {fileID: 8300000, guid: 2ffc7193d3656384e97cdff5c9026d6e, type: 3}
 --- !u!1 &7292594689442888054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2118,7 +2233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.007843138}
+  m_Color: {r: 1, g: 0.8392157, b: 0.039215688, a: 0.03137255}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

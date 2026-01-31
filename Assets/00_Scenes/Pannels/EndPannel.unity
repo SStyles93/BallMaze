@@ -727,10 +727,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1496548025}
     m_Modifications:
-    - target: {fileID: 2123617365436628784, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Volume
-      value: 0.8
+    - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: m_text
+      value: <sprite index=0> 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1134963539725086437, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: m_fontSize
+      value: 93.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985975944193728327, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: starAnimator
+      value: 
+      objectReference: {fileID: 2193332888819868486}
+    - target: {fileID: 2597081495345172114, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: starPopClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c48119bffca0f864795ee5feea7e0d19, type: 3}
+    - target: {fileID: 2597081495345172114, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: starGlitterClip
+      value: 
+      objectReference: {fileID: 8300000, guid: dc5861e87811bb44ba2f659883952c6d, type: 3}
     - target: {fileID: 2810706896204072601, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -811,53 +831,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3508962144549137260, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Color.a
-      value: 0.03137255
-      objectReference: {fileID: 0}
-    - target: {fileID: 3508962144549137260, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3953357953013032393, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Color.a
-      value: 0.03137255
-      objectReference: {fileID: 0}
-    - target: {fileID: 3953357953013032393, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5002280157773407942, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Color.a
-      value: 0.03137255
-      objectReference: {fileID: 0}
-    - target: {fileID: 5002280157773407942, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5805564212174792170, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Color.a
-      value: 0.03137255
-      objectReference: {fileID: 0}
-    - target: {fileID: 5805564212174792170, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5870281433104121468, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Color.a
-      value: 0.03137255
-      objectReference: {fileID: 0}
-    - target: {fileID: 5870281433104121468, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6231608433720637955, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Color.a
-      value: 0.03137255
-      objectReference: {fileID: 0}
-    - target: {fileID: 6231608433720637955, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
+    - target: {fileID: 6679797757833099865, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: delayBetweenStarPop
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6679797757833099865, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
       propertyPath: 'starParticles.Array.data[0]'
@@ -871,11 +847,27 @@ PrefabInstance:
       propertyPath: m_Name
       value: ScorePannel
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8166223256264113171, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+      propertyPath: coinPopClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 005caf71d756aaf4cbfdbd9da8b5ecf8, type: 3}
+    m_RemovedComponents:
+    - {fileID: 7554463575359472302, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+--- !u!114 &2193332888819868486 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6679797757833099865, guid: 3a47900989b8c614c973d64627e6779e, type: 3}
+  m_PrefabInstance: {fileID: 2193332888819868485}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df5ceb9388e221a4a9720fc34d5a2717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!224 &2810706896983723884 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2810706896204072601, guid: 3a47900989b8c614c973d64627e6779e, type: 3}

@@ -50,9 +50,11 @@ public class UIStarAnimator : MonoBehaviour
 
             Image starGlow1 = starImages[i];
             starGlow1.enabled = true;
+            starGlow1.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack);
 
             Image starGlow2 = starImages[i + 1];
             starGlow2.enabled = true;
+            starGlow1.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack);
 
 
             Image star = starImages[i + 2];
