@@ -44,7 +44,7 @@ public class ShopIAPManager : MonoBehaviour
         storeController.OnProductsFetchFailed += OnProductsFetchFailed;
         storeController.OnStoreDisconnected += OnStoreDisconnected;
 
-        Debug.Log("Connecting to store...");
+        //Debug.Log("Connecting to store...");
         await storeController.Connect();
         isConnected = true;
 
@@ -95,7 +95,7 @@ public class ShopIAPManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Purchase pending: {product.definition.id}");
+        //Debug.Log($"Purchase pending: {product.definition.id}");
         storeController.ConfirmPurchase(order);
     }
 
@@ -103,7 +103,7 @@ public class ShopIAPManager : MonoBehaviour
     {
         if (order is ConfirmedOrder)
         {
-            Debug.Log("Purchase confirmed.");
+            //Debug.Log("Purchase confirmed.");
 
             var product = GetFirstProduct(order);
             GrantPayouts(product.definition.id);
@@ -170,7 +170,7 @@ public class ShopIAPManager : MonoBehaviour
     void OnProductsFetched(List<Product> products)
     {
         this.products = products;
-        Debug.Log($"Products fetched successfully: {products.Count}");
+        //Debug.Log($"Products fetched successfully: {products.Count}");
     }
 
     void OnProductsFetchFailed(ProductFetchFailed failure)

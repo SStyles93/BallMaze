@@ -55,7 +55,7 @@ public class SceneController : MonoBehaviour
     {
         if (isBusy)
         {
-            Debug.LogWarning("Scene change already in progress");
+            //Debug.LogWarning("Scene change already in progress");
             yield break;
         }
         isBusy = true;

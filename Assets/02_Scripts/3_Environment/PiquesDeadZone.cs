@@ -24,7 +24,7 @@ public class PiquesDeadZone : MonoBehaviour
             if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
 
 
-        Debug.Log($"Piques Trigged by {collision.gameObject.name}");
+        //Debug.Log($"Piques Trigged by {collision.gameObject.name}");
         if (playerRigidbody == null) playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
         if (playerMovement == null) playerMovement = collision.gameObject.GetComponent<PlayerMovement>();
         if (playerCamera == null) playerCamera = collision.gameObject.GetComponent<PlayerCamera>();

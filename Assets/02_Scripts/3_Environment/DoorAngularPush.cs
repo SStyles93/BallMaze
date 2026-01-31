@@ -1,44 +1,86 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DoorAngularPush : MonoBehaviour
 {
-    [Header("Push Settings")]
-    [SerializeField] private float maxPushForce = 12f;
-    [SerializeField] private AnimationCurve forceFromAngularSpeed;
-    [SerializeField] private float maxAngularSpeed = 90f; // deg/sec
+    [SerializeField] private float pushForce = 10.0f;
 
-    private Quaternion lastRotation;
+    [SerializeField] private Transform parentTransform;
+    [SerializeField] private DoorAngularPush otherDoor;
+    [SerializeField] FlapingDoorsAnimation doorsAnimation;
 
-    private void Awake()
+    private bool isPlayerOnDoor = false;
+    private bool hasCollided = false;
+
+    public bool HasCollided => hasCollided;
+
+    private void OnEnable()
     {
-        lastRotation = transform.rotation;
+        doorsAnimation.OnPauseEnded += EnableCollision;
     }
 
-    private void FixedUpdate()
+    private void OnDisable()
     {
-        lastRotation = transform.rotation;
+        doorsAnimation.OnPauseEnded -= EnableCollision;
+    }
+
+    private void EnableCollision()
+    {
+        hasCollided = false;
     }
 
     private void OnCollisionStay(Collision collision)
     {
-        if (!collision.rigidbody) return;
+        if (collision.collider.CompareTag("Player"))
+        {
+            isPlayerOnDoor = true;
+            if (doorsAnimation.State == FlapingDoorsAnimation.DoorState.Opening && !hasCollided && !otherDoor.hasCollided)
+            {
+                Vector3 parentPos = parentTransform.position;
+                Vector3 playerPos = collision.collider.transform.position;
 
-        // Angular delta this frame
-        Quaternion delta = transform.rotation * Quaternion.Inverse(lastRotation);
-        delta.ToAngleAxis(out float angle, out Vector3 axis);
+                // Horizontal distance from center
+                float distanceFromCenter = Mathf.Abs(playerPos.x - parentPos.x);
 
-        float angularSpeed = angle / Time.fixedDeltaTime;
+                // Max distance where force becomes 0
+                float maxEffectiveDistance = parentTransform.localScale.x * 0.5f;
 
-        float normalizedSpeed = Mathf.Clamp01(angularSpeed / maxAngularSpeed);
-        float forceMultiplier = forceFromAngularSpeed.Evaluate(normalizedSpeed);
+                // Normalize and invert
+                float normalized = Mathf.Clamp01(distanceFromCenter / maxEffectiveDistance);
 
-        Vector3 pushDirection = transform.right; // tweak if needed
-        pushDirection += Vector3.up * 0.3f;
+                // Direction (left/right)
+                float direction = Mathf.Sign(playerPos.x - parentPos.x);
 
+                // Apply force
+                Vector3 force = new Vector3(
+                    direction * normalized,
+                    direction * normalized,
+                    0f
+                );
 
-        collision.rigidbody.AddForce(
-            pushDirection * maxPushForce * forceMultiplier,
-            ForceMode.Impulse
-        );
+                collision.rigidbody.AddForce(force * pushForce, ForceMode.Impulse);
+
+                hasCollided = true;
+
+                Debug.DrawLine(parentPos, playerPos, Color.Lerp(Color.green, Color.red, normalized),2f);
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        isPlayerOnDoor = false;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (isPlayerOnDoor)
+        {
+            Gizmos.color = Color.green;
+        }
+        else
+        {
+            Gizmos.color = Color.red;
+        }
+        Gizmos.DrawCube(transform.position, transform.localScale);
     }
 }

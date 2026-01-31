@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class FlapingDoorsAnimation : MonoBehaviour
@@ -16,7 +17,9 @@ public class FlapingDoorsAnimation : MonoBehaviour
     [Space(10)]
     [SerializeField] private float flapAngle = 90f;
 
-    private enum DoorState
+    //public bool[] isDoorsActive = new bool[2];
+
+    public enum DoorState
     {
         Opening,
         PausingOpen,
@@ -29,6 +32,11 @@ public class FlapingDoorsAnimation : MonoBehaviour
 
     private Quaternion leftClosedRotation;
     private Quaternion rightClosedRotation;
+
+    public DoorState State => state;
+    public float StateTimer => stateTimer;
+
+    public event Action OnPauseEnded;
 
     private void Start()
     {
@@ -56,7 +64,10 @@ public class FlapingDoorsAnimation : MonoBehaviour
                 break;
             case DoorState.PausingClosed:
                 if (stateTimer >= closePauseDuration)
+                {
+                    OnPauseEnded?.Invoke();
                     NextState();
+                }
                 break;
         }
     }

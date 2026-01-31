@@ -59,7 +59,7 @@ public class AdsManager : MonoBehaviour
 
     private void SdkInitializationCompletedEvent(LevelPlayConfiguration config)
     {
-        Debug.Log($"[AdsManager] SDK initialized");
+        //Debug.Log($"[AdsManager] SDK initialized");
 
         EnableAds();
         LoadBanner();
@@ -146,7 +146,7 @@ public class AdsManager : MonoBehaviour
         ApplyBannerAreaSize();
         OnBannerHeightChanged?.Invoke(CurrentBannerHeightPx);
 
-        adsDebugText.text = $"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)";
+        //adsDebugText.text = $"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)";
         //Debug.Log($"[AdsManager] Banner loaded ({CurrentBannerHeightPx}px)");
     }
 
@@ -157,7 +157,7 @@ public class AdsManager : MonoBehaviour
         //ApplyBannerAreaSize();
         //OnBannerHeightChanged?.Invoke(0);
 
-        adsDebugText.text = "[AdsManager] Banner failed to load";
+        //adsDebugText.text = "[AdsManager] Banner failed to load";
         Debug.LogWarning("[AdsManager] Banner failed to load");
     }
 
@@ -179,7 +179,7 @@ public class AdsManager : MonoBehaviour
         ApplyBannerAreaSize();
         OnBannerHeightChanged?.Invoke(0);
 
-        adsDebugText.text = "[AdsManager] Banner failed to Display";
+        //adsDebugText.text = "[AdsManager] Banner failed to Display";
         Debug.LogWarning($"[AdsManager] Banner failed to display");
     }
 

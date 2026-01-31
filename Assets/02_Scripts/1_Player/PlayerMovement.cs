@@ -87,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.y < fallThreshold)
+        if (playerRigidbody.position.y < fallThreshold)
         {
             State = PlayerState.IsFalling;
         }

@@ -385,7 +385,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  openDuration: 1
+  openDuration: 0.1
   openPauseDuration: 0.75
   closeCurve:
     serializedVersion: 2
