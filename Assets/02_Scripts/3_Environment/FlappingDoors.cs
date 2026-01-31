@@ -17,7 +17,7 @@ public class FlapingDoorsAnimation : MonoBehaviour
     [Space(10)]
     [SerializeField] private float flapAngle = 90f;
 
-    //public bool[] isDoorsActive = new bool[2];
+    public event Action OnDoorOpening;
 
     public enum DoorState
     {
@@ -51,6 +51,7 @@ public class FlapingDoorsAnimation : MonoBehaviour
         switch (state)
         {
             case DoorState.Opening:
+                OnDoorOpening?.Invoke();
                 Animate(openCurve, openDuration, DoorState.PausingOpen);
                 break;
 

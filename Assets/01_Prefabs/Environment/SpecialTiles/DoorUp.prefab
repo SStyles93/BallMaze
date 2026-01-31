@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 6111264296819903174}
   - component: {fileID: 7914536311214705368}
   - component: {fileID: 6281492670129911157}
+  - component: {fileID: 4518590486976203324}
   m_Layer: 15
   m_Name: BM_Platform_Obstacle03_DoorL_001
   m_TagString: Hazard
@@ -214,9 +215,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorAngularPush
   pushForce: 20
+  maxEffectiveDistance: 4
   parentTransform: {fileID: 7566462323238085141}
   otherDoor: {fileID: 5715382268928863143}
   doorsAnimation: {fileID: 5725664901779834156}
+--- !u!54 &4518590486976203324
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315103076016635661}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &4712522342983740015
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,6 +259,7 @@ GameObject:
   - component: {fileID: 2912665289451217926}
   - component: {fileID: 7879826298981205991}
   - component: {fileID: 5715382268928863143}
+  - component: {fileID: 8160501447098168853}
   m_Layer: 15
   m_Name: BM_Platform_Obstacle03_DoorR_001
   m_TagString: Hazard
@@ -342,9 +372,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorAngularPush
   pushForce: 20
+  maxEffectiveDistance: 4
   parentTransform: {fileID: 7566462323238085141}
   otherDoor: {fileID: 6281492670129911157}
   doorsAnimation: {fileID: 5725664901779834156}
+--- !u!54 &8160501447098168853
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4712522342983740015}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &4896003729149593231
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +534,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7566462323238085141}
+  - component: {fileID: 3714343597112022420}
   - component: {fileID: 5725664901779834156}
+  - component: {fileID: 1310292636719019741}
   m_Layer: 15
   m_Name: DoorUp
   m_TagString: Hazard
@@ -502,6 +562,103 @@ Transform:
   - {fileID: 8699614575396592585}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &3714343597112022420
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329032435540354753}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 2624485987641308137, guid: c682e0716e7d1a44dbfb4894c9308383, type: 2}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &5725664901779834156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,3 +726,18 @@ MonoBehaviour:
   closeDuration: 1
   closePauseDuration: 1.5
   flapAngle: -90
+--- !u!114 &1310292636719019741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329032435540354753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 468e6328fef95fe4497d1b4df5d761eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  flapingDoorsAnimation: {fileID: 5725664901779834156}
+  audioSource: {fileID: 3714343597112022420}
+  doorClip: {fileID: 8300000, guid: df24f138936b4c54eb2b2a60742da33a, type: 3}

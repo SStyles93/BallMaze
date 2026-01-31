@@ -747,8 +747,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebugPlay: 1
-  unlockAllLevels: 1
+  isDebugPlay: 0
+  unlockAllLevels: 0
   numberOfLevels: 200
 --- !u!1 &567788078
 GameObject:
@@ -923,15 +923,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8cb24066a6a804ab87507be7ebb34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  audioListener: {fileID: 142917551}
+  playerRef: {fileID: 0}
   mixer: {fileID: 24100000, guid: c682e0716e7d1a44dbfb4894c9308383, type: 2}
   musicAudioSource: {fileID: 567788080}
-  playerSfxAudioSource: {fileID: 1900290288}
-  playerRollingAudioSource: {fileID: 139742290}
+  UiSfxAudioSource: {fileID: 1900290288}
   environmentSfxAudioSource: {fileID: 849186764}
   musicClip: {fileID: 8300000, guid: 02f8a67d81fd7d1448cf0b2213796b97, type: 3}
-  rollingClip: {fileID: 8300000, guid: e06645a62ba918744832020ca093cb26, type: 3}
-  jumpClip: {fileID: 8300000, guid: b5d138cf3c10ee345aa3b6108fdffb94, type: 3}
-  thumpClip: {fileID: 8300000, guid: decb37e8bd6cbc84283b494a48c9a1ac, type: 3}
   clickClip: {fileID: 8300000, guid: 43388645cce375a42a77c0867acc79fd, type: 3}
   validateClip: {fileID: 8300000, guid: e7782d87603539140b19b1940d0abad7, type: 3}
   starClip: {fileID: 8300000, guid: c4850539d7f313a418beb6c3ceeb7c5c, type: 3}
@@ -1690,7 +1688,7 @@ GameObject:
   - component: {fileID: 1900290289}
   - component: {fileID: 1900290288}
   m_Layer: 0
-  m_Name: PlayerSfxAudioSource
+  m_Name: UISfxAudioSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -13,6 +13,10 @@ public class GiftPannelManager : MonoBehaviour
     [SerializeField] private float shakeDuration = 0.5f;
     [SerializeField] private float shakeStrength = 15f;
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioClip giftSound;
+    [SerializeField] private AudioClip glitterSound;
+
     [Header("Gift Value")]
     [SerializeField] private int giftValue = 450;
 
@@ -21,11 +25,22 @@ public class GiftPannelManager : MonoBehaviour
 
     private Sequence shakeSequence;
 
+    private AudioSource audioSource;
+
+    private void Awake()
+    {
+        audioSource ??= GetComponent<AudioSource>();
+    }
+
     private void Start()
     {
         coinObject.SetActive(false);
 
         coinObject.GetComponentInChildren<TMP_Text>().text = $"<sprite index=0> {giftValue}";
+
+        if (audioSource.isPlaying) audioSource.Stop();
+        audioSource.loop = false;
+        audioSource.PlayOneShot(giftSound);
 
         StartGiftShake();
     }
@@ -75,6 +90,17 @@ public class GiftPannelManager : MonoBehaviour
         canClick = false;
         giftOpened = true;
 
+        // Start of twinkle sound
+        if(audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+        audioSource.clip = glitterSound;
+        audioSource.loop = true;
+        audioSource.Play();
+
+        // Dotween Anims.
+
         StopGiftShake();
 
         Sequence openSequence = DOTween.Sequence();
@@ -111,6 +137,8 @@ public class GiftPannelManager : MonoBehaviour
     private void UnloadGiftPannel()
     {
         canClick = false;
+
+        audioSource.Stop();
 
         coinObject.transform
             .DOScale(0f, 0.25f)

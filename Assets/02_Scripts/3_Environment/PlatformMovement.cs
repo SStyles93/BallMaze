@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlatformMovement : MonoBehaviour
@@ -16,6 +17,8 @@ public class PlatformMovement : MonoBehaviour
     private bool isPaused = false;
 
     public float MovementAmplitude { get => movementAmplitude; set => movementAmplitude = value; }
+
+    public event Action<bool> OnPlatformActive;
 
     private void Awake()
     {
@@ -48,7 +51,10 @@ public class PlatformMovement : MonoBehaviour
         {
             pauseTimer -= Time.fixedDeltaTime;
             if (pauseTimer <= 0f)
+            {
                 isPaused = false;
+                OnPlatformActive?.Invoke(true);
+            }
             else
                 return; // Skip movement while paused
         }
@@ -79,6 +85,7 @@ public class PlatformMovement : MonoBehaviour
             {
                 isPaused = true;
                 pauseTimer = pauseDuration;
+                OnPlatformActive?.Invoke(false);
                 break;
             }
         }

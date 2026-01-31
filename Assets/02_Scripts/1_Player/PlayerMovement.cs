@@ -49,6 +49,9 @@ public class PlayerMovement : MonoBehaviour
 
     public event Action<string> OnPlayerLanded;
     public event Action OnPlayerJumped;
+    public event Action OnPlayerFalling;
+    // NOT USED YET -> Might be usefull
+    //public event Action OnPlayerRespawned;
 
 
     public float FallThreshold { get => fallThreshold; set => fallThreshold = value; }
@@ -87,9 +90,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (playerRigidbody.position.y < fallThreshold)
+        if (playerRigidbody.position.y < fallThreshold && State != PlayerState.IsFalling)
         {
             State = PlayerState.IsFalling;
+            OnPlayerFalling?.Invoke();
         }
     }
 
@@ -117,6 +121,8 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.isKinematic = false;
 
         State = PlayerState.Alive;
+        // NOT USED YET -> Might be usefull
+        //OnPlayerRespawned?.Invoke();
     }
 
 

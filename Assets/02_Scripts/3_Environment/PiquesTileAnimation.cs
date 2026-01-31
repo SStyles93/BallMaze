@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PiquesTileAnimation : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PiquesTileAnimation : MonoBehaviour
     [SerializeField] private float lowerPauseDuration = 0.5f;
     [Space(10)]
     [SerializeField] private float piquesYOffset = 1.5f;
+
+    public event Action OnPiquesRising;
 
     private enum PiquesState
     {
@@ -39,6 +42,8 @@ public class PiquesTileAnimation : MonoBehaviour
         switch (state)
         {
             case PiquesState.Rising:
+                // Used by the Audio
+                OnPiquesRising?.Invoke();
                 Animate(riseCurve, riseDuration, PiquesState.PausedUp);
                 break;
 

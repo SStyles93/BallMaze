@@ -3,6 +3,7 @@
 public class DoorAngularPush : MonoBehaviour
 {
     [SerializeField] private float pushForce = 10.0f;
+    [SerializeField] float maxEffectiveDistance = 2.0f;
 
     [SerializeField] private Transform parentTransform;
     [SerializeField] private DoorAngularPush otherDoor;
@@ -38,26 +39,17 @@ public class DoorAngularPush : MonoBehaviour
                 Vector3 parentPos = parentTransform.position;
                 Vector3 playerPos = collision.collider.transform.position;
 
-                // Horizontal distance from center
                 float distanceFromCenter = Mathf.Abs(playerPos.x - parentPos.x);
-
-                // Max distance where force becomes 0
-                float maxEffectiveDistance = parentTransform.localScale.x * 0.5f;
-
-                // Normalize and invert
-                float normalized = Mathf.Clamp01(distanceFromCenter / maxEffectiveDistance);
-
-                // Direction (left/right)
+                float normalized = 1f - Mathf.Clamp01(distanceFromCenter / maxEffectiveDistance);
                 float direction = Mathf.Sign(playerPos.x - parentPos.x);
 
-                // Apply force
                 Vector3 force = new Vector3(
-                    direction * normalized,
-                    direction * normalized,
+                    direction * pushForce * normalized,
+                    pushForce * normalized,
                     0f
                 );
 
-                collision.rigidbody.AddForce(force * pushForce, ForceMode.Impulse);
+                collision.rigidbody.AddForce(force, ForceMode.Impulse);
 
                 hasCollided = true;
 
@@ -82,5 +74,8 @@ public class DoorAngularPush : MonoBehaviour
             Gizmos.color = Color.red;
         }
         Gizmos.DrawCube(transform.position, transform.localScale);
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(parentTransform.position, Vector3.one * maxEffectiveDistance);
     }
 }

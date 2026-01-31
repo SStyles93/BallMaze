@@ -4,22 +4,22 @@ using UnityEngine.Rendering;
 
 public class AudioManager : MonoBehaviour
 {
+    [Header("AudioListenerRef")]
+    [SerializeField] private GameObject audioListener;
+    [SerializeField] private GameObject playerRef;
+
     [Header("Mixer")]
     [SerializeField] private AudioMixer mixer;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicAudioSource;
-    [SerializeField] private AudioSource playerSfxAudioSource;
-    [SerializeField] private AudioSource playerRollingAudioSource;
+    [SerializeField] private AudioSource UiSfxAudioSource;
     [SerializeField] private AudioSource environmentSfxAudioSource;
 
     [Header("Music")]
     [SerializeField] private AudioClip musicClip;
 
-    [Header("Player SFX")]
-    [SerializeField] private AudioClip rollingClip;
-    [SerializeField] private AudioClip jumpClip;
-    [SerializeField] private AudioClip thumpClip;
+    [Header("UI SFX")]
     [SerializeField] private AudioClip clickClip;
     [SerializeField] private AudioClip validateClip;
 
@@ -31,9 +31,6 @@ public class AudioManager : MonoBehaviour
     private bool isMusicEnabled = true;
 
     public static AudioManager Instance { get; private set; }
-    public AudioSource MusicAudioSource => musicAudioSource;
-    public AudioSource PlayerSfxAudioSource => playerSfxAudioSource;
-    public AudioSource EnvironmentSfxAudioSource => environmentSfxAudioSource;
     public bool IsAudioEnabled => isAudioEnabled;
     public bool IsMusicEnabled => isMusicEnabled;
 
@@ -46,9 +43,26 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         if (musicAudioSource == null) Debug.LogWarning("MusicAudioSource is null, assign it in inspector");
-        if (playerSfxAudioSource == null) Debug.LogWarning("PlayerSfxAudioSource is null, assign it in inspector");
+        if (UiSfxAudioSource == null) Debug.LogWarning("PlayerSfxAudioSource is null, assign it in inspector");
         if (environmentSfxAudioSource == null) Debug.LogWarning("EnvironmentSfxAudioSource is null, assign it in inspector");
-        if (playerRollingAudioSource == null) Debug.LogWarning("PlayerRollingAudioSource is null, assign it in inspector");
+    }
+
+    private void Update()
+    {
+        //if isGame
+        if(playerRef != null)
+        {
+            audioListener.transform.position = playerRef.transform.position;
+        }
+        else
+        {
+            audioListener.transform.position = Vector3.zero;
+        }
+    }
+
+    public void SetPlayer(GameObject player)
+    {
+        playerRef = player;
     }
 
     // --- GENERAL ---
@@ -75,24 +89,6 @@ public class AudioManager : MonoBehaviour
         isMusicEnabled = isActive;
     }
 
-
-    public void SetRollingVolume(float value)
-    {
-        if (value <= 0.02f)
-        {
-            playerRollingAudioSource.Stop();
-            playerRollingAudioSource.volume = 0.0f;
-        }
-        else
-        {
-            if(!playerRollingAudioSource.isPlaying)
-            playerRollingAudioSource.Play();
-
-            playerRollingAudioSource.volume = value;
-        }
-
-    }
-
     // --- MUSIC ---
     public void PlayMusic()
     {
@@ -106,32 +102,18 @@ public class AudioManager : MonoBehaviour
 
     // --- PLAYER SFX ---
 
-    public void PlayJumpSound()
-    {
-        playerSfxAudioSource.volume = 1.0f;
-        playerSfxAudioSource.pitch = 2.0f;
-        PlayPlayerSound(jumpClip);
-    }
-
-    public void PlayThumpSound(float pitch)
-    {
-        playerSfxAudioSource.pitch = pitch;
-        playerSfxAudioSource.volume = .3f;
-        PlayPlayerSound(thumpClip);
-    }
-
     public void PlayClickSound()
     {
-        playerSfxAudioSource.pitch = 1.0f;
-        playerSfxAudioSource.volume = 1.0f;
-        PlayPlayerSound(clickClip);
+        UiSfxAudioSource.pitch = 1.0f;
+        UiSfxAudioSource.volume = 1.0f;
+        PlayUISound(clickClip);
     }
 
     public void PlayValidate()
     {
-        playerSfxAudioSource.pitch = 1.0f;
-        playerSfxAudioSource.volume = 1.0f;
-        PlayPlayerSound(validateClip);
+        UiSfxAudioSource.pitch = 1.0f;
+        UiSfxAudioSource.volume = 1.0f;
+        PlayUISound(validateClip);
     }
 
     // --- ENVIRONMENT SFX ---
@@ -179,15 +161,15 @@ public class AudioManager : MonoBehaviour
     /// Plays a sound on the player Audio Source
     /// </summary>
     /// <param name="clip">The clip to play</param>
-    private void PlayPlayerSound(AudioClip clip)
+    private void PlayUISound(AudioClip clip)
     {
-        if (playerSfxAudioSource.isPlaying)
-            playerSfxAudioSource.Stop();
+        if (UiSfxAudioSource.isPlaying)
+            UiSfxAudioSource.Stop();
 
         if (clip == null)
             Debug.LogWarning($"Clip {clip.name} is null");
 
-        playerSfxAudioSource.PlayOneShot(clip);
+        UiSfxAudioSource.PlayOneShot(clip);
     }
 
     private void SetAudioSourceState(AudioSource audioSource, bool isActive)
