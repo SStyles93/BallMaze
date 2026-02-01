@@ -12,18 +12,18 @@ public class PlayerUIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerControler.OnTouchStarted += OnTouchStarted;
-        PlayerControler.OnMovePerfromed += OnMovePerformed;
-        PlayerControler.OnTouchStopped += OnTouchStopped;
-        PlayerControler.OnControlsChanged += AssignControlScheme;
+        PlayerController.OnTouchStarted += OnTouchStarted;
+        PlayerController.OnMovePerformed += OnMovePerformed;
+        PlayerController.OnTouchStopped += OnTouchStopped;
+        PlayerController.OnControlsChanged += AssignControlScheme;
     }
 
     private void OnDisable()
     {
-        PlayerControler.OnTouchStarted -= OnTouchStarted;
-        PlayerControler.OnMovePerfromed -= OnMovePerformed;
-        PlayerControler.OnTouchStopped -= OnTouchStopped;
-        PlayerControler.OnControlsChanged -= AssignControlScheme;
+        PlayerController.OnTouchStarted -= OnTouchStarted;
+        PlayerController.OnMovePerformed -= OnMovePerformed;
+        PlayerController.OnTouchStopped -= OnTouchStopped;
+        PlayerController.OnControlsChanged -= AssignControlScheme;
     }
 
     private void OnTouchStarted(Vector3 screenPosition)

@@ -1,12 +1,14 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.Windows;
 
 
 [RequireComponent(typeof(PlayerInput))]
-public class PlayerControler : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerInput playerInput;
 
@@ -25,6 +27,8 @@ public class PlayerControler : MonoBehaviour
     private double joystickStartTime;
     private bool joystickFingerDragged;
 
+    //[SerializeField] private TMP_Text MOVE_TEXT;
+    //[SerializeField] private TMP_Text JUMP_TEXT;
 
     /// <summary>
     /// Delegate used to transmit START touch position to other scripts
@@ -46,7 +50,7 @@ public class PlayerControler : MonoBehaviour
     /// <summary>
     /// Delegate used to Transmit movement
     /// </summary>
-    public static event Action<Vector2> OnMovePerfromed;
+    public static event Action<Vector2> OnMovePerformed;
 
     /// <summary>
     /// Delegate used to transmit Jump action
@@ -122,12 +126,12 @@ public class PlayerControler : MonoBehaviour
         {
             movementDirection = ctx.ReadValue<Vector2>();
             // Calls the event for the PlayerMovement
-            OnMovePerfromed?.Invoke(movementDirection);
+            OnMovePerformed?.Invoke(movementDirection);
             //Debug.Log(ctx.ReadValue<Vector2>());
         }
         if (ctx.canceled)
         {
-            OnMovePerfromed?.Invoke(Vector3.zero);
+            OnMovePerformed?.Invoke(Vector3.zero);
         }
     }
 
@@ -149,7 +153,7 @@ public class PlayerControler : MonoBehaviour
 
     private void OnFingerDown(Finger finger)
     {
-        if (IsPointerOverUI()) return;
+        if (IsPointerOverUI(finger)) return;
 
         Vector2 pos = finger.screenPosition;
 
@@ -189,7 +193,7 @@ public class PlayerControler : MonoBehaviour
 
     private void OnFingerUp(Finger finger)
     {
-        if (IsPointerOverUI()) return;
+        if (IsPointerOverUI(finger)) return;
 
         // Only joystick finger can jump on release
         if (finger != joystickFinger)
@@ -220,7 +224,8 @@ public class PlayerControler : MonoBehaviour
             lastMovementTimer = tapWindowTime;
         }
 
-        OnMovePerfromed?.Invoke(input);
+        OnMovePerformed?.Invoke(input);
+        //MOVE_TEXT.text = $"Move - {input}";
     }
 
     private void PerformJump()
@@ -228,10 +233,11 @@ public class PlayerControler : MonoBehaviour
         if (lastMovementTimer > 0f)
         {
             // Re-emit last movement so jump uses it
-            OnMovePerfromed?.Invoke(lastMovementDirection);
+            OnMovePerformed?.Invoke(lastMovementDirection);
         }
 
         OnJumpPerformed?.Invoke();
+        //JUMP_TEXT.text = $"Jump with {lastMovementDirection}";
     }
 
     private void ResetJoystick()
@@ -242,9 +248,22 @@ public class PlayerControler : MonoBehaviour
         OnTouchStopped?.Invoke();
     }
 
-    private bool IsPointerOverUI()
+    /// <summary>
+    /// Returns true if the given finger is over UI, blocking gameplay input.
+    /// Works for touch and mouse.
+    /// </summary>
+    private bool IsPointerOverUI(Finger finger)
     {
-        return EventSystem.current.IsPointerOverGameObject();
+        if (EventSystem.current == null) return false;
+
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = finger.screenPosition
+        };
+
+        var raycastResults = new System.Collections.Generic.List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, raycastResults);
+        return raycastResults.Count > 0;
     }
     #endregion
 }

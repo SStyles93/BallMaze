@@ -298,13 +298,13 @@ public static class RuntimeLevelProgression
             switch (modifier.modifierType)
             {
                 case ModifierType.Ice:
-                    doorDown = Mathf.Min(MAX_ICE, scaled * MAX_ICE);
+                    ice = Mathf.Min(MAX_ICE, scaled * MAX_ICE);
                     break;
                 case ModifierType.Moving:
-                    doorUp = Mathf.Min(MAX_MOVING, scaled * MAX_MOVING);
+                    moving = Mathf.Min(MAX_MOVING, scaled * MAX_MOVING);
                     break;
                 case ModifierType.Empty:
-                    doorUp = Mathf.Min(MAX_EMPTY, scaled * MAX_EMPTY);
+                    empty = Mathf.Min(MAX_EMPTY, scaled * MAX_EMPTY);
                     break;
                 case ModifierType.Piques:
                     piques = Mathf.Min(MAX_PIQUES, scaled * MAX_PIQUES);

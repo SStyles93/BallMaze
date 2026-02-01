@@ -351,6 +351,8 @@ MonoBehaviour:
   tapMaxDistance: 35
   tapWindowTime: 1
   tapMaxDuration: 0.2
+  MOVE_TEXT: {fileID: 0}
+  JUMP_TEXT: {fileID: 0}
 --- !u!114 &5788141387175152010
 MonoBehaviour:
   m_ObjectHideFlags: 0

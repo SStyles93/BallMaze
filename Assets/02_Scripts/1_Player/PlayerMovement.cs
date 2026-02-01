@@ -61,9 +61,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerControler.OnMovePerfromed += SetMovementValue;
-        PlayerControler.OnJumpPerformed += Jump;
-        PlayerControler.OnTouchStopped += ResetMovementValue;
+        PlayerController.OnMovePerformed += SetMovementValue;
+        PlayerController.OnJumpPerformed += Jump;
 
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnLifeLostToThisLevel += SetGroundRadiusHelp;
@@ -71,9 +70,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerControler.OnMovePerfromed -= SetMovementValue;
-        PlayerControler.OnJumpPerformed -= Jump;
-        PlayerControler.OnTouchStopped -= ResetMovementValue;
+        PlayerController.OnMovePerformed -= SetMovementValue;
+        PlayerController.OnJumpPerformed -= Jump;
 
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnLifeLostToThisLevel -= SetGroundRadiusHelp;
@@ -243,11 +241,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 mapped = DirectionMapper.MapTo8CardinalPoints(input);
         movementInput = new Vector3(mapped.x, 0, mapped.y);
-    }
-
-    private void ResetMovementValue()
-    {
-        movementInput = Vector3.zero;
     }
 
     // ---------------- GRAVITY ----------------

@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using MyBox;
 
-[RequireComponent(typeof(PlayerControler))]
+[RequireComponent(typeof(PlayerController))]
 public class ObjectManager : MonoBehaviour
 {
     [SerializeField] AnimationCurve forceCurve;
