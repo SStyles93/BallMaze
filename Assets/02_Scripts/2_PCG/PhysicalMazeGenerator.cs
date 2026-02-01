@@ -147,6 +147,12 @@ public class PhysicalMazeGenerator : MonoBehaviour
                 pm.MovementAmplitude = cellSize;
         }
 
+        if (ground.TryGetComponent<ITimedHazard>(out var hazard))
+        {
+            bool isInverted = ((x + y) & 1) == 1;
+            hazard.SetState(isInverted);
+        }
+
         ground.name = $"{groundType}_{x}_{y}";
     }
 

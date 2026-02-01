@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerSound : MonoBehaviour
 {
+    [SerializeField] private AudioSource audioSource;
+
     [Header("Player SFX")]
     [SerializeField] private AudioClip rollingClip;
     [SerializeField] private AudioClip jumpClip;
@@ -15,7 +17,6 @@ public class PlayerSound : MonoBehaviour
 
     private Rigidbody rb;
     private PlayerMovement playerMovement;
-    private AudioSource audioSource;
 
     // Define the range of expected speeds
     public float maxSpeed = 7.6f;
@@ -108,7 +109,7 @@ public class PlayerSound : MonoBehaviour
 
     private void PlayFallingSound()
     {
-        audioSource.pitch = 1.0f;
+        audioSource.pitch = 1.5f;
         audioSource.volume = 1.0f;
         PlaySoundOnce(fallingClip);
     }

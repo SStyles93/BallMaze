@@ -485,7 +485,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   openDuration: 0.1
-  openPauseDuration: 0.75
+  openPauseDuration: 0.5
   closeCurve:
     serializedVersion: 2
     m_Curve:
@@ -511,7 +511,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   closeDuration: 1
-  closePauseDuration: 1.5
+  closePauseDuration: 2
+  phaseOffset: 0
   flapAngle: 90
 --- !u!114 &461815115853785849
 MonoBehaviour:

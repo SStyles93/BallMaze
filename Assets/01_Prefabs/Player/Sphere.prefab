@@ -449,10 +449,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ccf19f2456c1e4d9f90d59b52b89b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  audioSource: {fileID: 850816290626706816}
   rollingClip: {fileID: 8300000, guid: e06645a62ba918744832020ca093cb26, type: 3}
   jumpClip: {fileID: 8300000, guid: b5d138cf3c10ee345aa3b6108fdffb94, type: 3}
   thumpClip: {fileID: 8300000, guid: decb37e8bd6cbc84283b494a48c9a1ac, type: 3}
-  fallingClip: {fileID: 8300000, guid: 84bdaa67df7c245499db868842bffd6e, type: 3}
+  fallingClip: {fileID: 8300000, guid: 952a5f73e975b27449a81edb4c516fc2, type: 3}
   GroundPitch: 1.5
   IcePitch: 1.5
   maxSpeed: 7.6

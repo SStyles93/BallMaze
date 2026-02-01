@@ -724,7 +724,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   closeDuration: 1
-  closePauseDuration: 1.5
+  closePauseDuration: 2
+  phaseOffset: 0
   flapAngle: -90
 --- !u!114 &1310292636719019741
 MonoBehaviour:

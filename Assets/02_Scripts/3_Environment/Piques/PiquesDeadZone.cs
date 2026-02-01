@@ -23,6 +23,7 @@ public class PiquesDeadZone : MonoBehaviour
         if (gamestateManager != null)
             if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
 
+        if (!collision.CompareTag("Player")) return;
 
         //Debug.Log($"Piques Trigged by {collision.gameObject.name}");
         if (playerRigidbody == null) playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();

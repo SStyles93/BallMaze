@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class FlapingDoorsAnimation : MonoBehaviour
+public class FlapingDoorsAnimation : MonoBehaviour, ITimedHazard
 {
     [Header("Door References")]
     [SerializeField] private Transform leftDoor;
@@ -14,6 +14,7 @@ public class FlapingDoorsAnimation : MonoBehaviour
     [SerializeField] private AnimationCurve closeCurve;
     [SerializeField] private float closeDuration = 1f;
     [SerializeField] private float closePauseDuration = 0.5f;
+
     [Space(10)]
     [SerializeField] private float flapAngle = 90f;
 
@@ -27,7 +28,8 @@ public class FlapingDoorsAnimation : MonoBehaviour
         PausingClosed
     }
 
-    private DoorState state = DoorState.Opening;
+    [Space(20)]
+    [SerializeField] private DoorState state = DoorState.Opening;
     private float stateTimer;
 
     private Quaternion leftClosedRotation;
@@ -109,4 +111,25 @@ public class FlapingDoorsAnimation : MonoBehaviour
             _ => state
         };
     }
+
+    // --- TIME SETTINGS ---
+
+    public float CycleDuration =>
+    openDuration + openPauseDuration +
+    closeDuration + closePauseDuration;
+
+    public void SetState(bool isInverted)
+    {
+        if (isInverted)
+        {
+            state = DoorState.Closing;
+            stateTimer = CycleDuration / 2;
+        }
+        else
+        {
+            state = DoorState.Opening;
+        }
+    }
+
+    public bool IsSafe() => state == DoorState.PausingClosed;
 }

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
-public class PiquesTileAnimation : MonoBehaviour
+public class PiquesTileAnimation : MonoBehaviour, ITimedHazard
 {
     [Header("Piques References")]
     [SerializeField] private Transform piques;
@@ -13,6 +14,7 @@ public class PiquesTileAnimation : MonoBehaviour
     [SerializeField] private AnimationCurve lowerCurve;  // up → down
     [SerializeField] private float lowerDuration = 0.6f;
     [SerializeField] private float lowerPauseDuration = 0.5f;
+
     [Space(10)]
     [SerializeField] private float piquesYOffset = 1.5f;
 
@@ -26,7 +28,8 @@ public class PiquesTileAnimation : MonoBehaviour
         PausedDown
     }
 
-    private PiquesState state = PiquesState.Rising;
+    [Space(20)]
+    [SerializeField] private PiquesState state = PiquesState.Rising;
     private float stateTimer;
     private Vector3 piqueOriginalPosition;
 
@@ -47,14 +50,15 @@ public class PiquesTileAnimation : MonoBehaviour
                 Animate(riseCurve, riseDuration, PiquesState.PausedUp);
                 break;
 
-            case PiquesState.Lowering:
-                Animate(lowerCurve, lowerDuration, PiquesState.PausedDown);
-                break;
-
             case PiquesState.PausedUp:
                 if (stateTimer >= risePauseDuration)
                     NextState();
                 break;
+
+            case PiquesState.Lowering:
+                Animate(lowerCurve, lowerDuration, PiquesState.PausedDown);
+                break;
+
             case PiquesState.PausedDown:
                 if (stateTimer >= lowerPauseDuration)
                     NextState();
@@ -90,4 +94,22 @@ public class PiquesTileAnimation : MonoBehaviour
     }
 
 
+    public float CycleDuration =>
+   riseDuration + risePauseDuration +
+   lowerDuration + lowerPauseDuration;
+
+    public void SetState(bool isInverted)
+    {
+        if (isInverted)
+        {
+            state = PiquesState.Lowering;
+            stateTimer = CycleDuration/2;
+        }
+        else
+        {
+            state = PiquesState.Rising;
+        }
+    }
+
+    public bool IsSafe() => state == PiquesState.PausedDown;
 }
