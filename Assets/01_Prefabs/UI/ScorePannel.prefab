@@ -950,7 +950,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <sprite index=0> 9999
+  m_text: <sprite index=0> 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9882ebed56d8a7f41958f15d8a76b904, type: 2}
   m_sharedMaterial: {fileID: 184713176012697816, guid: 9882ebed56d8a7f41958f15d8a76b904, type: 2}
@@ -977,7 +977,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 71.7
+  m_fontSize: 93.6
   m_fontSizeBase: 51.33
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1831,19 +1831,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   starImages:
+  - {fileID: 3620119715735344366}
   - {fileID: 5002280157773407942}
   - {fileID: 3508962144549137260}
-  - {fileID: 3620119715735344366}
+  - {fileID: 9087965187099379107}
   - {fileID: 3953357953013032393}
   - {fileID: 5870281433104121468}
-  - {fileID: 9087965187099379107}
+  - {fileID: 8522547964275309928}
   - {fileID: 6231608433720637955}
   - {fileID: 5805564212174792170}
-  - {fileID: 8522547964275309928}
   starParticles:
   - {fileID: 0}
   - {fileID: 0}
-  delayBetweenStarPop: 0.4
+  delayBetweenStarPop: 0.2
 --- !u!114 &2597081495345172114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1889,7 +1889,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   coinAudioSource: {fileID: 6956696682919648680}
   coinAnimator: {fileID: 1985975944193728327}
-  coinPopClip: {fileID: 8300000, guid: 2ffc7193d3656384e97cdff5c9026d6e, type: 3}
+  coinPopClip: {fileID: 8300000, guid: 005caf71d756aaf4cbfdbd9da8b5ecf8, type: 3}
 --- !u!1 &7292594689442888054
 GameObject:
   m_ObjectHideFlags: 0

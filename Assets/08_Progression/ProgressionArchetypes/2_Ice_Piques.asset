@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75656b88bfa5c99428acb7c612fed9a4, type: 3}
   m_Name: 2_Ice_Piques
   m_EditorClassIdentifier: Assembly-CSharp::LevelArchetypeData_SO
-  archetypeName: Ice_Piques
+  archetypeName: Ice_Spikes
   modifiers:
   - modifierType: 1
     weight: 1
   - modifierType: 3
-    weight: 1
+    weight: 0.5
   maxActiveModifiers: 2

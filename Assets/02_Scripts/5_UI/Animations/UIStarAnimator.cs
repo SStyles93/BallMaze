@@ -31,7 +31,7 @@ public class UIStarAnimator : MonoBehaviour
         // Disable visuals & set scale to 0
         for (int i = 0; i < starImages.Count; i++)
         {
-            if (i % 3 == 2)
+            if (i % 3 == 0)
             {
                 starImages[i].enabled = false;
                 starImages[i].transform.localScale = Vector3.zero;
@@ -48,22 +48,19 @@ public class UIStarAnimator : MonoBehaviour
         {
             // DOTween pop + fade
 
-            Image starGlow1 = starImages[i];
-            starGlow1.enabled = true;
-            starGlow1.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack);
-
-            Image starGlow2 = starImages[i + 1];
-            starGlow2.enabled = true;
-            starGlow1.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack);
-
-
-            Image star = starImages[i + 2];
+            Image star = starImages[i];
             star.enabled = true;
             star.transform.DOScale(1f, 0.35f).SetEase(Ease.OutBack);
             star.DOFade(1f, 0.3f);
 
             OnStarPop?.Invoke();
             yield return new WaitForSeconds(delayBetweenStarPop);
+
+            Image starGlow1 = starImages[i + 1];
+            starGlow1.enabled = true;
+
+            Image starGlow2 = starImages[i + 2];
+            starGlow2.enabled = true;
         }
 
         OnPopFinished?.Invoke();

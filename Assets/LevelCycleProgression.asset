@@ -14,38 +14,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelCycleProgression_SO
   recoveryArchetype: {fileID: 11400000, guid: 17219e5218ce38949957f40bbb03edac, type: 2}
   cycles:
-  - cycleName: NONE
-    allowedArchetypes:
-    - {fileID: 11400000, guid: 1c76d658c4ed01c44b714ea2874d0c5d, type: 2}
-  - cycleName: Slippery Intro
+  - cycleName: 0_NONE
+    allowedArchetypes: []
+  - cycleName: 1_Slippery Intro
     allowedArchetypes:
     - {fileID: 11400000, guid: 4e566a4861927d340b1ff1d701b2722f, type: 2}
-  - cycleName: Timing Intro
-    allowedArchetypes:
-    - {fileID: 11400000, guid: f21de6c545a2b0844b2d6d9a58353b77, type: 2}
-  - cycleName: Mixed Basics
-    allowedArchetypes:
-    - {fileID: 11400000, guid: 622082026a8e1af43828ce072ee2b328, type: 2}
-  - cycleName: Precision Intro (Holes)
+  - cycleName: 2_Precision Intro (Holes)
     allowedArchetypes:
     - {fileID: 11400000, guid: 4e1ad8b5c019bcb40877ef5d1248584d, type: 2}
-  - cycleName: Full Basics
+  - cycleName: 3_Piques
     allowedArchetypes:
-    - {fileID: 11400000, guid: 9d677956335b77e48a02f10ceebf64da, type: 2}
-    - {fileID: 11400000, guid: 26c1ddcb209a52849ba04eaa9f95e80e, type: 2}
-    - {fileID: 11400000, guid: 622082026a8e1af43828ce072ee2b328, type: 2}
-  - cycleName: Doors
+    - {fileID: 11400000, guid: a6fbe142573f8ba478c0dd84343c491c, type: 2}
+  - cycleName: 4_DoorDown
+    allowedArchetypes:
+    - {fileID: 11400000, guid: 6af09eda5aeec33498498c4c604e502e, type: 2}
+  - cycleName: 5_DoorUp
+    allowedArchetypes:
+    - {fileID: 11400000, guid: b9cf9eb25788cd54c9d04bc877f9e35d, type: 2}
+  - cycleName: 6_I+H
+    allowedArchetypes:
+    - {fileID: 11400000, guid: 1983c1e6587dba44f8604cf3b56fd76e, type: 2}
+  - cycleName: 7_I+P
+    allowedArchetypes:
+    - {fileID: 11400000, guid: a042a54f4ff050d4da2a18a1c315b9f4, type: 2}
+  - cycleName: 8_M+P
+    allowedArchetypes:
+    - {fileID: 11400000, guid: f357705445a46ed4fbd7769f68b50c33, type: 2}
+  - cycleName: 9_M+DD
+    allowedArchetypes:
+    - {fileID: 11400000, guid: 494bc100676a0da4a9bd2c65d4be6f67, type: 2}
+  - cycleName: 10_All
+    allowedArchetypes:
+    - {fileID: 11400000, guid: a89b382856c3f544f93dc2ae063aab85, type: 2}
+  - cycleName: 11_FullPool
     allowedArchetypes:
     - {fileID: 11400000, guid: 6af09eda5aeec33498498c4c604e502e, type: 2}
     - {fileID: 11400000, guid: b9cf9eb25788cd54c9d04bc877f9e35d, type: 2}
+    - {fileID: 11400000, guid: 4e1ad8b5c019bcb40877ef5d1248584d, type: 2}
+    - {fileID: 11400000, guid: 4e566a4861927d340b1ff1d701b2722f, type: 2}
     - {fileID: 11400000, guid: a6fbe142573f8ba478c0dd84343c491c, type: 2}
-  - cycleName: Full Pool
-    allowedArchetypes:
-    - {fileID: 11400000, guid: 955b9bec10871a944830ac4f7472e39e, type: 2}
-    - {fileID: 11400000, guid: d088ce4124699d9489c60af259c8d45e, type: 2}
-    - {fileID: 11400000, guid: 9d677956335b77e48a02f10ceebf64da, type: 2}
-    - {fileID: 11400000, guid: 26c1ddcb209a52849ba04eaa9f95e80e, type: 2}
-    - {fileID: 11400000, guid: 0fad8781a97cfd5489e55e13f36dd145, type: 2}
-    - {fileID: 11400000, guid: fe569ca15dd3c594ba288e4a432a878c, type: 2}
-    - {fileID: 11400000, guid: 622082026a8e1af43828ce072ee2b328, type: 2}
-    - {fileID: 11400000, guid: 66f1dceb8a19f2c4499b804c1e921065, type: 2}
+    - {fileID: 11400000, guid: f21de6c545a2b0844b2d6d9a58353b77, type: 2}
+    - {fileID: 11400000, guid: 1983c1e6587dba44f8604cf3b56fd76e, type: 2}
+    - {fileID: 11400000, guid: a042a54f4ff050d4da2a18a1c315b9f4, type: 2}
+    - {fileID: 11400000, guid: 494bc100676a0da4a9bd2c65d4be6f67, type: 2}
+    - {fileID: 11400000, guid: f357705445a46ed4fbd7769f68b50c33, type: 2}
+    - {fileID: 11400000, guid: a89b382856c3f544f93dc2ae063aab85, type: 2}
