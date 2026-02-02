@@ -58,7 +58,7 @@ public class PlayerVisualEffects : MonoBehaviour
         if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
 
         bool shouldShrink =
-            playerMovement.State == PlayerMovement.PlayerState.IsFalling;
+            playerMovement.State == PlayerState.IsFalling;
 
         // --- SHRINK ---
         if (shouldShrink && state == ScaleState.Normal)
@@ -71,7 +71,7 @@ public class PlayerVisualEffects : MonoBehaviour
         }
 
         // --- BLINK ---
-        if (playerMovement.State == PlayerMovement.PlayerState.IsDying)
+        if (playerMovement.State == PlayerState.IsDying)
         {
             Blink();
         }

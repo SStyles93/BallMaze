@@ -1,10 +1,13 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class CurrencyPannel : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
-    protected CoinType m_coinType = CoinType.COIN;
+    [SerializeField] protected CoinType m_coinType = CoinType.COIN;
+
+    [SerializeField] private Texture[] powerUpSprites = new Texture[5];
 
     protected CoinManager coinManagerRef;
 
@@ -23,10 +26,24 @@ public class CurrencyPannel : MonoBehaviour
 
     protected virtual void Start()
     {
-        if (coinManagerRef != null && coinManagerRef.PreviousCoinAmount != coinManagerRef.CoinAmount)
+        // --- TEXTURE SETTING
+        GetComponentInChildren<RawImage>().texture = powerUpSprites[(int)m_coinType];
+
+        // --- COIN MANAGER ---
+        if (coinManagerRef != null)
         {
-            UpdateCurrencyValue(m_coinType, coinManagerRef.CoinAmount, coinManagerRef.PreviousCoinAmount);
-            coinManagerRef.LevelPreviousCoinAmount(m_coinType);
+            int currentAmount = coinManagerRef.GetCoinAmount(m_coinType);
+            int previousAmount = coinManagerRef.GetPreviousAmount(m_coinType);
+
+            if (previousAmount != currentAmount)
+            {
+                UpdateCurrencyValue(m_coinType, currentAmount, previousAmount);
+                coinManagerRef.LevelPreviousCoinAmount(m_coinType);
+            }
+            else
+            {
+                SetCurrencyValue(m_coinType, currentAmount);
+            }
         }
     }
 

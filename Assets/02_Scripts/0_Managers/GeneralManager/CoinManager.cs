@@ -14,10 +14,6 @@ public class CoinManager : MonoBehaviour
     [SerializeField] private int timeToRegainHeartInMinutes = 10;
     public bool HasPlayerReceivedGift = false;
 
-    //[SerializeField] int coinAmount;
-    //[SerializeField] int starAmount;
-    //[SerializeField] int heartAmount;
-
     private DateTime lastHeartRefillTime;
     Coroutine timerCoroutine;
     bool isDataLoaded = false;
@@ -26,21 +22,19 @@ public class CoinManager : MonoBehaviour
     /// Delegate (Action) used to notify the different pannels (LifePannel, CurrencyPannel, StarPannel)
     /// </summary>
     public event Action<CoinType, int, int> OnCoinChanged;
+
+    /// <summary>
+    /// Delegate use to set the amount of coins
+    /// </summary>
     public event Action<CoinType, int> OnCoinSet;
 
+    /// <summary>
+    /// Delegate used to Tick
+    /// </summary>
     public event Action<TimeSpan> OnHeartTimerTick;
-
-    public int CoinAmount => coins[CoinType.COIN];
-    public int StarAmount => coins[CoinType.STAR];
-    public int HeartAmount => coins[CoinType.HEART];
-
-    public int PreviousCoinAmount => previousCoins[CoinType.COIN];
-    public int PreviousStarAmount => previousCoins[CoinType.STAR];
-    public int PreviousHeartAmount => previousCoins[CoinType.HEART];
 
     public int InitialHeartAmount => maxHeartAmount;
     public DateTime LastHeartRefillTime => lastHeartRefillTime;
-
     public static CoinManager Instance { get; private set; }
 
     private void Awake()
@@ -57,6 +51,8 @@ public class CoinManager : MonoBehaviour
             coins.Add(CoinType.COIN, 0);
             coins.Add(CoinType.STAR, 0);
             coins.Add(CoinType.HEART, 0);
+            coins.Add(CoinType.ROCKET, 0);
+            coins.Add(CoinType.UFO, 0);
         }
 
         if (previousCoins.Count == 0)
@@ -64,6 +60,8 @@ public class CoinManager : MonoBehaviour
             previousCoins.Add(CoinType.COIN, 0);
             previousCoins.Add(CoinType.STAR, 0);
             previousCoins.Add(CoinType.HEART, 0);
+            previousCoins.Add(CoinType.ROCKET, 0);
+            previousCoins.Add(CoinType.UFO, 0);
         }
     }
 
@@ -99,6 +97,20 @@ public class CoinManager : MonoBehaviour
     {
         return coins[type] >= amount;
     }
+
+    /// <summary>
+    /// Gets the current <see cref="CoinType"/> amount.
+    /// </summary>
+    /// <param name="type">The type of coin to get the amount for.</param>
+    /// <returns>The <see cref="CoinType"/> amount of of the specified <paramref name="type"/>.</returns>
+    public int GetCoinAmount(CoinType type) => coins[type];
+
+    /// <summary>
+    /// Gets the previous <see cref="CoinType"/> amount.
+    /// </summary>
+    /// <param name="type">The type of coin to get the amount for.</param>
+    /// <returns>The previous <see cref="CoinType"/> amount of the specified <paramref name="type"/>.</returns>
+    public int GetPreviousAmount(CoinType type) => previousCoins[type];
 
     /// <summary>
     /// Increases a currency amount of a type in the CurrencyManager

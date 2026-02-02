@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 5364715522439794130}
   - component: {fileID: 959544580089661260}
   - component: {fileID: 2578096927877487692}
+  - component: {fileID: 2627419418041996021}
   m_Layer: 13
   m_Name: Sphere
   m_TagString: Player
@@ -351,8 +352,6 @@ MonoBehaviour:
   tapMaxDistance: 35
   tapWindowTime: 1
   tapMaxDuration: 0.2
-  MOVE_TEXT: {fileID: 0}
-  JUMP_TEXT: {fileID: 0}
 --- !u!114 &5788141387175152010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,7 +377,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   fallThreshold: -5
-  State: 0
   lastSafePlatform: {fileID: 0}
 --- !u!114 &9137505450509997439
 MonoBehaviour:
@@ -460,6 +458,20 @@ MonoBehaviour:
   IcePitch: 1.5
   maxSpeed: 7.6
   volumeRange: {x: 0, y: 1}
+--- !u!114 &2627419418041996021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976364394071838964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f752d6f17182db7418327ee7222df3b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  rocketObject: {fileID: 0}
+  ufoObject: {fileID: 0}
 --- !u!1 &6644927266387035701
 GameObject:
   m_ObjectHideFlags: 0

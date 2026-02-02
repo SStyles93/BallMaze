@@ -64,7 +64,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        bool isCameraFollowing = playerMovement.State == PlayerMovement.PlayerState.Alive ? true : false;
+        bool isCameraFollowing = playerMovement.State == PlayerState.Alive ? true : false;
         SetCameraFollow(isCameraFollowing);
 
         if(currentShakeTimer > 0)

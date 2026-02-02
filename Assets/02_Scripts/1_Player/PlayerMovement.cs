@@ -2,6 +2,13 @@ using PxP.Draw;
 using System;
 using UnityEngine;
 
+public enum PlayerState
+{
+    Alive,
+    IsFalling,
+    IsDying,
+}
+
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -27,15 +34,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Fall")]
     [SerializeField] private float fallThreshold = -5f;
 
-    public PlayerState State = PlayerState.Alive;
-
-    public enum PlayerState
-    {
-        Alive,
-        IsFalling,
-        IsDying
-    }
-
+    private PlayerState state = PlayerState.Alive;
 
     private Vector3 movementInput;
     private bool isGrounded;
@@ -49,15 +48,15 @@ public class PlayerMovement : MonoBehaviour
 
     public event Action<string> OnPlayerLanded;
     public event Action OnPlayerJumped;
-    public event Action OnPlayerFalling;
+    public event Action<PlayerState> OnPlayerStateChanged;
     // NOT USED YET -> Might be usefull
     //public event Action OnPlayerRespawned;
 
-
-    public float FallThreshold { get => fallThreshold; set => fallThreshold = value; }
-    public Rigidbody PlayerRigidbody { get => playerRigidbody; set => playerRigidbody = value; }
-    public Transform CurrentPlatform => currentPlatform;
+    public Rigidbody PlayerRigidbody => playerRigidbody;
     public Transform LastSafePlatform => lastSafePlatform;
+    public Vector3 MovementInput => movementInput;
+
+    public PlayerState State => state;
 
     private void OnEnable()
     {
@@ -90,8 +89,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (playerRigidbody.position.y < fallThreshold && State != PlayerState.IsFalling)
         {
-            State = PlayerState.IsFalling;
-            OnPlayerFalling?.Invoke();
+            state = PlayerState.IsFalling;
+            OnPlayerStateChanged?.Invoke(State);
         }
     }
 
@@ -118,9 +117,15 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.position = respawnPosition;
         playerRigidbody.isKinematic = false;
 
-        State = PlayerState.Alive;
+        SetState(PlayerState.Alive);
         // NOT USED YET -> Might be usefull
         //OnPlayerRespawned?.Invoke();
+    }
+
+    public void SetState(PlayerState state)
+    {
+        this.state = state;
+        OnPlayerStateChanged?.Invoke(State);
     }
 
 

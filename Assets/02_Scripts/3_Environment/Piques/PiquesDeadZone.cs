@@ -32,8 +32,8 @@ public class PiquesDeadZone : MonoBehaviour
         if (continuePannel == null) continuePannel = FindFirstObjectByType<ContinuePannelManager>(FindObjectsInactive.Include).gameObject;
         
         //Avoid double collision
-        if (playerMovement.State == PlayerMovement.PlayerState.IsDying) return;
-        playerMovement.State = PlayerMovement.PlayerState.IsDying;
+        if (playerMovement.State == PlayerState.IsDying) return;
+        playerMovement.SetState(PlayerState.IsDying);
 
         if (!CoreManager.Instance.isDebugPlay)
             LifeManager.Instance?.RemoveLife();

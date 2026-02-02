@@ -20,8 +20,8 @@ public class DeadZone : MonoBehaviour
             if (!CoreManager.Instance.isDebugPlay)
                 LifeManager.Instance.RemoveLife();
 
-            if (playerMovement.State == PlayerMovement.PlayerState.IsDying) return;
-            playerMovement.State = PlayerMovement.PlayerState.IsDying;
+            if (playerMovement.State == PlayerState.IsDying) return;
+            playerMovement.SetState(PlayerState.IsDying);
 
             if (LifeManager.Instance.CurrentLife > 0)
             {

@@ -39,6 +39,8 @@ public class PlayerData : SaveableData
     public int coins;
     public int stars;
     public int hearts;
+    public int rockets;
+    public int ufos;
     public int colorIndex;
     public int skinIndex;
     public bool hasReceivedGift;

@@ -36,7 +36,7 @@ public class HeartPannelManager : MonoBehaviour
         CoinManager coinManager = CoinManager.Instance;
         if (coinManager != null)
         {
-            SetCurrencyValue(CoinType.HEART, coinManager.HeartAmount);
+            SetCurrencyValue(CoinType.HEART, coinManager.GetCoinAmount(CoinType.HEART));
         }
 
         UpdateTimerText(coinManager.TimeUntilNextHeart());

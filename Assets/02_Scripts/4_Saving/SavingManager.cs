@@ -135,9 +135,11 @@ public class SavingManager : MonoBehaviour
             //in case of fail we still want to try and access the shopmanager
             goto ShopManager;
         }
-        playerSaveData.coins = coinManager.CoinAmount;
-        playerSaveData.stars = coinManager.StarAmount;
-        playerSaveData.hearts = coinManager.HeartAmount;
+        playerSaveData.coins = coinManager.GetCoinAmount(CoinType.COIN);
+        playerSaveData.stars = coinManager.GetCoinAmount(CoinType.STAR);
+        playerSaveData.hearts = coinManager.GetCoinAmount(CoinType.HEART);
+        playerSaveData.rockets = coinManager.GetCoinAmount(CoinType.ROCKET);
+        playerSaveData.ufos = coinManager.GetCoinAmount(CoinType.UFO);
         playerSaveData.lastHeartRefillTime = coinManager.LastHeartRefillTime;
         playerSaveData.hasReceivedGift = coinManager.HasPlayerReceivedGift;
 
@@ -340,6 +342,8 @@ public class SavingManager : MonoBehaviour
                 coins = 0,
                 stars = 0,
                 hearts = CoinManager.Instance.InitialHeartAmount,
+                rockets = 0,
+                ufos = 0,
                 colorIndex = 0,
                 skinIndex = 0,
                 hasReceivedGift = false,
@@ -364,6 +368,12 @@ public class SavingManager : MonoBehaviour
 
         coinManager.SetCurrencyAmount(CoinType.HEART, currentPlayerData.hearts);
         coinManager.LevelPreviousCoinAmount(CoinType.HEART);
+
+        coinManager.SetCurrencyAmount(CoinType.ROCKET, currentPlayerData.rockets);
+        coinManager.LevelPreviousCoinAmount(CoinType.ROCKET);
+
+        coinManager.SetCurrencyAmount(CoinType.UFO, currentPlayerData.ufos);
+        coinManager.LevelPreviousCoinAmount(CoinType.UFO);
 
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
         LifeManager.Instance.ResetLife();

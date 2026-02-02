@@ -34,12 +34,12 @@ public class ContinuePannelManager : MonoBehaviour
         }
 
 
-            bool canRestart = CoinManager.Instance.HeartAmount > 0;
+            bool canRestart = CoinManager.Instance.GetCoinAmount(CoinType.HEART) > 0;
         restartButton.SetActive(canRestart);
 
         if (canRestart)
         {
-            int heartsLeft = Mathf.Clamp(CoinManager.Instance.HeartAmount, 1, 3);
+            int heartsLeft = Mathf.Clamp(CoinManager.Instance.GetCoinAmount(CoinType.HEART), 1, 3);
             restartText.text = $"Restart <sprite index=2> - {heartsLeft}";
         }
     }

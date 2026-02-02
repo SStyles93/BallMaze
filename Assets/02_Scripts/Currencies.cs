@@ -1,5 +1,12 @@
 using UnityEngine;
-public enum CoinType { COIN, STAR, HEART }
+public enum CoinType 
+{ 
+    COIN, 
+    STAR, 
+    HEART, 
+    ROCKET, 
+    UFO 
+}
 
 [System.Serializable]
 public class CoinQuantityPair

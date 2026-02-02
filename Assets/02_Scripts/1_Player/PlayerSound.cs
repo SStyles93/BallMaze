@@ -29,14 +29,14 @@ public class PlayerSound : MonoBehaviour
     {
         playerMovement.OnPlayerJumped += PlayJumpSound;
         playerMovement.OnPlayerLanded += PlayLandedSound;
-        playerMovement.OnPlayerFalling += PlayFallingSound;
+        playerMovement.OnPlayerStateChanged += PlayFallingSound;
     }
 
     private void OnDisable()
     {
         playerMovement.OnPlayerJumped -= PlayJumpSound;
         playerMovement.OnPlayerLanded -= PlayLandedSound;
-        playerMovement.OnPlayerFalling -= PlayFallingSound;
+        playerMovement.OnPlayerStateChanged -= PlayFallingSound;
     }
 
     private void Awake()
@@ -107,8 +107,9 @@ public class PlayerSound : MonoBehaviour
 
     // --- FALL --- 
 
-    private void PlayFallingSound()
+    private void PlayFallingSound(PlayerState state)
     {
+        if(state == PlayerState.IsFalling)
         audioSource.pitch = 1.5f;
         audioSource.volume = 1.0f;
         PlaySoundOnce(fallingClip);

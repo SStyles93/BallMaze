@@ -317,9 +317,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '999
-
-'
+  m_text: 9999
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9882ebed56d8a7f41958f15d8a76b904, type: 2}
   m_sharedMaterial: {fileID: 184713176012697816, guid: 9882ebed56d8a7f41958f15d8a76b904, type: 2}
@@ -346,12 +344,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 124.8
+  m_fontSize: 120
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 150
+  m_fontSizeMax: 120
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -401,7 +399,7 @@ GameObject:
   - component: {fileID: 5545123743588035109}
   - component: {fileID: 6187277957997973039}
   - component: {fileID: 31171478606367585}
-  - component: {fileID: 6167002127153318121}
+  - component: {fileID: 2648195725894023388}
   m_Layer: 5
   m_Name: StarPannel
   m_TagString: Untagged
@@ -471,7 +469,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6167002127153318121
+--- !u!114 &2648195725894023388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -480,10 +478,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 7722630851127644946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5ba15b0e73aef04092fc79232427f55, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b698926770209549830151f9463fdb1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StarPannel
+  m_EditorClassIdentifier: Assembly-CSharp::CurrencyPannel
   text: {fileID: 4301746873815571207}
+  m_coinType: 1
+  powerUpSprites:
+  - {fileID: 2800000, guid: 469eb7ea89b8ea6458e2bff230e8d24c, type: 3}
+  - {fileID: 2800000, guid: a2b33e9789c5c1646981206575432511, type: 3}
+  - {fileID: 2800000, guid: 5acf99553b06c2f43865358110d75eb0, type: 3}
+  - {fileID: 2800000, guid: 3c5e49c2a073cd54585174cafd980c9c, type: 3}
+  - {fileID: 2800000, guid: 6b789f6083e30ec4cbd2e81d7c58172a, type: 3}
 --- !u!1 &8737054394788576019
 GameObject:
   m_ObjectHideFlags: 0

@@ -92,12 +92,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 65.2
+  m_fontSize: 120
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 150
+  m_fontSizeMax: 120
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 2075890695750127537}
   - component: {fileID: 7139770896655808121}
   - component: {fileID: 873789922600849788}
-  - component: {fileID: 6292687874011946597}
+  - component: {fileID: 9043114618291836684}
   m_Layer: 5
   m_Name: CoinPannel
   m_TagString: Untagged
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6292687874011946597
+--- !u!114 &9043114618291836684
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -223,11 +223,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1924220559805017322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76821006359872e4d9bc78cec89d00b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b698926770209549830151f9463fdb1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Assembly-CSharp::CurrencyPannel
   text: {fileID: 3733378538290545897}
   m_coinType: 0
+  powerUpSprites:
+  - {fileID: 2800000, guid: 469eb7ea89b8ea6458e2bff230e8d24c, type: 3}
+  - {fileID: 2800000, guid: a2b33e9789c5c1646981206575432511, type: 3}
+  - {fileID: 2800000, guid: 5acf99553b06c2f43865358110d75eb0, type: 3}
+  - {fileID: 2800000, guid: 3c5e49c2a073cd54585174cafd980c9c, type: 3}
+  - {fileID: 2800000, guid: 6b789f6083e30ec4cbd2e81d7c58172a, type: 3}
 --- !u!1 &5123113102157232176
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,7 +417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6376088634615528062, guid: af7bc93ba6c69f842b2d9272ce1cd30d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8297259213095750613, guid: af7bc93ba6c69f842b2d9272ce1cd30d, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName

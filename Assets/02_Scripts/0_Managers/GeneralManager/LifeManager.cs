@@ -46,7 +46,7 @@ public class LifeManager : MonoBehaviour
     {
         CoinManager currencyManager = CoinManager.Instance;
         // Sets the amount of life according to the Heart currency amount 
-        currentLife = Mathf.Clamp(currencyManager.HeartAmount, 0, 3); //(max 3 hearts in game)
+        currentLife = Mathf.Clamp(currencyManager.GetCoinAmount(CoinType.HEART), 0, 3); //(max 3 hearts in game)
     }
 
     public void SetLife(int value)
