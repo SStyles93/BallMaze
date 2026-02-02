@@ -10,6 +10,7 @@ public class PlayerSound : MonoBehaviour
     [SerializeField] private AudioClip jumpClip;
     [SerializeField] private AudioClip thumpClip;
     [SerializeField] private AudioClip fallingClip;
+    [SerializeField] private AudioClip dyingClip;
 
     [Header("Sound Parameters")]
     [SerializeField] private float GroundPitch = 2.8f;
@@ -25,12 +26,14 @@ public class PlayerSound : MonoBehaviour
 
     private bool isPlayerGrounded;
     private bool hasFell = false;
+    private bool hasDied = false;
 
     private void OnEnable()
     {
         playerMovement.OnPlayerJumped += PlayJumpSound;
         playerMovement.OnPlayerLanded += PlayLandedSound;
         playerMovement.OnPlayerStateChanged += PlayFallingSound;
+        playerMovement.OnPlayerStateChanged += PlayDyingSound;
     }
 
     private void OnDisable()
@@ -38,6 +41,7 @@ public class PlayerSound : MonoBehaviour
         playerMovement.OnPlayerJumped -= PlayJumpSound;
         playerMovement.OnPlayerLanded -= PlayLandedSound;
         playerMovement.OnPlayerStateChanged -= PlayFallingSound;
+        playerMovement.OnPlayerStateChanged -= PlayDyingSound;
     }
 
     private void Awake()
@@ -116,6 +120,23 @@ public class PlayerSound : MonoBehaviour
             audioSource.pitch = 1.5f;
             audioSource.volume = 1.0f;
             PlaySoundOnce(fallingClip);
+        }
+        else
+        {
+            hasFell = false;
+        }
+    }
+
+    // --- DIE ---
+
+    private void PlayDyingSound(PlayerState state)
+    {
+        if (state == PlayerState.IsDying && !hasDied)
+        {
+            hasDied = true;
+            audioSource.pitch = 1.0f;
+            audioSource.volume = 1.0f;
+            PlaySoundOnce(dyingClip);
         }
         else
         {
