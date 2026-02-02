@@ -117,7 +117,7 @@ public class PlayerSound : MonoBehaviour
         if(state == PlayerState.IsFalling && !hasFell)
         {
             hasFell = true;
-            audioSource.pitch = 1.5f;
+            audioSource.pitch = 2;
             audioSource.volume = 1.0f;
             PlaySoundOnce(fallingClip);
         }
