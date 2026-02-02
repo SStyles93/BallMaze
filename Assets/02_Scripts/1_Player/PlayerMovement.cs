@@ -85,6 +85,14 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
     }
 
+    private void Start()
+    {
+        if(PowerUpManager.Instance != null)
+        {
+            PowerUpManager.Instance.SetPlayer(gameObject);
+        }
+    }
+
     private void Update()
     {
         if (playerRigidbody.position.y < fallThreshold && State != PlayerState.IsFalling)

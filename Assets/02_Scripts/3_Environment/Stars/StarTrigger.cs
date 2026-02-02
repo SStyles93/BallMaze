@@ -4,7 +4,10 @@ public class StarTrigger : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        GameObject colObj = other.gameObject;
+        if (colObj.CompareTag("Player") || 
+            colObj.CompareTag("Ufo") || 
+            colObj.CompareTag("Rocket"))
         {
             LevelManager.Instance?.IncreaseStarCount();
             
