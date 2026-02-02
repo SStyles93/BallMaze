@@ -59,7 +59,8 @@ public class UfoMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Horizontal movement
-        Vector2 targetVelocity = movementInput * ufoMoveSpeed;
+        Vector2 targetVelocity = new Vector2(movementInput.x * ufoMoveSpeed, movementInput.y * ufoMoveSpeed);
+        Debug.Log($"Ufo - target velocity : {targetVelocity}");
 
         // Hover height control
         Vector3 rigidbodyPos = ufoRigidbody.position;
