@@ -2625,10 +2625,10 @@ MonoBehaviour:
       ground: 0
       overlay: 0
     - isEmpty: 1
-      ground: 3
+      ground: 0
       overlay: 0
     - isEmpty: 0
-      ground: 4
+      ground: 5
       overlay: 0
     - isEmpty: 1
       ground: 0
@@ -2637,55 +2637,55 @@ MonoBehaviour:
       ground: 4
       overlay: 0
     - isEmpty: 0
-      ground: 3
+      ground: 1
       overlay: 3
     - isEmpty: 1
       ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+    - isEmpty: 0
+      ground: 5
       overlay: 0
     - isEmpty: 0
       ground: 1
       overlay: 0
     - isEmpty: 0
-      ground: 4
+      ground: 1
+      overlay: 3
+    - isEmpty: 0
+      ground: 1
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+    - isEmpty: 0
+      ground: 5
       overlay: 0
     - isEmpty: 0
       ground: 1
       overlay: 0
     - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
       ground: 1
       overlay: 3
     - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-    - isEmpty: 0
-      ground: 4
-      overlay: 0
-    - isEmpty: 0
-      ground: 2
-      overlay: 3
-    - isEmpty: 0
-      ground: 4
+      ground: 1
       overlay: 0
     - isEmpty: 0
       ground: 1
