@@ -24,6 +24,7 @@ public class PlayerSound : MonoBehaviour
     public Vector2 volumeRange = new Vector2(0.0f, 1.0f);
 
     private bool isPlayerGrounded;
+    private bool hasFell = false;
 
     private void OnEnable()
     {
@@ -109,10 +110,17 @@ public class PlayerSound : MonoBehaviour
 
     private void PlayFallingSound(PlayerState state)
     {
-        if(state == PlayerState.IsFalling)
-        audioSource.pitch = 1.5f;
-        audioSource.volume = 1.0f;
-        PlaySoundOnce(fallingClip);
+        if(state == PlayerState.IsFalling && !hasFell)
+        {
+            hasFell = true;
+            audioSource.pitch = 1.5f;
+            audioSource.volume = 1.0f;
+            PlaySoundOnce(fallingClip);
+        }
+        else
+        {
+            hasFell = false;
+        }
     }
 
     // --- HELPER ---

@@ -244,7 +244,6 @@ public class LevelManager : MonoBehaviour
     {
         if (levelDataDictionnary.ContainsKey(currentLevelIndex))
         {
-            currentLevelData.wasLevelFinished = false;
             currentLevelData.failedTimes++;
             currentLevelData.livesLostToThisLevel = previousLivesLostToThisLevel;
             levelDataDictionnary[currentLevelIndex] = currentLevelData;
