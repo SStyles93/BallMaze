@@ -12,7 +12,8 @@ public class PlayerCustomization : MonoBehaviour
     [SerializeField] private MeshRenderer m_meshRenderer;
     [Range(0, 100)]
     [SerializeField] private int glassTintPercent = 15;
-    [SerializeField] private float emissionStrenght = 2.0f;
+    [SerializeField] private float emissionStrenght = 1.5f;
+    [SerializeField] private float targetSaturationValue = 0.7f;
 
     [SerializeField] private PlayerVisualEffects m_playerVisualEffects;
 
@@ -64,7 +65,8 @@ public class PlayerCustomization : MonoBehaviour
                 TintedColourFrom(originalColor) : originalColor;
         if (m_meshRenderer.sharedMaterial.IsKeywordEnabled("_EMISSION"))
         {
-            m_meshRenderer.material.SetColor("_EmissionColor", originalColor * emissionStrenght);
+            m_meshRenderer.material.SetColor("_EmissionColor", originalColor);
+            m_meshRenderer.material.HarmonizeEmissive(targetSaturationValue, emissionStrenght);
         }
 
         UpdateTrailColor(originalColor);
@@ -85,7 +87,8 @@ public class PlayerCustomization : MonoBehaviour
                         TintedColourFrom(colorOpt.color) : colorOpt.color;
                     if (m_meshRenderer.sharedMaterial.IsKeywordEnabled("_EMISSION"))
                     {
-                        m_meshRenderer.material.SetColor("_EmissionColor", colorOpt.color * emissionStrenght);
+                        m_meshRenderer.material.SetColor("_EmissionColor", colorOpt.color);
+                        m_meshRenderer.material.HarmonizeEmissive(targetSaturationValue, emissionStrenght);
                     }
                 }
                 else // Special Case with "NONE" Colour
@@ -102,6 +105,7 @@ public class PlayerCustomization : MonoBehaviour
                 if (m_meshRenderer.sharedMaterial.IsKeywordEnabled("_EMISSION"))
                 {
                     m_meshRenderer.material.SetColor("_EmissionColor", m_meshRenderer.material.color * emissionStrenght);
+                    m_meshRenderer.material.HarmonizeEmissive(targetSaturationValue, emissionStrenght);
                 }
                 break;
 
