@@ -3,19 +3,18 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    private CinemachineCamera cinemachineCam;
+    private static CinemachineCamera cinemachineCam;
     private CinemachineBasicMultiChannelPerlin multiChannelPerlin;
     private CameraClamp camClamp;
-    private PlayerMovement playerMovement;
 
     [SerializeField] private Vector2 cameraGridLimitsPercentage = new Vector2(0.25f, 0.75f);
     [SerializeField] private float softZone = 1.0f;
     [SerializeField] private Vector2 cameraLimitsX = new Vector2(-100, 100);
 
-    [SerializeField] private float shakeTimer = 0.1f;
+    [SerializeField] private static float shakeTimer = 0.1f;
     [SerializeField] private float shakeAmplitude = 0.75f;
 
-    private float currentShakeTimer = 0;
+    private static float currentShakeTimer = 0;
 
     private void Awake()
     {
@@ -25,17 +24,6 @@ public class PlayerCamera : MonoBehaviour
             camClamp = cinemachineCam.GetComponent<CameraClamp>();
             multiChannelPerlin = cinemachineCam.GetComponent<CinemachineBasicMultiChannelPerlin>();
         }
-        playerMovement = GetComponent<PlayerMovement>();
-    }
-
-    private void OnEnable()
-    {
-        playerMovement.OnPlayerLanded += Shake;
-    }
-
-    private void OnDisable()
-    {
-        playerMovement.OnPlayerLanded += Shake;
     }
 
     void Start()
@@ -57,8 +45,6 @@ public class PlayerCamera : MonoBehaviour
                 camClamp.SetSoftZone(softZone);
             }
         }
-
-        cinemachineCam.Follow = transform;
     }
 
     private void Update()
@@ -74,12 +60,12 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
-    public void SetCameraFollow(Transform transform)
+    public static void SetCameraFollow(GameObject objectToFollow)
     {
-        cinemachineCam.Follow = transform;
+        cinemachineCam.Follow = objectToFollow.transform;
     }
 
-    private void Shake(string SurfaceTypeNotUsedYet)
+    public static void Shake(string SurfaceTypeNotUsedYet)
     {
         currentShakeTimer = shakeTimer;
     }

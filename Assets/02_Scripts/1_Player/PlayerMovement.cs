@@ -91,6 +91,8 @@ public class PlayerMovement : MonoBehaviour
         {
             PowerUpManager.Instance.SetPlayer(gameObject);
         }
+
+        PlayerCamera.SetCameraFollow(gameObject);
     }
 
     private void Update()
@@ -174,6 +176,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Calls the JumpSound on the PlayerSound script
         OnPlayerJumped?.Invoke();
+        PlayerCamera.Shake("Jump");
     }
 
     // ---------------- GROUND ----------------
@@ -207,6 +210,7 @@ public class PlayerMovement : MonoBehaviour
                 //Debug.Log(playerRigidbody.linearVelocity);
                 // Calls the LandedSound on the PlayerSound script
                 OnPlayerLanded?.Invoke(hit.collider.tag);
+                PlayerCamera.Shake("Ground");
 
                 wasJumpPerformed = false;
             }

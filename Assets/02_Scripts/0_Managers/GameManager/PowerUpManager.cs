@@ -9,6 +9,8 @@ public enum PowerUpState
 
 public class PowerUpManager : MonoBehaviour
 {
+    [Header("Scene")]
+    [SerializeField] private PlayerCamera playerCamera;
 
     [Header("Player Reference")]
     private GameObject player;
@@ -22,6 +24,7 @@ public class PowerUpManager : MonoBehaviour
 
     private PlayerState playerState;
 
+    [Space(10)]
     [SerializeField] private double currentPowerUpTimer = 0;
     private PowerUpState powerUpState = PowerUpState.Clear;
     private CoinType currentPowerType;
@@ -40,6 +43,9 @@ public class PowerUpManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        if(playerCamera == null)
+            playerCamera = FindAnyObjectByType<PlayerCamera>();
     }
 
     private void Update()
@@ -65,6 +71,7 @@ public class PowerUpManager : MonoBehaviour
                     default:
                         break;
                 }
+                PlayerCamera.SetCameraFollow(player);
                 player.SetActive(true);
             }
         }
@@ -87,6 +94,7 @@ public class PowerUpManager : MonoBehaviour
                 Vector3 rocketPosition = player.transform.position;
                 rocketPosition.y = 4.7f;
                 rocketObject.transform.position = rocketPosition;
+                PlayerCamera.SetCameraFollow(rocketObject);
                 rocketObject.SetActive(true);
                 break;
 
@@ -96,6 +104,7 @@ public class PowerUpManager : MonoBehaviour
                 Vector3 ufoPosition = player.transform.position;
                 ufoPosition.y = 3.6f;
                 ufoObject.transform.position = ufoPosition;
+                PlayerCamera.SetCameraFollow(ufoObject);
                 ufoObject.SetActive(true);
                 break;
 
