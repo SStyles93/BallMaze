@@ -1,4 +1,3 @@
-using MyBox;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -64,9 +63,6 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
-        bool isCameraFollowing = playerMovement.State == PlayerState.Alive ? true : false;
-        SetCameraFollow(isCameraFollowing);
-
         if(currentShakeTimer > 0)
         {
             currentShakeTimer -= Time.deltaTime;
@@ -78,9 +74,9 @@ public class PlayerCamera : MonoBehaviour
         }
     }
 
-    public void SetCameraFollow(bool value)
+    public void SetCameraFollow(Transform transform)
     {
-        cinemachineCam.Follow = value ? transform : null;
+        cinemachineCam.Follow = transform;
     }
 
     private void Shake(string SurfaceTypeNotUsedYet)

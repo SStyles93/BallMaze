@@ -9,7 +9,6 @@ public class UfoSound : MonoBehaviour
     {
         if (!ufoRigidbody)
             ufoRigidbody = GetComponent<Rigidbody>();
-        ufoRigidbody.isKinematic = true;
 
         if (!audioSource)
             audioSource = GetComponent<AudioSource>();

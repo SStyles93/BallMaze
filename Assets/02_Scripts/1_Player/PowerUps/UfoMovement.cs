@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 public class UfoMovement : MonoBehaviour
 {
     [Header("UFO Movement")]
-    [SerializeField] private float ufoHoverHeight = 2.5f;
+    [SerializeField] private float ufoHoverHeight = 3.6f;
     [SerializeField] private float ufoMoveSpeed = 8f;
     [SerializeField] private float ufoSmooth = 10f;
 
@@ -31,7 +31,8 @@ public class UfoMovement : MonoBehaviour
     {
         if (!ufoRigidbody)
             ufoRigidbody = GetComponent<Rigidbody>();
-        ufoRigidbody.isKinematic = true;
+        ufoRigidbody.isKinematic = false;
+        ufoRigidbody.useGravity = false;
 
         if(!audioSource)
             audioSource = GetComponent<AudioSource>();
@@ -39,7 +40,7 @@ public class UfoMovement : MonoBehaviour
 
     private void Update()
     {
-        float pitch = -movementInput.y * maxTiltAngle; // forward/back
+        float pitch = movementInput.y * maxTiltAngle; // forward/back
         float roll = -movementInput.x * maxTiltAngle; // left/right
 
         Quaternion targetRotation = Quaternion.Euler(
@@ -59,12 +60,12 @@ public class UfoMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Horizontal movement
-        Vector2 targetVelocity = new Vector2(movementInput.x * ufoMoveSpeed, movementInput.y * ufoMoveSpeed);
-        Debug.Log($"Ufo - target velocity : {targetVelocity}");
+        Vector2 targetVelocity = movementInput * ufoMoveSpeed;
 
         // Hover height control
         Vector3 rigidbodyPos = ufoRigidbody.position;
         rigidbodyPos.y = ufoHoverHeight;
+        ufoRigidbody.position = rigidbodyPos;
 
         Vector3 desiredVelocity = new Vector3(
             targetVelocity.x,
@@ -84,7 +85,6 @@ public class UfoMovement : MonoBehaviour
 
     private void SetMovementValue(Vector2 input)
     {
-        Vector2 mapped = DirectionMapper.MapTo8CardinalPoints(input);
-        movementInput = new Vector3(mapped.x, 0, mapped.y);
+        movementInput = input;
     }
 }
