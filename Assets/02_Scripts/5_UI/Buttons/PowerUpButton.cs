@@ -11,6 +11,7 @@ public class PowerUpButton : UIButton
 
     PowerUpState m_powerUpState = PowerUpState.Clear;
     PlayerState m_playerState = PlayerState.Alive;
+    int m_powerUpAmount;
 
     protected override void Awake()
     {
@@ -57,7 +58,8 @@ public class PowerUpButton : UIButton
     private void UpdatePowerUpVisuals(int powerUpAmount)
     {
         amountText.text = powerUpAmount > 0 ? powerUpAmount.ToString() : "0";
-        canvasGroup.alpha = powerUpAmount > 0 ? 1.0f : 0.1f;
+        m_powerUpAmount = powerUpAmount;
+        RefreshButtonVisibility();
     }
 
     private void SetPowerUpState(PowerUpState powerUpState)
@@ -76,6 +78,7 @@ public class PowerUpButton : UIButton
     {
         bool isPlayerAlive = m_playerState == PlayerState.Alive ? true : false;
         bool isPowerUpClear = m_powerUpState == PowerUpState.Clear ? true : false;
-        canvasGroup.alpha = isPlayerAlive && isPowerUpClear ? 1.0f : 0.1f;
+        bool hasPowerUp = m_powerUpAmount > 0 ? true : false;
+        canvasGroup.alpha = isPlayerAlive && isPowerUpClear && hasPowerUp ? 1.0f : 0.1f;
     }
 }
