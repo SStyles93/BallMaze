@@ -14,7 +14,8 @@ namespace PxP.PCG
                     {
                         isEmpty = true,
                         ground = GroundType.Floor,
-                        overlay = OverlayType.None
+                        overlay = OverlayType.None,
+                        isEnd = false
                     };
                 }
 

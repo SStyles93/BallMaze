@@ -89,6 +89,10 @@ namespace PxP.PCG
             cell.isEmpty = false;
             cell.ground = GroundType.Floor;
             cell.overlay = type;
+            if(type == OverlayType.End)
+            {
+                cell.isEnd = true;
+            }
         }
 
         // --- Safety helpers ---

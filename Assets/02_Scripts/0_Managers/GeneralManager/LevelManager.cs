@@ -19,7 +19,11 @@ public class LevelManager : MonoBehaviour
 
     [Header("Coin & Currencies")]
     [SerializeField] int initialCoinAmount = 60;
+    
+    
     private CellData[,] currentGrid;
+    private static readonly Vector2Int[] CardinalDirections =
+    { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right};
 
     private LevelData currentLevelData = null;
     private int currentLevelIndex = 0;
@@ -55,6 +59,7 @@ public class LevelManager : MonoBehaviour
     }
     #endregion
 
+    // --- GRID GENEREATION ---
 
     /// <summary>
     /// Generates the current level and returns its Cell grid
@@ -63,7 +68,7 @@ public class LevelManager : MonoBehaviour
     {
         int usedSeed;
 
-        // Use the new Cell[,] generator
+        // Use the Cell[,] generator
         CellData[,] grid = this.GenerateRuntimeLevel(
             currentLevelIndex,
             levelDatabase,
@@ -76,6 +81,58 @@ public class LevelManager : MonoBehaviour
         // Optional: store usedSeed somewhere if needed later
         return grid;
     }
+
+    public bool TryGetFloorCandidateAroundEnd(
+    out Vector2Int result)
+    {
+        Vector2Int endCellPosition = FindEndCell(currentGrid);
+
+        int width = currentGrid.GetLength(0);
+        int height = currentGrid.GetLength(1);
+
+        List<Vector2Int> candidates = new List<Vector2Int>();
+
+        foreach (var dir in CardinalDirections)
+        {
+            Vector2Int pos = endCellPosition + dir;
+
+            // Bounds check
+            if (pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height)
+                continue;
+
+            CellData cell = currentGrid[pos.x, pos.y];
+
+            if (cell.ground == GroundType.Floor && !cell.isEmpty)
+            {
+                candidates.Add(pos);
+            }
+        }
+
+        if (candidates.Count > 0)
+        {
+            result = candidates[UnityEngine.Random.Range(0, candidates.Count)];
+            return true;
+        }
+
+        result = default;
+        return false;
+    }
+
+    public Vector2Int FindEndCell(CellData[,] grid)
+    {
+        for (int x = 0; x < grid.GetLength(0); x++)
+        {
+            for (int y = 0; y < grid.GetLength(1); y++)
+            {
+                if (grid[x, y].isEnd)
+                    return new Vector2Int(x, y);
+            }
+        }
+
+        return new Vector2Int(-1, -1); // not found
+    }
+
+    #region LEVEL CHECK SYSTEM
 
     /// <summary>
     /// Return the Grade for a Level saved in dictionnary
@@ -143,6 +200,8 @@ public class LevelManager : MonoBehaviour
 
         return highestFinished;
     }
+
+    #endregion
 
     #region GLOBAL DIFFICULTY
 
@@ -317,7 +376,6 @@ public class LevelManager : MonoBehaviour
         return starScore + livesScore;
     }
 
-
     private int GradeToCoins(int score)
     {
         return score switch
@@ -411,5 +469,6 @@ public class LevelManager : MonoBehaviour
 
         return grid;
     }
+
     #endregion
 }

@@ -6,7 +6,8 @@ using DG.Tweening;
 public enum PowerUpState
 {
     Using,
-    Clear
+    Clear,
+    Blocked
 }
 
 [Serializable]
@@ -22,6 +23,9 @@ public class PowerUpData
 
 public class PowerUpManager : MonoBehaviour
 {
+    [Header("Scene Refs")]
+    [SerializeField] private PhysicalMazeGenerator physicalMazeGeneratorRef;
+
     [Header("Player")]
     private GameObject player;
     private Vector3 playerOriginalScale;
@@ -30,7 +34,6 @@ public class PowerUpManager : MonoBehaviour
     [SerializeField] private PowerUpData rocket;
     [SerializeField] private PowerUpData ufo;
 
-    private Dictionary<CoinType, PowerUpData> powerUps;
 
     [Header("Scale Animation")]
     [SerializeField] private float scaleDuration = 0.25f;
@@ -38,12 +41,13 @@ public class PowerUpManager : MonoBehaviour
     [SerializeField] private Ease easeOut = Ease.OutBack;
     [SerializeField] private float squashStretch = 1.15f;
 
+    private Dictionary<CoinType, PowerUpData> powerUps;
     private static readonly Vector3 HiddenScale = Vector3.zero;
-
     private float currentPowerUpTimer;
     private CoinType currentPowerType;
     private PowerUpState powerUpState = PowerUpState.Clear;
     private PlayerState playerState;
+
 
     public PowerUpState CurrentPowerUpState => powerUpState;
 
@@ -73,20 +77,34 @@ public class PowerUpManager : MonoBehaviour
             pu.originalScale = pu.objectRef.transform.localScale;
             pu.objectRef.SetActive(false);
         }
+
+        if (physicalMazeGeneratorRef == null) physicalMazeGeneratorRef = FindAnyObjectByType<PhysicalMazeGenerator>();
     }
 
     private void Update()
     {
-        if (powerUpState != PowerUpState.Using)
-            return;
-
-        currentPowerUpTimer -= Time.deltaTime;
-
-        if (currentPowerUpTimer <= 0f)
+        if (powerUpState == PowerUpState.Using)
         {
-            DeactivatePowerUp();
-            SetPowerUpState(PowerUpState.Clear);
+            currentPowerUpTimer -= Time.deltaTime;
+
+            if (currentPowerUpTimer <= 0f)
+            {
+                DeactivatePowerUp();
+                SetPowerUpState(PowerUpState.Clear);
+            }
         }
+    }
+
+    public float GetPowerUpDuration(CoinType type)
+    {
+        return powerUps.TryGetValue(type, out var pu) ?
+            pu.duration : 0f;
+    }
+
+    public float GetPowerUpHeightOffset(CoinType type)
+    {
+        return powerUps.TryGetValue(type, out var pu) ?
+            pu.heightOffset : 0f;
     }
 
     public void SetPlayer(GameObject player)
@@ -127,7 +145,7 @@ public class PowerUpManager : MonoBehaviour
         PlayerCamera.SetCameraFollow(pu.objectRef);
 
         Sequence seq = DOTween.Sequence();
-        
+
         // Block player
         player.GetComponent<Rigidbody>().isKinematic = true;
 
@@ -141,7 +159,7 @@ public class PowerUpManager : MonoBehaviour
         // Disable Player
         seq.AppendCallback(() =>
         {
-            pu.objectRef.SetActive(true);            
+            pu.objectRef.SetActive(true);
         });
 
         // Power-up grow + squash
@@ -204,6 +222,7 @@ public class PowerUpManager : MonoBehaviour
             player.GetComponent<Rigidbody>().isKinematic = false;
             Camera.main.transform
                 .DOPunchPosition(Vector3.up * 0.15f, 0.12f);
+            pu.objectRef.transform.rotation = Quaternion.identity;
         });
 
     }

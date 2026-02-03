@@ -24,5 +24,6 @@ public struct CellData
     public bool isEmpty;
     public GroundType ground;
     public OverlayType overlay;
+    public bool isEnd;
 }
 

@@ -11,6 +11,7 @@ public class PowerUpButton : UIButton
 
     PowerUpState m_powerUpState = PowerUpState.Clear;
     PlayerState m_playerState = PlayerState.Alive;
+    bool isBlocked = false;
     int m_powerUpAmount;
 
     protected override void Awake()
@@ -25,7 +26,9 @@ public class PowerUpButton : UIButton
         if (PowerUpManager.Instance == null) return;
         PowerUpManager.Instance.OnPowerUpStateChanged += SetPowerUpState;
         PlayerMovement.OnPlayerStateChanged += SetPlayerState;
-        
+        PowerUpDistanceChecker.OnPowerUpEnabled += SetBlockedState;
+
+
         button.onClick.AddListener(TryUsePowerUp);
 
         UpdatePowerUpVisuals(CoinManager.Instance.GetCoinAmount(coinType));
@@ -38,7 +41,8 @@ public class PowerUpButton : UIButton
         if (PowerUpManager.Instance == null) return;
         PowerUpManager.Instance.OnPowerUpStateChanged -= SetPowerUpState;
         PlayerMovement.OnPlayerStateChanged -= SetPlayerState;
-        
+        PowerUpDistanceChecker.OnPowerUpEnabled -= SetBlockedState;
+
         button.onClick.RemoveListener(TryUsePowerUp);
     }
 
@@ -62,6 +66,11 @@ public class PowerUpButton : UIButton
         RefreshButtonVisibility();
     }
 
+    private void SetBlockedState(bool blocked)
+    {
+        isBlocked = blocked;
+    }
+
     private void SetPowerUpState(PowerUpState powerUpState)
     {
         m_powerUpState = powerUpState;
@@ -79,6 +88,6 @@ public class PowerUpButton : UIButton
         bool isPlayerAlive = m_playerState == PlayerState.Alive ? true : false;
         bool isPowerUpClear = m_powerUpState == PowerUpState.Clear ? true : false;
         bool hasPowerUp = m_powerUpAmount > 0 ? true : false;
-        canvasGroup.alpha = isPlayerAlive && isPowerUpClear && hasPowerUp ? 1.0f : 0.1f;
+        canvasGroup.alpha = isPlayerAlive && isPowerUpClear && hasPowerUp && isBlocked ? 1.0f : 0.1f;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PhysicalMazeGenerator : MonoBehaviour
@@ -28,6 +29,9 @@ public class PhysicalMazeGenerator : MonoBehaviour
     public static event Action OnGenerationFinished;
 
     [SerializeField] private bool isGridGenerated = false;
+    [SerializeField] private Vector2Int validEndNeighbour;
+    [SerializeField] private static Vector3 endPosition;
+
 
     private void Awake()
     {
@@ -70,16 +74,11 @@ public class PhysicalMazeGenerator : MonoBehaviour
             {
                 CellData cell = grid[x, y];
 
-                // Flip Y to match editor visualization
-                int flippedY = (height - 1) - y;
-
-                Vector3 basePosition = new Vector3(
-                    x * cellSize,
-                    0f,
-                    flippedY * cellSize
-                );
+                Vector3 basePosition = GridToWorld(new Vector2Int(x, y));
 
                 SpawnCell(cell, basePosition, x, y);
+
+                if(cell.isEnd) endPosition = basePosition;
             }
         }
 
@@ -94,6 +93,20 @@ public class PhysicalMazeGenerator : MonoBehaviour
     {
         ClearChildren();
         isGridGenerated = false;
+    }
+
+    public Vector3 GetEndNeighbourPosition()
+    {
+        if (LevelManager.Instance.TryGetFloorCandidateAroundEnd(out Vector2Int result))
+        {
+            return GridToWorld(result);
+        }
+        else return Vector3.zero;
+    }
+
+    public Vector3 GetEndPosition()
+    {
+        return endPosition;
     }
 
     // ======================================
@@ -190,12 +203,16 @@ public class PhysicalMazeGenerator : MonoBehaviour
     // ======================================
     // HELPERS
     // ======================================
-    private void ClearChildren()
+
+    #region Environment Colours
+
+    private void ApplyEnvironmentColors(int presetIndex)
     {
-        for (int i = transform.childCount - 1; i >= 0; i--)
-        {
-            DestroyImmediate(transform.GetChild(i).gameObject);
-        }
+        material.SetColor("_TopColor", environmentColors_SO.Presets[presetIndex].Top);
+        material.SetColor("_RightColor", environmentColors_SO.Presets[presetIndex].Right);
+        material.SetColor("_LeftColor", environmentColors_SO.Presets[presetIndex].Left);
+        material.SetColor("_FrontColor", environmentColors_SO.Presets[presetIndex].Front);
+        emissiveBandMaterial.SetColor("_EmissionColor", environmentColors_SO.Presets[presetIndex].Emissive);
     }
 
     private void ApplyRandomEnvironmentColors()
@@ -213,12 +230,28 @@ public class PhysicalMazeGenerator : MonoBehaviour
         ApplyEnvironmentColors(rndPresetIndex);
     }
 
-    private void ApplyEnvironmentColors(int presetIndex)
+    #endregion
+
+    #region Grid Helpers
+
+    private void ClearChildren()
     {
-        material.SetColor("_TopColor", environmentColors_SO.Presets[presetIndex].Top);
-        material.SetColor("_RightColor", environmentColors_SO.Presets[presetIndex].Right);
-        material.SetColor("_LeftColor", environmentColors_SO.Presets[presetIndex].Left);
-        material.SetColor("_FrontColor", environmentColors_SO.Presets[presetIndex].Front);
-        emissiveBandMaterial.SetColor("_EmissionColor", environmentColors_SO.Presets[presetIndex].Emissive);
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            DestroyImmediate(transform.GetChild(i).gameObject);
+        }
     }
+
+    public Vector3 GridToWorld(Vector2Int gridPos)
+    {
+        int flippedY = 1 - gridPos.y;
+
+        return new Vector3(
+            gridPos.x * cellSize,
+            0f,
+            flippedY * cellSize
+        );
+    }
+
+    #endregion
 }

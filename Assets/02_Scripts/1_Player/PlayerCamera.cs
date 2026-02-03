@@ -12,7 +12,7 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] private Vector2 cameraLimitsX = new Vector2(-100, 100);
 
     [SerializeField] private static float shakeTimer = 0.1f;
-    [SerializeField] private float shakeAmplitude = 0.75f;
+    [SerializeField] private static float shakeAmplitude = 0.75f;
 
     private static float currentShakeTimer = 0;
 
@@ -71,5 +71,12 @@ public class PlayerCamera : MonoBehaviour
     public static void Shake(string SurfaceTypeNotUsedYet)
     {
         currentShakeTimer = shakeTimer;
+        shakeAmplitude = 0.75f;
+    }
+
+    public static void Shake(float duration, float amplitude)
+    {
+        currentShakeTimer = duration;
+        shakeAmplitude = amplitude;
     }
 }
