@@ -1,10 +1,8 @@
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class UfoMovement : MonoBehaviour
 {
     [Header("UFO Movement")]
-    [SerializeField] private float ufoHoverHeight = 3.6f;
     [SerializeField] private float ufoMoveSpeed = 8f;
     [SerializeField] private float ufoSmooth = 10f;
 
@@ -25,6 +23,7 @@ public class UfoMovement : MonoBehaviour
     private void OnDisable()
     {
         PlayerController.OnMovePerformed -= SetMovementValue;
+        movementInput = Vector2.zero;
     }
 
     private void Awake()
@@ -62,16 +61,18 @@ public class UfoMovement : MonoBehaviour
         // Horizontal movement
         Vector2 targetVelocity = movementInput * ufoMoveSpeed;
 
-        // Hover height control
-        Vector3 rigidbodyPos = ufoRigidbody.position;
-        rigidbodyPos.y = ufoHoverHeight;
-        ufoRigidbody.position = rigidbodyPos;
+        //// Hover height control
+        //Vector3 rigidbodyPos = ufoRigidbody.position;
+        //rigidbodyPos.y = ufoHoverHeight;
+        //ufoRigidbody.position = rigidbodyPos;
 
         Vector3 desiredVelocity = new Vector3(
             targetVelocity.x,
             0,
             targetVelocity.y
         );
+
+        if (ufoRigidbody.isKinematic == true) return;
 
         // Smooth velocity change
         ufoRigidbody.linearVelocity = Vector3.Lerp(

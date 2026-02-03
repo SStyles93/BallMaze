@@ -117,28 +117,31 @@ public class PowerUpManager : MonoBehaviour
     {
         player.transform.DOKill();
         pu.objectRef.transform.DOKill();
+        Rigidbody puRb = pu.objectRef.GetComponent<Rigidbody>();
 
         // Position power-up
         Vector3 pos = player.transform.position;
         pos.y = pu.heightOffset;
         pu.objectRef.transform.position = pos;
-
         pu.objectRef.transform.localScale = HiddenScale;
-
         PlayerCamera.SetCameraFollow(pu.objectRef);
 
         Sequence seq = DOTween.Sequence();
+        
+        // Block player
+        player.GetComponent<Rigidbody>().isKinematic = true;
 
-        // Player shrink
+        // Shrink player
         seq.Append(
             player.transform
             .DOScale(HiddenScale, scaleDuration)
             .SetEase(easeIn)
             .OnComplete(() => player.SetActive(false)));
 
+        // Disable Player
         seq.AppendCallback(() =>
         {
-            pu.objectRef.SetActive(true);
+            pu.objectRef.SetActive(true);            
         });
 
         // Power-up grow + squash
@@ -148,8 +151,10 @@ public class PowerUpManager : MonoBehaviour
             .SetEase(easeOut)
             .OnComplete(() => pu.objectRef.transform.DOScale(pu.originalScale, 0.1f)));
 
+        // Enable Power-up
         seq.AppendCallback(() =>
         {
+            puRb.isKinematic = false;
             Camera.main.transform
                 .DOPunchPosition(Vector3.up * 0.3f, 0.15f);
         });
@@ -158,20 +163,22 @@ public class PowerUpManager : MonoBehaviour
     private void DeactivatePowerUp()
     {
         var pu = powerUps[currentPowerType];
-
         player.transform.DOKill();
         pu.objectRef.transform.DOKill();
 
+        Rigidbody puRb = pu.objectRef.GetComponent<Rigidbody>();
+
         // Restore player position
         player.transform.position = pu.objectRef.transform.position;
-
         PlayerCamera.SetCameraFollow(player);
-
         player.transform.localScale = HiddenScale;
 
         Sequence seq = DOTween.Sequence();
 
-        // Power-up shrinks
+        //Block pu
+        puRb.isKinematic = true;
+
+        // Shrink Power-up
         seq.Append(
             pu.objectRef.transform
                 .DOScale(HiddenScale, scaleDuration)
@@ -179,6 +186,7 @@ public class PowerUpManager : MonoBehaviour
                 .OnComplete(() => pu.objectRef.SetActive(false))
         );
 
+        // Enable player
         seq.AppendCallback(() =>
         {
             player.SetActive(true);
@@ -189,20 +197,16 @@ public class PowerUpManager : MonoBehaviour
             player.transform
                 .DOScale(playerOriginalScale * squashStretch, scaleDuration)
                 .SetEase(easeOut)
-        );
-
-        seq.Append(
-            player.transform
-                .DOScale(playerOriginalScale, 0.1f));
+                .OnComplete(() => player.transform.DOScale(playerOriginalScale, 0.1f)));
 
         seq.AppendCallback(() =>
         {
+            player.GetComponent<Rigidbody>().isKinematic = false;
             Camera.main.transform
                 .DOPunchPosition(Vector3.up * 0.15f, 0.12f);
         });
 
     }
-
 
     private void SetPowerUpState(PowerUpState state)
     {
