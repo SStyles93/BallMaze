@@ -270,7 +270,7 @@ MonoBehaviour:
   jumpClip: {fileID: 8300000, guid: b5d138cf3c10ee345aa3b6108fdffb94, type: 3}
   thumpClip: {fileID: 8300000, guid: decb37e8bd6cbc84283b494a48c9a1ac, type: 3}
   fallingClip: {fileID: 8300000, guid: 7ccd9e12b0507384581fe28974ea3e67, type: 3}
-  dyingClip: {fileID: 0}
+  dyingClip: {fileID: 8300000, guid: decb37e8bd6cbc84283b494a48c9a1ac, type: 3}
   GroundPitch: 1.5
   IcePitch: 1.5
   maxSpeed: 7.6

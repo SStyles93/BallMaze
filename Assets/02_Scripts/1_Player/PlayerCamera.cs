@@ -62,7 +62,10 @@ public class PlayerCamera : MonoBehaviour
 
     public static void SetCameraFollow(GameObject objectToFollow)
     {
-        cinemachineCam.Follow = objectToFollow.transform;
+        if (objectToFollow == null)
+            cinemachineCam.Follow = null;
+        else
+            cinemachineCam.Follow = objectToFollow.transform;
     }
 
     public static void Shake(string SurfaceTypeNotUsedYet)

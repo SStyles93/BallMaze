@@ -1,40 +1,58 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
+using DG.Tweening;
+
 public enum PowerUpState
 {
     Using,
     Clear
 }
 
+[Serializable]
+public class PowerUpData
+{
+    public CoinType type;
+    public GameObject objectRef;
+    public float duration;
+    public float heightOffset;
+
+    [HideInInspector] public Vector3 originalScale;
+}
+
 public class PowerUpManager : MonoBehaviour
 {
-    [Header("Scene")]
-    [SerializeField] private PlayerCamera playerCamera;
-
-    [Header("Player Reference")]
+    [Header("Player")]
     private GameObject player;
+    private Vector3 playerOriginalScale;
 
-    [Header("PowerUp Prefabs")]
-    [SerializeField] private GameObject rocketObject;
-    [SerializeField] private double rocketTimer = 5.0;
-    [Space(10)]
-    [SerializeField] private GameObject ufoObject;
-    [SerializeField] private double ufoTimer = 10.0;
+    [Header("PowerUps")]
+    [SerializeField] private PowerUpData rocket;
+    [SerializeField] private PowerUpData ufo;
 
+    private Dictionary<CoinType, PowerUpData> powerUps;
+
+    [Header("Scale Animation")]
+    [SerializeField] private float scaleDuration = 0.25f;
+    [SerializeField] private Ease easeIn = Ease.InBack;
+    [SerializeField] private Ease easeOut = Ease.OutBack;
+    [SerializeField] private float squashStretch = 1.15f;
+
+    private static readonly Vector3 HiddenScale = Vector3.zero;
+
+    private float currentPowerUpTimer;
+    private CoinType currentPowerType;
+    private PowerUpState powerUpState = PowerUpState.Clear;
     private PlayerState playerState;
 
-    [Space(10)]
-    [SerializeField] private double currentPowerUpTimer = 0;
-    private PowerUpState powerUpState = PowerUpState.Clear;
-    private CoinType currentPowerType;
+    public PowerUpState CurrentPowerUpState => powerUpState;
 
     public PlayerState PlayerState => playerState;
-    public PowerUpState CurrentPowerUpState => powerUpState;
 
     public event Action<PowerUpState> OnPowerUpStateChanged;
 
     public static PowerUpManager Instance;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -44,77 +62,147 @@ public class PowerUpManager : MonoBehaviour
         }
         Instance = this;
 
-        if(playerCamera == null)
-            playerCamera = FindAnyObjectByType<PlayerCamera>();
+        powerUps = new Dictionary<CoinType, PowerUpData>
+        {
+            { rocket.type, rocket },
+            { ufo.type, ufo }
+        };
+
+        foreach (var pu in powerUps.Values)
+        {
+            pu.originalScale = pu.objectRef.transform.localScale;
+            pu.objectRef.SetActive(false);
+        }
     }
 
     private void Update()
     {
-        if (currentPowerUpTimer > 0)
-            currentPowerUpTimer -= Time.deltaTime;
-        else
+        if (powerUpState != PowerUpState.Using)
+            return;
+
+        currentPowerUpTimer -= Time.deltaTime;
+
+        if (currentPowerUpTimer <= 0f)
         {
-            if (powerUpState == PowerUpState.Using)
-            {
-                SetPowerUpState(PowerUpState.Clear);
-                //Disable PowerUps
-                switch (currentPowerType)
-                {
-                    case CoinType.ROCKET:
-                        player.transform.position = rocketObject.transform.position;
-                        rocketObject.SetActive(false);
-                        break;
-                    case CoinType.UFO:
-                        player.transform.position = ufoObject.transform.position;
-                        ufoObject.SetActive(false);
-                        break;
-                    default:
-                        break;
-                }
-                PlayerCamera.SetCameraFollow(player);
-                player.SetActive(true);
-            }
+            DeactivatePowerUp();
+            SetPowerUpState(PowerUpState.Clear);
         }
     }
 
     public void SetPlayer(GameObject player)
     {
         this.player = player;
+        playerOriginalScale = player.transform.localScale;
     }
 
-    public void UsePowerUp(CoinType powerType)
+    public void UsePowerUp(CoinType type)
     {
-        if (powerUpState == PowerUpState.Using || playerState != PlayerState.Alive) return;
+        if (powerUpState == PowerUpState.Using || playerState != PlayerState.Alive)
+            return;
 
-        switch (powerType)
+        if (!powerUps.TryGetValue(type, out var pu))
         {
-            case CoinType.ROCKET:
-                currentPowerUpTimer = rocketTimer;
-                player.SetActive(false);
-                Vector3 rocketPosition = player.transform.position;
-                rocketPosition.y = 4.7f;
-                rocketObject.transform.position = rocketPosition;
-                PlayerCamera.SetCameraFollow(rocketObject);
-                rocketObject.SetActive(true);
-                break;
-
-            case CoinType.UFO:
-                currentPowerUpTimer = ufoTimer;
-                player.SetActive(false);
-                Vector3 ufoPosition = player.transform.position;
-                ufoPosition.y = 3.6f;
-                ufoObject.transform.position = ufoPosition;
-                PlayerCamera.SetCameraFollow(ufoObject);
-                ufoObject.SetActive(true);
-                break;
-
-            default:
-                Debug.LogWarning($"No PowerUp of type {powerType}");
-                return;
+            Debug.LogWarning($"No PowerUp of type {type}");
+            return;
         }
-        currentPowerType = powerType;
+
+        currentPowerType = type;
+        currentPowerUpTimer = pu.duration;
+
+        ActivatePowerUp(pu);
         SetPowerUpState(PowerUpState.Using);
     }
+
+    private void ActivatePowerUp(PowerUpData pu)
+    {
+        player.transform.DOKill();
+        pu.objectRef.transform.DOKill();
+
+        // Position power-up
+        Vector3 pos = player.transform.position;
+        pos.y = pu.heightOffset;
+        pu.objectRef.transform.position = pos;
+
+        pu.objectRef.transform.localScale = HiddenScale;
+
+        PlayerCamera.SetCameraFollow(pu.objectRef);
+
+        Sequence seq = DOTween.Sequence();
+
+        // Player shrink
+        seq.Append(
+            player.transform
+            .DOScale(HiddenScale, scaleDuration)
+            .SetEase(easeIn)
+            .OnComplete(() => player.SetActive(false)));
+
+        seq.AppendCallback(() =>
+        {
+            pu.objectRef.SetActive(true);
+        });
+
+        // Power-up grow + squash
+        seq.Append(
+            pu.objectRef.transform
+            .DOScale(pu.originalScale * squashStretch, scaleDuration)
+            .SetEase(easeOut)
+            .OnComplete(() => pu.objectRef.transform.DOScale(pu.originalScale, 0.1f)));
+
+        seq.AppendCallback(() =>
+        {
+            Camera.main.transform
+                .DOPunchPosition(Vector3.up * 0.3f, 0.15f);
+        });
+    }
+
+    private void DeactivatePowerUp()
+    {
+        var pu = powerUps[currentPowerType];
+
+        player.transform.DOKill();
+        pu.objectRef.transform.DOKill();
+
+        // Restore player position
+        player.transform.position = pu.objectRef.transform.position;
+
+        PlayerCamera.SetCameraFollow(player);
+
+        player.transform.localScale = HiddenScale;
+
+        Sequence seq = DOTween.Sequence();
+
+        // Power-up shrinks
+        seq.Append(
+            pu.objectRef.transform
+                .DOScale(HiddenScale, scaleDuration)
+                .SetEase(easeIn)
+                .OnComplete(() => pu.objectRef.SetActive(false))
+        );
+
+        seq.AppendCallback(() =>
+        {
+            player.SetActive(true);
+        });
+
+        // Player grows + squash
+        seq.Append(
+            player.transform
+                .DOScale(playerOriginalScale * squashStretch, scaleDuration)
+                .SetEase(easeOut)
+        );
+
+        seq.Append(
+            player.transform
+                .DOScale(playerOriginalScale, 0.1f));
+
+        seq.AppendCallback(() =>
+        {
+            Camera.main.transform
+                .DOPunchPosition(Vector3.up * 0.15f, 0.12f);
+        });
+
+    }
+
 
     private void SetPowerUpState(PowerUpState state)
     {

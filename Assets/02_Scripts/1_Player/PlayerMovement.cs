@@ -46,9 +46,9 @@ public class PlayerMovement : MonoBehaviour
     private Transform currentPlatform;
     [SerializeField] private Transform lastSafePlatform;
 
-    public event Action<string> OnPlayerLanded;
-    public event Action OnPlayerJumped;
-    public event Action<PlayerState> OnPlayerStateChanged;
+    public static event Action<string> OnPlayerLanded;
+    public static event Action OnPlayerJumped;
+    public static event Action<PlayerState> OnPlayerStateChanged;
     // NOT USED YET -> Might be usefull
     //public event Action OnPlayerRespawned;
 
@@ -99,8 +99,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (playerRigidbody.position.y < fallThreshold && State != PlayerState.IsFalling)
         {
-            state = PlayerState.IsFalling;
-            OnPlayerStateChanged?.Invoke(State);
+            SetState(PlayerState.IsFalling);
         }
     }
 
@@ -135,6 +134,11 @@ public class PlayerMovement : MonoBehaviour
     public void SetState(PlayerState state)
     {
         this.state = state;
+
+        //Camera Follow
+        if (state == PlayerState.Alive) PlayerCamera.SetCameraFollow(gameObject);
+        else PlayerCamera.SetCameraFollow(null);
+
         OnPlayerStateChanged?.Invoke(State);
     }
 

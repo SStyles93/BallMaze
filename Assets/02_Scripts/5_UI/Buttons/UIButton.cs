@@ -28,14 +28,4 @@ public class UIButton : MonoBehaviour
     {
         AudioManager.Instance?.PlayClickSound();
     }
-
-    protected virtual void OnEnable()
-    {
-        
-    }
-
-    protected virtual void OnDisable()
-    {
-        
-    }
 }

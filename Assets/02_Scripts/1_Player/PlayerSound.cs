@@ -30,18 +30,18 @@ public class PlayerSound : MonoBehaviour
 
     private void OnEnable()
     {
-        playerMovement.OnPlayerJumped += PlayJumpSound;
-        playerMovement.OnPlayerLanded += PlayLandedSound;
-        playerMovement.OnPlayerStateChanged += PlayFallingSound;
-        playerMovement.OnPlayerStateChanged += PlayDyingSound;
+        PlayerMovement.OnPlayerJumped += PlayJumpSound;
+        PlayerMovement.OnPlayerLanded += PlayLandedSound;
+        PlayerMovement.OnPlayerStateChanged += PlayFallingSound;
+        PlayerMovement.OnPlayerStateChanged += PlayDyingSound;
     }
 
     private void OnDisable()
     {
-        playerMovement.OnPlayerJumped -= PlayJumpSound;
-        playerMovement.OnPlayerLanded -= PlayLandedSound;
-        playerMovement.OnPlayerStateChanged -= PlayFallingSound;
-        playerMovement.OnPlayerStateChanged -= PlayDyingSound;
+        PlayerMovement.OnPlayerJumped -= PlayJumpSound;
+        PlayerMovement.OnPlayerLanded -= PlayLandedSound;
+        PlayerMovement.OnPlayerStateChanged -= PlayFallingSound;
+        PlayerMovement.OnPlayerStateChanged -= PlayDyingSound;
     }
 
     private void Awake()
@@ -121,7 +121,7 @@ public class PlayerSound : MonoBehaviour
             audioSource.volume = 1.0f;
             PlaySoundOnce(fallingClip);
         }
-        else
+        else if(state != PlayerState.IsDying)
         {
             hasFell = false;
         }
@@ -131,7 +131,7 @@ public class PlayerSound : MonoBehaviour
 
     private void PlayDyingSound(PlayerState state)
     {
-        if (state == PlayerState.IsDying && !hasDied)
+        if (state == PlayerState.IsDying && !hasDied && !hasFell)
         {
             hasDied = true;
             audioSource.pitch = 1.0f;
@@ -140,7 +140,7 @@ public class PlayerSound : MonoBehaviour
         }
         else
         {
-            hasFell = false;
+            hasDied = false;
         }
     }
 
@@ -151,7 +151,10 @@ public class PlayerSound : MonoBehaviour
             audioSource.Stop();
 
         if (clip == null)
-            Debug.LogWarning($"Clip {clip.name} is null");
+        {
+            Debug.Log($"Clip {clip.name} is null");
+            return;
+        }
 
         audioSource.PlayOneShot(clip);
     }

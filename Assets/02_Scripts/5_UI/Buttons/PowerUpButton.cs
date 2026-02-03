@@ -9,6 +9,9 @@ public class PowerUpButton : UIButton
     [SerializeField] private TMP_Text amountText;
     [SerializeField] private CanvasGroup canvasGroup;
 
+    PowerUpState m_powerUpState = PowerUpState.Clear;
+    PlayerState m_playerState = PlayerState.Alive;
+
     protected override void Awake()
     {
         base.Awake();
@@ -19,7 +22,8 @@ public class PowerUpButton : UIButton
         base.Start();
 
         if (PowerUpManager.Instance == null) return;
-        PowerUpManager.Instance.OnPowerUpStateChanged += SetButtonState;
+        PowerUpManager.Instance.OnPowerUpStateChanged += SetPowerUpState;
+        PlayerMovement.OnPlayerStateChanged += SetPlayerState;
         
         button.onClick.AddListener(TryUsePowerUp);
 
@@ -31,7 +35,8 @@ public class PowerUpButton : UIButton
         base.OnDestroy();
 
         if (PowerUpManager.Instance == null) return;
-        PowerUpManager.Instance.OnPowerUpStateChanged -= SetButtonState;
+        PowerUpManager.Instance.OnPowerUpStateChanged -= SetPowerUpState;
+        PlayerMovement.OnPlayerStateChanged -= SetPlayerState;
         
         button.onClick.RemoveListener(TryUsePowerUp);
     }
@@ -55,8 +60,22 @@ public class PowerUpButton : UIButton
         canvasGroup.alpha = powerUpAmount > 0 ? 1.0f : 0.1f;
     }
 
-    private void SetButtonState(PowerUpState state)
+    private void SetPowerUpState(PowerUpState powerUpState)
     {
-        canvasGroup.alpha = state == PowerUpState.Clear ? 1.0f : 0.1f;
+        m_powerUpState = powerUpState;
+        RefreshButtonVisibility();
+    }
+
+    private void SetPlayerState(PlayerState playerState)
+    {
+        m_playerState = playerState;
+        RefreshButtonVisibility();
+    }
+
+    private void RefreshButtonVisibility()
+    {
+        bool isPlayerAlive = m_playerState == PlayerState.Alive ? true : false;
+        bool isPowerUpClear = m_powerUpState == PowerUpState.Clear ? true : false;
+        canvasGroup.alpha = isPlayerAlive && isPowerUpClear ? 1.0f : 0.1f;
     }
 }

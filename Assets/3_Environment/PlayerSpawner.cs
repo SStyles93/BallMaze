@@ -22,9 +22,4 @@ public class PlayerSpawner : MonoBehaviour
         spawnPosition = this.transform.position + Vector3.up * offset;
         GameObject player = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
     }
-    private void OnDrawGizmos()
-    {
-        //Gizmos.color = Color.green;
-        //Gizmos.DrawSphere(spawnPosition, 1.0f);
-    }
 }
