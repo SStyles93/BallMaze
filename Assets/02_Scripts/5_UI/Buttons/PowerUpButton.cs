@@ -1,18 +1,23 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PowerUpButton : UIButton
 {
-    [SerializeField] private CoinType coinType;
+    [SerializeField] private PowerUpBuyPannel powerUpBuyPannel;
+
+    [SerializeField] private CoinType powerType;
 
     [Header("Visual ELements")]
-    [SerializeField] private TMP_Text amountText;
     [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private TMP_Text amountText;
+    [SerializeField] private Image plusImage;
 
     PowerUpState m_powerUpState = PowerUpState.Clear;
     PlayerState m_playerState = PlayerState.Alive;
-    bool isBlocked = false;
-    int m_powerUpAmount;
+    
+    bool isLockedByDistance = false;
+    bool isUnlocked = false;
 
     protected override void Awake()
     {
@@ -26,12 +31,13 @@ public class PowerUpButton : UIButton
         if (PowerUpManager.Instance == null) return;
         PowerUpManager.Instance.OnPowerUpStateChanged += SetPowerUpState;
         PlayerMovement.OnPlayerStateChanged += SetPlayerState;
-        PowerUpDistanceChecker.OnPowerUpEnabled += SetBlockedState;
+        if (powerType == CoinType.ROCKET)
+            PowerUpDistanceChecker.OnPowerUpBlocked += SetLockByDistance;
 
 
         button.onClick.AddListener(TryUsePowerUp);
 
-        UpdatePowerUpVisuals(CoinManager.Instance.GetCoinAmount(coinType));
+        UpdatePowerUpVisuals(CoinManager.Instance.GetCoinAmount(powerType));
     }
 
     protected override void OnDestroy()
@@ -41,9 +47,15 @@ public class PowerUpButton : UIButton
         if (PowerUpManager.Instance == null) return;
         PowerUpManager.Instance.OnPowerUpStateChanged -= SetPowerUpState;
         PlayerMovement.OnPlayerStateChanged -= SetPlayerState;
-        PowerUpDistanceChecker.OnPowerUpEnabled -= SetBlockedState;
+        if (powerType == CoinType.ROCKET)
+            PowerUpDistanceChecker.OnPowerUpBlocked -= SetLockByDistance;
 
         button.onClick.RemoveListener(TryUsePowerUp);
+    }
+
+    public void UpdatePowerUpAmout()
+    {
+        UpdatePowerUpVisuals(CoinManager.Instance.GetCoinAmount(powerType));
     }
 
     private void TryUsePowerUp()
@@ -51,43 +63,66 @@ public class PowerUpButton : UIButton
         if (PowerUpManager.Instance == null || CoinManager.Instance == null) return;
 
         if (PowerUpManager.Instance.PlayerState != PlayerState.Alive) return;
+            
+        if (!isUnlocked) return;
 
-        if(CoinManager.Instance.CanAfford(coinType, 1))
+        if (CoinManager.Instance.CanAfford(powerType, 1))
         {
-            CoinManager.Instance.ReduceCurrencyAmount(coinType, 1);
-            UpdatePowerUpVisuals(CoinManager.Instance.GetCoinAmount(coinType));
-            PowerUpManager.Instance.UsePowerUp(coinType);
+            CoinManager.Instance.ReduceCurrencyAmount(powerType, 1);
+            SavingManager.Instance.SavePlayer();
+
+            UpdatePowerUpVisuals(CoinManager.Instance.GetCoinAmount(powerType));
+            PowerUpManager.Instance.UsePowerUp(powerType);
+        }
+        else
+        {
+            powerUpBuyPannel.gameObject.SetActive(true);
+            int powerUpValue = PowerUpManager.Instance.GetPowerUpBuyingValue(powerType);
+            powerUpBuyPannel.InitializePowerUpBuyPannel(this, powerType, powerUpValue);
         }
     }
+
     private void UpdatePowerUpVisuals(int powerUpAmount)
     {
-        amountText.text = powerUpAmount > 0 ? powerUpAmount.ToString() : "0";
-        m_powerUpAmount = powerUpAmount;
-        RefreshButtonVisibility();
+        bool hasPowerUp = powerUpAmount > 0;
+        if (hasPowerUp)
+        {
+            amountText.enabled = true;
+            amountText.text = powerUpAmount.ToString();
+            plusImage.enabled = false;
+        }
+        else
+        {
+            amountText.enabled = false;
+            plusImage.enabled = true;
+        }
+
+        RefreshButtonState();
     }
 
-    private void SetBlockedState(bool blocked)
+    private void SetLockByDistance(bool locked)
     {
-        isBlocked = blocked;
+        isLockedByDistance = locked;
+        RefreshButtonState();
     }
 
     private void SetPowerUpState(PowerUpState powerUpState)
     {
         m_powerUpState = powerUpState;
-        RefreshButtonVisibility();
+        RefreshButtonState();
     }
 
     private void SetPlayerState(PlayerState playerState)
     {
         m_playerState = playerState;
-        RefreshButtonVisibility();
+        RefreshButtonState();
     }
 
-    private void RefreshButtonVisibility()
+    private void RefreshButtonState()
     {
         bool isPlayerAlive = m_playerState == PlayerState.Alive ? true : false;
         bool isPowerUpClear = m_powerUpState == PowerUpState.Clear ? true : false;
-        bool hasPowerUp = m_powerUpAmount > 0 ? true : false;
-        canvasGroup.alpha = isPlayerAlive && isPowerUpClear && hasPowerUp && isBlocked ? 1.0f : 0.1f;
+        isUnlocked = isPlayerAlive && isPowerUpClear && !isLockedByDistance;
+        canvasGroup.alpha = isUnlocked ? 1.0f : 0.1f;
     }
 }

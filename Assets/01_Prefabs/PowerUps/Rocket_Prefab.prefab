@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 6687880034933839639}
   - component: {fileID: 5152108448824145806}
   m_Layer: 0
-  m_Name: BM_Rocket
+  m_Name: Rocket_Prefab
   m_TagString: Rocket
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

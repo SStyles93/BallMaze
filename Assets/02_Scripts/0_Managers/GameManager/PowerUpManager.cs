@@ -18,6 +18,8 @@ public class PowerUpData
     public float duration;
     public float heightOffset;
 
+    public int buyingValue;
+
     [HideInInspector] public Vector3 originalScale;
 }
 
@@ -105,6 +107,12 @@ public class PowerUpManager : MonoBehaviour
     {
         return powerUps.TryGetValue(type, out var pu) ?
             pu.heightOffset : 0f;
+    }
+
+    public int GetPowerUpBuyingValue(CoinType type)
+    {
+        return powerUps.TryGetValue(type, out var pu) ?
+            pu.buyingValue : 9999;
     }
 
     public void SetPlayer(GameObject player)

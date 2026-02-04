@@ -7,8 +7,9 @@ public class UfoMovement : MonoBehaviour
     [SerializeField] private float ufoSmooth = 10f;
 
     [Header("UFO Rotation")]
-    [SerializeField] private float maxTiltAngle = 15f;
-    [SerializeField] private float tiltSmooth = 5f;
+    [SerializeField] private float maxTiltAngle = 30f;
+    [SerializeField] private float tiltSmooth = 3f;
+    [SerializeField] private float rotationSmooth = 3f;
 
     private Vector2 movementInput;
     private Rigidbody ufoRigidbody;
@@ -39,22 +40,36 @@ public class UfoMovement : MonoBehaviour
 
     private void Update()
     {
-        float pitch = movementInput.y * maxTiltAngle; // forward/back
-        float roll = -movementInput.x * maxTiltAngle; // left/right
+        // ROTATION (Yaw) – face movement direction
+        if (movementInput.sqrMagnitude > 0.001f)
+        {
+            Vector3 moveDir = new Vector3(movementInput.x, 0f, movementInput.y);
 
-        Quaternion targetRotation = Quaternion.Euler(
-            pitch,
-            0f,
-            roll
+            Quaternion targetYaw = Quaternion.LookRotation(moveDir, Vector3.up);
+
+            transform.rotation = Quaternion.Lerp(
+                transform.rotation,
+                targetYaw,
+                Time.deltaTime * rotationSmooth
+            );
+        }
+
+        // TILT (Pitch) – only forward
+        float pitch = movementInput.magnitude * maxTiltAngle;
+
+        Quaternion targetTilt = Quaternion.Euler(
+            pitch,   // forward tilt
+            transform.localEulerAngles.y,
+            0f
         );
 
         transform.localRotation = Quaternion.Lerp(
             transform.localRotation,
-            targetRotation,
+            targetTilt,
             Time.deltaTime * tiltSmooth
         );
-
     }
+
 
     private void FixedUpdate()
     {
