@@ -22,7 +22,8 @@ public static class TMPTextExtensions
         },
         end,
         duration)
-        .SetEase(Ease.OutCubic);
+        .SetEase(Ease.OutCubic)
+        .SetLink(text.gameObject, LinkBehaviour.KillOnDestroy);
     }
 
     /// <summary>
@@ -48,6 +49,7 @@ public static class TMPTextExtensions
         end,
         duration)
         .SetEase(Ease.OutCubic)
+        .SetLink(text.gameObject, LinkBehaviour.KillOnDestroy)
         .OnComplete(() =>
         {
             onAnimationEnabled?.Invoke(false);

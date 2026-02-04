@@ -74,7 +74,7 @@ public class AudioManager : MonoBehaviour
     public void SetGeneralAudioState(bool isActive)
     {
         float volume = isActive ? 0.0f : -80.0f;
-        mixer.SetFloat("MasterVolume", volume);
+        mixer.SetFloat("SfxVolume", volume);
         isAudioEnabled = isActive;
     }
 

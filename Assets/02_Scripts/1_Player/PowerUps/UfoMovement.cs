@@ -7,8 +7,7 @@ public class UfoMovement : MonoBehaviour
     [SerializeField] private float ufoSmooth = 10f;
 
     [Header("UFO Rotation")]
-    [SerializeField] private float maxTiltAngle = 30f;
-    [SerializeField] private float tiltSmooth = 3f;
+    [SerializeField] private float maxTiltAngle = 20f;
     [SerializeField] private float rotationSmooth = 3f;
 
     private Vector2 movementInput;
@@ -34,68 +33,44 @@ public class UfoMovement : MonoBehaviour
         ufoRigidbody.isKinematic = false;
         ufoRigidbody.useGravity = false;
 
-        if(!audioSource)
+        if (!audioSource)
             audioSource = GetComponent<AudioSource>();
     }
 
-    private void Update()
-    {
-        // ROTATION (Yaw) – face movement direction
-        if (movementInput.sqrMagnitude > 0.001f)
-        {
-            Vector3 moveDir = new Vector3(movementInput.x, 0f, movementInput.y);
-
-            Quaternion targetYaw = Quaternion.LookRotation(moveDir, Vector3.up);
-
-            transform.rotation = Quaternion.Lerp(
-                transform.rotation,
-                targetYaw,
-                Time.deltaTime * rotationSmooth
-            );
-        }
-
-        // TILT (Pitch) – only forward
-        float pitch = movementInput.magnitude * maxTiltAngle;
-
-        Quaternion targetTilt = Quaternion.Euler(
-            pitch,   // forward tilt
-            transform.localEulerAngles.y,
-            0f
-        );
-
-        transform.localRotation = Quaternion.Lerp(
-            transform.localRotation,
-            targetTilt,
-            Time.deltaTime * tiltSmooth
-        );
-    }
-
-
     private void FixedUpdate()
     {
-        // Horizontal movement
-        Vector2 targetVelocity = movementInput * ufoMoveSpeed;
+        if (ufoRigidbody.isKinematic) return;
 
-        //// Hover height control
-        //Vector3 rigidbodyPos = ufoRigidbody.position;
-        //rigidbodyPos.y = ufoHoverHeight;
-        //ufoRigidbody.position = rigidbodyPos;
-
+        // Movement
         Vector3 desiredVelocity = new Vector3(
-            targetVelocity.x,
-            0,
-            targetVelocity.y
-        );
+            movementInput.x,
+            0f,
+            movementInput.y
+        ) * ufoMoveSpeed;
 
-        if (ufoRigidbody.isKinematic == true) return;
-
-        // Smooth velocity change
         ufoRigidbody.linearVelocity = Vector3.Lerp(
             ufoRigidbody.linearVelocity,
             desiredVelocity,
             Time.fixedDeltaTime * ufoSmooth
         );
+
+        // Rotation
+        Vector3 moveDir = new Vector3(movementInput.x, 0f, movementInput.y);
+
+        Quaternion yaw = Quaternion.LookRotation(moveDir, Vector3.up);
+        float pitch = movementInput.magnitude * maxTiltAngle;
+
+        Quaternion tilt = Quaternion.Euler(pitch, yaw.eulerAngles.y, 0f);
+
+        ufoRigidbody.MoveRotation(
+            Quaternion.Lerp(
+                ufoRigidbody.rotation,
+                tilt,
+                Time.fixedDeltaTime * rotationSmooth
+            )
+        );
     }
+
 
     // --- INPUT ---
 

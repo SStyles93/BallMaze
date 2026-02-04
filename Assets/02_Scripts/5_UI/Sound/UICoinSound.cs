@@ -26,6 +26,8 @@ public class UICoinSound : MonoBehaviour
 
     private void PlayCoinSound(bool enabled)
     {
+        if (!this || !coinAudioSource) return;
+
         if (enabled)
         {
             if (coinAudioSource.isPlaying)

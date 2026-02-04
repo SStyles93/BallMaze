@@ -102,7 +102,7 @@ public class LevelManager : MonoBehaviour
 
             CellData cell = currentGrid[pos.x, pos.y];
 
-            if (cell.ground == GroundType.Floor && !cell.isEmpty)
+            if ((cell.ground == GroundType.Floor || cell.ground == GroundType.Ice) && !cell.isEmpty)
             {
                 candidates.Add(pos);
             }
