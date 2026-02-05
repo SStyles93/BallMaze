@@ -12,15 +12,11 @@ public class HeartPannelManager : MonoBehaviour
 
     [SerializeField] GameObject insufficientFundsPannel;
 
-    private bool wasRewardGained = false;
-
     private void OnEnable()
     {
         CoinManager.Instance.OnCoinSet += SetCurrencyValue;
         CoinManager.Instance.OnCoinChanged += UpdateCurrencyValue;
         CoinManager.Instance.OnHeartTimerTick += UpdateTimerText;
-
-        wasRewardGained = false;
     }
 
     private void OnDisable()
@@ -140,13 +136,10 @@ public class HeartPannelManager : MonoBehaviour
 
     private void GrantRewardAndClosePannel(LevelPlayAdInfo adInfo, LevelPlayReward reward)
     {
-        if (!wasRewardGained)
-        {
-            int rewardAmount = Mathf.Clamp(reward.Amount, 1, 3);
-            CoinManager.Instance?.IncreaseCurrencyAmount(CoinType.HEART, rewardAmount);
-            wasRewardGained = true;
-            Debug.Log($"Rewarded :{rewardAmount} {reward.Name}");
-        }
+        int rewardAmount = Mathf.Clamp(reward.Amount, 1, 3);
+        CoinManager.Instance?.RewardHearts(rewardAmount);
+
+        Debug.Log($"Rewarded :{rewardAmount} {reward.Name}");
         ExitHeartPannel();
     }
 }

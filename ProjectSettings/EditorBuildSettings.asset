@@ -35,9 +35,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00_Scenes/Pannels/HeartPannel.unity
     guid: e194451c222c75048aea48fd018e2846
-  - enabled: 1
-    path: Assets/00_Scenes/Pannels/GiftPannel.unity
-    guid: 9c6f46f5a007c9243adec830ee07d0ce
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b369852d9e5a62c42aaedf664ffbd4ec, type: 2}
   m_UseUCBPForAssetBundles: 0

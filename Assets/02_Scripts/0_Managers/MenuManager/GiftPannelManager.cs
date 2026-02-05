@@ -1,70 +1,180 @@
 using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+
+[System.Serializable]
+public class GiftDefinition
+{
+    [Header("Gift Type")]
+    public CoinType type;
+    [Header("Gift Value")]
+    public int value = 0;
+}
 
 public class GiftPannelManager : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private GameObject giftObject;
-    [SerializeField] private GameObject coinObject;
+    public static GiftPannelManager Instance;
+
+    [Header("Scene References")]
+    [SerializeField] private GameObject giftPannel;
+    [SerializeField] private GameObject giftBoxObject;
+    [SerializeField] private GameObject giftContentLayout;
+
+    [Header("Project Object References")]
+    [SerializeField] private GameObject giftObjectPrefab;
+    [SerializeField] private Sprite[] giftSprites = new Sprite[5];
 
     [Header("Animation Settings")]
     [SerializeField] private float shakeInterval = 3f;
     [SerializeField] private float shakeDuration = 0.5f;
     [SerializeField] private float shakeStrength = 15f;
+    [SerializeField] private Ease openEase = Ease.OutBack;
+    [SerializeField] private Ease closeEase = Ease.InBack;
 
     [Header("Audio Settings")]
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip giftSound;
     [SerializeField] private AudioClip glitterSound;
 
-    [Header("Gift Value")]
-    [SerializeField] private int giftValue = 450;
-
+    private GiftPannelPlan currentGiftPannelPlan;
+    private List<GameObject> currentGiftObjects = new List<GameObject>();
+    private Sequence shakeSequence;
     private bool giftOpened = false;
     private bool canClick = true;
 
-    private Sequence shakeSequence;
-
-    private AudioSource audioSource;
-
     private void Awake()
     {
-        audioSource ??= GetComponent<AudioSource>();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
     }
 
     private void Start()
     {
-        coinObject.SetActive(false);
+        bool planMustBePerformed = false;
 
-        coinObject.GetComponentInChildren<TMP_Text>().text = $"<sprite index=0> {giftValue}";
+        GiftPannelPlan plan = GiftPannelManager.Instance.NewPlan();
 
-        if (audioSource.isPlaying) audioSource.Stop();
-        audioSource.loop = false;
-        audioSource.PlayOneShot(giftSound);
+        plan.WithShake()
+            .WithDelay(1);
 
-        StartGiftShake();
+        if (!CoinManager.Instance.wasCoinsReceived)
+        {
+            plan.AddGift(CoinType.COIN, 450);
+            CoinManager.Instance.wasCoinsReceived = true;
+            planMustBePerformed = true;
+        }
+        if (!CoinManager.Instance.wasRocketReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 10)
+        {
+            plan.AddGift(CoinType.ROCKET, 10);
+            CoinManager.Instance.wasRocketReceived = true;
+            planMustBePerformed = true;
+        }
+        if (!CoinManager.Instance.wasUfoReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 20)
+        {
+            plan.AddGift(CoinType.UFO, 10);
+            CoinManager.Instance.wasUfoReceived = true;
+            planMustBePerformed = true;
+        }
+
+        if (planMustBePerformed)
+        {
+            plan.Perform();
+        }
     }
 
-    public void OnPannelClicked()
+    public void OnClickGiftBox()
     {
-        if (!canClick)
-            return;
+        if (!canClick) return;
+
+        canClick = false;
 
         if (!giftOpened)
-            OpenGift();
+        {
+            // Open the gifts
+            StartCoroutine(OpenGiftRoutine(currentGiftObjects));
+        }
         else
-            UnloadGiftPannel();
+        {
+            // Close the panel
+            CloseGiftPanel(currentGiftPannelPlan);
+        }
     }
 
-    #region Gift Shake
 
+    #region GiftPlan
+
+    public GiftPannelPlan NewPlan()
+    {
+        return new GiftPannelPlan();
+    }
+    private IEnumerator ExecutePlan(GiftPannelPlan plan)
+    {
+        canClick = false;
+        giftOpened = false;
+
+        giftBoxObject.SetActive(true);
+        giftBoxObject.transform.localScale = Vector3.one;
+
+        currentGiftPannelPlan = plan;
+        currentGiftObjects = new List<GameObject>();
+
+        // Initialize gift objects
+        foreach (var gift in plan.Gifts)
+        {
+            GameObject obj = Instantiate(giftObjectPrefab, giftContentLayout.transform);
+            obj.SetActive(false);
+
+            TMP_Text text = obj.GetComponentInChildren<TMP_Text>();
+            if (gift.type == CoinType.COIN)
+                text.text = $"<sprite index=0> {gift.value}";
+            else
+                text.text = $"x{gift.value}";
+
+            obj.GetComponentInChildren<Image>().sprite = giftSprites[(int)gift.type];
+
+            currentGiftObjects.Add(obj);
+        }
+
+        if (plan.Delay > 0)
+        {
+            yield return new WaitForSeconds(plan.Delay);
+        }
+
+        giftPannel.SetActive(true);
+        audioSource.PlayOneShot(giftSound);
+
+        // Start shake animation if requested
+        if (plan.Shake)
+        {
+            StartGiftShake();
+        }
+
+        // Wait one frame before opening
+        yield return null;
+
+        if (plan.AutoOpenFlag)
+        {
+            yield return OpenGiftRoutine(currentGiftObjects);
+        }
+        else
+        {
+            canClick = true;
+        }
+    }
     private void StartGiftShake()
     {
         shakeSequence = DOTween.Sequence()
             .SetLoops(-1)
             .AppendInterval(shakeInterval)
             .Append(
-                giftObject.transform
+                giftBoxObject.transform
                     .DOShakeRotation(
                         shakeDuration,
                         new Vector3(0, 0, shakeStrength),
@@ -74,89 +184,127 @@ public class GiftPannelManager : MonoBehaviour
                     )
             );
     }
-
     private void StopGiftShake()
     {
         if (shakeSequence != null && shakeSequence.IsActive())
             shakeSequence.Kill();
     }
-
-    #endregion
-
-    #region Gift Open
-
-    private void OpenGift()
+    private IEnumerator OpenGiftRoutine(List<GameObject> giftObjects)
     {
-        canClick = false;
-        giftOpened = true;
+        StopGiftShake();
 
-        // Start of twinkle sound
-        if(audioSource.isPlaying)
-        {
-            audioSource.Stop();
-        }
+        // Play glitter sound
         audioSource.clip = glitterSound;
         audioSource.loop = true;
         audioSource.Play();
 
-        // Dotween Anims.
+        // Scale down gift box
+        yield return giftBoxObject.transform
+            .DOScale(0f, 0.35f)
+            .SetEase(Ease.InBack)
+            .WaitForCompletion();
 
-        StopGiftShake();
+        giftBoxObject.SetActive(false);
 
-        Sequence openSequence = DOTween.Sequence();
-
-        openSequence.Append(
-            giftObject.transform
-                .DOScale(0f, 0.35f)
-                .SetEase(Ease.InBack)
-        );
-
-        openSequence.AppendCallback(() =>
+        // Show gifts one by one
+        foreach (var giftObj in giftObjects)
         {
-            giftObject.SetActive(false);
-            coinObject.SetActive(true);
-            coinObject.transform.localScale = Vector3.zero;
-        });
-
-        openSequence.Append(
-            coinObject.transform
+            giftObj.SetActive(true);
+            giftObj.transform.localScale = Vector3.zero;
+            yield return giftObj.transform
                 .DOScale(1f, 0.4f)
-                .SetEase(Ease.OutBack)
-        );
+                .SetEase(openEase)
+                .WaitForCompletion();
+        }
 
-        openSequence.OnComplete(() =>
-        {
-            canClick = true;
-        });
+        giftOpened = true;
+        canClick = true;
     }
-
-    #endregion
-
-    #region Panel Unload
-
-    private void UnloadGiftPannel()
+    private void CloseGiftPanel(GiftPannelPlan plan)
     {
-        canClick = false;
+        if (!giftOpened) return;
 
+
+        canClick = false;
         audioSource.Stop();
 
-        coinObject.transform
-            .DOScale(0f, 0.25f)
-            .SetEase(Ease.InBack)
-            .OnComplete(() =>
+        // Assuming gifts are child objects of parent
+        List<Transform> gifts = new();
+        foreach (Transform child in giftContentLayout.transform)
+        {
+            if (child != giftBoxObject)
+                gifts.Add(child);
+        }
+
+        Sequence seq = DOTween.Sequence();
+        foreach (var g in gifts)
+        {
+            seq.Join(g.DOScale(0f, 0.25f).SetEase(closeEase));
+        }
+
+        seq.OnComplete(() =>
+        {
+            foreach (var giftDef in currentGiftPannelPlan.Gifts)
             {
-                CoinManager.Instance.IncreaseCurrencyAmount(CoinType.COIN, giftValue);
-                CoinManager.Instance.HasPlayerReceivedGift = true;
+                CoinManager.Instance.IncreaseCurrencyAmount(giftDef.type, giftDef.value);
+            }
+            SavingManager.Instance.SavePlayer();
 
-                SavingManager.Instance.SavePlayer();
+            foreach (var giftObject in gifts)
+            {
+                Destroy(giftObject.gameObject);
+            }
+            canClick = true;
+            giftOpened = false;
+            giftPannel.SetActive(false);
+        });
+    }
 
-                SceneController.Instance
-                    .NewTransition()
-                    .Unload(SceneDatabase.Scenes.GiftPannel)
-                    .SetActive(SceneController.Instance.PreviousActiveScene)
-                    .Perform();
-            });
+    // --- Plan class ---
+    public class GiftPannelPlan
+    {
+        private List<GiftDefinition> gifts = new();
+        private bool shake = false;
+        private bool autoOpen = false;
+        private float delay;
+
+        public GiftPannelPlan AddGift(CoinType type, int value)
+        {
+            gifts.Add(new GiftDefinition { type = type, value = value });
+            return this;
+        }
+
+        public GiftPannelPlan WithShake()
+        {
+            shake = true;
+            return this;
+        }
+        public GiftPannelPlan WithDelay(float delay)
+        {
+            this.delay = delay;
+            return this;
+        }
+
+        public GiftPannelPlan AutoOpen()
+        {
+            autoOpen = true;
+            return this;
+        }
+
+        public void Perform()
+        {
+            GiftPannelManager.Instance.StartCoroutine(
+                GiftPannelManager.Instance.ExecutePlan(this)
+            );
+        }
+
+        internal List<GiftDefinition> Gifts => gifts;
+        internal bool Shake => shake;
+        internal bool AutoOpenFlag => autoOpen;
+
+        internal float Delay => delay;
     }
 
     #endregion
+
 }

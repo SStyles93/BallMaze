@@ -14,6 +14,7 @@ public class UfoMovement : MonoBehaviour
     private Rigidbody ufoRigidbody;
     private AudioSource audioSource;
 
+    private Vector3 previousMoveDirection = Vector3.forward;
 
     private void OnEnable()
     {
@@ -57,7 +58,17 @@ public class UfoMovement : MonoBehaviour
         // Rotation
         Vector3 moveDir = new Vector3(movementInput.x, 0f, movementInput.y);
 
-        Quaternion yaw = Quaternion.LookRotation(moveDir, Vector3.up);
+        Quaternion yaw;
+        if (moveDir != Vector3.zero)
+        {
+            yaw = Quaternion.LookRotation(moveDir, Vector3.up);
+            previousMoveDirection = moveDir;
+        }
+        else
+        {
+            yaw = Quaternion.LookRotation(previousMoveDirection, Vector3.up);
+        }
+
         float pitch = movementInput.magnitude * maxTiltAngle;
 
         Quaternion tilt = Quaternion.Euler(pitch, yaw.eulerAngles.y, 0f);

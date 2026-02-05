@@ -141,7 +141,9 @@ public class SavingManager : MonoBehaviour
         playerSaveData.rockets = coinManager.GetCoinAmount(CoinType.ROCKET);
         playerSaveData.ufos = coinManager.GetCoinAmount(CoinType.UFO);
         playerSaveData.lastHeartRefillTime = coinManager.LastHeartRefillTime;
-        playerSaveData.hasReceivedGift = coinManager.HasPlayerReceivedGift;
+        playerSaveData.wasCoinsReceived = coinManager.wasCoinsReceived;
+        playerSaveData.wasRocketReceived = coinManager.wasRocketReceived;
+        playerSaveData.wasUfoReceived = coinManager.wasUfoReceived;
 
 
         // --- SHOP ---
@@ -346,8 +348,9 @@ public class SavingManager : MonoBehaviour
                 ufos = 0,
                 colorIndex = 0,
                 skinIndex = 0,
-                hasReceivedGift = false,
-
+                wasCoinsReceived = false,
+                wasRocketReceived = false,
+                wasUfoReceived = false
             };
             //Debug.Log("Current Session Data does not exist, creating new PlayerData");
             currentPlayerData = playerData;
@@ -378,7 +381,9 @@ public class SavingManager : MonoBehaviour
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
         LifeManager.Instance.ResetLife();
 
-        coinManager.HasPlayerReceivedGift = currentPlayerData.hasReceivedGift;
+        coinManager.wasCoinsReceived = currentPlayerData.wasCoinsReceived;
+        coinManager.wasRocketReceived= currentPlayerData.wasRocketReceived;
+        coinManager.wasUfoReceived = currentPlayerData.wasUfoReceived;
 
         // --- SHOP ---
         ShopManager:

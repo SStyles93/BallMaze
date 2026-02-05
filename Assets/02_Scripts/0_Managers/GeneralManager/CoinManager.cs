@@ -12,11 +12,15 @@ public class CoinManager : MonoBehaviour
     [SerializeField] int maxHeartAmount = 15;
     [Tooltip("Time to regain a heart (in Secondd) 1m = 60")]
     [SerializeField] private int timeToRegainHeartInMinutes = 10;
-    public bool HasPlayerReceivedGift = false;
+    public bool wasCoinsReceived = false;
+    public bool wasRocketReceived = false;
+    public bool wasUfoReceived = false;
+
 
     private DateTime lastHeartRefillTime;
     Coroutine timerCoroutine;
     bool isDataLoaded = false;
+    private double rewardedVideoSafeTime;
 
     /// <summary>
     /// Delegate (Action) used to notify the different pannels (LifePannel, CurrencyPannel, StarPannel)
@@ -67,10 +71,8 @@ public class CoinManager : MonoBehaviour
 
     private void Update()
     {
-
-        //coinAmount = coins[CoinType.COIN];
-        //starAmount = coins[CoinType.STAR];
-        //heartAmount = coins[CoinType.HEART];
+        if(rewardedVideoSafeTime > 0)
+        rewardedVideoSafeTime -= Time.deltaTime;
 
         // Update calculations & timer (visuals)
         if (Application.isFocused)
@@ -150,6 +152,22 @@ public class CoinManager : MonoBehaviour
 
         OnCoinChanged?.Invoke(type, coins[type], previousCoins[type]);
         LevelPreviousCoinAmount(type);
+    }
+
+    /// <summary>
+    /// Special method used to reward heart and apply a safe time frame
+    /// </summary>
+    /// <param name="amount"></param>
+    public void RewardHearts(int amount)
+    {
+        if (rewardedVideoSafeTime > 0) return;
+        rewardedVideoSafeTime = 20.0f;
+        
+        coins[CoinType.HEART] += amount;
+        RecalculateHearts();
+
+        OnCoinChanged?.Invoke(CoinType.HEART, coins[CoinType.HEART], previousCoins[CoinType.HEART]);
+        LevelPreviousCoinAmount(CoinType.HEART);
     }
 
     /// <summary>

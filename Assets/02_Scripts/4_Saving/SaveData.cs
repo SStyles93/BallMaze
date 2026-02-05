@@ -43,7 +43,9 @@ public class PlayerData : SaveableData
     public int ufos;
     public int colorIndex;
     public int skinIndex;
-    public bool hasReceivedGift;
+    public bool wasCoinsReceived = false;
+    public bool wasRocketReceived = false;
+    public bool wasUfoReceived = false;
 }
 
 /// <summary>
