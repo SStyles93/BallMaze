@@ -35,7 +35,8 @@ public class LevelData
 [System.Serializable]
 public class PlayerData : SaveableData
 {
-    public DateTime lastHeartRefillTime; // Date-Time at which the game was first launched
+    public DateTime lastHeartRefillTime;
+    public DateTime lastCoinVideoTime;
     public int coins;
     public int stars;
     public int hearts;

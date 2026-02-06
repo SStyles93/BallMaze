@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class HeartPannelManager : MonoBehaviour
 {
-    [SerializeField] int heartValue = 600;
+    [SerializeField] int heartValue = 150;
     [SerializeField] private TMP_Text heartTimerText;
     [SerializeField] private TMP_Text heartAmountText;
     [SerializeField] private TMP_Text coinAmountText;
@@ -130,7 +130,7 @@ public class HeartPannelManager : MonoBehaviour
 
         if (manager.RewardedVideoAd.IsAdReady())
         {
-            manager.RewardedVideoAd.ShowAd();
+            manager.RewardedVideoAd.ShowAd("rewarded_hearts");
         }
     }
 

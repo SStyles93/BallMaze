@@ -135,12 +135,18 @@ public class SavingManager : MonoBehaviour
             //in case of fail we still want to try and access the shopmanager
             goto ShopManager;
         }
+        // Coins
         playerSaveData.coins = coinManager.GetCoinAmount(CoinType.COIN);
         playerSaveData.stars = coinManager.GetCoinAmount(CoinType.STAR);
         playerSaveData.hearts = coinManager.GetCoinAmount(CoinType.HEART);
         playerSaveData.rockets = coinManager.GetCoinAmount(CoinType.ROCKET);
         playerSaveData.ufos = coinManager.GetCoinAmount(CoinType.UFO);
+
+        // Timers
         playerSaveData.lastHeartRefillTime = coinManager.LastHeartRefillTime;
+        playerSaveData.lastCoinVideoTime = coinManager.LastVideoRewardTime;
+        
+        // Gifts
         playerSaveData.wasCoinsReceived = coinManager.wasCoinsReceived;
         playerSaveData.wasRocketReceived = coinManager.wasRocketReceived;
         playerSaveData.wasUfoReceived = coinManager.wasUfoReceived;
@@ -341,6 +347,7 @@ public class SavingManager : MonoBehaviour
             PlayerData playerData = new PlayerData()
             {
                 lastHeartRefillTime = DateTime.UtcNow,
+                lastCoinVideoTime = DateTime.UtcNow.AddDays(-1),
                 coins = 0,
                 stars = 0,
                 hearts = CoinManager.Instance.InitialHeartAmount,
@@ -379,6 +386,7 @@ public class SavingManager : MonoBehaviour
         coinManager.LevelPreviousCoinAmount(CoinType.UFO);
 
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
+        coinManager.SetLastCoinVideoTime(currentPlayerData.lastCoinVideoTime);
         LifeManager.Instance.ResetLife();
 
         coinManager.wasCoinsReceived = currentPlayerData.wasCoinsReceived;

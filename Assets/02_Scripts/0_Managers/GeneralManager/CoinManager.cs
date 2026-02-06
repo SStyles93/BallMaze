@@ -10,16 +10,19 @@ public class CoinManager : MonoBehaviour
 
     [Header("Hearts Parameters")]
     [SerializeField] int maxHeartAmount = 15;
-    [Tooltip("Time to regain a heart (in Secondd) 1m = 60")]
+    [Tooltip("Time to regain a heart")]
     [SerializeField] private int timeToRegainHeartInMinutes = 10;
+    [Tooltip("Time to wait before it is possible to replay a rewarded coin video")]
+    [SerializeField] private int hoursBetweenRewardedCoins = 4;
+
     public bool wasCoinsReceived = false;
     public bool wasRocketReceived = false;
     public bool wasUfoReceived = false;
 
 
-    private DateTime lastHeartRefillTime;
     Coroutine timerCoroutine;
-    bool isDataLoaded = false;
+    private DateTime lastHeartRefillTime;
+    private DateTime lastVideoRewardTime;
     private double rewardedVideoSafeTime;
 
     /// <summary>
@@ -32,6 +35,12 @@ public class CoinManager : MonoBehaviour
     /// </summary>
     public event Action<CoinType, int> OnCoinSet;
 
+
+    /// <summary>
+    /// Delegate used to Tick with the RewardedCoin remaining time
+    /// </summary>
+    public event Action<TimeSpan> OnCoinTimerTick;
+
     /// <summary>
     /// Delegate used to Tick
     /// </summary>
@@ -39,6 +48,7 @@ public class CoinManager : MonoBehaviour
 
     public int InitialHeartAmount => maxHeartAmount;
     public DateTime LastHeartRefillTime => lastHeartRefillTime;
+    public DateTime LastVideoRewardTime => lastVideoRewardTime;
     public static CoinManager Instance { get; private set; }
 
     private void Awake()
@@ -71,21 +81,14 @@ public class CoinManager : MonoBehaviour
 
     private void Update()
     {
-        if(rewardedVideoSafeTime > 0)
-        rewardedVideoSafeTime -= Time.deltaTime;
+        if (rewardedVideoSafeTime > 0)
+            rewardedVideoSafeTime -= Time.deltaTime;
 
         // Update calculations & timer (visuals)
-        if (Application.isFocused)
-        {
-            RecalculateHearts();
-            if (coins[CoinType.HEART] < maxHeartAmount)
-                StartTimer();
-        }
-        else
-        {
-            // Only calculations
-            RecalculateHearts();
-        }
+        if (!Application.isFocused) return;
+
+        StartTimer();
+        RecalculateHearts();
     }
 
 
@@ -162,13 +165,30 @@ public class CoinManager : MonoBehaviour
     {
         if (rewardedVideoSafeTime > 0) return;
         rewardedVideoSafeTime = 20.0f;
-        
+
         coins[CoinType.HEART] += amount;
         RecalculateHearts();
 
         OnCoinChanged?.Invoke(CoinType.HEART, coins[CoinType.HEART], previousCoins[CoinType.HEART]);
         LevelPreviousCoinAmount(CoinType.HEART);
+
+        SavingManager.Instance.SavePlayer();
     }
+
+    public void RewardCoins(int amount)
+    {
+        if (rewardedVideoSafeTime > 0) return;
+        rewardedVideoSafeTime = 20.0f;
+
+        lastVideoRewardTime = DateTime.UtcNow;
+
+        coins[CoinType.COIN] += amount;
+        OnCoinChanged?.Invoke(CoinType.COIN, coins[CoinType.COIN], previousCoins[CoinType.COIN]);
+        LevelPreviousCoinAmount(CoinType.COIN);
+
+        SavingManager.Instance.SavePlayer();
+    }
+
 
     /// <summary>
     /// Sets a currency value of a type in the CurrencyManager
@@ -194,8 +214,14 @@ public class CoinManager : MonoBehaviour
     public void SetLastHeartRefillTime(DateTime dateTime)
     {
         lastHeartRefillTime = dateTime;
-        isDataLoaded = true;
     }
+
+    public void SetLastCoinVideoTime(DateTime dateTime)
+    {
+        lastVideoRewardTime = dateTime;
+    }
+
+
     /// <summary>
     /// Recalculates the amount of hearts to increase the saved data by
     /// </summary>
@@ -224,9 +250,10 @@ public class CoinManager : MonoBehaviour
             heartsToAdd * timeToRegainHeartInMinutes
         );
 
-        if (isDataLoaded)
-            SavingManager.Instance?.SavePlayer();
+        SavingManager.Instance?.SavePlayer();
     }
+
+
     private void StartTimer()
     {
         if (timerCoroutine != null)
@@ -238,18 +265,14 @@ public class CoinManager : MonoBehaviour
     {
         var wait = new WaitForSecondsRealtime(1f);
 
-        while (coins[CoinType.HEART] < maxHeartAmount)
-        {
-            TimeSpan remaining = TimeUntilNextHeart();
+        TimeSpan remainingHeartTime = TimeUntilNextHeart();
+        OnHeartTimerTick?.Invoke(remainingHeartTime);
+        TimeSpan remainingCoinVideoTime = TimeUntilNextCoinVideo();
+        OnCoinTimerTick?.Invoke(remainingCoinVideoTime);
 
-            OnHeartTimerTick?.Invoke(remaining);
-
-            yield return wait;
-        }
-
-        // Final update when full
-        OnHeartTimerTick?.Invoke(TimeSpan.Zero);
+        yield return wait;
     }
+
     public TimeSpan TimeUntilNextHeart()
     {
         // If already full, there is no countdown
@@ -257,16 +280,22 @@ public class CoinManager : MonoBehaviour
             return TimeSpan.Zero;
 
         DateTime now = DateTime.UtcNow;
+        DateTime nextHeartTime = lastHeartRefillTime.AddMinutes(timeToRegainHeartInMinutes);
 
-        DateTime nextHeartTime = lastHeartRefillTime
-            .AddMinutes(timeToRegainHeartInMinutes);
-
-        TimeSpan remaining = nextHeartTime - now;
-
-        // Safety clamp (can happen on resume)
-        if (remaining < TimeSpan.Zero)
+        if (now >= nextHeartTime)
             return TimeSpan.Zero;
 
-        return remaining;
+        return nextHeartTime - now;
+    }
+
+    public TimeSpan TimeUntilNextCoinVideo()
+    {
+        DateTime now = DateTime.UtcNow;
+        DateTime nextPossibleVideo = lastVideoRewardTime.AddHours(hoursBetweenRewardedCoins);
+
+        if (now >= nextPossibleVideo)
+            return TimeSpan.Zero;
+
+        return nextPossibleVideo - now;
     }
 }
