@@ -1,5 +1,6 @@
 using PxP.Draw;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public enum PlayerState
@@ -14,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Rigidbody playerRigidbody;
+    [SerializeField] private PlayerVisualEffects playerVisualEffects;
 
     [Header("Rolling")]
     [SerializeField] private float torqueStrength = 30f;
@@ -83,15 +85,13 @@ public class PlayerMovement : MonoBehaviour
 
         playerRigidbody.maxAngularVelocity = maxAngularVelocity;
         playerRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+
+        if (!playerVisualEffects)
+            playerVisualEffects = GetComponent<PlayerVisualEffects>();
     }
 
     private void Start()
     {
-        if(PowerUpManager.Instance != null)
-        {
-            PowerUpManager.Instance.SetPlayer(gameObject);
-        }
-
         PlayerCamera.SetCameraFollow(gameObject);
     }
 
@@ -116,23 +116,39 @@ public class PlayerMovement : MonoBehaviour
 
     // ---------------- PUBLIC METHODS ----------------
 
+
     public void ReplacePlayer()
     {
+        // Disable
+        if (playerRigidbody == null)
+            Debug.LogError("playerRigidbody is NULL at respawn");
+        if (!playerVisualEffects)
+            Debug.Log("playerVisualEffects is NULL at respawn");
+        if (LastSafePlatform == null)
+            Debug.LogError("LastSafePlatform is NULL at respawn");
+
+        playerRigidbody.linearVelocity = Vector3.zero;
+        playerRigidbody.angularVelocity = Vector3.zero;
         playerRigidbody.isKinematic = true;
 
-        Vector3 respawnPosition = LastSafePlatform.position;
-        respawnPosition.y = 3.0f;
-        playerRigidbody.gameObject.transform.position = respawnPosition;
-        playerRigidbody.position = respawnPosition;
-        playerRigidbody.isKinematic = false;
+        playerVisualEffects.SetPlayerShrunk();
 
+        Vector3 respawnPosition = LastSafePlatform.position;
+        respawnPosition.y = 3f;
+        transform.position = respawnPosition;
+        Physics.SyncTransforms();
+
+        // Re-enable
+
+        playerRigidbody.isKinematic = false;
         SetState(PlayerState.Alive);
-        // NOT USED YET -> Might be usefull
-        //OnPlayerRespawned?.Invoke();
+
+        playerVisualEffects.SetPlayerShrunk();
     }
 
     public void SetState(PlayerState state)
     {
+        if (this.state == state) return;
         this.state = state;
 
         //Camera Follow

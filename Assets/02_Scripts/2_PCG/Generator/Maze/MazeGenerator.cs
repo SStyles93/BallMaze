@@ -43,14 +43,14 @@ namespace PxP.PCG
             return carved;
         }
 
-        public static void ApplyMaze(CellData[,] grid, HashSet<Vector2Int> carved, GeneratorParameters_SO p, System.Random rng)
+        public static void ApplyMaze(Grid grid, HashSet<Vector2Int> carved, GeneratorParameters_SO p, System.Random rng)
         {
             foreach (var pos in carved)
             {
-                if (!GridUtils.IsInsideGrid(pos, grid))
+                if (!grid.IsInside(pos))
                     continue;
 
-                ref var cell = ref grid[pos.x, pos.y];
+                ref var cell = ref grid.GetCellRef(pos);
                 cell.isEmpty = false;
 
                 // Floor ratio is always "whatever is left"

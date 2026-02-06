@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 [Serializable]
 public struct TileRatioData
@@ -39,40 +37,33 @@ public class LevelData_SO
     public bool starsConnectToEnd;
 
     [Header("Grid Data")]
-    // Flattened Cell array
+    [Tooltip("Flattened grid: index = y * width + x")]
     public CellData[] gridData;
+
     public int usedSeed;
 
+    // --------------------------------------------------
+    // Grid conversion
+    // --------------------------------------------------
+
     /// <summary>
-    /// Converts the flattened Cell array to a 2D grid
+    /// Converts the flattened Cell array into a Grid
     /// </summary>
-    public CellData[,] ToGrid()
+    public Grid ToGrid()
     {
-        // Validate grid dimensions
         if (gridWidth <= 0 || gridHeight <= 0)
         {
-            Debug.LogWarning($"LevelData_SO: Invalid grid size ({gridWidth}x{gridHeight}). Returning empty grid.");
-            return new CellData[0, 0];
+            Debug.LogWarning(
+                $"LevelData_SO: Invalid grid size ({gridWidth}x{gridHeight}). Returning empty grid.");
+            return new Grid(0, 0);
         }
 
-        CellData[,] grid = new CellData[gridWidth, gridHeight];
+        Grid grid = new Grid(gridWidth, gridHeight);
 
-        if (gridData == null)
+        if (gridData == null || gridData.Length != gridWidth * gridHeight)
         {
-            Debug.LogWarning("LevelData_SO: gridData is null. Returning empty grid.");
-            return grid;
-        }
-
-        if (gridData.Length != gridWidth * gridHeight)
-        {
-            Debug.LogWarning($"LevelData_SO: gridData length mismatch ({gridData.Length} != {gridWidth * gridHeight}). Filling with default cells.");
-            for (int y = 0; y < gridHeight; y++)
-            {
-                for (int x = 0; x < gridWidth; x++)
-                {
-                    grid[x, y] = new CellData(); // default struct
-                }
-            }
+            Debug.LogWarning(
+                $"LevelData_SO: gridData invalid (len = {gridData?.Length ?? 0}, expected {gridWidth * gridHeight}). Filling defaults.");
             return grid;
         }
 
@@ -80,7 +71,8 @@ public class LevelData_SO
         {
             for (int x = 0; x < gridWidth; x++)
             {
-                grid[x, y] = gridData[y * gridWidth + x];
+                ref var cell = ref grid.GetCellRef(x, y);
+                cell = gridData[y * gridWidth + x];
             }
         }
 
@@ -88,9 +80,9 @@ public class LevelData_SO
     }
 
     /// <summary>
-    /// Converts a 2D Cell grid into the flattened gridData array
+    /// Converts a Grid into the flattened gridData array
     /// </summary>
-    public void FromGrid(CellData[,] grid)
+    public void FromGrid(Grid grid)
     {
         if (grid == null)
         {
@@ -98,8 +90,8 @@ public class LevelData_SO
             return;
         }
 
-        gridWidth = grid.GetLength(0);
-        gridHeight = grid.GetLength(1);
+        gridWidth = grid.Width;
+        gridHeight = grid.Height;
 
         gridData = new CellData[gridWidth * gridHeight];
 
@@ -107,7 +99,7 @@ public class LevelData_SO
         {
             for (int x = 0; x < gridWidth; x++)
             {
-                gridData[y * gridWidth + x] = grid[x, y];
+                gridData[y * gridWidth + x] = grid.GetCell(x, y);
             }
         }
     }

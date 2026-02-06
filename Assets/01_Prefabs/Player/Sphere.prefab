@@ -198,6 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRigidbody: {fileID: 6087839670450387137}
+  playerVisualEffects: {fileID: 959544580089661260}
   torqueStrength: 100
   maxAngularVelocity: 100
   jumpForce: 15

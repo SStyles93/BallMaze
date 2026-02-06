@@ -10,7 +10,7 @@ public class PathGeneratorWindow : EditorWindow
     private PhysicalMazeGenerator physicalGenerator;
 
     private int levelIndex = 0;
-    private CellData[,] grid;
+    private Grid grid;
     private int usedSeed;
 
     private int coinsToEarn;
@@ -256,7 +256,7 @@ public class PathGeneratorWindow : EditorWindow
         {
             for (int x = 0; x < width; x++)
             {
-                ref CellData cell = ref grid[x, y];
+                ref CellData cell = ref grid.GetCellRef(x, y);
 
                 Rect cellRect = new Rect(
                     rect.x + x * cellSize,
@@ -347,7 +347,7 @@ public class PathGeneratorWindow : EditorWindow
         if (!IsInsideGrid(x, y))
             return;
 
-        ref CellData cell = ref grid[x, y];
+        ref CellData cell = ref grid.GetCellRef(x, y);
 
         // Prevent overwriting Start position
         Vector2Int startPos = new(
@@ -375,36 +375,36 @@ public class PathGeneratorWindow : EditorWindow
                             cell.isEmpty = false;
                             cell.ground = selectedGround;
 
-                            int width = grid.GetLength(0);
-                            int height = grid.GetLength(1);
+                            int width = grid.Width;
+                            int height = grid.Height;
 
                             // Paint sides
                             if (horizontal)
                             {
                                 if (x > 0 && !IsStartOrEnd(x - 1, y))
                                 {
-                                    grid[x - 1, y].isEmpty = false;
-                                    grid[x - 1, y].ground = GroundType.PlatformSide;
+                                    grid.GetCellRef(x - 1, y).isEmpty = false;
+                                    grid.GetCellRef(x - 1, y).ground = GroundType.PlatformSide;
                                 }
 
                                 if (x < width - 1 && !IsStartOrEnd(x + 1, y))
                                 {
-                                    grid[x + 1, y].isEmpty = false;
-                                    grid[x + 1, y].ground = GroundType.PlatformSide;
+                                    grid.GetCellRef(x + 1, y).isEmpty = false;
+                                    grid.GetCellRef(x + 1, y).ground = GroundType.PlatformSide;
                                 }
                             }
                             else // vertical
                             {
                                 if (y > 0 && !IsStartOrEnd(x, y - 1))
                                 {
-                                    grid[x, y - 1].isEmpty = false;
-                                    grid[x, y - 1].ground = GroundType.PlatformSide;
+                                    grid.GetCellRef(x, y - 1).isEmpty = false;
+                                    grid.GetCellRef(x, y - 1).ground = GroundType.PlatformSide;
                                 }
 
                                 if (y < height - 1 && !IsStartOrEnd(x, y + 1))
                                 {
-                                    grid[x, y + 1].isEmpty = false;
-                                    grid[x, y + 1].ground = GroundType.PlatformSide;
+                                    grid.GetCellRef(x, y + 1).isEmpty = false;
+                                    grid.GetCellRef(x, y + 1).ground = GroundType.PlatformSide;
                                 }
                             }
                         }
@@ -494,8 +494,8 @@ public class PathGeneratorWindow : EditorWindow
         // **************************
 
         // -- Size ---
-        int width = grid.GetLength(0);
-        int height = grid.GetLength(1);
+        int width = grid.Width;
+        int height = grid.Height;
         data.gridWidth = width;
         data.gridHeight = height;
         // Save grid (flattend grid for serializeation)
@@ -504,7 +504,7 @@ public class PathGeneratorWindow : EditorWindow
         {
             for (int x = 0; x < width; x++)
             {
-                data.gridData[y * width + x] = grid[x, y];
+                data.gridData[y * width + x] = grid.GetCellRef(x, y);
             }
         }
 
@@ -548,12 +548,12 @@ public class PathGeneratorWindow : EditorWindow
         // **************************
 
         // Load from flattened grid (for serialization)
-        grid = new CellData[data.gridWidth, data.gridHeight];
+        grid = new Grid(data.gridWidth, data.gridHeight);
         for (int y = 0; y < data.gridHeight; y++)
         {
             for (int x = 0; x < data.gridWidth; x++)
             {
-                grid[x, y] = data.gridData[y * data.gridWidth + x];
+                grid.GetCellRef(x, y) = data.gridData[y * data.gridWidth + x];
             }
         }
 

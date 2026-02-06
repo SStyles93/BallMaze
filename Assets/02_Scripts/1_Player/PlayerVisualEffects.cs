@@ -1,7 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
-using UnityEngine.Rendering;
 
 public class PlayerVisualEffects : MonoBehaviour
 {
@@ -19,16 +18,18 @@ public class PlayerVisualEffects : MonoBehaviour
     [SerializeField] private Material[] m_trailMaterials;
 
 
-
     private PlayerMovement playerMovement;
     private Tween scaleTween;
     private Tween blinkTween;
+    private Tween trailScaleTween;
     private Renderer[] renderers;
     private TrailRenderer[] trailRenderers;
-    private Tween trailWidthTween;
     private bool m_isTrailActive = true;
-
     private bool isBlinking = false;
+    private float startDelay = 0.5f;
+    private Vector3 originalScale;
+    private float originalTrailWidth;
+
 
     private enum ScaleState
     {
@@ -42,20 +43,58 @@ public class PlayerVisualEffects : MonoBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         trailRenderers = m_trail.GetComponentsInChildren<TrailRenderer>();
+        originalScale = transform.localScale;
+        originalTrailWidth = trailRenderers[0].widthMultiplier;
+    }
 
-        // Create the tween ONCE and reuse it
+    private void OnEnable()
+    {
+        // Player Scale
         scaleTween = transform
-            .DOScale(Vector3.zero, shrinkDuration)
+            .DOScale(originalScale, shrinkDuration)
             .SetEase(Ease.InOutQuad)
             .SetAutoKill(false)
             .Pause()
             .SetLink(gameObject)
-            .OnRewind(EnableTrail);
+            .OnComplete(EnableTrail);
+
+        trailScaleTween = DOTween.To(
+        () => trailRenderers[0].widthMultiplier,
+        value =>
+        {
+            foreach (var tr in trailRenderers)
+                tr.widthMultiplier = value;
+        },
+        originalTrailWidth,
+        shrinkDuration)
+            .SetEase(Ease.InOutQuad)
+            .SetAutoKill(false)
+            .Pause()
+            .SetLink(gameObject);
     }
 
+    private void OnDisable()
+    {
+        blinkTween?.Kill();
+        trailScaleTween?.Kill();
+        scaleTween?.Kill();
+    }
+
+    private void Start()
+    {
+        transform.localScale = Vector3.zero;
+        state = ScaleState.Shrunk;
+        foreach (var tr in trailRenderers)
+            tr.widthMultiplier = 0;
+    }
     private void Update()
     {
         if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
+        if (startDelay > 0.0f)
+        {
+            startDelay -= Time.deltaTime;
+            return;
+        }
 
         bool shouldShrink =
             playerMovement.State == PlayerState.IsFalling;
@@ -75,7 +114,7 @@ public class PlayerVisualEffects : MonoBehaviour
         {
             Blink();
         }
-        else if(isBlinking)
+        else if (isBlinking)
         {
             StopBlink();
         }
@@ -91,6 +130,14 @@ public class PlayerVisualEffects : MonoBehaviour
         {
             m_trail.SetActive(true);
         }
+    }
+
+    public void SetPlayerShrunk()
+    {
+        transform.localScale = Vector3.zero;
+        state = ScaleState.Shrunk;
+        scaleTween.Rewind();
+        trailScaleTween.Rewind();
     }
 
     public void SetTrailColor(Color color)
@@ -111,42 +158,24 @@ public class PlayerVisualEffects : MonoBehaviour
         m_trailMaterials[1].SetColor("_Color02", c1B);
     }
 
+    private void EnableTrail()
+    {
+        m_trail.SetActive(true);
+        m_isTrailActive = true;
+    }
 
     private void Shrink()
     {
         state = ScaleState.Shrunk;
-        scaleTween.PlayForward();
-        TweenTrailWidth(0f);
+        scaleTween.PlayBackwards();
+        trailScaleTween.PlayBackwards();
     }
 
     private void Grow()
     {
         state = ScaleState.Normal;
-        scaleTween.PlayBackwards();
-        TweenTrailWidth(1f);
-    }
-
-    private void TweenTrailWidth(float targetWidth)
-    {
-        trailWidthTween?.Kill();
-
-        trailWidthTween = DOTween.To(
-            () => trailRenderers[0].widthMultiplier,
-            value =>
-            {
-                foreach (var tr in trailRenderers)
-                    tr.widthMultiplier = value;
-            },
-            targetWidth,
-            shrinkDuration
-        ).SetEase(Ease.InOutQuad)
-         .SetLink(gameObject);
-    }
-
-    private void EnableTrail()
-    {
-        m_trail.SetActive(true);
-        m_isTrailActive = true;
+        scaleTween.PlayForward();
+        trailScaleTween.PlayForward();
     }
 
     private void Blink()
@@ -172,7 +201,7 @@ public class PlayerVisualEffects : MonoBehaviour
         // Master sequence (runs once)
         blinkTween = DOTween.Sequence()
             .AppendInterval(blinkDelay)
-            .Append(blinkLoop)                 
+            .Append(blinkLoop)
             .SetLink(gameObject)
             .OnComplete(() => BlinkingEnded());
     }
@@ -210,8 +239,6 @@ public class PlayerVisualEffects : MonoBehaviour
             }
         }
     }
-
-
 
 
     private void OnCollisionEnter(Collision collision)

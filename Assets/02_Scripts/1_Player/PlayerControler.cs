@@ -62,7 +62,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public static event Action<string> OnControlsChanged;
 
-
     private void Awake()
     {
         if (playerInput == null)

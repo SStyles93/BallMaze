@@ -6,111 +6,87 @@ namespace PxP.PCG
 {
     public static class GridUtils
     {
-        public static Vector2Int GetStartPosition(CellData[,] grid, GeneratorParameters_SO p)
+        public static Vector2Int GetStartPosition(Grid grid, GeneratorParameters_SO p)
         {
-            int width = p.gridWidth;
-            int height = p.gridHeight;
-
-            // Always pick middle column
-            int startX = width / 2;
-            int startY = height - 1; // bottom row (map inverted)
+            int startX = grid.Width / 2;
+            int startY = grid.Height - 1;
 
             Vector2Int start = new(startX, startY);
 
-            // Ensure the start tile is walkable
-            if (IsInsideGrid(start, grid))
+            if (grid.IsInside(start))
             {
-                grid[start.x, start.y].isEmpty = false;
-                grid[start.x, start.y].ground = GroundType.Floor;
+                ref var cell = ref grid.GetCellRef(start.x, start.y);
+                cell.isEmpty = false;
+                cell.ground = GroundType.Floor;
             }
 
-            // Carve the tile above to guarantee connectivity
             Vector2Int above = new(start.x, start.y - 1);
-            if (IsInsideGrid(above, grid))
+            if (grid.IsInside(above))
             {
-                grid[above.x, above.y].isEmpty = false;
-                grid[above.x, above.y].ground = GroundType.Floor;
+                ref var cell = ref grid.GetCellRef(above.x, above.y);
+                cell.isEmpty = false;
+                cell.ground = GroundType.Floor;
             }
 
             return start;
         }
 
+
         public static Vector2Int ResolveEndPosition(
-            CellData[,] grid,GeneratorParameters_SO p,System.Random rng)
+            Grid grid, GeneratorParameters_SO p, System.Random rng)
         {
-            int maxY = Mathf.FloorToInt(p.gridHeight * (p.endMaxHeightPercent / 100f));
-            int width = p.gridWidth;
-            int height = p.gridHeight;
+            int maxY = Mathf.FloorToInt(grid.Height * (p.endMaxHeightPercent / 100f));
 
-            Vector2Int end;
-
-            if (p.randomEnd)
-            {
-                // Pick a random position within allowed height
-                end = new Vector2Int(
-                    rng.Next(0, width),
-                    rng.Next(0, Mathf.Max(0, maxY))
-                );
-            }
-            else
-            {
-                end = new Vector2Int(
-                    Mathf.Clamp(p.fixedEnd.x, 0, width - 1),
+            Vector2Int end = p.randomEnd
+                ? new Vector2Int(rng.Next(0, grid.Width), rng.Next(0, Mathf.Max(0, maxY)))
+                : new Vector2Int(
+                    Mathf.Clamp(p.fixedEnd.x, 0, grid.Width - 1),
                     Mathf.Clamp(p.fixedEnd.y, 0, maxY)
-                );
-            }
+                  );
 
-            // Ensure the tile "below" (toward bottom) is solid ground
-            if (end.y + 1 < height)
+            if (end.y + 1 < grid.Height)
             {
-                grid[end.x, end.y + 1].isEmpty = false;
+                ref var below = ref grid.GetCellRef(end.x, end.y + 1);
+                below.isEmpty = false;
             }
 
             return end;
         }
 
-        public static void MarkStartAndEnd(
-            CellData[,] grid,
-            Vector2Int start,
-            Vector2Int end)
+
+        public static void MarkStartAndEnd(Grid grid, Vector2Int start, Vector2Int end)
         {
             SetOverlay(grid, start, OverlayType.Start);
             SetOverlay(grid, end, OverlayType.End);
         }
 
-        private static void SetOverlay(
-            CellData[,] grid,
-            Vector2Int pos,
-            OverlayType type)
+        private static void SetOverlay(Grid grid, Vector2Int pos, OverlayType type)
         {
-            if (!IsInsideGrid(pos, grid)) return;
+            if (!grid.IsInside(pos)) return;
 
-            ref var cell = ref grid[pos.x, pos.y];
+            ref var cell = ref grid.GetCellRef(pos.x, pos.y);
             cell.isEmpty = false;
             cell.ground = GroundType.Floor;
             cell.overlay = type;
-            if(type == OverlayType.End)
-            {
-                cell.isEnd = true;
-            }
         }
 
         // --- Safety helpers ---
 
-        public static int CountWallNeighbors(CellData[,] grid, int x, int y)
+        public static int CountWallNeighbors(Grid grid, int x, int y)
         {
             int count = 0;
             foreach (var d in Directions)
             {
                 int nx = x + d.x;
                 int ny = y + d.y;
-                if (IsInsideGrid(nx, ny, grid) && grid[nx, ny].isEmpty)
+                if (grid.IsInside(nx, ny) && grid.GetCell(nx, ny).isEmpty)
                     count++;
             }
             return count;
         }
 
-        public static bool CreatesOpenSquare(CellData[,] grid, int x, int y)
+
+        public static bool CreatesOpenSquare(Grid grid, int x, int y)
         {
             for (int ox = -1; ox <= 0; ox++)
                 for (int oy = -1; oy <= 0; oy++)
@@ -121,8 +97,8 @@ namespace PxP.PCG
                         {
                             int nx = x + ox + dx;
                             int ny = y + oy + dy;
-                            if (IsInsideGrid(nx, ny, grid) &&
-                                !grid[nx, ny].isEmpty)
+                            if (grid.IsInside(nx, ny) &&
+                                !grid.GetCell(nx, ny).isEmpty)
                                 open++;
                         }
                     if (open >= 3) return true;
@@ -133,14 +109,6 @@ namespace PxP.PCG
         public static bool IsNear(Vector2Int a, Vector2Int b)
             => Mathf.Abs(a.x - b.x) <= 1 &&
                Mathf.Abs(a.y - b.y) <= 1;
-
-        public static bool IsInsideGrid(Vector2Int p, CellData[,] g)
-            => IsInsideGrid(p.x, p.y, g);
-
-        public static bool IsInsideGrid(int x, int y, CellData[,] g)
-            => x >= 0 && y >= 0 &&
-               x < g.GetLength(0) &&
-               y < g.GetLength(1);
 
         public static void Shuffle<T>(IList<T> list, System.Random rng)
         {

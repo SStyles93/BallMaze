@@ -52,7 +52,6 @@ public class PlayButton : UIButton
 
     private void PlayNextLevel()
     {
-        GamesMenuManager.Instance?.SaveScrollbarValues();
         SavingManager.Instance?.SaveSession();
 
         // Normal behaviour

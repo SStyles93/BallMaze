@@ -11,6 +11,7 @@ public class CustomizationManager : MonoBehaviour
     [SerializeField] private CustomizationSlot currentSlot = null;
     [SerializeField] private CustomizationOption currentOption = null;
     private int currentOptionIndex = 0;
+    private SkinSlot equipedSkinSlot;
 
     public event Action<CustomizationSlot> OnOptionChanged;
     public event Action OnUpdatePlayerSkinOption;
@@ -34,6 +35,15 @@ public class CustomizationManager : MonoBehaviour
 
         // This will call the PreviewOption() method on the PlayerCustomization.cs
         OnOptionChanged?.Invoke(currentSlot);
+    }
+
+    /// <summary>
+    /// Resets the player's skin to the equipped one
+    /// </summary>
+    public void SetSkinToCurrent()
+    {
+        if (equipedSkinSlot == null) return;
+        OnOptionChanged?.Invoke(equipedSkinSlot);
     }
 
     public bool ValidatePurchase()
@@ -93,6 +103,8 @@ public class CustomizationManager : MonoBehaviour
                 skinData_SO.skinOption = skinOpt;
                 skinData_SO.playerSkinIndex = currentOptionIndex;
                 skinData_SO.playerColorIndex = 0;
+                // Keep ref to reset when switching to Colors
+                equipedSkinSlot = (SkinSlot)currentSlot;
                 break;
 
             default:

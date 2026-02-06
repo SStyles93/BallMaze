@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using DG.Tweening;
-using System;
+using UnityEngine;
 
 public class RocketAnimation : MonoBehaviour
 {
     [SerializeField] private PhysicalMazeGenerator physicalMazeGeneratorRef;
+    [SerializeField] private PowerUpManager powerUpManagerRef;
+
     [SerializeField] private RocketSound rocketSound;
     [SerializeField] private ParticleSystem ps;
 
@@ -22,7 +24,7 @@ public class RocketAnimation : MonoBehaviour
 
     private float totalDuration;
     private Vector3 targetWorldPos;
-    private Tween sequence;
+    private Sequence sequence;
 
     private void OnEnable()
     {
@@ -31,21 +33,24 @@ public class RocketAnimation : MonoBehaviour
             Debug.Log("No Physical Maze Generator assigned");
             return;
         }
+
+        if(powerUpManagerRef == null) powerUpManagerRef = transform.GetComponentInParent<PowerUpManager>();
+
         if (rocketSound == null) rocketSound = GetComponent<RocketSound>();
 
-        targetWorldPos = physicalMazeGeneratorRef.GetEndNeighbourPosition();
-        targetWorldPos.y = PowerUpManager.Instance.GetPowerUpHeightOffset(CoinType.ROCKET);
+        if(!physicalMazeGeneratorRef.TryGetWalkableEndNeighbours(out List<Vector3> worldPositions))
+        {
+            Debug.Log("No walkable neighbour");
+        }
+
+        targetWorldPos = worldPositions[Random.Range(0, worldPositions.Count)];
+        targetWorldPos.y = powerUpManagerRef.GetPowerUpHeightOffset(CoinType.ROCKET);
 
         // Pull duration directly from PowerUpManager
-        totalDuration = PowerUpManager.Instance
+        totalDuration = powerUpManagerRef
             .GetPowerUpDuration(CoinType.ROCKET);
 
         PlaySequence();
-    }
-
-    private void OnDisable()
-    {
-        sequence?.Kill();
     }
 
     private void PlaySequence()
@@ -63,9 +68,12 @@ public class RocketAnimation : MonoBehaviour
         // We start from the current rotation and apply the difference.
         Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, dirToTarget);
 
-        Sequence seq = DOTween.Sequence();
+        sequence?.Kill();
+        sequence = DOTween.Sequence()
+            .SetTarget(this)
+            .SetLink(gameObject, LinkBehaviour.KillOnDisable);
 
-        seq.InsertCallback(0, () =>
+        sequence.InsertCallback(0, () =>
         {
             PlayerCamera.Shake(rotateDuration, shakeStrength);
             VibrationManager.Instance.Classic();
@@ -74,7 +82,7 @@ public class RocketAnimation : MonoBehaviour
         });
 
         // rocket shake (charge phase)
-        seq.Join(
+        sequence.Join(
             transform.DOShakePosition(
                 rotateDuration,
                 shakeStrength,
@@ -86,23 +94,27 @@ public class RocketAnimation : MonoBehaviour
         );
 
         // Rotation: Rotate the rocket so the tip (Up) faces the target
-        seq.Join(
+        sequence.Join(
             transform.DORotateQuaternion(targetRotation, rotateDuration)
                 .SetEase(Ease.InOutSine)
         );
 
-        seq.AppendCallback(() =>
+        sequence.AppendCallback(() =>
         {
             rocketSound.PlayBurstSound();
             ps.Stop();
         });
 
         // Burst (movement phase)
-        seq.Append(
+        sequence.Append(
             transform.DOMove(targetWorldPos, burstDuration)
                 .SetEase(burstEase, burstEasePower)
         );
-
-        sequence = seq;
     }
+
+    private void OnDisable()
+    {
+        DOTween.Kill(this); // kills only tweens owned by this RocketAnimation
+    }
+
 }

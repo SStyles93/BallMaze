@@ -7,7 +7,7 @@ namespace PxP.PCG
     public static class StarPlacer
     {
 
-        public static void PlaceStars(CellData[,] grid, GeneratorParameters_SO p, HashSet<Vector2Int> walkable,
+        public static void PlaceStars(Grid grid, GeneratorParameters_SO p, HashSet<Vector2Int> walkable,
             Vector2Int start, Vector2Int end, System.Random rng)
         {
             var placed = new List<Vector2Int>();
@@ -21,12 +21,12 @@ namespace PxP.PCG
             foreach (var pos in candidates)
             {
                 if (placed.Count >= p.starCount) break;
-                if (grid[pos.x, pos.y].overlay != OverlayType.None) continue;
+                if (grid.GetCell(pos.x, pos.y).overlay != OverlayType.None) continue;
 
                 if (placed.Any(s => Vector2Int.Distance(s, pos) < p.minStarDistance))
                     continue;
 
-                grid[pos.x, pos.y].overlay = OverlayType.Star;
+                grid.GetCellRef(pos.x, pos.y).overlay = OverlayType.Star;
                 placed.Add(pos);
             }
 
@@ -36,10 +36,10 @@ namespace PxP.PCG
                 foreach (var pos in candidates)
                 {
                     if (placed.Count >= p.starCount) break;
-                    if (grid[pos.x, pos.y].overlay != OverlayType.None) continue;
+                    if (grid.GetCellRef(pos.x, pos.y).overlay != OverlayType.None) continue;
                     if (placed.Contains(pos)) continue;
 
-                    grid[pos.x, pos.y].overlay = OverlayType.Star;
+                    grid.GetCellRef(pos.x, pos.y).overlay = OverlayType.Star;
                     placed.Add(pos);
                 }
             }

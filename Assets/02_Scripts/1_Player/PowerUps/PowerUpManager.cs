@@ -50,6 +50,8 @@ public class PowerUpManager : MonoBehaviour
     private PowerUpState powerUpState = PowerUpState.Clear;
     private PlayerState playerState;
     private Sequence sequence;
+    private Tween playerScaleTween;
+    private Tween powerUpScaleTween;
 
     public PowerUpState CurrentPowerUpState => powerUpState;
 
@@ -57,17 +59,8 @@ public class PowerUpManager : MonoBehaviour
 
     public event Action<PowerUpState> OnPowerUpStateChanged;
 
-    public static PowerUpManager Instance;
-
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-
         powerUps = new Dictionary<CoinType, PowerUpData>
         {
             { rocket.type, rocket },
@@ -81,6 +74,12 @@ public class PowerUpManager : MonoBehaviour
         }
 
         if (physicalMazeGeneratorRef == null) physicalMazeGeneratorRef = FindAnyObjectByType<PhysicalMazeGenerator>();
+    }
+
+    private void Start()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        SetPlayer(player);
     }
 
     private void Update()
@@ -115,12 +114,6 @@ public class PowerUpManager : MonoBehaviour
             pu.buyingValue : 9999;
     }
 
-    public void SetPlayer(GameObject player)
-    {
-        this.player = player;
-        playerOriginalScale = player.transform.localScale;
-    }
-
     public void UsePowerUp(CoinType type)
     {
         if (powerUpState == PowerUpState.Using || playerState != PlayerState.Alive)
@@ -141,8 +134,13 @@ public class PowerUpManager : MonoBehaviour
 
     private void ActivatePowerUp(PowerUpData pu)
     {
-        player.transform.DOKill();
-        pu.objectRef.transform.DOKill();
+        playerScaleTween?.Kill();
+        powerUpScaleTween?.Kill();
+        sequence?.Kill();
+
+        sequence = DOTween.Sequence().SetTarget(this);
+
+
         Rigidbody puRb = pu.objectRef.GetComponent<Rigidbody>();
 
         // Position power-up
@@ -159,11 +157,12 @@ public class PowerUpManager : MonoBehaviour
         player.GetComponent<Rigidbody>().isKinematic = true;
 
         // Shrink player
-        sequence.Append(
-            player.transform
+        playerScaleTween = player.transform
             .DOScale(HiddenScale, scaleDuration)
             .SetEase(easeIn)
-            .OnComplete(() => player.SetActive(false)));
+            .OnComplete(() => player.SetActive(false));
+
+        sequence.Append(playerScaleTween);
 
         // Disable Player
         sequence.AppendCallback(() =>
@@ -172,11 +171,15 @@ public class PowerUpManager : MonoBehaviour
         });
 
         // Power-up grow + squash
-        sequence.Append(
-            pu.objectRef.transform
+
+        powerUpScaleTween = pu.objectRef.transform
             .DOScale(pu.originalScale * squashStretch, scaleDuration)
             .SetEase(easeOut)
-            .OnComplete(() => pu.objectRef.transform.DOScale(pu.originalScale, 0.1f)));
+            .OnComplete(() => 
+                pu.objectRef.transform.DOScale(pu.originalScale, 0.1f)
+            );
+
+        sequence.Append(powerUpScaleTween);
 
         // Enable Power-up
         sequence.AppendCallback(() =>
@@ -189,9 +192,13 @@ public class PowerUpManager : MonoBehaviour
 
     private void DeactivatePowerUp()
     {
+        playerScaleTween?.Kill();
+        powerUpScaleTween?.Kill();
+        sequence?.Kill();
+        sequence = DOTween.Sequence().SetTarget(this);
+
+        
         var pu = powerUps[currentPowerType];
-        player.transform.DOKill();
-        pu.objectRef.transform.DOKill();
 
         Rigidbody puRb = pu.objectRef.GetComponent<Rigidbody>();
 
@@ -200,19 +207,16 @@ public class PowerUpManager : MonoBehaviour
         PlayerCamera.SetCameraFollow(player);
         player.transform.localScale = HiddenScale;
 
-        sequence?.Kill();
-        sequence = DOTween.Sequence();
-
         //Block pu
         puRb.isKinematic = true;
 
         // Shrink Power-up
-        sequence.Append(
-            pu.objectRef.transform
-                .DOScale(HiddenScale, scaleDuration)
-                .SetEase(easeIn)
-                .OnComplete(() => pu.objectRef.SetActive(false))
-        );
+        powerUpScaleTween = pu.objectRef.transform
+            .DOScale(HiddenScale, scaleDuration)
+            .SetEase(easeIn)
+            .OnComplete(() => pu.objectRef.SetActive(false));
+
+        sequence.Append(powerUpScaleTween);
 
         // Enable player
         sequence.AppendCallback(() =>
@@ -220,12 +224,14 @@ public class PowerUpManager : MonoBehaviour
             player.SetActive(true);
         });
 
-        // Player grows + squash
-        sequence.Append(
-            player.transform
-                .DOScale(playerOriginalScale * squashStretch, scaleDuration)
-                .SetEase(easeOut)
-                .OnComplete(() => player.transform.DOScale(playerOriginalScale, 0.1f)));
+        playerScaleTween = player.transform
+            .DOScale(playerOriginalScale * squashStretch, scaleDuration)
+            .SetEase(easeOut)
+            .OnComplete(() =>
+                    player.transform.DOScale(playerOriginalScale, 0.1f)
+                );
+
+        sequence.Append(playerScaleTween);
 
         sequence.AppendCallback(() =>
         {
@@ -242,8 +248,16 @@ public class PowerUpManager : MonoBehaviour
         OnPowerUpStateChanged?.Invoke(state);
     }
 
+    private void SetPlayer(GameObject player)
+    {
+        this.player = player;
+        playerOriginalScale = player.transform.localScale;
+    }
+
     private void OnDisable()
     {
-        sequence?.Kill();
+        DOTween.Kill(this); // kills only tweens targeting this manager
+        playerScaleTween?.Kill();
+        powerUpScaleTween?.Kill();
     }
 }

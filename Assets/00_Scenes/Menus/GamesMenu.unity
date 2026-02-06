@@ -16546,8 +16546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollViewContent: {fileID: 4710719528390126957}
-  scrollbar: {fileID: 4710719528390126958}
-  scrollbarData: {fileID: 11400000, guid: a87b144f2210efa4fb6e1ea9e9ba7d25, type: 2}
+  scrollRect: {fileID: 4710719528390126958}
   slotPrefab: {fileID: 6114339248805080769, guid: 71d0ff4a681cf544eb37a85bffdf14dc, type: 3}
   playButton: {fileID: 435486660}
 --- !u!82 &1944165808
@@ -17432,13 +17431,13 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &4710719528390126958 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5461082072299805760, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5053684399657392986, guid: deb96b945ff652b45a3ca99651e0a71e, type: 3}
   m_PrefabInstance: {fileID: 4710719528390126956}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
+  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6144344133404814291

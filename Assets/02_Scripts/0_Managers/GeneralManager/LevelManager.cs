@@ -19,9 +19,9 @@ public class LevelManager : MonoBehaviour
 
     [Header("Coin & Currencies")]
     [SerializeField] int initialCoinAmount = 60;
-    
-    
-    private CellData[,] currentGrid;
+
+
+    private Grid currentGrid;
     private static readonly Vector2Int[] CardinalDirections =
     { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right};
 
@@ -46,7 +46,7 @@ public class LevelManager : MonoBehaviour
     public int PreviousNumberOfStars => previousStarCount;
     public bool WasGamePreviouslyFinished => wasGamePreviouslyFinished;
     public int CurrentStarCount { get => currentStarCount; set => currentStarCount = value; }
-    public CellData[,] CurrentGrid => currentGrid;
+    public Grid CurrentGrid => currentGrid;
 
     public event Action<int> OnLifeLostToThisLevel;
 
@@ -64,12 +64,12 @@ public class LevelManager : MonoBehaviour
     /// <summary>
     /// Generates the current level and returns its Cell grid
     /// </summary>
-    public CellData[,] GenerateAndGetCurrentLevelGrid()
+    public Grid GenerateAndGetCurrentLevelGrid()
     {
         int usedSeed;
 
         // Use the Cell[,] generator
-        CellData[,] grid = this.GenerateRuntimeLevel(
+        Grid grid = this.GenerateRuntimeLevel(
             currentLevelIndex,
             levelDatabase,
             generatorParameters,
@@ -77,59 +77,7 @@ public class LevelManager : MonoBehaviour
         );
 
         currentGrid = grid;
-
-        // Optional: store usedSeed somewhere if needed later
         return grid;
-    }
-
-    public bool TryGetFloorCandidateAroundEnd(
-    out Vector2Int result)
-    {
-        Vector2Int endCellPosition = FindEndCell(currentGrid);
-
-        int width = currentGrid.GetLength(0);
-        int height = currentGrid.GetLength(1);
-
-        List<Vector2Int> candidates = new List<Vector2Int>();
-
-        foreach (var dir in CardinalDirections)
-        {
-            Vector2Int pos = endCellPosition + dir;
-
-            // Bounds check
-            if (pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height)
-                continue;
-
-            CellData cell = currentGrid[pos.x, pos.y];
-
-            if ((cell.ground == GroundType.Floor || cell.ground == GroundType.Ice) && !cell.isEmpty)
-            {
-                candidates.Add(pos);
-            }
-        }
-
-        if (candidates.Count > 0)
-        {
-            result = candidates[UnityEngine.Random.Range(0, candidates.Count)];
-            return true;
-        }
-
-        result = default;
-        return false;
-    }
-
-    public Vector2Int FindEndCell(CellData[,] grid)
-    {
-        for (int x = 0; x < grid.GetLength(0); x++)
-        {
-            for (int y = 0; y < grid.GetLength(1); y++)
-            {
-                if (grid[x, y].isEnd)
-                    return new Vector2Int(x, y);
-            }
-        }
-
-        return new Vector2Int(-1, -1); // not found
     }
 
     #region LEVEL CHECK SYSTEM
@@ -262,7 +210,7 @@ public class LevelManager : MonoBehaviour
             previousScore = CalculateGradeScore(previousStarCount, previousLivesLostToThisLevel);
         else
             previousScore = 0; // first completion always counts
-       
+
 
         int currentCoins = GradeToCoins(currentScore);
         int previousCoins = GradeToCoins(previousScore);
@@ -270,7 +218,7 @@ public class LevelManager : MonoBehaviour
         int currencyEarned = Mathf.Max(0, currentCoins - previousCoins);
 
         // Ensure there is no gain over the max amount
-        if(currencyEarned >= currentLevelData.coinsLeftToEarn)
+        if (currencyEarned >= currentLevelData.coinsLeftToEarn)
             currencyEarned = currentLevelData.coinsLeftToEarn;
 
 
@@ -424,7 +372,7 @@ public class LevelManager : MonoBehaviour
     /// <param name="baseParameters">generator parameters</param>
     /// <param name="usedSeed">OUT param for the RNG seed</param>
     /// <returns>A 2D array of CellData (grid)</returns>
-    private CellData[,] GenerateRuntimeLevel(
+    private Grid GenerateRuntimeLevel(
         int levelIndex,
         LevelDatabase_SO database,
         GeneratorParameters_SO baseParameters,
@@ -440,8 +388,8 @@ public class LevelManager : MonoBehaviour
 
         // 2️ Otherwise, generate runtime parameters
         RuntimeLevelParameters runtimeParams =
-            RuntimeLevelProgression.GetParametersForLevel(levelIndex,tileDatabase_SO,
-            levelCycleProgression_SO, levelsPerCycle, 
+            RuntimeLevelProgression.GetParametersForLevel(levelIndex, tileDatabase_SO,
+            levelCycleProgression_SO, levelsPerCycle,
             previousLivesLostToThisLevel, failedTimes,
             globalDifficultyModifier.difficultyDebt);
 
@@ -454,7 +402,7 @@ public class LevelManager : MonoBehaviour
         baseParameters.iceRatio = runtimeParams.iceRatio;
         baseParameters.movingPlatformRatio = runtimeParams.movingPlatformRatio;
         baseParameters.piquesRatio = runtimeParams.piqueRatio;
-        baseParameters.doorDownRatio= runtimeParams.doorDownRatio;
+        baseParameters.doorDownRatio = runtimeParams.doorDownRatio;
         baseParameters.doorUpRatio = runtimeParams.doorUpRatio;
 
         // Star Settings
@@ -465,7 +413,7 @@ public class LevelManager : MonoBehaviour
         baseParameters.inputSeed = -1;
 
         // 5️ Generate new grid
-        CellData[,] grid = PxP.PCG.Generator.GenerateMaze(baseParameters, out usedSeed);
+        Grid grid = PxP.PCG.Generator.GenerateMaze(baseParameters, out usedSeed);
 
         return grid;
     }

@@ -1,5 +1,7 @@
-﻿using UnityEngine;
-using DG.Tweening;
+﻿using DG.Tweening;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class EndTrigger : MonoBehaviour
 {
@@ -23,6 +25,11 @@ public class EndTrigger : MonoBehaviour
 
     private bool wasLevelProcessed = false;
 
+    private void Start()
+    {
+        wasLevelProcessed = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player") || wasLevelProcessed)
@@ -33,141 +40,163 @@ public class EndTrigger : MonoBehaviour
         Rigidbody rb = other.GetComponent<Rigidbody>();
         rb.isKinematic = true;
 
-        PlayEndAnimation(other.transform, rb);
+        StartCoroutine(EndSequence(other.transform, rb));
     }
 
-    private void PlayEndAnimation(Transform player, Rigidbody rb)
+    private IEnumerator EndSequence(Transform player, Rigidbody rb)
     {
-        // Global timing
         float centerTime = animationDuration * 0.10f;
         float levitateTime = animationDuration * 0.60f;
         float burstTime = animationDuration * 0.30f;
 
-        // Levitation sub-phases
         float alignTime = levitateTime * levitationDistribution;
-        float spinTime = levitateTime * (1- levitationDistribution);
+        float spinTime = levitateTime * (1f - levitationDistribution);
 
-        Vector3 centerPosition = new Vector3(
+        Vector3 startPos = player.position;
+        Vector3 centerPos = new Vector3(
             transform.position.x,
             player.position.y,
             transform.position.z
         );
 
-        Sequence seq = DOTween.Sequence();
-
+        // ───────────────────────
         // Move to center
-        seq.Append(
-            player.DOMove(centerPosition, centerTime)
-                  .SetEase(Ease.InOutQuad)
-        );
+        // ───────────────────────
+        yield return MoveOverTime(player, startPos, centerPos, centerTime, EaseInOut);
 
-        // Levitation (full duration)
-        seq.Append(
-            player.DOMoveY(
-                player.position.y + levitationHeight,
-                levitateTime
-            ).SetEase(Ease.OutSine)
-        );
+        // ───────────────────────
+        // Levitate
+        // ───────────────────────
+        Vector3 levitateStart = player.position;
+        Vector3 levitateEnd = levitateStart + Vector3.up * levitationHeight;
 
-        float levitationStart = seq.Duration() - levitateTime;
+        StartCoroutine(RotateToUpright(player, alignTime));
+        StartCoroutine(Spin(player, spinTime, 6f));
 
-        // Smooth re-orient (X/Z → 0)
-        Vector3 startEuler = player.rotation.eulerAngles;
+        StartRumble(spinTime);
 
-        seq.Insert(
-            levitationStart,
-            DOTween.To(
-                () => startEuler,
-                v =>
-                {
-                    startEuler = v;
-                    player.rotation = Quaternion.Euler(
-                        v.x,
-                        player.rotation.eulerAngles.y,
-                        v.z
-                    );
-                },
-                new Vector3(0f, startEuler.y, 0f),
-                alignTime
-            ).SetEase(Ease.OutQuad)
-        );
+        yield return MoveOverTime(player, levitateStart, levitateEnd, levitateTime, EaseOutSine);
 
-        // Spin
-        seq.Insert(
-            levitationStart + alignTime,
-            player.DORotate(
-                new Vector3(0f, 360f * 6f, 0f),
-                spinTime,
-                RotateMode.FastBeyond360
-            ).SetEase(Ease.InQuad)
-        );
+        StopRumble();
 
-        // RUMBLE + SHAKE (spin only)
-        seq.InsertCallback(
-            levitationStart + alignTime,
-            () =>
-            {
-                PlayerCamera.Shake(spinTime, 1.2f);
-
-                if (audioSource && rumbleClip)
-                {
-                    audioSource.pitch = rumblePitch;
-                    audioSource.clip = rumbleClip;
-                    audioSource.loop = true;
-                    audioSource.Play();
-                }
-            }
-        );
-
-        // Stop rumble exactly when spin ends
-        seq.InsertCallback(
-            levitationStart + alignTime + spinTime,
-            () =>
-            {
-                if (audioSource && audioSource.isPlaying)
-                    audioSource.Stop();
-            }
-        );
-
+        // ───────────────────────
         // Burst
-        seq.AppendCallback(() =>
-        {
-            player.DOKill(false);
+        // ───────────────────────
+        PlayerCamera.SetCameraFollow(null);
 
-            PlayerCamera.SetCameraFollow(null);
+        rb.isKinematic = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(Vector3.up * burstForce, ForceMode.Impulse);
 
-            rb.isKinematic = false;
-            rb.linearVelocity = Vector3.zero;
-            rb.AddForce(Vector3.up * burstForce, ForceMode.Impulse);
+        PlayCometSound();
 
-            // 🔊 COMET
-            if (audioSource && cometClip)
-            {
-                audioSource.pitch = cometPitch;
-                audioSource.loop = false;
-                audioSource.PlayOneShot(cometClip);
-            }
-        });
+        yield return Spin(player, burstTime, 10f);
 
-        // Spin continues during burst
-        seq.Append(
-            player.DORotate(
-                new Vector3(0f, 360f * 10f, 0f),
-                burstTime,
-                RotateMode.FastBeyond360
-            ).SetEase(Ease.Linear)
-        );
-
+        // ───────────────────────
         // Scene transition
-        seq.OnComplete(() =>
-        {
-            LevelManager.Instance.ProcessLevelData();
-            SavingManager.Instance.SaveSession();
-            SceneController.Instance.NewTransition()
-                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
-                .Perform();
+        // ───────────────────────
+        rb.isKinematic = true;
 
-            rb.isKinematic = true;
-        });
+        LevelManager.Instance.ProcessLevelData();
+        SavingManager.Instance.SaveSession();
+
+        SceneController.Instance.NewTransition()
+            .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.EndPannel)
+            .Perform();
     }
+
+    // --- HELPER FUNCTIONS ---
+
+    private IEnumerator MoveOverTime(
+    Transform t,
+    Vector3 from,
+    Vector3 to,
+    float duration,
+    System.Func<float, float> ease)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            float tNorm = elapsed / duration;
+            t.position = Vector3.Lerp(from, to, ease(tNorm));
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        t.position = to;
+    }
+
+    private IEnumerator RotateToUpright(Transform t, float duration)
+    {
+        Quaternion start = t.rotation;
+        Quaternion end = Quaternion.Euler(0f, t.eulerAngles.y, 0f);
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            t.rotation = Quaternion.Slerp(start, end, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        t.rotation = end;
+    }
+
+    private IEnumerator Spin(Transform t, float duration, float turns)
+    {
+        float speed = 360f * turns / duration;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            t.Rotate(Vector3.up, speed * Time.deltaTime, Space.World);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+
+    // --- Audio Helpers
+
+    private void StartRumble(float duration)
+    {
+        PlayerCamera.Shake(duration, 1.2f);
+
+        if (!audioSource || !rumbleClip) return;
+
+        audioSource.pitch = rumblePitch;
+        audioSource.clip = rumbleClip;
+        audioSource.loop = true;
+        audioSource.Play();
+    }
+
+    private void StopRumble()
+    {
+        if (audioSource && audioSource.isPlaying)
+            audioSource.Stop();
+    }
+
+    private void PlayCometSound()
+    {
+        if (!audioSource || !cometClip) return;
+
+        audioSource.pitch = cometPitch;
+        audioSource.loop = false;
+        audioSource.PlayOneShot(cometClip);
+    }
+
+
+    // --- Easing functions
+
+    private float EaseInOut(float t)
+    {
+        return t * t * (3f - 2f * t);
+    }
+
+    private float EaseOutSine(float t)
+    {
+        return Mathf.Sin(t * Mathf.PI * 0.5f);
+    }
+
 }

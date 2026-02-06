@@ -29,9 +29,8 @@ public class PhysicalMazeGenerator : MonoBehaviour
     public static event Action OnGenerationFinished;
 
     [SerializeField] private bool isGridGenerated = false;
-    [SerializeField] private Vector2Int validEndNeighbour;
-    [SerializeField] private static Vector3 endPosition;
 
+    private Grid currentGrid;
 
     private void Awake()
     {
@@ -54,7 +53,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
     // ======================================
     // PUBLIC GENERATION METHOD
     // ======================================
-    public void Generate(CellData[,] grid)
+    public void Generate(Grid grid)
     {
         if (grid == null)
         {
@@ -62,23 +61,24 @@ public class PhysicalMazeGenerator : MonoBehaviour
             return;
         }
 
+        currentGrid = grid;
+
         if (clearPrevious)
             ClearChildren();
 
-        int width = grid.GetLength(0);
-        int height = grid.GetLength(1);
+        int width = grid.Width;
+        int height = grid.Height;
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                CellData cell = grid[x, y];
+                CellData cell = grid.GetCell(x, y);
 
                 Vector3 basePosition = GridToWorld(new Vector2Int(x, y));
 
                 SpawnCell(cell, basePosition, x, y);
 
-                if(cell.isEnd) endPosition = basePosition;
             }
         }
 
@@ -95,18 +95,22 @@ public class PhysicalMazeGenerator : MonoBehaviour
         isGridGenerated = false;
     }
 
-    public Vector3 GetEndNeighbourPosition()
+    public bool TryGetWalkableEndNeighbours(out List<Vector3> worldPositions)
     {
-        if (LevelManager.Instance.TryGetFloorCandidateAroundEnd(out Vector2Int result))
-        {
-            return GridToWorld(result);
-        }
-        else return Vector3.zero;
-    }
+        worldPositions = new List<Vector3>();
 
-    public Vector3 GetEndPosition()
-    {
-        return endPosition;
+        if (currentGrid == null)
+            return false;
+
+        if (!currentGrid.TryGetWalkableEndNeighbours(out var gridPositions))
+            return false;
+
+        foreach (var gridPos in gridPositions)
+        {
+            worldPositions.Add(GridToWorld(gridPos));
+        }
+
+        return worldPositions.Count > 0;
     }
 
     // ======================================
@@ -242,7 +246,7 @@ public class PhysicalMazeGenerator : MonoBehaviour
         }
     }
 
-    public Vector3 GridToWorld(Vector2Int gridPos)
+    private Vector3 GridToWorld(Vector2Int gridPos)
     {
         int flippedY = 1 - gridPos.y;
 

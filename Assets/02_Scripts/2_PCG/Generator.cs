@@ -5,7 +5,7 @@ namespace PxP.PCG
 {
     public static class Generator
     {
-        public static CellData[,] GenerateMaze(
+        public static Grid GenerateMaze(
             GeneratorParameters_SO p,
             out int usedSeed)
         {
@@ -15,7 +15,7 @@ namespace PxP.PCG
 
             var rng = new System.Random(usedSeed);
 
-            var grid = GridFactory.CreateWallGrid(p.gridWidth, p.gridHeight);
+            Grid grid = GridFactory.CreateWallGrid(p.gridWidth, p.gridHeight);
 
             // 1. Perfect maze
             var carved = MazeGenerator.GenerateKruskalMaze(p.gridWidth, p.gridHeight, rng);

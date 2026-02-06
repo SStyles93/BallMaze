@@ -12,7 +12,7 @@ public class PiquesDeadZone : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerCamera playerCamera;
 
-    private void Awake()
+    private void Start()
     {
         continuePannel = FindFirstObjectByType<ContinuePannelManager>(FindObjectsInactive.Include).gameObject;
     }
@@ -21,22 +21,20 @@ public class PiquesDeadZone : MonoBehaviour
     {
         GameStateManager gamestateManager = GameStateManager.Instance;
         if (gamestateManager != null)
-            if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
+            if (GameStateManager.Instance.CurrentGameState != GameState.Playing) return;
 
         if (!collision.CompareTag("Player")) return;
 
-        //Debug.Log($"Piques Trigged by {collision.gameObject.name}");
         if (playerRigidbody == null) playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
         if (playerMovement == null) playerMovement = collision.gameObject.GetComponent<PlayerMovement>();
         if (playerCamera == null) playerCamera = collision.gameObject.GetComponent<PlayerCamera>();
         if (continuePannel == null) continuePannel = FindFirstObjectByType<ContinuePannelManager>(FindObjectsInactive.Include).gameObject;
-        
+
         //Avoid double collision
         if (playerMovement.State == PlayerState.IsDying) return;
         playerMovement.SetState(PlayerState.IsDying);
 
-        if (!CoreManager.Instance.isDebugPlay)
-            LifeManager.Instance?.RemoveLife();
+        LifeManager.Instance?.RemoveLife();
 
         Vector3 projectionDir = (collision.transform.position - transform.position).normalized;
         playerRigidbody.AddForce(new Vector3(projectionDir.x * radialForce, projectionForce, projectionDir.z * radialForce), ForceMode.Impulse);
@@ -55,6 +53,8 @@ public class PiquesDeadZone : MonoBehaviour
     {
         // Let physics act
         yield return new WaitForSeconds(delay);
+
+        yield return new WaitForFixedUpdate();
 
         if (isLastLife)
         {

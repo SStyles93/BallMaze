@@ -4,7 +4,9 @@ using UnityEngine.UI;
 
 public class PowerUpButton : UIButton
 {
+    [Header("Scene References")]
     [SerializeField] private PowerUpBuyPannel powerUpBuyPannel;
+    [SerializeField] private PowerUpManager powerUpManager;
 
     [SerializeField] private CoinType powerType;
 
@@ -28,8 +30,8 @@ public class PowerUpButton : UIButton
     {
         base.Start();
 
-        if (PowerUpManager.Instance == null) return;
-        PowerUpManager.Instance.OnPowerUpStateChanged += SetPowerUpState;
+        powerUpManager.OnPowerUpStateChanged += SetPowerUpState;
+        
         PlayerMovement.OnPlayerStateChanged += SetPlayerState;
         if (powerType == CoinType.ROCKET)
             PowerUpDistanceChecker.OnPowerUpBlocked += SetLockByDistance;
@@ -44,8 +46,8 @@ public class PowerUpButton : UIButton
     {
         base.OnDestroy();
 
-        if (PowerUpManager.Instance == null) return;
-        PowerUpManager.Instance.OnPowerUpStateChanged -= SetPowerUpState;
+        powerUpManager.OnPowerUpStateChanged -= SetPowerUpState;
+
         PlayerMovement.OnPlayerStateChanged -= SetPlayerState;
         if (powerType == CoinType.ROCKET)
             PowerUpDistanceChecker.OnPowerUpBlocked -= SetLockByDistance;
@@ -60,9 +62,9 @@ public class PowerUpButton : UIButton
 
     private void TryUsePowerUp()
     {
-        if (PowerUpManager.Instance == null || CoinManager.Instance == null) return;
+        if (powerUpManager == null || CoinManager.Instance == null) return;
 
-        if (PowerUpManager.Instance.PlayerState != PlayerState.Alive) return;
+        if (powerUpManager.PlayerState != PlayerState.Alive) return;
             
         if (!isUnlocked) return;
 
@@ -72,12 +74,12 @@ public class PowerUpButton : UIButton
             SavingManager.Instance.SavePlayer();
 
             UpdatePowerUpVisuals(CoinManager.Instance.GetCoinAmount(powerType));
-            PowerUpManager.Instance.UsePowerUp(powerType);
+            powerUpManager.UsePowerUp(powerType);
         }
         else
         {
             powerUpBuyPannel.gameObject.SetActive(true);
-            int powerUpValue = PowerUpManager.Instance.GetPowerUpBuyingValue(powerType);
+            int powerUpValue = powerUpManager.GetPowerUpBuyingValue(powerType);
             powerUpBuyPannel.InitializePowerUpBuyPannel(this, powerType, powerUpValue);
         }
     }

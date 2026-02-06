@@ -42,6 +42,11 @@ public class EquipmentManager : MonoBehaviour
         SetActionButtonText(selectedOption);
     }
 
+    public void ResetPlayerWithEquippedSkinOption()
+    {
+        CustomizationManager.Instance.SetSkinToCurrent();
+    }
+
     private void SetSelectedOption(CustomizationSlot slot)
     {
         selectedOption = slot.option;

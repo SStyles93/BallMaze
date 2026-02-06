@@ -30,7 +30,7 @@ public class PlayerCamera : MonoBehaviour
     {
         if(LevelManager.Instance != null)
         {
-            int width = LevelManager.Instance.CurrentGrid.GetLength(0);
+            int width = LevelManager.Instance.CurrentGrid.Width;
 
             PhysicalMazeGenerator physicalMazeGeneratorRef = GameObject.FindFirstObjectByType<PhysicalMazeGenerator>();
             if (physicalMazeGeneratorRef != null)

@@ -17313,6 +17313,34 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -30
       objectReference: {fileID: 0}
+    - target: {fileID: 8353522923612156595, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353522923612156595, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353522923612156595, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Target
+      value: 
+      objectReference: {fileID: 1575674418}
+    - target: {fileID: 8353522923612156595, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353522923612156595, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_MethodName
+      value: ResetPlayerWithEquippedSkinOption
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353522923612156595, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_TargetAssemblyTypeName
+      value: EquipmentManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353522923612156595, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 9190687937287436614, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
       propertyPath: m_Sprite
       value: 

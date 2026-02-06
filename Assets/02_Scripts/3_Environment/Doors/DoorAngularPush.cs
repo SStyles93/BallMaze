@@ -9,7 +9,7 @@ public class DoorAngularPush : MonoBehaviour
     [SerializeField] private DoorAngularPush otherDoor;
     [SerializeField] FlapingDoorsAnimation doorsAnimation;
 
-    private bool isPlayerOnDoor = false;
+    //private bool isPlayerOnDoor = false;
     private bool hasCollided = false;
 
     public bool HasCollided => hasCollided;
@@ -33,7 +33,7 @@ public class DoorAngularPush : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            isPlayerOnDoor = true;
+            //isPlayerOnDoor = true;
             if (doorsAnimation.State == FlapingDoorsAnimation.DoorState.Opening && !hasCollided && !otherDoor.hasCollided)
             {
                 Vector3 parentPos = parentTransform.position;
@@ -53,29 +53,29 @@ public class DoorAngularPush : MonoBehaviour
 
                 hasCollided = true;
 
-                Debug.DrawLine(parentPos, playerPos, Color.Lerp(Color.green, Color.red, normalized),2f);
+                //Debug.DrawLine(parentPos, playerPos, Color.Lerp(Color.green, Color.red, normalized),2f);
             }
         }
     }
 
-    private void OnCollisionExit(Collision collision)
-    {
-        isPlayerOnDoor = false;
-    }
+    //private void OnCollisionExit(Collision collision)
+    //{
+    //    isPlayerOnDoor = false;
+    //}
 
-    private void OnDrawGizmosSelected()
-    {
-        if (isPlayerOnDoor)
-        {
-            Gizmos.color = Color.green;
-        }
-        else
-        {
-            Gizmos.color = Color.red;
-        }
-        Gizmos.DrawCube(transform.position, transform.localScale);
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (isPlayerOnDoor)
+    //    {
+    //        Gizmos.color = Color.green;
+    //    }
+    //    else
+    //    {
+    //        Gizmos.color = Color.red;
+    //    }
+    //    Gizmos.DrawCube(transform.position, transform.localScale);
 
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(parentTransform.position, Vector3.one * maxEffectiveDistance);
-    }
+    //    Gizmos.color = Color.cyan;
+    //    Gizmos.DrawWireCube(parentTransform.position, Vector3.one * maxEffectiveDistance);
+    //}
 }

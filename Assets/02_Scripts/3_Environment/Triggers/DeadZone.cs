@@ -10,18 +10,19 @@ public class DeadZone : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (GameStateManager.Instance?.CurrentGameState != GameState.Playing) return;
+        GameStateManager gamestateManager = GameStateManager.Instance;
+        if (gamestateManager != null)
+            if (GameStateManager.Instance.CurrentGameState != GameState.Playing) return;
 
         if (collision.gameObject.CompareTag("Player"))
         {
-            if(playerRigidbody == null) playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
-            if(playerMovement == null) playerMovement = collision.gameObject.GetComponent<PlayerMovement>();
-
-            if (!CoreManager.Instance.isDebugPlay)
-                LifeManager.Instance.RemoveLife();
+            if (playerRigidbody == null) playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
+            if (playerMovement == null) playerMovement = collision.gameObject.GetComponent<PlayerMovement>();
 
             if (playerMovement.State == PlayerState.IsDying) return;
             playerMovement.SetState(PlayerState.IsDying);
+
+            LifeManager.Instance.RemoveLife();
 
             if (LifeManager.Instance.CurrentLife > 0)
             {

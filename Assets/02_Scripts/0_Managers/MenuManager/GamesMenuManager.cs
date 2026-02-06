@@ -1,5 +1,4 @@
-using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,8 +6,7 @@ public class GamesMenuManager : MonoBehaviour
 {
     [Header("Object References")]
     [SerializeField] private GameObject scrollViewContent;
-    [SerializeField] private Scrollbar scrollbar;
-    [SerializeField] private ScrollbarData_SO scrollbarData;
+    [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private PlayButton playButton;
 
@@ -25,8 +23,8 @@ public class GamesMenuManager : MonoBehaviour
     {
         InitializeSlots();
 
-        scrollbar.value = scrollbarData.scrollbarValue;
-        scrollbar.size = scrollbarData.scrollbarSize;
+        StartCoroutine(ScrollToCurrentLevel());
+
         playButton.InitializeLastLevelToPlay();
     }
 
@@ -34,6 +32,44 @@ public class GamesMenuManager : MonoBehaviour
     {
         playButton.SetIndexOfLevelToPlay(index);
     }
+
+    private IEnumerator ScrollToCurrentLevel()
+    {
+        // wait for layout + content size fitter
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+
+        int highestFinishedLevel = LevelManager.Instance.GetHighestFinishedLevelIndex();
+
+        // Next playable level (1-based → 0-based)
+        int currentLevelIndex = Mathf.Max(0, highestFinishedLevel);
+
+        RectTransform contentRT = scrollViewContent.GetComponent<RectTransform>();
+        RectTransform viewportRT = scrollRect.viewport;
+        GridLayoutGroup grid = scrollViewContent.GetComponent<GridLayoutGroup>();
+
+        int columns = grid.constraintCount;
+        float rowHeight = grid.cellSize.y + grid.spacing.y;
+
+        // Compute row index
+        int levelRow = currentLevelIndex / columns;
+
+        // One extra row above
+        int targetRow = Mathf.Max(0, levelRow - 3);
+
+        float targetY = targetRow * rowHeight;
+        float maxScroll = contentRT.rect.height - viewportRT.rect.height;
+
+        if (maxScroll <= 0f)
+        {
+            scrollRect.verticalNormalizedPosition = 1f;
+            yield break;
+        }
+
+        float normalizedPos = 1f - Mathf.Clamp01(targetY / maxScroll);
+        scrollRect.verticalNormalizedPosition = normalizedPos;
+    }
+
 
     private void InitializeSlots()
     {
@@ -69,7 +105,6 @@ public class GamesMenuManager : MonoBehaviour
 
     public void OpenShopMenu()
     {
-        SaveScrollbarValues();
         SavingManager.Instance.SaveGame();
 
         SceneController.Instance
@@ -82,7 +117,6 @@ public class GamesMenuManager : MonoBehaviour
 
     public void OpenSettingsPannel()
     {
-        SaveScrollbarValues();
         SavingManager.Instance.SaveGame();
 
         SceneController.Instance
@@ -93,7 +127,6 @@ public class GamesMenuManager : MonoBehaviour
 
     public void OpenCustomizationMenu()
     {
-        SaveScrollbarValues();
         SavingManager.Instance.SaveGame();
 
         SceneController.Instance
@@ -106,7 +139,6 @@ public class GamesMenuManager : MonoBehaviour
 
     public void OpenHeartPannel()
     {
-        SaveScrollbarValues();
         SavingManager.Instance.SaveGame();
 
         //Load Rewarded ads before the pannel appears
@@ -116,10 +148,5 @@ public class GamesMenuManager : MonoBehaviour
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.HeartPannel)
             .Perform();
-    }
-
-    public void SaveScrollbarValues()
-    {
-        scrollbarData.SetScrollbarValues(scrollbar);
     }
 }
