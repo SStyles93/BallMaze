@@ -1539,6 +1539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
   maxHeartAmount: 9
   timeToRegainHeartInMinutes: 20
+  hoursBetweenRewardedCoins: 4
   wasCoinsReceived: 0
   wasRocketReceived: 0
   wasUfoReceived: 0
