@@ -100,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
         if (playerRigidbody.position.y < fallThreshold && State != PlayerState.IsFalling)
         {
             SetState(PlayerState.IsFalling);
+            playerVisualEffects.ShouldShrink();
         }
     }
 
@@ -131,8 +132,6 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.angularVelocity = Vector3.zero;
         playerRigidbody.isKinematic = true;
 
-        playerVisualEffects.SetPlayerShrunk();
-
         Vector3 respawnPosition = LastSafePlatform.position;
         respawnPosition.y = 3f;
         transform.position = respawnPosition;
@@ -143,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.isKinematic = false;
         SetState(PlayerState.Alive);
 
-        playerVisualEffects.SetPlayerShrunk();
+        playerVisualEffects.ForcePlayerShrunk();
     }
 
     public void SetState(PlayerState state)

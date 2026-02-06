@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 
@@ -25,19 +25,24 @@ public class PlayerVisualEffects : MonoBehaviour
     private Renderer[] renderers;
     private TrailRenderer[] trailRenderers;
     private bool m_isTrailActive = true;
-    private bool isBlinking = false;
     private float startDelay = 0.5f;
     private Vector3 originalScale;
     private float originalTrailWidth;
 
+    private bool shouldShrink = false;
+    private bool shouldGrow = false;
+    private bool shouldBlink = false;
 
-    private enum ScaleState
+    private enum AnimationState
     {
-        Normal,
-        Shrunk
+        Idle,
+        Shrink,
+        Shrunk,
+        Grow,
+        Blink
     }
 
-    private ScaleState state = ScaleState.Normal;
+    private AnimationState state = AnimationState.Idle;
 
     private void Awake()
     {
@@ -56,7 +61,8 @@ public class PlayerVisualEffects : MonoBehaviour
             .SetAutoKill(false)
             .Pause()
             .SetLink(gameObject)
-            .OnComplete(EnableTrail);
+            .OnRewind(OnShrinkComplete)
+            .OnComplete(OnGrowComplete);
 
         trailScaleTween = DOTween.To(
         () => trailRenderers[0].widthMultiplier,
@@ -82,8 +88,10 @@ public class PlayerVisualEffects : MonoBehaviour
 
     private void Start()
     {
+        state = AnimationState.Shrunk;
+        shouldGrow = true;
+
         transform.localScale = Vector3.zero;
-        state = ScaleState.Shrunk;
         foreach (var tr in trailRenderers)
             tr.widthMultiplier = 0;
     }
@@ -96,28 +104,7 @@ public class PlayerVisualEffects : MonoBehaviour
             return;
         }
 
-        bool shouldShrink =
-            playerMovement.State == PlayerState.IsFalling;
-
-        // --- SHRINK ---
-        if (shouldShrink && state == ScaleState.Normal)
-        {
-            Shrink();
-        }
-        else if (!shouldShrink && state == ScaleState.Shrunk)
-        {
-            Grow();
-        }
-
-        // --- BLINK ---
-        if (playerMovement.State == PlayerState.IsDying)
-        {
-            Blink();
-        }
-        else if (isBlinking)
-        {
-            StopBlink();
-        }
+        EvaluateAnimationState();
     }
 
     private void FixedUpdate()
@@ -132,12 +119,31 @@ public class PlayerVisualEffects : MonoBehaviour
         }
     }
 
-    public void SetPlayerShrunk()
+    public void ForcePlayerShrunk()
     {
         transform.localScale = Vector3.zero;
-        state = ScaleState.Shrunk;
+        state = AnimationState.Shrunk;
         scaleTween.Rewind();
         trailScaleTween.Rewind();
+        blinkTween?.Kill();
+        shouldGrow = true;
+        shouldShrink = false;
+        shouldBlink = false;
+    }
+
+    public void ShouldShrink()
+    {
+        shouldShrink = true;
+    }
+
+    public void ShouldGrow()
+    {
+        shouldGrow = true;
+    }
+
+    public void ShouldBlink()
+    {
+        shouldBlink = true;
     }
 
     public void SetTrailColor(Color color)
@@ -158,35 +164,70 @@ public class PlayerVisualEffects : MonoBehaviour
         m_trailMaterials[1].SetColor("_Color02", c1B);
     }
 
-    private void EnableTrail()
+
+#region FSM
+    private void EvaluateAnimationState()
     {
-        m_trail.SetActive(true);
-        m_isTrailActive = true;
+        switch (state)
+        {
+            case AnimationState.Idle:
+                if (shouldShrink)
+                    EnterShrink();
+                if (shouldBlink)
+                    EnterBlink();
+                break;
+
+            case AnimationState.Shrink:
+                // Waiting for tween callback → no polling
+                break;
+
+            case AnimationState.Shrunk:
+                if (shouldGrow)
+                    EnterGrow();
+                break;
+
+            case AnimationState.Grow:
+                // Waiting for tween callback → no polling
+                break;
+            case AnimationState.Blink:                    
+                // Wainting for tween callback
+                break;
+        }
     }
 
-    private void Shrink()
+    private void EnterShrink()
     {
-        state = ScaleState.Shrunk;
+        state = AnimationState.Shrink;
         scaleTween.PlayBackwards();
         trailScaleTween.PlayBackwards();
     }
-
-    private void Grow()
+    private void OnShrinkComplete()
     {
-        state = ScaleState.Normal;
+        state = AnimationState.Shrunk;
+        EnableTrail(true);
+        shouldShrink = false;
+    }
+
+    private void EnterGrow()
+    {
+        state = AnimationState.Grow;
         scaleTween.PlayForward();
         trailScaleTween.PlayForward();
     }
-
-    private void Blink()
+    private void OnGrowComplete()
     {
-        if (isBlinking)
-            return;
+        state = AnimationState.Idle;
+        EnableTrail(true);
+        shouldGrow = false;
+    }
 
-        isBlinking = true;
+    private void EnterBlink()
+    {
+        state = AnimationState.Blink;
 
         if (renderers == null)
             renderers = visualsParent.GetComponentsInChildren<Renderer>();
+        EnableTrail(false);
 
         blinkTween?.Kill();
 
@@ -203,41 +244,27 @@ public class PlayerVisualEffects : MonoBehaviour
             .AppendInterval(blinkDelay)
             .Append(blinkLoop)
             .SetLink(gameObject)
-            .OnComplete(() => BlinkingEnded());
+            .OnComplete(() => OnBlinkCompleted());
+    }
+    private void OnBlinkCompleted()
+    {
+        state = AnimationState.Idle;
+        shouldBlink = false;
+        EnableTrail(true);
+    }
+
+#endregion
+
+    private void EnableTrail(bool value)
+    {
+        m_trail.SetActive(value);
+        m_isTrailActive = value;
     }
 
     private void SetRenderers(bool value)
     {
         foreach (var r in renderers)
             r.enabled = value;
-    }
-
-    private void BlinkingEnded()
-    {
-        isBlinking = false;
-    }
-
-    private void StopBlink()
-    {
-        blinkTween?.Kill();
-        SetRenderers(true);
-        isBlinking = false;
-    }
-
-    private void SetAlpha(float alpha)
-    {
-        foreach (var r in renderers)
-        {
-            foreach (var mat in r.materials)
-            {
-                if (mat.HasProperty("_Color"))
-                {
-                    Color c = mat.color;
-                    c.a = alpha;
-                    mat.color = c;
-                }
-            }
-        }
     }
 
 

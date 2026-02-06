@@ -11,6 +11,7 @@ public class PiquesDeadZone : MonoBehaviour
     private Rigidbody playerRigidbody;
     private PlayerMovement playerMovement;
     private PlayerCamera playerCamera;
+    private PlayerVisualEffects playerVisualEffects;
 
     private void Start()
     {
@@ -28,11 +29,13 @@ public class PiquesDeadZone : MonoBehaviour
         if (playerRigidbody == null) playerRigidbody = collision.gameObject.GetComponent<Rigidbody>();
         if (playerMovement == null) playerMovement = collision.gameObject.GetComponent<PlayerMovement>();
         if (playerCamera == null) playerCamera = collision.gameObject.GetComponent<PlayerCamera>();
+        if (playerVisualEffects == null) playerVisualEffects = collision.gameObject.GetComponent<PlayerVisualEffects>();
         if (continuePannel == null) continuePannel = FindFirstObjectByType<ContinuePannelManager>(FindObjectsInactive.Include).gameObject;
 
         //Avoid double collision
         if (playerMovement.State == PlayerState.IsDying) return;
         playerMovement.SetState(PlayerState.IsDying);
+        playerVisualEffects.ShouldBlink();
 
         LifeManager.Instance?.RemoveLife();
 

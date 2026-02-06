@@ -30,7 +30,6 @@ public class PowerUpManager : MonoBehaviour
 
     [Header("Player")]
     private GameObject player;
-    private Vector3 playerOriginalScale;
 
     [Header("PowerUps")]
     [SerializeField] private PowerUpData rocket;
@@ -50,8 +49,10 @@ public class PowerUpManager : MonoBehaviour
     private PowerUpState powerUpState = PowerUpState.Clear;
     private PlayerState playerState;
     private Sequence sequence;
-    private Tween playerScaleTween;
     private Tween powerUpScaleTween;
+
+    private Rigidbody playerRigidbody;
+    private PlayerVisualEffects playerVisualEffects;
 
     public PowerUpState CurrentPowerUpState => powerUpState;
 
@@ -134,12 +135,9 @@ public class PowerUpManager : MonoBehaviour
 
     private void ActivatePowerUp(PowerUpData pu)
     {
-        playerScaleTween?.Kill();
         powerUpScaleTween?.Kill();
         sequence?.Kill();
-
         sequence = DOTween.Sequence().SetTarget(this);
-
 
         Rigidbody puRb = pu.objectRef.GetComponent<Rigidbody>();
 
@@ -150,28 +148,19 @@ public class PowerUpManager : MonoBehaviour
         pu.objectRef.transform.localScale = HiddenScale;
         PlayerCamera.SetCameraFollow(pu.objectRef);
 
-        sequence?.Kill();
-        sequence = DOTween.Sequence();
-
         // Block player
-        player.GetComponent<Rigidbody>().isKinematic = true;
-
-        // Shrink player
-        playerScaleTween = player.transform
-            .DOScale(HiddenScale, scaleDuration)
-            .SetEase(easeIn)
-            .OnComplete(() => player.SetActive(false));
-
-        sequence.Append(playerScaleTween);
+        playerRigidbody.isKinematic = true;
+        
 
         // Disable Player
         sequence.AppendCallback(() =>
         {
+            playerVisualEffects.ShouldShrink();
             pu.objectRef.SetActive(true);
         });
 
-        // Power-up grow + squash
 
+        // Power-up grow + squash
         powerUpScaleTween = pu.objectRef.transform
             .DOScale(pu.originalScale * squashStretch, scaleDuration)
             .SetEase(easeOut)
@@ -185,31 +174,24 @@ public class PowerUpManager : MonoBehaviour
         sequence.AppendCallback(() =>
         {
             puRb.isKinematic = false;
-            Camera.main.transform
-                .DOPunchPosition(Vector3.up * 0.3f, 0.15f);
         });
     }
 
     private void DeactivatePowerUp()
     {
-        playerScaleTween?.Kill();
         powerUpScaleTween?.Kill();
         sequence?.Kill();
         sequence = DOTween.Sequence().SetTarget(this);
 
-        
         var pu = powerUps[currentPowerType];
-
         Rigidbody puRb = pu.objectRef.GetComponent<Rigidbody>();
+        puRb.isKinematic = true;
 
         // Restore player position
         player.transform.position = pu.objectRef.transform.position;
-        PlayerCamera.SetCameraFollow(player);
         player.transform.localScale = HiddenScale;
-
-        //Block pu
-        puRb.isKinematic = true;
-
+        PlayerCamera.SetCameraFollow(player);
+        
         // Shrink Power-up
         powerUpScaleTween = pu.objectRef.transform
             .DOScale(HiddenScale, scaleDuration)
@@ -222,22 +204,8 @@ public class PowerUpManager : MonoBehaviour
         sequence.AppendCallback(() =>
         {
             player.SetActive(true);
-        });
-
-        playerScaleTween = player.transform
-            .DOScale(playerOriginalScale * squashStretch, scaleDuration)
-            .SetEase(easeOut)
-            .OnComplete(() =>
-                    player.transform.DOScale(playerOriginalScale, 0.1f)
-                );
-
-        sequence.Append(playerScaleTween);
-
-        sequence.AppendCallback(() =>
-        {
-            player.GetComponent<Rigidbody>().isKinematic = false;
-            Camera.main.transform
-                .DOPunchPosition(Vector3.up * 0.15f, 0.12f);
+            playerVisualEffects.ShouldGrow();
+            playerRigidbody.isKinematic = false;
             pu.objectRef.transform.rotation = Quaternion.identity;
         });
     }
@@ -251,13 +219,13 @@ public class PowerUpManager : MonoBehaviour
     private void SetPlayer(GameObject player)
     {
         this.player = player;
-        playerOriginalScale = player.transform.localScale;
+        playerRigidbody = player.GetComponent<Rigidbody>();
+        playerVisualEffects = player.GetComponent<PlayerVisualEffects>();
     }
 
     private void OnDisable()
     {
         DOTween.Kill(this); // kills only tweens targeting this manager
-        playerScaleTween?.Kill();
         powerUpScaleTween?.Kill();
     }
 }

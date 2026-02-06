@@ -37,7 +37,6 @@ public class UfoVisual : MonoBehaviour
         if (timer >= duration)
         {
             SetEmission(0f);
-            enabled = false;
             return;
         }
 
