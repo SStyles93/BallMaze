@@ -11188,7 +11188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f780b5d16e56dec49924807f18ca3044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaterialPannelInitializer
-  customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
+  customizationData_SO: {fileID: 11400000, guid: a8006b3f7ff62d842bc9f255b43dfa2d, type: 2}
   playerCustomization: {fileID: 7303076051737459510}
   materialSlotsContainer: {fileID: 1026635658}
   materialSlotPrefab: {fileID: 7729237570373966067, guid: 2e84213cd8a3eeb41bc641a6e024bdbe, type: 3}
@@ -11204,7 +11204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b36797025b05fc84ba070be91600473c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ColorPannelInitializer
-  customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
+  customizationData_SO: {fileID: 11400000, guid: a8006b3f7ff62d842bc9f255b43dfa2d, type: 2}
   playerSkinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
   playerCustomization: {fileID: 7303076051737459510}
   colorTab: {fileID: 4131955769538779210}

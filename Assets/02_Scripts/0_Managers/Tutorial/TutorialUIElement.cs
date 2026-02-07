@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -21,7 +22,6 @@ public class TutorialUIElement : MonoBehaviour
     // ==============================
     // DATA INJECTION (CALLED BY MANAGER)
     // ==============================
-
     public void ApplyStepData(TutorialStep step)
     {
         duration = step.duration;
@@ -34,47 +34,51 @@ public class TutorialUIElement : MonoBehaviour
     // ==============================
     // UNITYEVENT-SAFE METHODS
     // ==============================
+    public void MoveToTargetPosition() =>
+        StartAnimation(() => MoveRoutine(rectTransform.anchoredPosition));
 
-    public void MoveToTargetPosition()
-    {
-        StartAnimation(MoveRoutine(rectTransform.anchoredPosition));
-    }
+    public void ScaleToTarget() =>
+        StartAnimation(() => ScaleRoutine(rectTransform.localScale));
 
-    public void ScaleToTarget()
-    {
-        StartAnimation(ScaleRoutine(rectTransform.localScale));
-    }
+    public void ScaleUpDown() =>
+        StartAnimation(() => ScaleUpDown(0.2f));
 
-    public void FadeIn() => StartAnimation(FadeRoutine(1f));
-    public void FadeOut() => StartAnimation(FadeRoutine(0f));
-    public void SquashAndStretch() => StartAnimation(SquashRoutine());
+    public void FadeIn() =>
+        StartAnimation(() => FadeRoutine(1f));
+
+    public void FadeOut() =>
+        StartAnimation(() => FadeRoutine(0f));
+
+    public void SquashAndStretch() =>
+        StartAnimation(() => SquashRoutine());
 
     public void StopAnimation()
     {
         if (currentAnimation != null)
+        {
             StopCoroutine(currentAnimation);
+            currentAnimation = null;
+        }
     }
 
     // ==============================
     // INTERNALS
     // ==============================
-
-    private void StartAnimation(IEnumerator routine)
+    private void StartAnimation(Func<IEnumerator> routineFactory)
     {
         StopAnimation();
-        currentAnimation = StartCoroutine(loop ? Loop(routine) : routine);
+        currentAnimation = StartCoroutine(loop ? Loop(routineFactory) : routineFactory());
     }
 
-    private IEnumerator Loop(IEnumerator routine)
+    private IEnumerator Loop(Func<IEnumerator> routineFactory)
     {
         while (true)
-            yield return StartCoroutine(routine);
+            yield return StartCoroutine(routineFactory());
     }
 
     // ==============================
     // ROUTINES
     // ==============================
-
     private IEnumerator MoveRoutine(Vector2 target)
     {
         Vector2 start = rectTransform.anchoredPosition;
@@ -86,6 +90,8 @@ public class TutorialUIElement : MonoBehaviour
             rectTransform.anchoredPosition = Vector2.Lerp(start, target, Ease(t / duration));
             yield return null;
         }
+
+        rectTransform.anchoredPosition = target;
     }
 
     private IEnumerator ScaleRoutine(Vector3 target)
@@ -99,7 +105,29 @@ public class TutorialUIElement : MonoBehaviour
             rectTransform.localScale = Vector3.Lerp(start, target, Ease(t / duration));
             yield return null;
         }
+
+        rectTransform.localScale = target;
     }
+
+    private IEnumerator ScaleUpDown(float magnitude = 0.2f)
+    {
+        Vector3 start = rectTransform.localScale;
+        float elapsed = 0f;
+
+        while (true) // continuous loop
+        {
+            elapsed += Time.deltaTime;
+
+            // sine oscillates between -1 and 1
+            float sine = Mathf.Sin(elapsed / duration * Mathf.PI * 2f);
+
+            // scale up/down around start
+            rectTransform.localScale = start * (1f + sine * magnitude);
+
+            yield return null;
+        }
+    }
+
 
     private IEnumerator FadeRoutine(float target)
     {
@@ -112,6 +140,8 @@ public class TutorialUIElement : MonoBehaviour
             canvasGroup.alpha = Mathf.Lerp(start, target, Ease(t / duration));
             yield return null;
         }
+
+        canvasGroup.alpha = target;
     }
 
     private IEnumerator SquashRoutine()

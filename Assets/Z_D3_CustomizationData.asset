@@ -453,6 +453,46 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
     isPremium: 0
     color: {r: 0.9529412, g: 0.6039216, b: 0.5529412, a: 1}
+  - id: marble_type04_hat01
+    isLocked: 1
+    levelToUnlock: 60
+    price:
+      CoinType: 1
+      Amount: 50
+    skin: {fileID: 1568721189470480968, guid: a5fb6a9faf5911e4aa4c121bfa2bda0b, type: 3}
+    sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
+    isPremium: 0
+    color: {r: 0.9529412, g: 0.6039216, b: 0.5529412, a: 1}
+  - id: marble_type04_hat02
+    isLocked: 0
+    levelToUnlock: 0
+    price:
+      CoinType: 0
+      Amount: 0
+    skin: {fileID: 7724226111776969179, guid: 832d053084184f24ebf453402e349da0, type: 3}
+    sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
+    isPremium: 0
+    color: {r: 0.9529412, g: 0.6039216, b: 0.5529412, a: 1}
+  - id: marble_type04_hat03
+    isLocked: 0
+    levelToUnlock: 0
+    price:
+      CoinType: 1
+      Amount: 50
+    skin: {fileID: 1099430107892781238, guid: 1741784e9715c544083062222fdf44dc, type: 3}
+    sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
+    isPremium: 0
+    color: {r: 0.9529412, g: 0.6039216, b: 0.5529412, a: 1}
+  - id: marble_type04_hat04
+    isLocked: 0
+    levelToUnlock: 0
+    price:
+      CoinType: 1
+      Amount: 50
+    skin: {fileID: 7902111144965243480, guid: d2299f10e3e3dfe42be9695690ecfa70, type: 3}
+    sprite: {fileID: 21300000, guid: f78efde3405bfa24aa622cc60b385b25, type: 3}
+    isPremium: 0
+    color: {r: 0.9529412, g: 0.6039216, b: 0.5529412, a: 1}
   colors:
   - id: NONE
     isLocked: 0

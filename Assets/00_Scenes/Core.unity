@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203352b9fcd7e8c459030f991e39d5ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomizationManager
-  customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
+  customizationData_SO: {fileID: 11400000, guid: a8006b3f7ff62d842bc9f255b43dfa2d, type: 2}
   skinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
   currentSlot: {fileID: 0}
   currentOption:
@@ -631,6 +631,7 @@ RectTransform:
   m_Children:
   - {fileID: 944478998}
   - {fileID: 1647435489}
+  - {fileID: 1666691493}
   m_Father: {fileID: 442186513}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -646,7 +647,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 385315539}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -1814,8 +1815,10 @@ GameObject:
   - component: {fileID: 1647435489}
   - component: {fileID: 1647435491}
   - component: {fileID: 1647435490}
+  - component: {fileID: 1647435492}
+  - component: {fileID: 1647435493}
   m_Layer: 0
-  m_Name: Image
+  m_Name: FingerPointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1878,6 +1881,135 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1647435488}
   m_CullTransparentMesh: 1
+--- !u!114 &1647435492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647435488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2c9a8f4ffb04b4fb21605672dc86ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  duration: 0.5
+  loop: 0
+--- !u!225 &1647435493
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647435488}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!1 &1666691492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1666691493}
+  - component: {fileID: 1666691495}
+  - component: {fileID: 1666691494}
+  - component: {fileID: 1666691497}
+  - component: {fileID: 1666691496}
+  m_Layer: 0
+  m_Name: Highlight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1666691493
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666691492}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 385315540}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -1500, y: 0}
+  m_SizeDelta: {x: 200, y: 200}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1666691494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666691492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.16862746}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 9208f0b907763a642ab2a0a4718fa2db, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1666691495
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666691492}
+  m_CullTransparentMesh: 1
+--- !u!114 &1666691496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666691492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2c9a8f4ffb04b4fb21605672dc86ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialUIElement
+  duration: 0.5
+  loop: 0
+--- !u!225 &1666691497
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666691492}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1900290287
 GameObject:
   m_ObjectHideFlags: 0
@@ -2162,7 +2294,7 @@ GameObject:
   - component: {fileID: 2144166143}
   - component: {fileID: 2144166144}
   m_Layer: 0
-  m_Name: TutuorialManage
+  m_Name: TutorialManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2196,8 +2328,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   tutorialCanvasGroup: {fileID: 385315541}
+  fingerUI: {fileID: 1647435492}
+  highlightUI: {fileID: 1666691496}
   bgFadeInOutTime: 0.1
-  fingerImage: {fileID: 1647435490}
+  tutorialList:
+  - tutorialName: GameplayIntro
+    levelNumber: 1
+    tutorialType: Movement
+    description: Teaches the player to Move
+    steps:
+    - description: 
+      fingerPosition: {x: 0, y: 0, z: 0}
+      highlightPosition: {x: 0, y: 0, z: 0}
+      targetPosition: {x: 780, y: 0}
+      targetScale: {x: 1, y: 1, z: 1}
+      duration: 1
+      loop: 1
+      waitForInput: 1
+      autoComplete: 0
+      waitTime: 0
+      completionCondition:
+        rid: 4426608676113219845
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1647435492}
+            m_TargetAssemblyTypeName: TutorialUIElement, Assembly-CSharp
+            m_MethodName: ScaleUpDown
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4426608676113219845
+      type: {class: SwipeCondition, ns: , asm: Assembly-CSharp}
+      data:
+        direction: {x: 0, y: 1}
+        minDistance: 200
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

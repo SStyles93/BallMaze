@@ -23,8 +23,8 @@ public class TutorialStep
 {
     public string description;
 
-    public Vector3? fingerPosition;      // Optional finger position
-    public Vector3? highlightPosition;   // Optional highlight position
+    public Vector3 fingerPosition;      // Optional finger position
+    public Vector3 highlightPosition;   // Optional highlight position
 
     [Header("Position Data")]
     public Vector2 targetPosition;
@@ -63,7 +63,7 @@ public class TutorialManager : MonoBehaviour
 
 
 
-    private TutorialManager Instance;
+    public static TutorialManager Instance;
 
     private void Awake()
     {
