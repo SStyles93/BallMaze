@@ -23,16 +23,10 @@ public class TutorialStep
 {
     public string description;
 
-    public Vector3 fingerPosition;      // Optional finger position
-    public Vector3 highlightPosition;   // Optional highlight position
+    public TutorialUIElement[] tutorialUIElements = new TutorialUIElement[0];
 
-    [Header("Position Data")]
-    public Vector2 targetPosition;
-    public Vector3 targetScale = Vector3.one;
-    public float duration = 0.5f;
-    public bool loop;
-
-    public bool waitForInput = true;     // Wait for click/tap instead of auto timing
+    [Header("Mask / Scrim")]
+    public TutorialMaskData maskData;
 
     [Header("Completion")]
     public bool autoComplete;
@@ -41,27 +35,48 @@ public class TutorialStep
     [SerializeReference]
     public ITutorialCondition completionCondition;
 
-    public UnityEvent onStepStart;       // Optional actions at step start
-    public UnityEvent onStepComplete;    // Optional actions at step end
+    public UnityEvent onStepStart;
+    public UnityEvent onStepComplete;
+}
+
+
+[System.Serializable]
+public class TutorialUIElement
+{
+    public TutorialUIAnimation elementAnimation;
+    public TutorialUIAnimType[] animationSequence;
+    
+    [Header("Runtime Animation Data")]
+    public float duration = 0.5f;
+    public bool loop;
+
+    public string anchorID;
+}
+
+[System.Serializable]
+public class TutorialMaskData
+{
+    public bool enableMask = true;
+
+    public string focusTargetId;
+    public float padding = 10f;
+    public bool blockOutsideClicks = true;
 }
 
 public class TutorialManager : MonoBehaviour
 {
     [Header("UI References")]
+    [SerializeField] private Canvas tutorialCanvas;
     [SerializeField] private CanvasGroup tutorialCanvasGroup;
-    [SerializeField] private TutorialUIElement fingerUI;
-    [SerializeField] private TutorialUIElement highlightUI;
-
+    [SerializeField] private TutorialOverlayMask overlayMask;
 
     [Header("Settings")]
     [SerializeField] private float bgFadeInOutTime = 0.1f;
-
-    [Header("Tutorials List")]
+    [Space(10)]
     [SerializeField] private List<Tutorial> tutorialList;
 
+    private TutorialContext currentContext;
     private int currentStepIndex = 0;
-
-
 
     public static TutorialManager Instance;
 
@@ -78,6 +93,12 @@ public class TutorialManager : MonoBehaviour
     // ==============================
     // Public Methods to Start Tutorial
     // ==============================
+
+    public void RegisterContext(TutorialContext context)
+    {
+        currentContext = context;
+    }
+
 
     public void StartTutorial(int index)
     {
@@ -154,34 +175,89 @@ public class TutorialManager : MonoBehaviour
         {
             var step = tutorial.steps[currentStepIndex];
 
-            // Inject data BEFORE events
-            fingerUI?.ApplyStepData(step);
-            highlightUI?.ApplyStepData(step);
+            // =========================
+            // APPLY MASK (ID-BASED)
+            // =========================
+            if (step.maskData != null && step.maskData.enableMask && currentContext != null)
+            {
+                RectTransform target =
+                    currentContext.Get(step.maskData.focusTargetId);
 
-            // Trigger events
+                if (target != null)
+                {
+                    overlayMask.gameObject.SetActive(true);
+                    overlayMask.FocusOnTarget(
+                        tutorialCanvas,
+                        step.maskData.padding,
+                        target
+                    );
+                }
+                else
+                {
+                    overlayMask.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                overlayMask.gameObject.SetActive(false);
+            }
+
+            // =========================
+            // UI ANIMATION SEQUENCES
+            // =========================
+            foreach (var uiElement in step.tutorialUIElements)
+            {
+                var anim = uiElement.elementAnimation;
+                if (anim == null) continue;
+
+                anim.Initialize(
+                    currentContext,
+                    uiElement.anchorID,
+                    uiElement.duration
+                );
+
+                anim.PlaySequence(
+                    uiElement.animationSequence,
+                    uiElement.loop
+                );
+            }
+
+
+            // =========================
+            // STEP START
+            // =========================
             step.onStepStart?.Invoke();
 
+            // =========================
+            // WAIT FOR COMPLETION
+            // =========================
             if (step.autoComplete)
             {
                 yield return new WaitForSeconds(step.waitTime);
             }
             else if (step.completionCondition != null)
             {
-                yield return new WaitUntil(() => step.completionCondition.IsSatisfied());
+                yield return new WaitUntil(() =>
+                    step.completionCondition.IsSatisfied());
             }
             else
             {
-                Debug.LogWarning("Step has no completion condition!");
+                Debug.LogWarning(
+                    $"Tutorial step {currentStepIndex} has no completion condition.");
             }
 
-
+            // =========================
+            // STEP COMPLETE
+            // =========================
             step.onStepComplete?.Invoke();
             currentStepIndex++;
         }
 
+        overlayMask.gameObject.SetActive(false);
         yield return FadeTo(tutorialCanvasGroup, 0f, bgFadeInOutTime);
         tutorialCanvasGroup.gameObject.SetActive(false);
     }
+
     private IEnumerator FadeTo(CanvasGroup group, float targetAlpha, float duration)
     {
         float startAlpha = group.alpha;
