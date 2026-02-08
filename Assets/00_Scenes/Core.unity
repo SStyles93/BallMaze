@@ -2460,7 +2460,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - tutorialName: Swipe and Tap
+  - tutorialName: SwipeAndTap
     levelNumber: 1
     tutorialType: Move Jump
     description: Teaches the player to jump while moving
@@ -2750,6 +2750,72 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
+  - tutorialName: RocketTutorial
+    levelNumber: 10
+    tutorialType: Game
+    description: Teaches the player to Use rockets
+    steps:
+    - description: Tap on button
+      tutorialUIElements:
+      - elementAnimation: {fileID: 440803644}
+        animationSequence: 04000000
+        duration: 0
+        loop: 1
+        anchorID: rocket_button
+      maskData:
+        enableMask: 1
+        focusTargetId: rocket_button
+        padding: 0
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275756
+      allowedInput: 20
+      allowedMovement: 0
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: PauseGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1441120722}
+            m_TargetAssemblyTypeName: CoinManager, Assembly-CSharp
+            m_MethodName: RewardRocketTemporarly
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 1
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: ResumeGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
   IsTutorial1Complete: 0
   IsTutorialShopComplete: 0
   IsTutorialRocketComplete: 0
@@ -2842,6 +2908,13 @@ MonoBehaviour:
       data:
         anchorId: custom_action_button
         padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275756
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: rocket_button
+        padding: 10
         maxMoveDistance: 40
         maxDuration: 0.3
 --- !u!114 &2144166145
