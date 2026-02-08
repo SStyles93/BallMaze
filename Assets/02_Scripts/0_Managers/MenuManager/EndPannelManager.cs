@@ -50,7 +50,7 @@ public class EndPannelManager : MonoBehaviour
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
-            .Unload(SceneDatabase.Scenes.Game)
+            .Unload(SceneController.Instance.PreviousActiveScene)
             .Unload(SceneDatabase.Scenes.EndPannel)
             .WithOverlay()
             .WithClearUnusedAssets()
@@ -63,7 +63,7 @@ public class EndPannelManager : MonoBehaviour
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
-            .Unload(SceneDatabase.Scenes.Game)
+            .Unload(SceneController.Instance.PreviousActiveScene)
             .Unload(SceneDatabase.Scenes.EndPannel)
             .WithOverlay()
             .WithClearUnusedAssets()

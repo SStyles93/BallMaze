@@ -69,3 +69,15 @@ public class SettingsData : SaveableData
     public bool isMusicOn = true;
     public bool isVibrationOn = true;
 }
+
+/// <summary>
+/// The state of the settings
+/// </summary>
+[System.Serializable]
+public class TutorialData : SaveableData
+{
+    public bool isTutorial1Complete = false;
+    public bool isTutorialShopComplete = false;
+    public bool isTutorialRocketComplete = false;
+    public bool isTutorialUfoComplete = false;
+}

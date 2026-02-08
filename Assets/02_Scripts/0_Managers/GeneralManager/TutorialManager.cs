@@ -32,8 +32,9 @@ public class TutorialStep
     [Header("Completion")]
     public bool autoComplete;
     public float waitTime;
+    public ConditionLogic conditionLogic = ConditionLogic.Any;
     [SerializeReference]
-    public ITutorialCondition completionCondition;
+    public List<ITutorialCondition> completionConditions = new List<ITutorialCondition>();
 
     [Header("Movement Restrictions")]
     public AllowedInput allowedInput = AllowedInput.All;
@@ -43,6 +44,11 @@ public class TutorialStep
     public UnityEvent onStepComplete;
 }
 
+public enum ConditionLogic
+{
+    Any,
+    All
+}
 
 [System.Serializable]
 public class TutorialUIElement
@@ -81,6 +87,14 @@ public class TutorialManager : MonoBehaviour
 
     private TutorialContext currentContext;
     private int currentStepIndex = 0;
+    private bool forceStepComplete = false;
+
+
+    [HideInInspector]
+    public bool IsTutorial1Complete = false, 
+        IsTutorialShopComplete = false,
+        IsTutorialRocketComplete = false,
+        IsTutorialUfoComplete = false;
 
     public static TutorialManager Instance;
 
@@ -98,11 +112,18 @@ public class TutorialManager : MonoBehaviour
     // Public Methods to Start Tutorial
     // ==============================
 
+    public void CompleteCurrentStep()
+    {
+        if (currentContext == null)
+            return;
+
+        forceStepComplete = true;
+    }
+
     public void RegisterContext(TutorialContext context)
     {
         currentContext = context;
     }
-
 
     public void StartTutorial(int index)
     {
@@ -122,6 +143,18 @@ public class TutorialManager : MonoBehaviour
         StartTutorialInternal(tutorial);
     }
 
+    public void SetTutorialComplete(int indexOfTutorial)
+    {
+        _ = indexOfTutorial switch
+        {
+            1 => IsTutorial1Complete = true,
+            2 => IsTutorialShopComplete = true,
+            3 => IsTutorialRocketComplete = true,
+            4 => IsTutorialUfoComplete = true,
+            _ => false
+        };
+    }
+    
     // Internal helper
     private void StartTutorialInternal(Tutorial tutorial)
     {
@@ -137,6 +170,7 @@ public class TutorialManager : MonoBehaviour
 
         StartCoroutine(RunTutorial(tutorial));
     }
+
 
     // ==============================
     // Find Methods
@@ -212,6 +246,8 @@ public class TutorialManager : MonoBehaviour
             foreach (var uiElement in step.tutorialUIElements)
             {
                 var anim = uiElement.elementAnimation;
+                anim.gameObject.SetActive(true);
+
                 if (anim == null) continue;
 
                 anim.Initialize(
@@ -242,38 +278,62 @@ public class TutorialManager : MonoBehaviour
             // =========================
             // WAIT FOR COMPLETION
             // =========================
+            forceStepComplete = false;
+
             if (step.autoComplete)
             {
-                yield return new WaitForSeconds(step.waitTime);
-            }
-            else if (step.completionCondition != null)
-            {
-                if (step.completionCondition is IContextBoundCondition boundCondition && 
-                    currentContext != null && step.tutorialUIElements.Length > 0)
+                float timer = 0f;
+
+                while (timer < step.waitTime && !forceStepComplete)
                 {
-                    boundCondition.BindContext(
-                        currentContext,
-                        step.tutorialUIElements[0].anchorID,
-                        tutorialCanvas
-                    );
+                    timer += Time.deltaTime;
+                    yield return null;
+                }
+            }
+            else if (step.completionConditions != null && step.completionConditions.Count > 0)
+            {
+                // Bind context to conditions that require it
+                foreach (var condition in step.completionConditions)
+                {
+                    if (condition is IContextBoundCondition boundCondition &&
+                        condition is ITargetedTutorialCondition targetedCondition &&
+                        currentContext != null)
+                    {
+                        boundCondition.BindContext(
+                            currentContext,
+                            targetedCondition.AnchorId,
+                            tutorialCanvas
+                        );
+                    }
                 }
 
-                yield return new WaitUntil(() => step.completionCondition.IsSatisfied());
+                yield return new WaitUntil(() =>
+                    forceStepComplete || AreConditionsSatisfied(step));
             }
             else
             {
                 Debug.LogWarning(
-                    $"Tutorial step {currentStepIndex} has no completion condition.");
+                    $"Tutorial step {currentStepIndex} has no completion conditions.");
             }
+
 
             // =========================
             // STEP COMPLETE
             // =========================
+
+            // --- Constraints ---
             InputGate.Allowed = AllowedInput.All;
             MovementGate.Allowed = AllowedMovement.All;
-
+            // --- UI elements ---
+            foreach (var uiElement in step.tutorialUIElements)
+            {
+                var anim = uiElement.elementAnimation;
+                anim.gameObject.SetActive(false);
+            }
+            // --- Step ---
             step.onStepComplete?.Invoke();
             currentStepIndex++;
+            forceStepComplete = false;
         }
 
         overlayMask.gameObject.SetActive(false);
@@ -294,5 +354,21 @@ public class TutorialManager : MonoBehaviour
         }
 
         group.alpha = targetAlpha;
+    }
+
+    /// <summary>
+    /// Checks for multiple conditions
+    /// </summary>
+    /// <param name="step"></param>
+    /// <returns></returns>
+    private bool AreConditionsSatisfied(TutorialStep step)
+    {
+        if (step.completionConditions == null || step.completionConditions.Count == 0)
+            return true;
+
+        if (step.conditionLogic == ConditionLogic.Any)
+            return step.completionConditions.Any(c => c.IsSatisfied());
+
+        return step.completionConditions.All(c => c.IsSatisfied());
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameTutorialManager : MonoBehaviour
 {
-    public List<int> triggers = new List<int>();
+    public Dictionary<int, Action> triggeredCallbacks = new Dictionary<int, Action>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,19 +15,21 @@ public class GameTutorialManager : MonoBehaviour
     // Use a dictionary to store callbacks per trigger index
 
     // Register a callback for a trigger index
-    public void RegisterTrigger(int index)
+    public void RegisterTrigger(int index, Action callback)
     {
-        if (!triggers.Contains(index))
-            triggers.Add(index);
+        if (!triggeredCallbacks.ContainsKey(index))
+        {
+            triggeredCallbacks.Add(index, callback);
+        }
     }
 
     // Called by the trigger when something enters it
     public void TriggerActivated(int index)
     {
-        if (triggers.Contains(index))
+        if (triggeredCallbacks.TryGetValue(index, out var callback))
         {
-            TutorialManager.Instance.StartTutorial(index);
-            triggers.RemoveAt(index);
+            callback?.Invoke();
+            triggeredCallbacks.Remove(index);
         }
     }
 }

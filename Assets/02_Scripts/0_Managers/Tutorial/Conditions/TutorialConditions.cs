@@ -6,6 +6,24 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [System.Serializable]
+public class OrderedCondition : ITutorialCondition
+{
+    private int currentIndex = 0;
+    public List<ITutorialCondition> conditions;
+
+    public bool IsSatisfied()
+    {
+        if (currentIndex >= conditions.Count)
+            return true;
+
+        if (conditions[currentIndex].IsSatisfied())
+            currentIndex++;
+
+        return currentIndex >= conditions.Count;
+    }
+}
+
+[System.Serializable]
 public class TapAnywhereCondition : ITutorialCondition
 {
     public bool IsSatisfied()
@@ -17,9 +35,13 @@ public class TapAnywhereCondition : ITutorialCondition
 
 
 [System.Serializable]
-public class TapInAreaCondition : ITutorialCondition, IContextBoundCondition
+public class TapInAreaCondition : ITutorialCondition, IContextBoundCondition, ITargetedTutorialCondition
 {
+    [Header("Target")]
+    [SerializeField] private string anchorId;
+    public string AnchorId => anchorId;
     public float padding = 0f;
+
     private Rect screenRect;
 
     public void BindContext(TutorialContext context, string anchorId, Canvas canvas)
@@ -52,8 +74,12 @@ public class TapInAreaCondition : ITutorialCondition, IContextBoundCondition
 }
 
 [System.Serializable]
-public class TapAndReleaseInAreaCondition : ITutorialCondition, IContextBoundCondition
+public class TapAndReleaseInAreaCondition : ITutorialCondition, IContextBoundCondition, ITargetedTutorialCondition
 {
+    [Header("Target")]
+    [SerializeField] private string anchorId;
+    public string AnchorId => anchorId;
+
     [Header("Tap Tolerance")]
     public float padding = 0f;
     public float maxMoveDistance = 40f;   // pixels
@@ -228,8 +254,12 @@ public class TapOnUIElementCondition : ITutorialCondition
 
 
 [System.Serializable]
-public class DragFromToCondition : ITutorialCondition, IContextBoundCondition
+public class DragFromToCondition : ITutorialCondition, IContextBoundCondition, ITargetedTutorialCondition
 {
+    [Header("Target")]
+    [SerializeField] private string anchorId;
+    public string AnchorId => anchorId;
+
     [Min(0)] public float startRadius = 80f;
     [Min(0)] public float endRadius = 80f;
     [Min(0)] public float minDragDistance = 150f;
@@ -294,8 +324,12 @@ public class DragFromToCondition : ITutorialCondition, IContextBoundCondition
 
 
 [System.Serializable]
-public class DragFromReleaseAtCondition : ITutorialCondition, IContextBoundCondition
+public class DragFromReleaseAtCondition : ITutorialCondition, IContextBoundCondition, ITargetedTutorialCondition
 {
+    [Header("Target")]
+    [SerializeField] private string anchorId;
+    public string AnchorId => anchorId;
+
     [Min (0)] public float startRadius = 80f;
     [Min(0)] public float endRadius = 80f;
     [Min(0)] public float minDragDistance = 150f;

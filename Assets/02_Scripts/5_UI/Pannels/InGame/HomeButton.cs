@@ -9,7 +9,7 @@ public class HomeButton : UIButton
         SavingManager.Instance?.SavePlayer();
 
         SceneController.Instance.NewTransition()
-            .Unload(SceneDatabase.Scenes.Game)
+            .Unload(SceneController.Instance.CurrentActiveScene)
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
             .WithOverlay()
             .Perform();

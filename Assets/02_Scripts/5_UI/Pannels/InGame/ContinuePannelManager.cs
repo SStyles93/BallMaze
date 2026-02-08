@@ -74,7 +74,7 @@ public class ContinuePannelManager : MonoBehaviour
 
         SceneController.Instance.NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
-            .Unload(SceneDatabase.Scenes.Game)
+            .Unload(SceneController.Instance.CurrentActiveScene)
             .WithOverlay()
             .WithClearUnusedAssets()
             .Perform();
@@ -89,8 +89,8 @@ public class ContinuePannelManager : MonoBehaviour
         GameStateManager.Instance?.SetState(GameState.Playing);
 
         SceneController.Instance.NewTransition()
-            .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
-            .Unload(SceneDatabase.Scenes.Game)
+            .Load(SceneDatabase.Slots.Content, SceneController.Instance.CurrentActiveScene)
+            .Unload(SceneController.Instance.CurrentActiveScene)
             .WithOverlay()
             .WithClearUnusedAssets()
             .Perform();

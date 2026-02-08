@@ -9,3 +9,8 @@ public interface IContextBoundCondition
 {
     void BindContext(TutorialContext context, string anchorId, Canvas canvas);
 }
+
+public interface ITargetedTutorialCondition : IContextBoundCondition
+{
+    string AnchorId { get; }
+}

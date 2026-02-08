@@ -630,6 +630,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1647435489}
+  - {fileID: 440803642}
   - {fileID: 1266310481}
   m_Father: {fileID: 442186513}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -657,6 +658,78 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 385315539}
+  m_CullTransparentMesh: 1
+--- !u!1 &440803641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 440803642}
+  - component: {fileID: 440803646}
+  - component: {fileID: 440803644}
+  - component: {fileID: 440803643}
+  m_Layer: 0
+  m_Name: SecondFingerPointer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &440803642
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440803641}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1214221843}
+  m_Father: {fileID: 385315540}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -3000, y: 0}
+  m_SizeDelta: {x: 512, y: 512}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &440803643
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440803641}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
+--- !u!114 &440803644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440803641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2c9a8f4ffb04b4fb21605672dc86ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  baseScale: {x: 1, y: 1, z: 1}
+--- !u!222 &440803646
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440803641}
   m_CullTransparentMesh: 1
 --- !u!1 &442186512
 GameObject:
@@ -1169,6 +1242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingOverlay: {fileID: 332380844}
   PreviousActiveScene: 0
+  CurrentActiveScene: 0
 --- !u!1 &1192641768
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,6 +1287,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10d38a9469e031d4ca5c20125766b46e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VibrationManager
+--- !u!1 &1214221842
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1214221843}
+  - component: {fileID: 1214221845}
+  - component: {fileID: 1214221844}
+  m_Layer: 0
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1214221843
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214221842}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 440803642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1214221844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214221842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 171151c3be9b22b489767929712a8067, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1214221845
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214221842}
+  m_CullTransparentMesh: 1
 --- !u!1 &1230751198
 GameObject:
   m_ObjectHideFlags: 0
@@ -1820,7 +1969,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1500, y: 0}
+  m_AnchoredPosition: {x: -3000, y: 0}
   m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1647435490
@@ -2172,6 +2321,11 @@ MonoBehaviour:
     isAudioOn: 1
     isMusicOn: 1
     isVibrationOn: 1
+  currentTutorialData:
+    isTutorial1Complete: 0
+    isTutorialShopComplete: 0
+    isTutorialRocketComplete: 0
+    isTutorialUfoComplete: 0
 --- !u!1 &2144166142
 GameObject:
   m_ObjectHideFlags: 0
@@ -2241,8 +2395,9 @@ MonoBehaviour:
         blockOutsideClicks: 1
       autoComplete: 0
       waitTime: 0
-      completionCondition:
-        rid: 4426608699110326557
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275708
       allowedInput: 13
       allowedMovement: 1
       onStepStart:
@@ -2270,8 +2425,9 @@ MonoBehaviour:
         blockOutsideClicks: 1
       autoComplete: 0
       waitTime: 0
-      completionCondition:
-        rid: 4426608699110326474
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275709
       allowedInput: -1
       allowedMovement: 0
       onStepStart:
@@ -2304,20 +2460,390 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
+  - tutorialName: Swipe and Tap
+    levelNumber: 1
+    tutorialType: Move Jump
+    description: Teaches the player to jump while moving
+    steps:
+    - description: Swipe and Tap
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 00000000
+        duration: 1
+        loop: 1
+        anchorID: game_swipe_forward
+      - elementAnimation: {fileID: 440803644}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: game_tap_jump_two
+      maskData:
+        enableMask: 0
+        focusTargetId: game_tap_jump
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 1
+      completionConditions:
+      - rid: 4426608721726275710
+      - rid: 4426608721726275711
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2144166144}
+            m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
+            m_MethodName: SetTutorialComplete
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 1
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - tutorialName: Shop Tutorial
+    levelNumber: 0
+    tutorialType: Menu
+    description: Teaches the player to buy and equip Skins & Colours
+    steps:
+    - description: Tap on golden Marble
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_skin_item
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_skin_item
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275735
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap on Buy
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_buy_button
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_buy_button
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275734
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap on Yes
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_yes_button
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_yes_button
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275733
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap on Equip
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_action_button
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_action_button
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275732
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap on Color Tab
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_color_button
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_color_button
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275743
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap on Color
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_skin_item
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_skin_item
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275744
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap on Buy
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_buy_button
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_buy_button
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275745
+      allowedInput: -1
+      allowedMovement: -1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap on Yes
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_yes_button
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_yes_button
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275746
+      allowedInput: -1
+      allowedMovement: -1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap on Use
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: custom_action_button
+      maskData:
+        enableMask: 1
+        focusTargetId: custom_action_button
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275747
+      allowedInput: -1
+      allowedMovement: -1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2144166144}
+            m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
+            m_MethodName: SetTutorialComplete
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 2
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  IsTutorial1Complete: 0
+  IsTutorialShopComplete: 0
+  IsTutorialRocketComplete: 0
+  IsTutorialUfoComplete: 0
   references:
     version: 2
     RefIds:
-    - rid: 4426608699110326474
+    - rid: 4426608721726275708
+      type: {class: DragFromToCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: game_swipe_forward
+        startRadius: 80
+        endRadius: 80
+        minDragDistance: 50
+    - rid: 4426608721726275709
       type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
       data:
+        anchorId: game_tap_jump
         padding: 0
         maxMoveDistance: 40
         maxDuration: 0.3
-    - rid: 4426608699110326557
+    - rid: 4426608721726275710
       type: {class: SwipeCondition, ns: , asm: Assembly-CSharp}
       data:
         direction: {x: 0, y: 1}
-        minDistance: 200
+        minDistance: 10
+    - rid: 4426608721726275711
+      type: {class: TapInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_action_button
+        padding: 0
+    - rid: 4426608721726275732
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_action_button
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275733
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_yes_button
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275734
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_buy_button
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275735
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_skin_item
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275743
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_color_button
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275744
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_skin_item
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275745
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_buy_button
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275746
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_yes_button
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275747
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: custom_action_button
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
 --- !u!114 &2144166145
 MonoBehaviour:
   m_ObjectHideFlags: 0

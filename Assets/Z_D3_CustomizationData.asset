@@ -24,7 +24,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - id: marble_type01_m_02
-    isLocked: 0
+    isLocked: 1
     levelToUnlock: 0
     price:
       CoinType: 0
@@ -38,7 +38,7 @@ MonoBehaviour:
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 60
+      Amount: 0
     skin: {fileID: 2043128687369127624, guid: d83722138f8a56f40a5e0c546599325d, type: 3}
     sprite: {fileID: 21300000, guid: 2d355c05a2d01d447bf2bce00d806c6f, type: 3}
     isPremium: 0
@@ -513,7 +513,7 @@ MonoBehaviour:
     levelToUnlock: 0
     price:
       CoinType: 0
-      Amount: 25
+      Amount: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - id: palette_v1_3
     isLocked: 1

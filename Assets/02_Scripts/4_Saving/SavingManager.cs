@@ -13,11 +13,13 @@ public class SavingManager : MonoBehaviour
     public PlayerData currentPlayerData = null;
     public SkinShopData currentSkinData = null;
     public SettingsData currentSettingsData = null;
+    public TutorialData currentTutorialData = null;
 
     const string GameDataFileName = "GameData";
     const string PlayerDataFileName = "PlayerData";
     const string SkinDataFileName = "ShopData";
     const string SettingsDataFileName = "SettingsData";
+    const string TutorialDataFileName = "TutorialsData";
 
     private void Awake()
     {
@@ -42,6 +44,8 @@ public class SavingManager : MonoBehaviour
         SaveCustomizationShopDataInFile(SkinDataFileName);
 
         SaveSettingsDataInFile(SettingsDataFileName);
+
+        SaveTutorialDataInFile(TutorialDataFileName);
 
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
@@ -76,6 +80,14 @@ public class SavingManager : MonoBehaviour
     public void SaveSettings()
     {
         SaveSettingsDataInFile(SettingsDataFileName);
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+    }
+
+    public void SaveTutorials()
+    {
+        SaveTutorialDataInFile(SettingsDataFileName);
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
@@ -232,6 +244,27 @@ public class SavingManager : MonoBehaviour
         SaveDataInFile(currentSkinData, fileName);
     }
 
+    private void SaveTutorialDataInFile(string fileName)
+    {
+        TutorialData tutorialData = new TutorialData
+        {
+            isTutorial1Complete = false,
+            isTutorialShopComplete = false,
+            isTutorialRocketComplete = false,
+            isTutorialUfoComplete = false
+        };
+        
+        if(TutorialManager.Instance == null) return;
+
+        tutorialData.isTutorial1Complete = TutorialManager.Instance.IsTutorial1Complete;
+        tutorialData.isTutorialShopComplete = TutorialManager.Instance.IsTutorialShopComplete;
+        tutorialData.isTutorialRocketComplete = TutorialManager.Instance.IsTutorialRocketComplete;
+        tutorialData.isTutorialUfoComplete = TutorialManager.Instance.IsTutorialUfoComplete;
+
+        currentTutorialData = tutorialData;
+        SaveDataInFile(currentTutorialData, fileName);
+    }
+
 
 
     // --- LOAD ---
@@ -248,6 +281,8 @@ public class SavingManager : MonoBehaviour
         RestoreSkinShopDataFromFile(SkinDataFileName);
 
         RestoreSettingsDataFromFile(SettingsDataFileName);
+
+        RestoreTutorialDataFromFile(TutorialDataFileName);
     }
 
 
@@ -266,6 +301,11 @@ public class SavingManager : MonoBehaviour
     public void LoadSettings()
     {
         RestoreSettingsDataFromFile(SettingsDataFileName);
+    }
+
+    public void LoadTutorials()
+    {
+        RestoreTutorialDataFromFile(TutorialDataFileName);
     }
 
 
@@ -340,7 +380,7 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void RestorePlayerDataFromFile(string fileName)
     {
-        currentPlayerData = LoadFile<PlayerData>(PlayerDataFileName);
+        currentPlayerData = LoadFile<PlayerData>(fileName);
 
         if (currentPlayerData == null)
         {
@@ -443,7 +483,7 @@ public class SavingManager : MonoBehaviour
     {
         if (CustomizationManager.Instance == null) return;
 
-        currentSkinData = LoadFile<SkinShopData>(SkinDataFileName);
+        currentSkinData = LoadFile<SkinShopData>(fileName);
 
         var dataSO = CustomizationManager.Instance.customizationData_SO;
 
@@ -479,6 +519,26 @@ public class SavingManager : MonoBehaviour
                 colorOption.isLocked = true;
             }
         }
+    }
+
+    private void RestoreTutorialDataFromFile(string fileName)
+    {
+        if (TutorialManager.Instance == null) return;
+
+        currentTutorialData = LoadFile<TutorialData>(fileName);
+
+        if (currentTutorialData == null)
+        {
+            TutorialData tutorialData = new TutorialData();
+            return;
+        }
+
+        TutorialManager.Instance.IsTutorial1Complete = currentTutorialData.isTutorial1Complete;
+        TutorialManager.Instance.IsTutorialShopComplete = currentTutorialData.isTutorialShopComplete;
+        TutorialManager.Instance.IsTutorialRocketComplete = currentTutorialData.isTutorialRocketComplete;
+        TutorialManager.Instance.IsTutorialUfoComplete = currentTutorialData.isTutorialUfoComplete;
+
+        SaveDataInFile(currentTutorialData, fileName);
     }
 
 

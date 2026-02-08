@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EndTrigger : MonoBehaviour
 {
@@ -25,9 +26,12 @@ public class EndTrigger : MonoBehaviour
 
     private bool wasLevelProcessed = false;
 
+    private Button homeButton;
+
     private void Start()
     {
         wasLevelProcessed = false;
+        homeButton = GameObject.FindGameObjectWithTag("HomeButton").gameObject.GetComponent<Button>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,6 +49,8 @@ public class EndTrigger : MonoBehaviour
 
     private IEnumerator EndSequence(Transform player, Rigidbody rb)
     {
+        homeButton.interactable = false;
+
         float centerTime = animationDuration * 0.10f;
         float levitateTime = animationDuration * 0.60f;
         float burstTime = animationDuration * 0.30f;

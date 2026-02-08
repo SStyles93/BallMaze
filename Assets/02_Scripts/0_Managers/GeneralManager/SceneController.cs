@@ -30,6 +30,7 @@ public class SceneController : MonoBehaviour
     private bool isBusy = false;
 
     public SceneDatabase.Scenes PreviousActiveScene;
+    public SceneDatabase.Scenes CurrentActiveScene;
 
     public bool IsBusy => isBusy;
 
@@ -139,6 +140,7 @@ public class SceneController : MonoBehaviour
             if (newScene.IsValid() && newScene.isLoaded)
             {
                 SceneManager.SetActiveScene(newScene);
+                CurrentActiveScene = DatabaseSceneFromScene(newScene);
             }
         }
 

@@ -53,11 +53,11 @@ public class CustomizationData_SO_CustomInspectior : Editor
         GUI.color = Color.green;
         if (GUILayout.Button("Reset Data", style, GUILayout.ExpandWidth(true)))
         {
-            for (int i = 1; i < _target.skins.Length; i++)
+            for (int i = 2; i < _target.skins.Length; i++)
             {
                 _target.skins[i].isLocked = true;
             }
-            for (int i = 1; i < _target.colors.Length; i++)
+            for (int i = 2; i < _target.colors.Length; i++)
             {
                 _target.colors[i].isLocked = true;
             }
