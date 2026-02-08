@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameTutorialManager : MonoBehaviour
 {
-    private List<int> triggers = new List<int>();
+    public List<int> triggers = new List<int>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,7 +24,7 @@ public class GameTutorialManager : MonoBehaviour
     // Called by the trigger when something enters it
     public void TriggerActivated(int index)
     {
-        if (!triggers.Contains(index))
+        if (triggers.Contains(index))
         {
             TutorialManager.Instance.StartTutorial(index);
         }
