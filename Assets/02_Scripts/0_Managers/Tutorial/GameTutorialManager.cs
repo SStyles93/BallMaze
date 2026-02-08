@@ -27,6 +27,7 @@ public class GameTutorialManager : MonoBehaviour
         if (triggers.Contains(index))
         {
             TutorialManager.Instance.StartTutorial(index);
+            triggers.RemoveAt(index);
         }
     }
 }

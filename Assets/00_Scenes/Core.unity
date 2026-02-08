@@ -2260,7 +2260,7 @@ MonoBehaviour:
       tutorialUIElements:
       - elementAnimation: {fileID: 1647435492}
         animationSequence: 04000000
-        duration: 0.5
+        duration: 0.1
         loop: 1
         anchorID: game_tap_jump
       maskData:
