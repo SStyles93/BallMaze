@@ -80,6 +80,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (GameStateManager.Instance?.CurrentGameState != GameState.Playing)
+        {
+            ResetJoystick();
+            return;
+        }
+
         if (lastMovementTimer > 0f)
             lastMovementTimer -= Time.deltaTime;
 
@@ -125,12 +131,12 @@ public class PlayerController : MonoBehaviour
         {
             movementDirection = ctx.ReadValue<Vector2>();
             // Calls the event for the PlayerMovement
-            OnMovePerformed?.Invoke(movementDirection);
+            SendMovement(movementDirection);
             //Debug.Log(ctx.ReadValue<Vector2>());
         }
         if (ctx.canceled)
         {
-            OnMovePerformed?.Invoke(Vector3.zero);
+            SendMovement(Vector2.zero);
         }
     }
 
@@ -141,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
         if (ctx.performed)
         {
-            OnJumpPerformed?.Invoke();
+            PerformJump();
             //Debug.Log(ctx.ReadValue<float>());
         }
     }
@@ -152,6 +158,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnFingerDown(Finger finger)
     {
+        if (!InputGate.Allowed.HasFlag(AllowedInput.Touch))
+            return;
+
         if (IsPointerOverUI(finger)) return;
 
         Vector2 pos = finger.screenPosition;
@@ -173,6 +182,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnFingerMove(Finger finger)
     {
+        if (!InputGate.Allowed.HasFlag(AllowedInput.Swipe))
+            return;
+
         if (finger != joystickFinger)
             return;
 
@@ -202,6 +214,7 @@ public class PlayerController : MonoBehaviour
         float distance = Vector2.Distance(joystickStartPos, finger.screenPosition);
 
         bool isTapJump =
+             InputGate.Allowed.HasFlag(AllowedInput.Tap) &&
             !joystickFingerDragged &&
             duration <= tapMaxDuration &&
             distance <= tapMaxDistance;
@@ -217,18 +230,26 @@ public class PlayerController : MonoBehaviour
 
     private void SendMovement(Vector2 input)
     {
-        if (input.magnitude > 0.2f)
+        if (!InputGate.Allowed.HasFlag(AllowedInput.Move))
+            return;
+
+        Vector2 clamped = ClampMovement(input);
+
+        if (clamped.magnitude > 0.2f)
         {
-            lastMovementDirection = input;
+            lastMovementDirection = clamped;
             lastMovementTimer = tapWindowTime;
         }
 
-        OnMovePerformed?.Invoke(input);
+        OnMovePerformed?.Invoke(clamped);
         //MOVE_TEXT.text = $"Move - {input}";
     }
 
     private void PerformJump()
     {
+        if (!InputGate.Allowed.HasFlag(AllowedInput.Jump))
+            return;
+
         if (lastMovementTimer > 0f)
         {
             // Re-emit last movement so jump uses it
@@ -265,4 +286,23 @@ public class PlayerController : MonoBehaviour
         return raycastResults.Count > 0;
     }
     #endregion
+
+    private Vector2 ClampMovement(Vector2 input)
+    {
+        Vector2 result = input;
+
+        if (!MovementGate.Allowed.HasFlag(AllowedMovement.Forward))
+            result.y = Mathf.Min(result.y, 0f);
+
+        if (!MovementGate.Allowed.HasFlag(AllowedMovement.Backward))
+            result.y = Mathf.Max(result.y, 0f);
+
+        if (!MovementGate.Allowed.HasFlag(AllowedMovement.Right))
+            result.x = Mathf.Min(result.x, 0f);
+
+        if (!MovementGate.Allowed.HasFlag(AllowedMovement.Left))
+            result.x = Mathf.Max(result.x, 0f);
+
+        return result;
+    }
 }

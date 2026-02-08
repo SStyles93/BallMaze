@@ -152,8 +152,13 @@ public class TutorialUIAnimation : MonoBehaviour
             case TutorialUIAnimType.ScaleUpDown:
                 yield return ScaleUpDown(0.2f);
                 break;
+
+            case TutorialUIAnimType.MoveToTarget:
+                yield return MoveToTargetRoutine();
+                break;
         }
     }
+
 
     private IEnumerator FadeRoutine(float target)
     {
@@ -184,6 +189,53 @@ public class TutorialUIAnimation : MonoBehaviour
 
         rectTransform.localScale = initialScale;
     }
+
+    private IEnumerator MoveToTargetRoutine()
+    {
+        if (context == null || string.IsNullOrEmpty(anchorId))
+            yield break;
+
+        // Get the anchor RectTransform
+        RectTransform anchor = context.Get(anchorId);
+        if (anchor == null)
+            yield break;
+
+        // Access start and end positions from TutorialContext
+        Vector2 start = Vector2.zero;
+        Vector2 end = Vector2.zero;
+
+        // Find the UIAnchor struct for this id
+        foreach (var a in context.anchors)
+        {
+            if (a.id == anchorId)
+            {
+                start = a.startPosition;
+                end = a.endPosition;
+                break;
+            }
+        }
+
+        // Transform local anchor positions to this RectTransform's parent space
+        RectTransform parent = rectTransform.parent as RectTransform;
+        Vector2 startPos = RectTransformUtility.WorldToScreenPoint(null, anchor.TransformPoint(start));
+        Vector2 endPos = RectTransformUtility.WorldToScreenPoint(null, anchor.TransformPoint(end));
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, startPos, null, out startPos);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, endPos, null, out endPos);
+
+        // Animate
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Ease(elapsed / duration);
+            rectTransform.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
+            yield return null;
+        }
+
+        rectTransform.anchoredPosition = endPos;
+    }
+
 
     private float Ease(float t)
     {

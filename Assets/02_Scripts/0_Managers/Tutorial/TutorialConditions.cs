@@ -1,30 +1,123 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class TapAnywhereCondition : ITutorialCondition
 {
     public bool IsSatisfied()
     {
-        return Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame;
+        return Pointer.current != null &&
+               Pointer.current.press.wasPressedThisFrame;
+    }
+}
+
+
+[System.Serializable]
+public class TapInAreaCondition : ITutorialCondition, IContextBoundCondition
+{
+    public float padding = 0f;
+    private Rect screenRect;
+
+    public void BindContext(TutorialContext context, string anchorId, Canvas canvas)
+    {
+        var rect = context?.Get(anchorId);
+        if (rect == null) return;
+
+        Vector3[] corners = new Vector3[4];
+        rect.GetWorldCorners(corners);
+
+        Vector2 min = RectTransformUtility.WorldToScreenPoint(null, corners[0]);
+        Vector2 max = RectTransformUtility.WorldToScreenPoint(null, corners[2]);
+
+        screenRect = Rect.MinMaxRect(
+            min.x - padding,
+            min.y - padding,
+            max.x + padding,
+            max.y + padding
+        );
+    }
+
+    public bool IsSatisfied()
+    {
+        var pointer = Pointer.current;
+        if (pointer == null || !pointer.press.wasPressedThisFrame)
+            return false;
+
+        return screenRect.Contains(pointer.position.ReadValue());
     }
 }
 
 [System.Serializable]
-public class TapInAreaCondition : ITutorialCondition
+public class TapAndReleaseInAreaCondition : ITutorialCondition, IContextBoundCondition
 {
-    public Rect screenArea;
+    [Header("Tap Tolerance")]
+    public float padding = 0f;
+    public float maxMoveDistance = 40f;   // pixels
+    public float maxDuration = 0.3f;      // seconds
+
+    private Rect screenRect;
+
+    private Vector2 pressPosition;
+    private float pressTime;
+    private bool pressedInside;
+
+    public void BindContext(
+        TutorialContext context,
+        string anchorId,
+        Canvas canvas)
+    {
+        var rect = context?.Get(anchorId);
+        if (rect == null) return;
+
+        Vector3[] corners = new Vector3[4];
+        rect.GetWorldCorners(corners);
+
+        Vector2 min = RectTransformUtility.WorldToScreenPoint(null, corners[0]);
+        Vector2 max = RectTransformUtility.WorldToScreenPoint(null, corners[2]);
+
+        screenRect = Rect.MinMaxRect(
+            min.x - padding,
+            min.y - padding,
+            max.x + padding,
+            max.y + padding
+        );
+    }
 
     public bool IsSatisfied()
     {
-        if (Mouse.current == null || !Mouse.current.leftButton.wasPressedThisFrame)
-            return false;
+        var pointer = Pointer.current;
+        if (pointer == null) return false;
 
-        Vector2 pos = Mouse.current.position.ReadValue();
-        return screenArea.Contains(pos);
+        Vector2 pos = pointer.position.ReadValue();
+
+        // Press
+        if (pointer.press.wasPressedThisFrame)
+        {
+            pressPosition = pos;
+            pressTime = Time.time;
+            pressedInside = screenRect.Contains(pos);
+            return false;
+        }
+
+        // Release
+        if (pressedInside && pointer.press.wasReleasedThisFrame)
+        {
+            pressedInside = false;
+
+            float duration = Time.time - pressTime;
+            float distance = Vector2.Distance(pressPosition, pos);
+
+            return
+                screenRect.Contains(pos) &&
+                duration <= maxDuration &&
+                distance <= maxMoveDistance;
+        }
+
+        return false;
     }
 }
 
@@ -35,23 +128,71 @@ public class SwipeCondition : ITutorialCondition
     public float minDistance = 100f;
 
     private Vector2 start;
+    private bool isSwiping = false;
 
     public bool IsSatisfied()
     {
-        if (Mouse.current == null) return false;
+        var pointer = Pointer.current;
+        if (pointer == null) return false;
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-            start = Mouse.current.position.ReadValue();
-
-        if (Mouse.current.leftButton.wasReleasedThisFrame)
+        // When the swipe starts
+        if (pointer.press.wasPressedThisFrame)
         {
-            Vector2 delta = Mouse.current.position.ReadValue() - start;
+            start = pointer.position.ReadValue();
+            isSwiping = true;
+        }
+
+        // Check while swiping
+        if (isSwiping && pointer.press.isPressed)
+        {
+            Vector2 delta = pointer.position.ReadValue() - start;
+            if (delta.magnitude >= minDistance &&
+                Vector2.Dot(delta.normalized, direction.normalized) > 0.8f)
+            {
+                isSwiping = false; // reset to avoid multiple triggers
+                return true;
+            }
+        }
+
+        // Reset if pointer released before reaching minDistance
+        if (pointer.press.wasReleasedThisFrame)
+        {
+            isSwiping = false;
+        }
+
+        return false;
+    }
+}
+
+
+
+
+[System.Serializable]
+public class SwipeAndReleaseCondition : ITutorialCondition
+{
+    public Vector2 direction;
+    public float minDistance = 100f;
+
+    private Vector2 start;
+
+    public bool IsSatisfied()
+    {
+        var pointer = Pointer.current;
+        if (pointer == null) return false;
+
+        if (pointer.press.wasPressedThisFrame)
+            start = pointer.position.ReadValue();
+
+        if (pointer.press.wasReleasedThisFrame)
+        {
+            Vector2 delta = pointer.position.ReadValue() - start;
             return delta.magnitude >= minDistance &&
                    Vector2.Dot(delta.normalized, direction.normalized) > 0.8f;
         }
 
         return false;
     }
+
 }
 
 [System.Serializable]
@@ -85,42 +226,125 @@ public class TapOnUIElementCondition : ITutorialCondition
     }
 }
 
+
 [System.Serializable]
-public class DragFromToCondition : ITutorialCondition
+public class DragFromToCondition : ITutorialCondition, IContextBoundCondition
 {
-    public Vector2 startAreaCenter;
-    public float startRadius = 80f;
+    [Min(0)] public float startRadius = 80f;
+    [Min(0)] public float endRadius = 80f;
+    [Min(0)] public float minDragDistance = 150f;
 
-    public Vector2 endAreaCenter;
-    public float endRadius = 80f;
-
-    public float minDragDistance = 150f;
+    private Vector2 startScreen;
+    private Vector2 endScreen;
 
     private Vector2 dragStart;
     private bool dragging;
 
+    public void BindContext(TutorialContext context, string anchorId, Canvas canvas)
+    {
+        if (context == null) return;
+
+        var uiAnchor = context.anchors.FirstOrDefault(a => a.id == anchorId);
+        if (uiAnchor.rect == null) return;
+
+        Vector2 startWorld = uiAnchor.rect.TransformPoint(uiAnchor.startPosition);
+        Vector2 endWorld = uiAnchor.rect.TransformPoint(uiAnchor.endPosition);
+
+        startScreen = RectTransformUtility.WorldToScreenPoint(null, startWorld);
+        endScreen = RectTransformUtility.WorldToScreenPoint(null, endWorld);
+    }
+
     public bool IsSatisfied()
     {
-        if (Mouse.current == null) return false;
+        var pointer = Pointer.current;
+        if (pointer == null) return false;
 
-        // Start drag
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        Vector2 pos = pointer.position.ReadValue();
+
+        // Start drag if pointer pressed near start
+        if (pointer.press.wasPressedThisFrame)
         {
-            dragStart = Mouse.current.position.ReadValue();
-            dragging = Vector2.Distance(dragStart, startAreaCenter) <= startRadius;
+            dragStart = pos;
+            dragging = Vector2.Distance(dragStart, startScreen) <= startRadius;
         }
 
-        // End drag
-        if (dragging && Mouse.current.leftButton.wasReleasedThisFrame)
+        // Check while dragging (pointer still pressed)
+        if (dragging && pointer.press.isPressed)
         {
-            Vector2 dragEnd = Mouse.current.position.ReadValue();
-            bool reachedEnd = Vector2.Distance(dragEnd, endAreaCenter) <= endRadius;
-            bool longEnough = Vector2.Distance(dragStart, dragEnd) >= minDragDistance;
+            Vector2 delta = pos - dragStart;
+
+            float distanceToEnd = Vector2.Distance(pos, endScreen);
+            float dragDistance = delta.magnitude;
+
+            if (dragDistance >= minDragDistance && distanceToEnd <= endRadius)
+            {
+                dragging = false; // reset so it triggers only once
+                return true;
+            }
+        }
+
+        // Reset if pointer released before satisfying
+        if (pointer.press.wasReleasedThisFrame)
+            dragging = false;
+
+        return false;
+    }
+}
+
+
+
+[System.Serializable]
+public class DragFromReleaseAtCondition : ITutorialCondition, IContextBoundCondition
+{
+    [Min (0)] public float startRadius = 80f;
+    [Min(0)] public float endRadius = 80f;
+    [Min(0)] public float minDragDistance = 150f;
+
+    private Vector2 startScreen;
+    private Vector2 endScreen;
+
+    private Vector2 dragStart;
+    private bool dragging;
+
+    public void BindContext(TutorialContext context, string anchorId, Canvas canvas)
+    {
+        if (context == null) return;
+
+        var uiAnchor = context.anchors.FirstOrDefault(a => a.id == anchorId);
+        if (uiAnchor.rect == null) return;
+
+        Vector2 startWorld = uiAnchor.rect.TransformPoint(uiAnchor.startPosition);
+        Vector2 endWorld = uiAnchor.rect.TransformPoint(uiAnchor.endPosition);
+
+        startScreen = RectTransformUtility.WorldToScreenPoint(null, startWorld);
+        endScreen = RectTransformUtility.WorldToScreenPoint(null, endWorld);
+    }
+
+    public bool IsSatisfied()
+    {
+        var pointer = Pointer.current;
+        if (pointer == null) return false;
+
+        Vector2 pos = pointer.position.ReadValue();
+
+        if (pointer.press.wasPressedThisFrame)
+        {
+            dragStart = pos;
+            dragging = Vector2.Distance(dragStart, startScreen) <= startRadius;
+        }
+
+        if (dragging && pointer.press.wasReleasedThisFrame)
+        {
+            Vector2 dragEnd = pos;
 
             dragging = false;
-            return reachedEnd && longEnough;
+            return
+                Vector2.Distance(dragEnd, endScreen) <= endRadius &&
+                Vector2.Distance(dragStart, dragEnd) >= minDragDistance;
         }
 
         return false;
     }
 }
+
+

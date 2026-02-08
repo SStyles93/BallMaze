@@ -32,4 +32,7 @@ public class GameStateManager : MonoBehaviour
     {
         currentGameState = state;
     }
+
+    public void PauseGame() => currentGameState = GameState.Paused;
+    public void ResumeGame() => currentGameState = GameState.Playing;
 }

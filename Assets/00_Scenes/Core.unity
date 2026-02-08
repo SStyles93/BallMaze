@@ -1821,7 +1821,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -1500, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 512, y: 512}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1647435490
 MonoBehaviour:
@@ -1843,7 +1843,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1011555705, guid: e7e210410311590458ea3f20dd626f24, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 171151c3be9b22b489767929712a8067, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2069,6 +2069,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2010482526}
+  - component: {fileID: 2010482527}
   m_Layer: 0
   m_Name: --- SETUP ---
   m_TagString: Untagged
@@ -2097,6 +2098,18 @@ Transform:
   - {fileID: 849186765}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2010482527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010482525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e31057ef324a04478bb4f7d469b3cdc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.EnhancedTouch.TouchSimulation
 --- !u!1 &2109442886
 GameObject:
   m_ObjectHideFlags: 0
@@ -2213,36 +2226,105 @@ MonoBehaviour:
     tutorialType: Movement
     description: Teaches the player to Move
     steps:
-    - description: Click on the play button
+    - description: Swipe forward to move
       tutorialUIElements:
       - elementAnimation: {fileID: 1647435492}
-        animationSequence: 04000000
+        animationSequence: 00000000
         duration: 1
         loop: 1
-        anchorID: play_button
+        anchorID: game_swipe_forward
       maskData:
         enableMask: 1
-        focusTargetId: heart_button
+        focusTargetId: game_swipe_forward
         padding: 10
         blockOutsideClicks: 1
       autoComplete: 0
       waitTime: 0
       completionCondition:
-        rid: 4426608676113219845
+        rid: 4426608699110326510
+      allowedInput: 13
+      allowedMovement: 1
       onStepStart:
         m_PersistentCalls:
           m_Calls: []
       onStepComplete:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: PauseGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - description: Tap to Jump
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 04000000
+        duration: 1
+        loop: 1
+        anchorID: game_tap_jump
+      maskData:
+        enableMask: 1
+        focusTargetId: game_tap_jump
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      completionCondition:
+        rid: 4426608699110326474
+      allowedInput: -1
+      allowedMovement: 0
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: ResumeGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: ResumeGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
   references:
     version: 2
     RefIds:
-    - rid: 4426608676113219845
-      type: {class: SwipeCondition, ns: , asm: Assembly-CSharp}
+    - rid: 4426608699110326474
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
       data:
-        direction: {x: 0, y: 1}
-        minDistance: 200
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608699110326510
+      type: {class: DragFromToCondition, ns: , asm: Assembly-CSharp}
+      data:
+        startRadius: 400
+        endRadius: 400
+        minDragDistance: 300
 --- !u!222 &4739770524757124673
 CanvasRenderer:
   m_ObjectHideFlags: 0

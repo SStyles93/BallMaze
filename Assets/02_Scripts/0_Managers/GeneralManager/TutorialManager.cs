@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -31,9 +32,12 @@ public class TutorialStep
     [Header("Completion")]
     public bool autoComplete;
     public float waitTime;
-
     [SerializeReference]
     public ITutorialCondition completionCondition;
+
+    [Header("Movement Restrictions")]
+    public AllowedInput allowedInput = AllowedInput.All;
+    public AllowedMovement allowedMovement = AllowedMovement.All;
 
     public UnityEvent onStepStart;
     public UnityEvent onStepComplete;
@@ -222,6 +226,13 @@ public class TutorialManager : MonoBehaviour
                 );
             }
 
+            // =========================
+            // INPUT GATE
+            // =========================
+
+            InputGate.Allowed = step.allowedInput;
+            MovementGate.Allowed = step.allowedMovement;
+
 
             // =========================
             // STEP START
@@ -237,8 +248,17 @@ public class TutorialManager : MonoBehaviour
             }
             else if (step.completionCondition != null)
             {
-                yield return new WaitUntil(() =>
-                    step.completionCondition.IsSatisfied());
+                if (step.completionCondition is IContextBoundCondition boundCondition && 
+                    currentContext != null && step.tutorialUIElements.Length > 0)
+                {
+                    boundCondition.BindContext(
+                        currentContext,
+                        step.tutorialUIElements[0].anchorID,
+                        tutorialCanvas
+                    );
+                }
+
+                yield return new WaitUntil(() => step.completionCondition.IsSatisfied());
             }
             else
             {
@@ -249,6 +269,9 @@ public class TutorialManager : MonoBehaviour
             // =========================
             // STEP COMPLETE
             // =========================
+            InputGate.Allowed = AllowedInput.All;
+            MovementGate.Allowed = AllowedMovement.All;
+
             step.onStepComplete?.Invoke();
             currentStepIndex++;
         }

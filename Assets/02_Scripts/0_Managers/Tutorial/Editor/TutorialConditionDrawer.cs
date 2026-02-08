@@ -14,10 +14,7 @@ public class TutorialConditionDrawer : PropertyDrawer
     {
         conditionTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(a => a.GetTypes())
-            .Where(t =>
-                typeof(ITutorialCondition).IsAssignableFrom(t) &&
-                !t.IsInterface &&
-                !t.IsAbstract)
+            .Where(t => typeof(ITutorialCondition).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
             .ToList();
 
         displayNames = new string[conditionTypes.Count + 1];
@@ -32,11 +29,11 @@ public class TutorialConditionDrawer : PropertyDrawer
         if (property.managedReferenceValue == null)
             return EditorGUIUtility.singleLineHeight;
 
-        float height = EditorGUIUtility.singleLineHeight; // for dropdown
+        float height = EditorGUIUtility.singleLineHeight; // dropdown
         SerializedProperty iterator = property.Copy();
         SerializedProperty end = iterator.GetEndProperty();
 
-        iterator.NextVisible(true); // skip the managedReference field itself
+        iterator.NextVisible(true); // skip managedReference itself
 
         while (!SerializedProperty.EqualContents(iterator, end))
         {
@@ -51,13 +48,8 @@ public class TutorialConditionDrawer : PropertyDrawer
     {
         EditorGUI.BeginProperty(position, label, property);
 
-        // Draw dropdown
-        Rect dropdownRect = new Rect(
-            position.x,
-            position.y,
-            position.width,
-            EditorGUIUtility.singleLineHeight
-        );
+        // Dropdown
+        Rect dropdownRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
 
         int currentIndex = 0;
         if (property.managedReferenceValue != null)
@@ -71,38 +63,31 @@ public class TutorialConditionDrawer : PropertyDrawer
         if (newIndex != currentIndex)
         {
             if (newIndex == 0)
-            {
                 property.managedReferenceValue = null;
-            }
             else
-            {
-                Type selectedType = conditionTypes[newIndex - 1];
-                property.managedReferenceValue = Activator.CreateInstance(selectedType);
-            }
+                property.managedReferenceValue = Activator.CreateInstance(conditionTypes[newIndex - 1]);
         }
 
-        // Draw child fields
+        // Draw only editable child fields
         if (property.managedReferenceValue != null)
         {
-            Rect contentRect = new Rect(
-                position.x,
-                position.y + EditorGUIUtility.singleLineHeight + 2,
-                position.width,
-                position.height - EditorGUIUtility.singleLineHeight - 2
-            );
+            Rect contentRect = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight + 2,
+                                        position.width, position.height - EditorGUIUtility.singleLineHeight - 2);
 
             SerializedProperty iterator = property.Copy();
             SerializedProperty end = iterator.GetEndProperty();
-
-            iterator.NextVisible(true); // move to first child
+            iterator.NextVisible(true); // first child
 
             EditorGUI.indentLevel++;
             while (!SerializedProperty.EqualContents(iterator, end))
             {
-                float h = EditorGUI.GetPropertyHeight(iterator, true);
-                Rect r = new Rect(contentRect.x, contentRect.y, contentRect.width, h);
-                EditorGUI.PropertyField(r, iterator, true);
-                contentRect.y += h + 2;
+                if (iterator.name != "startPosition" && iterator.name != "endPosition") // hide positions
+                {
+                    float h = EditorGUI.GetPropertyHeight(iterator, true);
+                    Rect r = new Rect(contentRect.x, contentRect.y, contentRect.width, h);
+                    EditorGUI.PropertyField(r, iterator, true);
+                    contentRect.y += h + 2;
+                }
                 iterator.NextVisible(false);
             }
             EditorGUI.indentLevel--;

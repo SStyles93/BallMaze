@@ -26,8 +26,6 @@ public class GamesMenuManager : MonoBehaviour
         StartCoroutine(ScrollToCurrentLevel());
 
         playButton.InitializeLastLevelToPlay();
-
-        TutorialManager.Instance.StartTutorial(0);
     }
 
     public void SetLevelToPlay(int index)
