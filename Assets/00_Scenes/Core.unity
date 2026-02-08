@@ -2182,6 +2182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2144166143}
   - component: {fileID: 2144166144}
+  - component: {fileID: 2144166145}
   m_Layer: 0
   m_Name: TutorialManager
   m_TagString: Untagged
@@ -2224,7 +2225,7 @@ MonoBehaviour:
   - tutorialName: GameplayIntro
     levelNumber: 1
     tutorialType: Movement
-    description: Teaches the player to Move
+    description: Teaches the player to Move Foward
     steps:
     - description: Swipe forward to move
       tutorialUIElements:
@@ -2241,7 +2242,7 @@ MonoBehaviour:
       autoComplete: 0
       waitTime: 0
       completionCondition:
-        rid: 4426608699110326510
+        rid: 4426608699110326557
       allowedInput: 13
       allowedMovement: 1
       onStepStart:
@@ -2249,24 +2250,17 @@ MonoBehaviour:
           m_Calls: []
       onStepComplete:
         m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 1312464705}
-            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
-            m_MethodName: PauseGame
-            m_Mode: 1
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: 
-              m_BoolArgument: 0
-            m_CallState: 2
+          m_Calls: []
+  - tutorialName: TapToJump
+    levelNumber: 1
+    tutorialType: Jump
+    description: Teaches the player to Jump
+    steps:
     - description: Tap to Jump
       tutorialUIElements:
       - elementAnimation: {fileID: 1647435492}
         animationSequence: 04000000
-        duration: 1
+        duration: 0.5
         loop: 1
         anchorID: game_tap_jump
       maskData:
@@ -2285,13 +2279,13 @@ MonoBehaviour:
           m_Calls:
           - m_Target: {fileID: 1312464705}
             m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
-            m_MethodName: ResumeGame
-            m_Mode: 1
+            m_MethodName: SetTimeScale
+            m_Mode: 4
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
-              m_FloatArgument: 0
+              m_FloatArgument: 0.1
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
@@ -2319,12 +2313,23 @@ MonoBehaviour:
         padding: 0
         maxMoveDistance: 40
         maxDuration: 0.3
-    - rid: 4426608699110326510
-      type: {class: DragFromToCondition, ns: , asm: Assembly-CSharp}
+    - rid: 4426608699110326557
+      type: {class: SwipeCondition, ns: , asm: Assembly-CSharp}
       data:
-        startRadius: 400
-        endRadius: 400
-        minDragDistance: 300
+        direction: {x: 0, y: 1}
+        minDistance: 200
+--- !u!114 &2144166145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144166142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7055202f289f91f4e9981c4b6c384245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialSignalEmitter
 --- !u!222 &4739770524757124673
 CanvasRenderer:
   m_ObjectHideFlags: 0

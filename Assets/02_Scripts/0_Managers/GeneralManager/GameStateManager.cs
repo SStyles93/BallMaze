@@ -33,6 +33,20 @@ public class GameStateManager : MonoBehaviour
         currentGameState = state;
     }
 
-    public void PauseGame() => currentGameState = GameState.Paused;
-    public void ResumeGame() => currentGameState = GameState.Playing;
+    public void PauseGame()
+    {
+        currentGameState = GameState.Paused;
+        Time.timeScale = 0.0f;
+    }
+
+    public void ResumeGame()
+    {
+        currentGameState = GameState.Playing;
+        Time.timeScale = 1.0f;
+    }
+
+    public void SetTimeScale(float timeScale)
+    {
+        Time.timeScale = timeScale;
+    }
 }

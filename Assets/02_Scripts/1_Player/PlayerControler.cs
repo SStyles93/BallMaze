@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
     {
         if (GameStateManager.Instance?.CurrentGameState != GameState.Playing)
         {
-            ResetJoystick();
+            //ResetJoystick();
             return;
         }
 
