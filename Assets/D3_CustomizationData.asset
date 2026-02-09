@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d8ab3b68e8ce4c4292323bcb2d002b0, type: 3}
-  m_Name: Z_D3_CustomizationData
+  m_Name: D3_CustomizationData
   m_EditorClassIdentifier: Assembly-CSharp::CustomizationData_SO
   skins:
   - id: marble_type01_m_01
@@ -24,7 +24,7 @@ MonoBehaviour:
     isPremium: 0
     color: {r: 0, g: 0, b: 0, a: 0}
   - id: marble_type01_m_02
-    isLocked: 1
+    isLocked: 0
     levelToUnlock: 0
     price:
       CoinType: 0
@@ -502,7 +502,7 @@ MonoBehaviour:
       Amount: 0
     color: {r: 1, g: 1, b: 1, a: 1}
   - id: palette_v1_1
-    isLocked: 1
+    isLocked: 0
     levelToUnlock: 0
     price:
       CoinType: 0
@@ -514,7 +514,7 @@ MonoBehaviour:
     price:
       CoinType: 0
       Amount: 0
-    color: {r: 1, g: 1, b: 1, a: 1}
+    color: {r: 0.972549, g: 0.72156864, b: 0.5803922, a: 1}
   - id: palette_v1_3
     isLocked: 1
     levelToUnlock: 0

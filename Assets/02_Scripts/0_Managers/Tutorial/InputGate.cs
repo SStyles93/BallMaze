@@ -26,7 +26,7 @@ public enum AllowedMovement
     Backward = 1 << 1,
     Left = 1 << 2,
     Right = 1 << 3,
-    All = Forward | Backward | Left | Right
+    All = ~0
 }
 
 public static class MovementGate

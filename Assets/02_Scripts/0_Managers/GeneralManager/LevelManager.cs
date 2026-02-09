@@ -23,8 +23,6 @@ public class LevelManager : MonoBehaviour
 
 
     private Grid currentGrid;
-    private static readonly Vector2Int[] CardinalDirections =
-    { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right};
 
     private LevelData currentLevelData = null;
     private int currentLevelIndex = 0;
@@ -134,25 +132,23 @@ public class LevelManager : MonoBehaviour
                 SceneController.Instance.NewTransition() : customPlan;
 
             #region Tutorial
-
             // Movement Tutorial
             if (indexOfLevelToPlay == 1 && !TutorialManager.Instance.IsTutorial1Complete)
             {
                 plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Tutorial1);
             }
-
             // Rocket Tutorial
-            else if (indexOfLevelToPlay == 10 && !TutorialManager.Instance.IsTutorialRocketComplete)
+            else if (!TutorialManager.Instance.IsTutorialRocketComplete &&
+                    (indexOfLevelToPlay == 10 || CoinManager.Instance.GetCoinAmount(CoinType.ROCKET) > 0))
             {
                 plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.TutorialRocket);
             }
-
             // Rocket Tutorial
-            else if (indexOfLevelToPlay == 20 && !TutorialManager.Instance.IsTutorialUfoComplete)
+            else if (!TutorialManager.Instance.IsTutorialUfoComplete &&
+                (indexOfLevelToPlay == 20 || CoinManager.Instance.GetCoinAmount(CoinType.UFO) > 0))
             {
                 plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.TutorialUfo);
-            }
-
+            } 
             #endregion
             else
             {

@@ -23,7 +23,7 @@ public class RocketAnimation : MonoBehaviour
     [SerializeField] private float burstEasePower = 2f;
 
     private float totalDuration;
-    [SerializeField] private Vector3 targetWorldPos;
+    [SerializeField] private Vector3 targetWorldPos = Vector3.zero;
     private Sequence sequence;
 
     private void OnEnable()
@@ -43,7 +43,7 @@ public class RocketAnimation : MonoBehaviour
             Debug.Log("No walkable neighbour");
         }
 
-        if (!physicalMazeGeneratorRef.IsGridGenerated)
+        if (targetWorldPos == Vector3.zero)
             targetWorldPos = worldPositions[Random.Range(0, worldPositions.Count)];
 
         targetWorldPos.y = powerUpManagerRef.GetPowerUpHeightOffset(CoinType.ROCKET);

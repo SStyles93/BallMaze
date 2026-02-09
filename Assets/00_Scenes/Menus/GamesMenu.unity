@@ -225,6 +225,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4111429350209791974, guid: 43c68eb5626639041b9822e0901255d0, type: 3}
   m_PrefabInstance: {fileID: 155458142}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &155458144 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 430430631489477523, guid: 43c68eb5626639041b9822e0901255d0, type: 3}
+  m_PrefabInstance: {fileID: 155458142}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &158954800
 GameObject:
   m_ObjectHideFlags: 0
@@ -5555,6 +5560,7 @@ GameObject:
   - component: {fileID: 689690066}
   - component: {fileID: 689690067}
   - component: {fileID: 689690068}
+  - component: {fileID: 689690069}
   m_Layer: 5
   m_Name: GamePannel
   m_TagString: Untagged
@@ -5613,6 +5619,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdAwareCanvasPadding
   root: {fileID: 689690066}
+--- !u!114 &689690069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689690065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a03573a367ba834da23db65957e0b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerUpButtonManager
+  rocketButton: {fileID: 710205017}
+  ufoButton: {fileID: 155458144}
+  powerUpBackground: {fileID: 0}
+  states: 0
 --- !u!1001 &710205015
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5717,6 +5739,11 @@ PrefabInstance:
 --- !u!224 &710205016 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7276452961982539171, guid: a786600f5e42c3147b67870a2d7c4e67, type: 3}
+  m_PrefabInstance: {fileID: 710205015}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &710205017 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6747191782704781452, guid: a786600f5e42c3147b67870a2d7c4e67, type: 3}
   m_PrefabInstance: {fileID: 710205015}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &955936859
@@ -6426,10 +6453,19 @@ MonoBehaviour:
   anchors:
   - id: play_button
     rect: {fileID: 435486655}
+    startPosition: {x: 0, y: 0}
+    endPosition: {x: 0, y: 0}
+    gizmos: 0
   - id: heart_button
     rect: {fileID: 827572929941656374}
+    startPosition: {x: 0, y: 0}
+    endPosition: {x: 0, y: 0}
+    gizmos: 0
   - id: custom_button
     rect: {fileID: 2140506346}
+    startPosition: {x: 0, y: 0}
+    endPosition: {x: 0, y: 0}
+    gizmos: 0
 --- !u!1 &1607278856
 GameObject:
   m_ObjectHideFlags: 0

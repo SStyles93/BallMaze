@@ -56,4 +56,4 @@ MonoBehaviour:
   materialReference: {fileID: 2100000, guid: d0b5b4e45c472a94981a3234f899fd1c, type: 2}
   emissiveMaterialReference: {fileID: 2100000, guid: 0e0e1eb42e7f8d34382ebc5e7ddc4053, type: 2}
   targetPresetIndex: 3
-  lastPresetIndex: 6
+  lastPresetIndex: 0
