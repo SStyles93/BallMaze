@@ -38,13 +38,15 @@ public class RocketAnimation : MonoBehaviour
 
         if (rocketSound == null) rocketSound = GetComponent<RocketSound>();
 
-        if (!physicalMazeGeneratorRef.TryGetWalkableEndNeighbours(out List<Vector3> worldPositions))
-        {
-            Debug.Log("No walkable neighbour");
-        }
-
         if (targetWorldPos == Vector3.zero)
+        {
+            if (!physicalMazeGeneratorRef.TryGetWalkableEndNeighbours(out List<Vector3> worldPositions))
+            {
+                Debug.Log("No walkable neighbour");
+            }
+
             targetWorldPos = worldPositions[Random.Range(0, worldPositions.Count)];
+        }
 
         targetWorldPos.y = powerUpManagerRef.GetPowerUpHeightOffset(CoinType.ROCKET);
 
