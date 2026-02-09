@@ -101,24 +101,24 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _FesnelPower: 1.5
+    - _FesnelPower: 1.71
     - _Float: 0
     - _Fresnel_Luminance: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
-    - _Metalness: 0
+    - _Metalness: 1
     - _Metalness_1: 0
     - _OUtline: 0
     - _OUtline_Thickness: 0
     - _OcclusionStrength: 1
-    - _Outline_Thickness: 0.1
+    - _Outline_Thickness: 0.11
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.6
+    - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

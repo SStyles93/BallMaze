@@ -23,7 +23,7 @@ public class RocketAnimation : MonoBehaviour
     [SerializeField] private float burstEasePower = 2f;
 
     private float totalDuration;
-    private Vector3 targetWorldPos;
+    [SerializeField] private Vector3 targetWorldPos = Vector3.zero;
     private Sequence sequence;
 
     private void OnEnable()
@@ -34,16 +34,20 @@ public class RocketAnimation : MonoBehaviour
             return;
         }
 
-        if(powerUpManagerRef == null) powerUpManagerRef = transform.GetComponentInParent<PowerUpManager>();
+        if (powerUpManagerRef == null) powerUpManagerRef = transform.GetComponentInParent<PowerUpManager>();
 
         if (rocketSound == null) rocketSound = GetComponent<RocketSound>();
 
-        if(!physicalMazeGeneratorRef.TryGetWalkableEndNeighbours(out List<Vector3> worldPositions))
+        if (targetWorldPos == Vector3.zero)
         {
-            Debug.Log("No walkable neighbour");
+            if (!physicalMazeGeneratorRef.TryGetWalkableEndNeighbours(out List<Vector3> worldPositions))
+            {
+                Debug.Log("No walkable neighbour");
+            }
+
+            targetWorldPos = worldPositions[Random.Range(0, worldPositions.Count)];
         }
 
-        targetWorldPos = worldPositions[Random.Range(0, worldPositions.Count)];
         targetWorldPos.y = powerUpManagerRef.GetPowerUpHeightOffset(CoinType.ROCKET);
 
         // Pull duration directly from PowerUpManager

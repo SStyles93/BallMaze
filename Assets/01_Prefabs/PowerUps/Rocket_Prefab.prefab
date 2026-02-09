@@ -663,7 +663,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8192
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
@@ -781,6 +781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RocketAnimation
   physicalMazeGeneratorRef: {fileID: 0}
+  powerUpManagerRef: {fileID: 0}
   rocketSound: {fileID: 0}
   ps: {fileID: 0}
   rotatePhaseRatio: 0.6
@@ -788,6 +789,7 @@ MonoBehaviour:
   shakeVibrato: 20
   burstEase: 6
   burstEasePower: 2
+  targetWorldPos: {x: 0, y: 0, z: 0}
 --- !u!114 &2371491618587410530
 MonoBehaviour:
   m_ObjectHideFlags: 0

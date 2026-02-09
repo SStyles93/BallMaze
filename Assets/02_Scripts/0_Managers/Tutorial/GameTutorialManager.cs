@@ -6,12 +6,6 @@ public class GameTutorialManager : MonoBehaviour
 {
     public Dictionary<int, Action> triggeredCallbacks = new Dictionary<int, Action>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        TutorialManager.Instance.StartTutorial(0);
-    }
-
     // Use a dictionary to store callbacks per trigger index
 
     // Register a callback for a trigger index

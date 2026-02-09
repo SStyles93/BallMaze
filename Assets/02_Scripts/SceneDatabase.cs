@@ -22,6 +22,8 @@ public class SceneDatabase : MonoBehaviour
         ShopMenu,
         CreditsPannel,
         HeartPannel,
-        Tutorial1
+        Tutorial1,
+        TutorialRocket,
+        TutorialUfo
     }
 }

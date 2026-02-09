@@ -32,12 +32,14 @@ public class PhysicalMazeGenerator : MonoBehaviour
 
     private Grid currentGrid;
 
+    public bool IsGridGenerated => isGridGenerated;
+
     private void Awake()
     {
         // Safe Guard in case the state was wrong before entering the game
         GameStateManager.Instance?.SetState(GameState.Playing);
 
-        if (LevelManager.Instance != null)
+        if (LevelManager.Instance != null && !isGridGenerated)
         {
             // Generate the map on Awake
             Generate(LevelManager.Instance.CurrentGrid);
@@ -48,7 +50,6 @@ public class PhysicalMazeGenerator : MonoBehaviour
             OnGenerationFinished?.Invoke();
         }
     }
-
 
     // ======================================
     // PUBLIC GENERATION METHOD

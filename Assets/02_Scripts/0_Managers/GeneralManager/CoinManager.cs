@@ -15,9 +15,10 @@ public class CoinManager : MonoBehaviour
     [Tooltip("Time to wait before it is possible to replay a rewarded coin video")]
     [SerializeField] private int hoursBetweenRewardedCoins = 4;
 
-    public bool wasCoinsReceived = false;
-    public bool wasRocketReceived = false;
-    public bool wasUfoReceived = false;
+    [HideInInspector]
+    public bool wasCoinsReceived = false, 
+        wasRocketReceived = false,
+        wasUfoReceived = false;
 
 
     Coroutine timerCoroutine;
@@ -188,6 +189,37 @@ public class CoinManager : MonoBehaviour
 
         SavingManager.Instance.SavePlayer();
     }
+
+    public void RewardRocket(int amount)
+    {
+        coins[CoinType.ROCKET] += amount;
+        OnCoinChanged?.Invoke(CoinType.ROCKET, coins[CoinType.ROCKET], previousCoins[CoinType.ROCKET]);
+        LevelPreviousCoinAmount(CoinType.ROCKET);
+        SavingManager.Instance.SavePlayer();
+    }
+
+    public void RewardUfo(int amount)
+    {
+        coins[CoinType.UFO] += amount;
+        OnCoinChanged?.Invoke(CoinType.UFO, coins[CoinType.UFO], previousCoins[CoinType.UFO]);
+        LevelPreviousCoinAmount(CoinType.UFO);
+        SavingManager.Instance.SavePlayer();
+    }
+
+    public void RewardRocketTemporarly(int amount)
+    {
+        coins[CoinType.ROCKET] += amount;
+        OnCoinChanged?.Invoke(CoinType.ROCKET, coins[CoinType.ROCKET], previousCoins[CoinType.ROCKET]);
+        LevelPreviousCoinAmount(CoinType.ROCKET);
+    }
+
+    public void RewardUfoTemporarly(int amount)
+    {
+        coins[CoinType.UFO] += amount;
+        OnCoinChanged?.Invoke(CoinType.UFO, coins[CoinType.UFO], previousCoins[CoinType.UFO]);
+        LevelPreviousCoinAmount(CoinType.UFO);
+    }
+
 
 
     /// <summary>

@@ -38,7 +38,7 @@ public class HeartPannelManager : MonoBehaviour
         UpdateTimerText(coinManager.TimeUntilNextHeart());
         UpdateCoinValueText();
 
-        AdsManager.Instance.RewardedVideoAd.OnAdRewarded += GrantRewardAndClosePannel;
+        AdsManager.Instance.RewardedHeartsVideoAd.OnAdRewarded += GrantRewardAndClosePannel;
     }
 
     private void SetCurrencyValue(CoinType type, int value)
@@ -128,9 +128,9 @@ public class HeartPannelManager : MonoBehaviour
         AdsManager manager = AdsManager.Instance;
         if (manager == null) return;
 
-        if (manager.RewardedVideoAd.IsAdReady())
+        if (manager.RewardedHeartsVideoAd.IsAdReady())
         {
-            manager.RewardedVideoAd.ShowAd("rewarded_hearts");
+            manager.RewardedHeartsVideoAd.ShowAd();
         }
     }
 

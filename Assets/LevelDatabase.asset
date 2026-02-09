@@ -2403,7 +2403,7 @@ MonoBehaviour:
     starsConnectToEnd: 1
     gridData:
     - isEmpty: 0
-      ground: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
@@ -2411,30 +2411,42 @@ MonoBehaviour:
       overlay: 2
       isEnd: 0
     - isEmpty: 0
-      ground: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
-      ground: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
-      ground: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
-      ground: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
-      ground: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
-      ground: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
+      ground: 1
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 1
       ground: 0
       overlay: 0
       isEnd: 0
@@ -2487,18 +2499,6 @@ MonoBehaviour:
       overlay: 0
       isEnd: 0
     - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
       ground: 0
       overlay: 0
       isEnd: 0
@@ -2510,7 +2510,7 @@ MonoBehaviour:
       ground: 0
       overlay: 0
       isEnd: 0
-    - isEmpty: 0
+    - isEmpty: 1
       ground: 0
       overlay: 0
       isEnd: 0
@@ -2518,7 +2518,7 @@ MonoBehaviour:
       ground: 0
       overlay: 1
       isEnd: 0
-    - isEmpty: 0
+    - isEmpty: 1
       ground: 0
       overlay: 0
       isEnd: 0

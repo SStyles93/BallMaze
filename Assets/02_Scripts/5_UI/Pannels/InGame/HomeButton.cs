@@ -6,8 +6,6 @@ public class HomeButton : UIButton
     {
         LifeManager.Instance?.ResetLife();
 
-        SavingManager.Instance?.SavePlayer();
-
         SceneController.Instance.NewTransition()
             .Unload(SceneController.Instance.CurrentActiveScene)
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)

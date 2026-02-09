@@ -3,7 +3,8 @@ public static class AdConfig
     public static string AppKey => GetAppKey();
     public static string BannerAdUnitId => GetBannerAdUnitId();
     public static string InterstitalAdUnitId => GetInterstitialAdUnitId();
-    public static string RewardedVideoAdUnitId => GetRewardedVideoAdUnitId();
+    public static string RewardedHeartsVideoAdUnitId => GetRewardedHeartsVideoAdUnitId();
+    public static string RewardedCoinsVideoAdUnitId => GetRewardedCoinsVideoAdUnitId();
 
     static string GetAppKey()
     {
@@ -19,7 +20,7 @@ public static class AdConfig
     static string GetBannerAdUnitId()
     {
 #if UNITY_ANDROID
-        return "1mby4s8dvao8a33i";
+        return "gp53lv8cji8vau6e";
 #elif UNITY_IPHONE
             return "iep3rxsyp9na3rw8";
 #else
@@ -37,10 +38,21 @@ public static class AdConfig
 #endif
     }
 
-    static string GetRewardedVideoAdUnitId()
+    static string GetRewardedHeartsVideoAdUnitId()
     {
 #if UNITY_ANDROID
-        return "7kcyu32zwf1mf20t";
+        return "m5npfdphbe9fxjhj";
+#elif UNITY_IPHONE
+            return "qwouvdrkuwivay5q";
+#else
+            return "unexpected_platform";
+#endif
+    }
+
+    static string GetRewardedCoinsVideoAdUnitId()
+    {
+#if UNITY_ANDROID
+        return "hn5i748o0zt0zkv4";
 #elif UNITY_IPHONE
             return "qwouvdrkuwivay5q";
 #else

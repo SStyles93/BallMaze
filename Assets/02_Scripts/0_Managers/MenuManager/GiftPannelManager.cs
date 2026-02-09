@@ -70,15 +70,15 @@ public class GiftPannelManager : MonoBehaviour
             CoinManager.Instance.wasCoinsReceived = true;
             planMustBePerformed = true;
         }
-        if (!CoinManager.Instance.wasRocketReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 10)
+        if (!CoinManager.Instance.wasRocketReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 9)
         {
-            plan.AddGift(CoinType.ROCKET, 3);
+            plan.AddGift(CoinType.ROCKET, 5);
             CoinManager.Instance.wasRocketReceived = true;
             planMustBePerformed = true;
         }
-        if (!CoinManager.Instance.wasUfoReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 20)
+        if (!CoinManager.Instance.wasUfoReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 19)
         {
-            plan.AddGift(CoinType.UFO, 3);
+            plan.AddGift(CoinType.UFO, 5);
             CoinManager.Instance.wasUfoReceived = true;
             planMustBePerformed = true;
         }

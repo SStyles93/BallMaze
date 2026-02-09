@@ -13,6 +13,6 @@ public class CustomizationTutorialManager : MonoBehaviour
     void Start()
     {
         if (throwTutorial)
-            TutorialManager.Instance.StartTutorial("Shop Tutorial");
+            TutorialManager.Instance.StartTutorial("ShopTutorial");
     }
 }

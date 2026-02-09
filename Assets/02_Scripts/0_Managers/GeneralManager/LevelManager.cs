@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 
 public class LevelManager : MonoBehaviour
@@ -22,8 +23,6 @@ public class LevelManager : MonoBehaviour
 
 
     private Grid currentGrid;
-    private static readonly Vector2Int[] CardinalDirections =
-    { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right};
 
     private LevelData currentLevelData = null;
     private int currentLevelIndex = 0;
@@ -122,6 +121,44 @@ public class LevelManager : MonoBehaviour
 
         //Init level
         currentGrid = GenerateAndGetCurrentLevelGrid();
+    }
+
+    public void LoadLevel(int indexOfLevelToPlay, SceneController.SceneTransitionPlan customPlan = null)
+    {
+        if (Enum.TryParse<SceneDatabase.Scenes>(
+                SceneManager.GetActiveScene().name, out SceneDatabase.Scenes scene))
+        {
+            SceneController.SceneTransitionPlan plan = customPlan == null ? 
+                SceneController.Instance.NewTransition() : customPlan;
+
+            #region Tutorial
+            // Movement Tutorial
+            if (indexOfLevelToPlay == 1 && !TutorialManager.Instance.IsTutorial1Complete)
+            {
+                plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Tutorial1);
+            }
+            // Rocket Tutorial
+            else if (!TutorialManager.Instance.IsTutorialRocketComplete &&
+                    (indexOfLevelToPlay == 10 || CoinManager.Instance.GetCoinAmount(CoinType.ROCKET) > 0))
+            {
+                plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.TutorialRocket);
+            }
+            // Rocket Tutorial
+            else if (!TutorialManager.Instance.IsTutorialUfoComplete &&
+                (indexOfLevelToPlay == 20 || CoinManager.Instance.GetCoinAmount(CoinType.UFO) > 0))
+            {
+                plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.TutorialUfo);
+            } 
+            #endregion
+            else
+            {
+                plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game);
+            }
+
+            plan.Unload(scene)
+            .WithOverlay()
+            .Perform();
+        }
     }
 
     public bool CanStartLevel(int index)
