@@ -1327,7 +1327,7 @@
     "m_Title": "Luminance correction (Blue increase)",
     "m_Position": {
         "x": -1673.5999755859375,
-        "y": -396.79998779296877
+        "y": -398.3999938964844
     }
 }
 
@@ -1417,8 +1417,8 @@
     "m_ObjectId": "3c915037bcfd4973820724c8c99f6c9d",
     "m_Title": "Alpha - Outline OR Fresnel",
     "m_Position": {
-        "x": -890.7999877929688,
-        "y": 497.5999755859375
+        "x": -891.2000122070313,
+        "y": 495.99993896484377
     }
 }
 
@@ -3241,7 +3241,7 @@
     "m_WorkflowMode": 1,
     "m_NormalDropOffSpace": 0,
     "m_ClearCoat": false,
-    "m_BlendModePreserveSpecular": false
+    "m_BlendModePreserveSpecular": true
 }
 
 {
@@ -3375,8 +3375,8 @@
     "m_ObjectId": "d2e816467a874c6684b6210a53ffe694",
     "m_Title": "Outline",
     "m_Position": {
-        "x": -1815.5999755859375,
-        "y": 360.79998779296877
+        "x": -1816.0,
+        "y": 359.2000732421875
     }
 }
 
