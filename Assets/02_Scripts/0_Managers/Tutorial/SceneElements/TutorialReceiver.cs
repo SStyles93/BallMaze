@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public struct TutorialSignal
@@ -11,17 +12,15 @@ public struct TutorialSignal
         this.payload = payload;
     }
 }
-
-public interface ITutorialSceneObject
+public interface ITutorialReceiver
 {
     void OnTutorialSignal(TutorialSignal signal);
 }
 
-public abstract class TutorialSceneObject
-    : MonoBehaviour, ITutorialSceneObject
+public abstract class TutorialReceiver : MonoBehaviour, ITutorialReceiver
 {
     [SerializeField]
-    protected string listenToSignalId;
+    protected List<string> listenToSignalIds;
 
     protected virtual void OnEnable()
     {
@@ -35,8 +34,11 @@ public abstract class TutorialSceneObject
 
     private void HandleSignal(TutorialSignal signal)
     {
-        if (signal.id == listenToSignalId)
-            OnTutorialSignal(signal);
+        foreach(string signalId in listenToSignalIds)
+        {
+            if (signal.id == signalId)
+                OnTutorialSignal(signal);
+        }
     }
 
     public abstract void OnTutorialSignal(TutorialSignal signal);

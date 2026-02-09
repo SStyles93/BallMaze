@@ -53,24 +53,6 @@ public class PlayButton : UIButton
     {
         SavingManager.Instance?.SaveSession();
 
-        if(m_indexOfLevelToPlay == 1)
-        {
-            LevelManager.Instance.InitializeLevel(m_indexOfLevelToPlay);
-
-            if (Enum.TryParse<SceneDatabase.Scenes>(
-                SceneManager.GetActiveScene().name, out SceneDatabase.Scenes scene))
-            {
-
-                SceneController.Instance
-                .NewTransition()
-                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Tutorial1)
-                .Unload(scene)
-                .WithOverlay()
-                .Perform();
-            }
-            return;
-        }
-
         // Normal behaviour
         if (CoinManager.Instance.CanAfford(CoinType.HEART, 1))
         {
@@ -80,18 +62,7 @@ public class PlayButton : UIButton
             CoinManager.Instance.LevelPreviousCoinAmount(CoinType.HEART);
 
             LevelManager.Instance.InitializeLevel(m_indexOfLevelToPlay);
-
-            if (Enum.TryParse<SceneDatabase.Scenes>(
-                SceneManager.GetActiveScene().name, out SceneDatabase.Scenes scene))
-            {
-
-                SceneController.Instance
-                .NewTransition()
-                .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
-                .Unload(scene)
-                .WithOverlay()
-                .Perform();
-            }
+            LevelManager.Instance.LoadLevel(m_indexOfLevelToPlay);
         }
         else // Heart Pannel
         {

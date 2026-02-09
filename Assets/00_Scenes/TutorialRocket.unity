@@ -42435,7 +42435,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4357711454790058377, guid: 7452550dade3dbb4aa3e569e463dbb82, type: 3}
       propertyPath: isGridGenerated
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4837170634502622635, guid: 7452550dade3dbb4aa3e569e463dbb82, type: 3}
       propertyPath: m_LocalPosition.x
@@ -43001,6 +43001,10 @@ PrefabInstance:
     - target: {fileID: 739097322142403517, guid: ba45aae0b7ad2f048939dc2f90b38ba3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613342090221798841, guid: ba45aae0b7ad2f048939dc2f90b38ba3, type: 3}
+      propertyPath: targetWorldPos.x
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4613342090221798841, guid: ba45aae0b7ad2f048939dc2f90b38ba3, type: 3}
       propertyPath: powerUpManagerRef

@@ -29,7 +29,7 @@ public class ShopVideoSlot : MonoBehaviour
             UpdateTimerText(coinManager.TimeUntilNextCoinVideo());
         }
 
-        AdsManager.Instance.RewardedVideoAd.OnAdRewarded += GrantRewardAndClosePannel;
+        AdsManager.Instance.RewardedCoinsVideoAd.OnAdRewarded += GrantRewardAndClosePannel;
 
         buyButton.onClick.AddListener(LaunchRewardedAd);
     }
@@ -57,9 +57,9 @@ public class ShopVideoSlot : MonoBehaviour
         AdsManager manager = AdsManager.Instance;
         if (manager == null) return;
 
-        if (manager.RewardedVideoAd.IsAdReady())
+        if (manager.RewardedCoinsVideoAd.IsAdReady())
         {
-            manager.RewardedVideoAd.ShowAd("rewarded_coins");
+            manager.RewardedCoinsVideoAd.ShowAd();
         }
     }
 

@@ -38,6 +38,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00_Scenes/Tutorial1.unity
     guid: 37a09715cc252ec42b82ffd6129c7ef8
+  - enabled: 1
+    path: Assets/00_Scenes/TutorialRocket.unity
+    guid: dce056b288ce28647b9f9c703124808c
+  - enabled: 1
+    path: Assets/00_Scenes/TutorialUfo.unity
+    guid: e7bb105ea66fcc54aad4de76bb1c3b25
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b369852d9e5a62c42aaedf664ffbd4ec, type: 2}
   m_UseUCBPForAssetBundles: 0

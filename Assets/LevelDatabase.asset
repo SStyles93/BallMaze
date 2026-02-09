@@ -2386,7 +2386,7 @@ MonoBehaviour:
     usedSeed: 138771431
   - index: 10
     gridWidth: 3
-    gridHeight: 20
+    gridHeight: 10
     randomEnd: 0
     fixedEnd: {x: 1, y: 0}
     endMinHeightPercent: 0
@@ -2402,7 +2402,7 @@ MonoBehaviour:
     minStarDistance: 2
     starsConnectToEnd: 1
     gridData:
-    - isEmpty: 1
+    - isEmpty: 0
       ground: 1
       overlay: 0
       isEnd: 0
@@ -2410,123 +2410,27 @@ MonoBehaviour:
       ground: 0
       overlay: 2
       isEnd: 0
-    - isEmpty: 1
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
     - isEmpty: 0
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
       ground: 1
       overlay: 0
       isEnd: 0
-    - isEmpty: 1
-      ground: 0
+    - isEmpty: 0
+      ground: 1
       overlay: 0
       isEnd: 0
     - isEmpty: 0
       ground: 1
       overlay: 0
       isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
     - isEmpty: 0
       ground: 1
       overlay: 0
       isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
     - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
       ground: 1
       overlay: 0
       isEnd: 0
@@ -2538,8 +2442,8 @@ MonoBehaviour:
       ground: 0
       overlay: 0
       isEnd: 0
-    - isEmpty: 0
-      ground: 1
+    - isEmpty: 1
+      ground: 0
       overlay: 0
       isEnd: 0
     - isEmpty: 1
@@ -2548,27 +2452,7 @@ MonoBehaviour:
       isEnd: 0
     - isEmpty: 0
       ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 1
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
-      isEnd: 0
-    - isEmpty: 0
-      ground: 0
       overlay: 3
-      isEnd: 0
-    - isEmpty: 0
-      ground: 0
-      overlay: 0
       isEnd: 0
     - isEmpty: 0
       ground: 1
@@ -2582,12 +2466,8 @@ MonoBehaviour:
       ground: 1
       overlay: 0
       isEnd: 0
-    - isEmpty: 0
-      ground: 1
-      overlay: 0
-      isEnd: 0
     - isEmpty: 1
-      ground: 1
+      ground: 0
       overlay: 0
       isEnd: 0
     - isEmpty: 0
@@ -2630,7 +2510,7 @@ MonoBehaviour:
       ground: 0
       overlay: 0
       isEnd: 0
-    - isEmpty: 0
+    - isEmpty: 1
       ground: 0
       overlay: 0
       isEnd: 0
@@ -2638,7 +2518,7 @@ MonoBehaviour:
       ground: 0
       overlay: 1
       isEnd: 0
-    - isEmpty: 0
+    - isEmpty: 1
       ground: 0
       overlay: 0
       isEnd: 0

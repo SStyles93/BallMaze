@@ -50,6 +50,7 @@ public class PowerUpManager : MonoBehaviour
     private PlayerState playerState;
     private Sequence sequence;
     private Tween powerUpScaleTween;
+    private bool infiniteTime = false;
 
     private Rigidbody playerRigidbody;
     private PlayerVisualEffects playerVisualEffects;
@@ -87,6 +88,8 @@ public class PowerUpManager : MonoBehaviour
     {
         if (powerUpState == PowerUpState.Using)
         {
+            if (infiniteTime) return;
+
             currentPowerUpTimer -= Time.deltaTime;
 
             if (currentPowerUpTimer <= 0f)
@@ -95,6 +98,12 @@ public class PowerUpManager : MonoBehaviour
                 SetPowerUpState(PowerUpState.Clear);
             }
         }
+    }
+
+    public void SetInfinitTime(bool value)
+    {
+        infiniteTime = value;
+        currentPowerUpTimer = -1.0f;
     }
 
     public float GetPowerUpDuration(CoinType type)

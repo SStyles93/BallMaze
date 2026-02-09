@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203352b9fcd7e8c459030f991e39d5ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomizationManager
-  customizationData_SO: {fileID: 11400000, guid: a8006b3f7ff62d842bc9f255b43dfa2d, type: 2}
+  customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
   skinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
   currentSlot: {fileID: 0}
   currentOption:
@@ -880,9 +880,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebugPlay: 0
-  unlockAllLevels: 0
-  numberOfLevels: 80
+  isDebugPlay: 1
+  unlockAllLevels: 1
+  numberOfLevels: 9
 --- !u!1 &567788078
 GameObject:
   m_ObjectHideFlags: 0
@@ -2487,7 +2487,7 @@ MonoBehaviour:
       conditionLogic: 1
       completionConditions:
       - rid: 4426608721726275710
-      - rid: 4426608721726275711
+      - rid: 4426608721726275772
       allowedInput: -1
       allowedMovement: 1
       onStepStart:
@@ -2508,7 +2508,7 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - tutorialName: Shop Tutorial
+  - tutorialName: ShopTutorial
     levelNumber: 0
     tutorialType: Menu
     description: Teaches the player to buy and equip Skins & Colours
@@ -2759,7 +2759,7 @@ MonoBehaviour:
       tutorialUIElements:
       - elementAnimation: {fileID: 440803644}
         animationSequence: 04000000
-        duration: 0
+        duration: 0.1
         loop: 1
         anchorID: rocket_button
       maskData:
@@ -2779,13 +2779,13 @@ MonoBehaviour:
           m_Calls:
           - m_Target: {fileID: 1312464705}
             m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
-            m_MethodName: PauseGame
-            m_Mode: 1
+            m_MethodName: SetTimeScale
+            m_Mode: 4
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
-              m_FloatArgument: 0
+              m_FloatArgument: 0.1
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
@@ -2816,6 +2816,145 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
+          - m_Target: {fileID: 2144166144}
+            m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
+            m_MethodName: SetTutorialComplete
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 3
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+  - tutorialName: UfoTutorial
+    levelNumber: 20
+    tutorialType: Game
+    description: Teaches the player to Use Ufo
+    steps:
+    - description: Tap on button
+      tutorialUIElements:
+      - elementAnimation: {fileID: 440803644}
+        animationSequence: 04000000
+        duration: 0
+        loop: 1
+        anchorID: ufo_button
+      maskData:
+        enableMask: 1
+        focusTargetId: ufo_button
+        padding: 0
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275762
+      allowedInput: 20
+      allowedMovement: 0
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: PauseGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1441120722}
+            m_TargetAssemblyTypeName: CoinManager, Assembly-CSharp
+            m_MethodName: RewardUfoTemporarly
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 1
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: ResumeGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - description: move to end
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 00000000
+        duration: 0
+        loop: 1
+        anchorID: game_swipe_forward
+      maskData:
+        enableMask: 1
+        focusTargetId: game_swipe_forward
+        padding: 0
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608721726275763
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2144166145}
+            m_TargetAssemblyTypeName: TutorialSignalEmitter, Assembly-CSharp
+            m_MethodName: Emit
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: tutorial/ufo/infinitetime
+              m_BoolArgument: 0
+            m_CallState: 2
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 2144166145}
+            m_TargetAssemblyTypeName: TutorialSignalEmitter, Assembly-CSharp
+            m_MethodName: Emit
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: tutorial/ufo/stop
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 2144166144}
+            m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
+            m_MethodName: SetTutorialComplete
+            m_Mode: 3
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 4
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
   IsTutorial1Complete: 0
   IsTutorialShopComplete: 0
   IsTutorialRocketComplete: 0
@@ -2842,11 +2981,6 @@ MonoBehaviour:
       data:
         direction: {x: 0, y: 1}
         minDistance: 10
-    - rid: 4426608721726275711
-      type: {class: TapInAreaCondition, ns: , asm: Assembly-CSharp}
-      data:
-        anchorId: custom_action_button
-        padding: 0
     - rid: 4426608721726275732
       type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -2917,6 +3051,23 @@ MonoBehaviour:
         padding: 10
         maxMoveDistance: 40
         maxDuration: 0.3
+    - rid: 4426608721726275762
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: ufo_button
+        padding: 0
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608721726275763
+      type: {class: SwipeCondition, ns: , asm: Assembly-CSharp}
+      data:
+        direction: {x: 0, y: 1}
+        minDistance: 3000
+    - rid: 4426608721726275772
+      type: {class: TapInAreaCondition, ns: , asm: Assembly-CSharp}
+      data:
+        anchorId: game_tap_jump_two
+        padding: 0
 --- !u!114 &2144166145
 MonoBehaviour:
   m_ObjectHideFlags: 0

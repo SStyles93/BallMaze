@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 
 public class LevelManager : MonoBehaviour
@@ -122,6 +123,46 @@ public class LevelManager : MonoBehaviour
 
         //Init level
         currentGrid = GenerateAndGetCurrentLevelGrid();
+    }
+
+    public void LoadLevel(int indexOfLevelToPlay, SceneController.SceneTransitionPlan customPlan = null)
+    {
+        if (Enum.TryParse<SceneDatabase.Scenes>(
+                SceneManager.GetActiveScene().name, out SceneDatabase.Scenes scene))
+        {
+            SceneController.SceneTransitionPlan plan = customPlan == null ? 
+                SceneController.Instance.NewTransition() : customPlan;
+
+            #region Tutorial
+
+            // Movement Tutorial
+            if (indexOfLevelToPlay == 1 && !TutorialManager.Instance.IsTutorial1Complete)
+            {
+                plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Tutorial1);
+            }
+
+            // Rocket Tutorial
+            else if (indexOfLevelToPlay == 10 && !TutorialManager.Instance.IsTutorialRocketComplete)
+            {
+                plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.TutorialRocket);
+            }
+
+            // Rocket Tutorial
+            else if (indexOfLevelToPlay == 20 && !TutorialManager.Instance.IsTutorialUfoComplete)
+            {
+                plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.TutorialUfo);
+            }
+
+            #endregion
+            else
+            {
+                plan.Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game);
+            }
+
+            plan.Unload(scene)
+            .WithOverlay()
+            .Perform();
+        }
     }
 
     public bool CanStartLevel(int index)

@@ -142,7 +142,7 @@ public class GamesMenuManager : MonoBehaviour
         SavingManager.Instance.SaveGame();
 
         //Load Rewarded ads before the pannel appears
-        AdsManager.Instance?.RewardedVideoAd.LoadAd();
+        AdsManager.Instance?.RewardedHeartsVideoAd.LoadAd();
 
         SceneController.Instance
             .NewTransition()

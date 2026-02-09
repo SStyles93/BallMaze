@@ -25,7 +25,8 @@ public class AdsManager : MonoBehaviour
 
     public LevelPlayBannerAd BannerAd;
     public LevelPlayInterstitialAd InterstitialAd;
-    public LevelPlayRewardedAd RewardedVideoAd;
+    public LevelPlayRewardedAd RewardedHeartsVideoAd;
+    public LevelPlayRewardedAd RewardedCoinsVideoAd;
 
     [SerializeField] private TMP_Text adsDebugText;
     [SerializeField] private bool isDebug = false;
@@ -78,18 +79,34 @@ public class AdsManager : MonoBehaviour
     {
         LevelPlay.OnImpressionDataReady += ImpressionDataReadyEvent;
 
-        // ---------- Rewarded ----------
-        RewardedVideoAd = new LevelPlayRewardedAd(AdConfig.RewardedVideoAdUnitId);
+        // --- Rewarded ---
+        // ------ Hearts ------
+        RewardedHeartsVideoAd = new LevelPlayRewardedAd(AdConfig.RewardedHeartsVideoAdUnitId);
 
-        RewardedVideoAd.OnAdLoaded += RewardedVideoOnLoadedEvent;
-        RewardedVideoAd.OnAdLoadFailed += RewardedVideoOnAdLoadFailedEvent;
-        RewardedVideoAd.OnAdDisplayed += RewardedVideoOnAdDisplayedEvent;
-        RewardedVideoAd.OnAdDisplayFailed += RewardedVideoOnAdDisplayedFailedEvent;
-        RewardedVideoAd.OnAdRewarded += RewardedVideoOnAdRewardedEvent;
-        RewardedVideoAd.OnAdClicked += RewardedVideoOnAdClickedEvent;
-        RewardedVideoAd.OnAdClosed += RewardedVideoOnAdClosedEvent;
+        RewardedHeartsVideoAd.OnAdLoaded += RewardedVideoOnLoadedEvent;
+        RewardedHeartsVideoAd.OnAdLoadFailed += RewardedVideoOnAdLoadFailedEvent;
+        RewardedHeartsVideoAd.OnAdDisplayed += RewardedVideoOnAdDisplayedEvent;
+        RewardedHeartsVideoAd.OnAdDisplayFailed += RewardedVideoOnAdDisplayedFailedEvent;
+        RewardedHeartsVideoAd.OnAdRewarded += RewardedVideoOnAdRewardedEvent;
+        RewardedHeartsVideoAd.OnAdClicked += RewardedVideoOnAdClickedEvent;
+        RewardedHeartsVideoAd.OnAdClosed += RewardedVideoOnAdClosedEvent;
 
-        RewardedVideoAd.LoadAd();
+        RewardedHeartsVideoAd.LoadAd();
+
+
+        // ------ Coins ------
+        RewardedCoinsVideoAd = new LevelPlayRewardedAd(AdConfig.RewardedCoinsVideoAdUnitId);
+
+        RewardedCoinsVideoAd.OnAdLoaded += RewardedVideoOnLoadedEvent;
+        RewardedCoinsVideoAd.OnAdLoadFailed += RewardedVideoOnAdLoadFailedEvent;
+        RewardedCoinsVideoAd.OnAdDisplayed += RewardedVideoOnAdDisplayedEvent;
+        RewardedCoinsVideoAd.OnAdDisplayFailed += RewardedVideoOnAdDisplayedFailedEvent;
+        RewardedCoinsVideoAd.OnAdRewarded += RewardedVideoOnAdRewardedEvent;
+        RewardedCoinsVideoAd.OnAdClicked += RewardedVideoOnAdClickedEvent;
+        RewardedCoinsVideoAd.OnAdClosed += RewardedVideoOnAdClosedEvent;
+
+        RewardedCoinsVideoAd.LoadAd();
+
 
         // ---------- Interstitial ----------
         InterstitialAd = new LevelPlayInterstitialAd(AdConfig.InterstitalAdUnitId);
@@ -235,6 +252,7 @@ public class AdsManager : MonoBehaviour
     {
         BannerAd?.DestroyAd();
         InterstitialAd?.DestroyAd();
-        RewardedVideoAd?.DestroyAd();
+        RewardedHeartsVideoAd?.DestroyAd();
+        RewardedCoinsVideoAd?.DestroyAd();
     }
 }

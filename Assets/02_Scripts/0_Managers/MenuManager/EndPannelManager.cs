@@ -44,17 +44,13 @@ public class EndPannelManager : MonoBehaviour
     /// <param name="sceneIndex">0 = current, 1 = next</param>
     private void LoadScene(int sceneIndex)
     {
-        levelManager.InitializeLevel(levelManager.CurrentLevelIndex + sceneIndex);
-
         LifeManager.Instance.ResetLife();
 
-        SceneController.Instance.NewTransition()
-            .Load(SceneDatabase.Slots.Content, SceneDatabase.Scenes.Game)
-            .Unload(SceneController.Instance.PreviousActiveScene)
-            .Unload(SceneDatabase.Scenes.EndPannel)
-            .WithOverlay()
-            .WithClearUnusedAssets()
-            .Perform();
+        levelManager.InitializeLevel(levelManager.CurrentLevelIndex + sceneIndex);
+        
+        SceneController.SceneTransitionPlan customPlan  = SceneController.Instance.NewTransition();
+        customPlan.Unload(SceneController.Instance.PreviousActiveScene);
+        levelManager.LoadLevel(levelManager.CurrentLevelIndex, customPlan);
     }
 
     public void ReturnToGamesMenu()
