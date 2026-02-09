@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203352b9fcd7e8c459030f991e39d5ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomizationManager
-  customizationData_SO: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
+  customizationData_SO: {fileID: 11400000, guid: a8006b3f7ff62d842bc9f255b43dfa2d, type: 2}
   skinData_SO: {fileID: 11400000, guid: 1d612beef13a6304a9f984d985423d40, type: 2}
   currentSlot: {fileID: 0}
   currentOption:
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isDebugPlay: 1
   unlockAllLevels: 1
-  numberOfLevels: 9
+  numberOfLevels: 19
 --- !u!1 &567788078
 GameObject:
   m_ObjectHideFlags: 0
@@ -2759,7 +2759,7 @@ MonoBehaviour:
       tutorialUIElements:
       - elementAnimation: {fileID: 440803644}
         animationSequence: 04000000
-        duration: 0.1
+        duration: 0.001
         loop: 1
         anchorID: rocket_button
       maskData:
@@ -2785,7 +2785,7 @@ MonoBehaviour:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
-              m_FloatArgument: 0.1
+              m_FloatArgument: 0.001
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
@@ -2837,7 +2837,7 @@ MonoBehaviour:
       tutorialUIElements:
       - elementAnimation: {fileID: 440803644}
         animationSequence: 04000000
-        duration: 0
+        duration: 0.001
         loop: 1
         anchorID: ufo_button
       maskData:
@@ -2857,13 +2857,13 @@ MonoBehaviour:
           m_Calls:
           - m_Target: {fileID: 1312464705}
             m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
-            m_MethodName: PauseGame
-            m_Mode: 1
+            m_MethodName: SetTimeScale
+            m_Mode: 4
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
-              m_FloatArgument: 0
+              m_FloatArgument: 0.001
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
@@ -2898,7 +2898,7 @@ MonoBehaviour:
       tutorialUIElements:
       - elementAnimation: {fileID: 1647435492}
         animationSequence: 00000000
-        duration: 0
+        duration: 1
         loop: 1
         anchorID: game_swipe_forward
       maskData:
