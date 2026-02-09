@@ -11559,10 +11559,10 @@ RectTransform:
   - {fileID: 1846768876}
   m_Father: {fileID: 1176792953}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1920, y: 0}
-  m_SizeDelta: {x: 100, y: -2056}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 3840, y: 2160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1720875891
 MonoBehaviour:
@@ -11850,6 +11850,7 @@ GameObject:
   - component: {fileID: 1846768876}
   - component: {fileID: 1846768878}
   - component: {fileID: 1846768877}
+  - component: {fileID: 1846768879}
   m_Layer: 5
   m_Name: TutorialActionButton
   m_TagString: Untagged
@@ -11871,9 +11872,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1720875890}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 750, y: -820}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 750, y: 250}
   m_SizeDelta: {x: 750, y: 340}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1846768877
@@ -11883,7 +11884,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1846768875}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -11914,6 +11915,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1846768875}
   m_CullTransparentMesh: 1
+--- !u!114 &1846768879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846768875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc28ffac4bb922a40abefbe5e1b60529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  target: {fileID: 2491771124754997212}
+  worldOffset: {x: 0, y: 0, z: 0}
+  uiElement: {fileID: 1846768876}
 --- !u!1 &1863893196
 GameObject:
   m_ObjectHideFlags: 0
@@ -17299,6 +17315,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+--- !u!224 &2491771124754997212 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 957345749901761452, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+  m_PrefabInstance: {fileID: 2491771124754997211}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2705284763106749182 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 124170474488868429, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
