@@ -1,7 +1,5 @@
 using MyBox;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class TutorialTrigger : MonoBehaviour
 {
@@ -23,7 +21,9 @@ public class TutorialTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Optional: filter by tag
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || 
+            other.CompareTag("Ufo") || 
+            other.CompareTag("Rocket"))
         {
             manager.TriggerActivated(triggerIndex);
         }
