@@ -10,15 +10,14 @@ using Unity.Services.CloudSave;
 [Serializable]
 public class CloudSavePayload : SaveableData
 {
+    public string deviceId;
     public long version;
+    public DateTime lastModifiedUtc;
 
-    public GameData game;
     public PlayerData player;
     public SkinShopData skinShop;
+    public GameData game;
     public TutorialData tutorial;
-
-    public DateTime lastModifiedUtc;
-    public string deviceId;
 }
 
 #endregion
@@ -31,7 +30,7 @@ public class CloudSaveManager : MonoBehaviour
     // CONFIG
     // ==============================
 
-    private const string CLOUD_KEY = "mm_cloud_save";
+    private string CLOUD_KEY = "mm_cloud_save";
 
     [SerializeField] private bool verboseLogging = false;
 
@@ -68,20 +67,20 @@ public class CloudSaveManager : MonoBehaviour
 
     private void OnEnable()
     {
-        LoginManager.OnGoogleLogin += SetCloudSaveEnabled;
+        LoginManager.OnAuthenticationReady += SetCloudSaveEnabled;
     }
 
     private void OnDisable()
     {
-        LoginManager.OnGoogleLogin -= SetCloudSaveEnabled;
+        LoginManager.OnAuthenticationReady -= SetCloudSaveEnabled;
     }
 
-    private void SetCloudSaveEnabled(bool enabled)
+    private void SetCloudSaveEnabled()
     {
-        isAvailable = enabled;
+        isAvailable = true;
 
         if (verboseLogging)
-            Debug.Log($"[CloudSave] Enabled = {enabled}");
+            Debug.Log($"[CloudSave] Enabled");
     }
 
     // ==============================
@@ -115,13 +114,13 @@ public class CloudSaveManager : MonoBehaviour
     {
         return new CloudSavePayload
         {
+            deviceId = SystemInfo.deviceUniqueIdentifier,
             version = lastKnownCloudVersion + 1,
             lastModifiedUtc = DateTime.UtcNow,
-            deviceId = SystemInfo.deviceUniqueIdentifier,
 
-            game = SavingManager.Instance.Get<GameData>(),
             player = SavingManager.Instance.Get<PlayerData>(),
             skinShop = SavingManager.Instance.Get<SkinShopData>(),
+            game = SavingManager.Instance.Get<GameData>(),
             tutorial = SavingManager.Instance.Get<TutorialData>()
         };
     }

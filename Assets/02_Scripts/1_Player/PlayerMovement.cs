@@ -157,6 +157,10 @@ public class PlayerMovement : MonoBehaviour
         OnPlayerStateChanged?.Invoke(State);
     }
 
+    public void ForceJump()
+    {
+        Jump();
+    }
 
     // ---------------- ROLLING ----------------
 

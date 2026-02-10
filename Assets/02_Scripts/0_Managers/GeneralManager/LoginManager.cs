@@ -13,120 +13,102 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 #endif
 
+
 public class LoginManager : MonoBehaviour
 {
-    private string m_GooglePLayGamesToken;
+    private string m_GooglePlayGamesToken;
+    private bool m_GoogleAuthFinished;
 
-    public static Action<bool> OnGoogleLogin;
+    public static Action OnAuthenticationReady;
+    private bool m_AuthReadyFired = false;
 
 
-    private void Awake()
+    private async void Awake()
     {
+        await InitializeUnityServices();
 
-
-#region UNITY
-
-        //if (UnityServices.State == ServicesInitializationState.Uninitialized)
-        //{
-        //    Debug.Log("Services Initializing");
-        //    await UnityServices.InitializeAsync();
-        //}
-
-        //PlayerAccountService.Instance.SignedIn += SignInOrLinkWithUnity;
-        
-#endregion
+        //OTHER INITS WOULD GO HERE
 
 #if UNITY_ANDROID
         PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
         LoginGooglePlayGames();
 #endif
-        // FACEBOOK INIT WOULD GO HERE
     }
 
-    private void Start()
+    private async void Start()
     {
-        StartSignInWithGooglePlayGames();
-        //// --- Unity ----
-        //if (!AuthenticationService.Instance.SessionTokenExists)
-        //{
-        //    Debug.Log("Session Token not found");
-        //    return;
-        //}
-        //Debug.Log("Returning player signing in...");
-        //await SignInAnonymouslyAsync();
-    }
-
-    // --- PUBLIC ---
-
-    // ------ Anonymous ------
-    public async void StartAnonymousSignIn()
-    {
-        await SignInAnonymouslyAsync();
-    }
-
-    // ------ Unity ------
-    public async void StartUnitySignInAsync()
-    {
-        if (PlayerAccountService.Instance.IsSignedIn)
+        if (AuthenticationService.Instance.IsSignedIn)
         {
-            SignInOrLinkWithUnity();
+            Debug.Log("Already signed in, skipping login flow.");
             return;
         }
-        try
+
+        if (AuthenticationService.Instance.SessionTokenExists)
         {
-            await PlayerAccountService.Instance.StartSignInAsync();
-        }catch(RequestFailedException ex)
+            Debug.Log("Session token found, restoring session...");
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            FireAuthReadyOnce();
+            return;
+        }
+
+
+#if UNITY_ANDROID
+        // Wait for Google auth to finish (success OR failure)
+        await WaitForGoogleAuth();
+#endif
+
+        if (!string.IsNullOrEmpty(m_GooglePlayGamesToken))
         {
-            Debug.LogException(ex);
+            Debug.Log("Signing in with Google Play Games...");
+            await SignInWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+        }
+        else
+        {
+            Debug.Log("Google login unavailable, signing in anonymously...");
+            await SignInAnonymouslyAsync();
         }
     }
-    public void SignOutUnity(bool clearSessionToken = false)
-    {
-        // Sign out of Unity Authentication, with the option to clear the session token
-        AuthenticationService.Instance.SignOut(clearSessionToken);
 
-        // Sign out of Unity Player Accounts
-        PlayerAccountService.Instance.SignOut();
-    }
-
-    // ------ Google ------
-    public void LoginGooglePlayGames()
+    private void LoginGooglePlayGames()
     {
-        PlayGamesPlatform.Instance.Authenticate((status) =>
+        PlayGamesPlatform.Instance.Authenticate(status =>
         {
             if (status == SignInStatus.Success)
             {
-                Debug.Log("Login wiht Google Play game successful");
+                Debug.Log("Google Play Games login successful");
 
                 PlayGamesPlatform.Instance.RequestServerSideAccess(true, code =>
                 {
-                    Debug.Log("Authorization code: " + code);
-                    m_GooglePLayGamesToken = code;
-                    // Token example used by the SignInWithGooglePlayGames
+                    m_GooglePlayGamesToken = code;
+                    m_GoogleAuthFinished = true;
                 });
             }
             else
             {
-                Debug.Log($"Google Play Games login unsuccessful, status: {status}");
+                Debug.LogWarning($"Google Play Games login failed: {status}");
+                m_GoogleAuthFinished = true;
             }
         });
     }
-    public void StartSignInWithGooglePlayGames()
+
+    private async Task WaitForGoogleAuth(float timeoutSeconds = 5f)
     {
-        if (!PlayGamesPlatform.Instance.IsAuthenticated())
+        float timer = 0f;
+
+        while (!m_GoogleAuthFinished && timer < timeoutSeconds)
         {
-            Debug.LogWarning("Not yet authenticated with Google Play Games -- attempting login again");
-            LoginGooglePlayGames();
-            return;
+            timer += Time.deltaTime;
+            await Task.Yield();
         }
-        SignInOrLinkWithGooglePlayGames();
+
+        while (!m_GoogleAuthFinished)
+        {
+            Debug.LogWarning("Google Play Games authentication timed out.");
+        }
     }
 
-    // --- PRIVATE METHODS ---
-
-    // ------ Anonymous ------
-
+    // --- Sign In ---
     private async Task SignInAnonymouslyAsync()
     {
         try
@@ -152,171 +134,40 @@ public class LoginManager : MonoBehaviour
         }
     }
 
-
-    // ------ Unity ------
-
-    async void StartPlayerAccountsSignInAsync()
-    {
-        if (PlayerAccountService.Instance.IsSignedIn)
-        {
-            // If the player is already signed into Unity Player Accounts, proceed directly to the Unity Authentication sign-in.
-            await SignInWithUnityAuth();
-            return;
-        }
-
-        try
-        {
-            // This will open the system browser and prompt the user to sign in to Unity Player Accounts
-            await PlayerAccountService.Instance.StartSignInAsync();
-        }
-        catch (PlayerAccountsException ex)
-        {
-            // Compare error code to PlayerAccountsErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-    }
-
-    async void SignInOrLinkWithUnity()
-    {
-        try
-        {
-            if (!AuthenticationService.Instance.IsSignedIn)
-            {
-                Debug.Log("Signing up with Unity Player Account...");
-                await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
-                Debug.Log("Successfully signed up with Unity Player Account");
-                return;
-            }
-            if (!HasUnityID()) 
-            {
-                Debug.Log("Linkin anonymous account to Unity...");
-                await LinkWithUnityAsync(PlayerAccountService.Instance.AccessToken);
-                Debug.Log("Successfully linked anonymous account!");
-            }
-
-            Debug.Log("Player is already signed in to their Unity Player Account");
-        }
-        catch(RequestFailedException ex)
-        {
-            Debug.LogException(ex);
-        }
-    }
-
-    async Task SignInWithUnityAuth()
-    {
-        try
-        {
-            await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
-            Debug.Log("SignIn is successful.");
-        }
-        catch (AuthenticationException ex)
-        {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-    }
-
-    async Task LinkWithUnityAsync(string accessToken)
-    {
-        try
-        {
-            await AuthenticationService.Instance.LinkWithUnityAsync(accessToken);
-            Debug.Log("Link is successful.");
-        }
-        catch (AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
-        {
-            // Prompt the player with an error message.
-            Debug.LogError("This user is already linked with another account. Log in instead.");
-        }
-        catch (AuthenticationException ex)
-        {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-    }
-
-    async Task UnlinkUnityAsync()
-    {
-        try
-        {
-            await AuthenticationService.Instance.UnlinkUnityAsync();
-            Debug.Log("Unlink is successful.");
-        }
-        catch (AuthenticationException ex)
-        {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-    }
-
-    private bool HasUnityID()
-    {
-        return AuthenticationService.Instance.PlayerInfo.GetUnityId() != null;
-    }
-
-    // ------ Google Play Games ------
-
 #if UNITY_ANDROID
-
-    private async void SignInOrLinkWithGooglePlayGames()
+    
+    private async Task SignInOrLinkWithGooglePlayGamesAsync()
     {
-        if (string.IsNullOrEmpty(m_GooglePLayGamesToken)){
+        if (string.IsNullOrEmpty(m_GooglePlayGamesToken))
+        {
             Debug.LogWarning("Authorization code is null or empty");
             return;
         }
         if (!AuthenticationService.Instance.IsSignedIn)
         {
-            await SignInWithGooglePlayGamesAsync(m_GooglePLayGamesToken);
+            await SignInWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
         }
         else
         {
-            await LinkWithGooglePlayGamesAsync(m_GooglePLayGamesToken);
+            await LinkWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
         }
     }
-
+    
     private async Task SignInWithGooglePlayGamesAsync(string authCode)
     {
         try
         {
             await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(authCode);
             Debug.Log("SignIn is successful.");
-            OnGoogleLogin?.Invoke(true);
+            FireAuthReadyOnce();
         }
-        catch(AuthenticationException ex)
+        catch (AuthenticationException ex)
         {
             // Compare error code to AuthentificationErrorCode
             // Notify the player with the proper error message
             Debug.LogException(ex);
         }
-        catch(RequestFailedException ex)
+        catch (RequestFailedException ex)
         {
             // Compare error code to CommonErrorCodes
             // Notify the player with the proper erroe message
@@ -330,20 +181,20 @@ public class LoginManager : MonoBehaviour
         {
             await AuthenticationService.Instance.LinkWithGoogleAsync(authCode);
             Debug.Log("Link is successful.");
-            OnGoogleLogin?.Invoke(true);
+            FireAuthReadyOnce();
         }
-        catch(AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
+        catch (AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
         {
             // Prompt the player with an error message.
             Debug.LogWarning("This user is already linked with another account. Log in instead.");
         }
-        catch(AuthenticationException ex)
+        catch (AuthenticationException ex)
         {
             //Compare error code to AuthenticationErrorCodes
             //Notify the player with the proper error message
             Debug.LogException(ex);
         }
-        catch(RequestFailedException ex)
+        catch (RequestFailedException ex)
         {
             //Compare error code to CommonErrorCodes
             //Notify the player with the proper error message
@@ -357,7 +208,6 @@ public class LoginManager : MonoBehaviour
         {
             await AuthenticationService.Instance.UnlinkGooglePlayGamesAsync();
             Debug.Log("Unlink is successful.");
-            OnGoogleLogin?.Invoke(false);
         }
         catch (AuthenticationException ex)
         {
@@ -383,4 +233,14 @@ public class LoginManager : MonoBehaviour
             await UnityServices.InitializeAsync();
         }
     }
+    private void FireAuthReadyOnce()
+    {
+        if (m_AuthReadyFired)
+            return;
+
+        m_AuthReadyFired = true;
+        Debug.Log("Authentication ready – starting cloud save logic");
+        OnAuthenticationReady?.Invoke();
+    }
+
 }

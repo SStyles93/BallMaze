@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -82,7 +83,6 @@ public class PlayerController : MonoBehaviour
     {
         if (GameStateManager.Instance?.CurrentGameState != GameState.Playing)
         {
-            //ResetJoystick();
             return;
         }
 
@@ -281,9 +281,20 @@ public class PlayerController : MonoBehaviour
             position = finger.screenPosition
         };
 
-        var raycastResults = new System.Collections.Generic.List<RaycastResult>();
+        var raycastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(pointerData, raycastResults);
-        return raycastResults.Count > 0;
+
+        foreach (var result in raycastResults)
+        {
+            // Ignore tutorial UI
+            if (result.gameObject.layer == LayerMask.NameToLayer("TutorialUI"))
+                continue;
+
+            // Any other UI blocks input
+            return true;
+        }
+
+        return false;
     }
     #endregion
 

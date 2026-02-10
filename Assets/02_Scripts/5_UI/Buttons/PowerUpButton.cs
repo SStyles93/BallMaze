@@ -33,8 +33,7 @@ public class PowerUpButton : UIButton
         powerUpManager.OnPowerUpStateChanged += SetPowerUpState;
         
         PlayerMovement.OnPlayerStateChanged += SetPlayerState;
-        if (powerType == CoinType.ROCKET)
-            PowerUpDistanceChecker.OnPowerUpBlocked += SetLockByDistance;
+        PowerUpDistanceChecker.OnPowerUpBlocked += SetLockByDistance;
 
 
         button.onClick.AddListener(TryUsePowerUp);
@@ -49,8 +48,7 @@ public class PowerUpButton : UIButton
         powerUpManager.OnPowerUpStateChanged -= SetPowerUpState;
 
         PlayerMovement.OnPlayerStateChanged -= SetPlayerState;
-        if (powerType == CoinType.ROCKET)
-            PowerUpDistanceChecker.OnPowerUpBlocked -= SetLockByDistance;
+        PowerUpDistanceChecker.OnPowerUpBlocked -= SetLockByDistance;
 
         button.onClick.RemoveListener(TryUsePowerUp);
     }
