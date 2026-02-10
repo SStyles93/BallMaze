@@ -11,7 +11,7 @@ public class SavingManager : MonoBehaviour
 
     public GameData currentGameData = null;
     public PlayerData currentPlayerData = null;
-    public SkinShopData currentSkinData = null;
+    public SkinShopData currentSkinShopData = null;
     public SettingsData currentSettingsData = null;
     public TutorialData currentTutorialData = null;
 
@@ -28,6 +28,53 @@ public class SavingManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
 
         dataService = new JsonDataService(); // Or any other IDataService implementation
+    }
+
+    // --- CLOUD RELATED METHODS ---
+
+    public T Get<T>() where T : SaveableData
+    {
+        if (typeof(T) == typeof(GameData))
+            return currentGameData as T;
+
+        if (typeof(T) == typeof(PlayerData))
+            return currentPlayerData as T;
+
+        if (typeof(T) == typeof(SkinShopData))
+            return currentSkinShopData as T;
+
+        if (typeof(T) == typeof(TutorialData))
+            return currentTutorialData as T;
+
+        return null;
+    }
+
+    public void ForceLocalOverwrite<T>(T data, bool saveToDisk = true) where T : SaveableData
+    {
+        if (data == null) return;
+
+        switch (data)
+        {
+            case GameData g:
+                currentGameData = g;
+                if (saveToDisk) SaveDataInFile(g, GameDataFileName);
+                break;
+
+            case PlayerData p:
+                currentPlayerData = p;
+                if (saveToDisk) SaveDataInFile(p, PlayerDataFileName);
+                break;
+
+            case SkinShopData s:
+                currentSkinShopData = s;
+                if (saveToDisk) SaveDataInFile(s, SkinDataFileName);
+                break;
+
+            case TutorialData t:
+                currentTutorialData = t;
+                if (saveToDisk) SaveDataInFile(t, TutorialDataFileName);
+                break;
+        }
     }
 
     // --- SAVE ---
@@ -60,9 +107,6 @@ public class SavingManager : MonoBehaviour
         AssetDatabase.Refresh();
 #endif
     }
-    /// <summary>
-    /// Captures the player's data (currency (int), colorIndex(int), materialIndex(int))
-    /// </summary>
     public void SavePlayer()
     {
         SavePlayerDataInFile(PlayerDataFileName);
@@ -84,7 +128,6 @@ public class SavingManager : MonoBehaviour
         AssetDatabase.Refresh();
 #endif
     }
-
     public void SaveTutorials()
     {
         SaveTutorialDataInFile(SettingsDataFileName);
@@ -239,11 +282,16 @@ public class SavingManager : MonoBehaviour
             shopData.colorsLockedState[colorOption.Id] = colorOption.isLocked;
         }
 
-        currentSkinData = shopData;
+        currentSkinShopData = shopData;
 
-        SaveDataInFile(currentSkinData, fileName);
+        SaveDataInFile(currentSkinShopData, fileName);
     }
-
+    
+    /// <summary>
+    /// Saves the Tutorial Data in File <br/>
+    /// (Tutorial1, Shop, Rocket, Ufo)
+    /// </summary>
+    /// <param name="fileName"></param>
     private void SaveTutorialDataInFile(string fileName)
     {
         TutorialData tutorialData = new TutorialData
@@ -302,7 +350,6 @@ public class SavingManager : MonoBehaviour
     {
         RestoreSettingsDataFromFile(SettingsDataFileName);
     }
-
     public void LoadTutorials()
     {
         RestoreTutorialDataFromFile(TutorialDataFileName);
@@ -483,21 +530,21 @@ public class SavingManager : MonoBehaviour
     {
         if (CustomizationManager.Instance == null) return;
 
-        currentSkinData = LoadFile<SkinShopData>(fileName);
+        currentSkinShopData = LoadFile<SkinShopData>(fileName);
 
         var dataSO = CustomizationManager.Instance.customizationData_SO;
 
-        if (currentSkinData == null)
+        if (currentSkinShopData == null)
         {
             //Debug.Log("Current ShopData does not exist, creating a new one");
-            currentSkinData = new SkinShopData();
+            currentSkinShopData = new SkinShopData();
             return;
         }
 
         // Restore skins state (un-locked)
         foreach (var skinOption in dataSO.skins)
         {
-            if (currentSkinData.skinsLockedState.TryGetValue(skinOption.Id, out bool locked))
+            if (currentSkinShopData.skinsLockedState.TryGetValue(skinOption.Id, out bool locked))
             {
                 skinOption.isLocked = locked;
             }
@@ -510,7 +557,7 @@ public class SavingManager : MonoBehaviour
         // Restore colors state (un-locked)
         foreach (var colorOption in dataSO.colors)
         {
-            if (currentSkinData.colorsLockedState.TryGetValue(colorOption.Id, out bool locked))
+            if (currentSkinShopData.colorsLockedState.TryGetValue(colorOption.Id, out bool locked))
             {
                 colorOption.isLocked = locked;
             }
@@ -521,6 +568,11 @@ public class SavingManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Restores the Tutorial info <br/>
+    /// (Tutorial1, Shop, Rocket, Ufo)
+    /// </summary>
+    /// <param name="fileName"></param>
     private void RestoreTutorialDataFromFile(string fileName)
     {
         if (TutorialManager.Instance == null) return;

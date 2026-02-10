@@ -21,6 +21,8 @@ public class GamesMenuManager : MonoBehaviour
 
     private void Start()
     {
+        CloudSaveManager.Instance?.TrySaveAllToCloud();
+
         InitializeSlots();
 
         StartCoroutine(ScrollToCurrentLevel());

@@ -21,6 +21,7 @@ public class CoreManager : MonoBehaviour
         if (SavingManager.Instance == null)
             Debug.Log("Saving Manager does not exist");
         SavingManager.Instance?.LoadSession();
+        CloudSaveManager.Instance?.TryLoadAllFromCloud();
 
         SceneController.Instance
             .NewTransition()

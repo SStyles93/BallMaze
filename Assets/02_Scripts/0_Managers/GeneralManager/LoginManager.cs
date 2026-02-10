@@ -17,8 +17,13 @@ public class LoginManager : MonoBehaviour
 {
     private string m_GooglePLayGamesToken;
 
+    public static Action<bool> OnGoogleLogin;
+
+
     private void Awake()
     {
+
+
 #region UNITY
 
         //if (UnityServices.State == ServicesInitializationState.Uninitialized)
@@ -39,16 +44,17 @@ public class LoginManager : MonoBehaviour
         // FACEBOOK INIT WOULD GO HERE
     }
 
-    private async void Start()
+    private void Start()
     {
-        // --- Unity ----
-        if (!AuthenticationService.Instance.SessionTokenExists)
-        {
-            Debug.Log("Session Token not found");
-            return;
-        }
-        Debug.Log("Returning player signing in...");
-        await SignInAnonymouslyAsync();
+        StartSignInWithGooglePlayGames();
+        //// --- Unity ----
+        //if (!AuthenticationService.Instance.SessionTokenExists)
+        //{
+        //    Debug.Log("Session Token not found");
+        //    return;
+        //}
+        //Debug.Log("Returning player signing in...");
+        //await SignInAnonymouslyAsync();
     }
 
     // --- PUBLIC ---
@@ -302,6 +308,7 @@ public class LoginManager : MonoBehaviour
         {
             await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(authCode);
             Debug.Log("SignIn is successful.");
+            OnGoogleLogin?.Invoke(true);
         }
         catch(AuthenticationException ex)
         {
@@ -323,6 +330,7 @@ public class LoginManager : MonoBehaviour
         {
             await AuthenticationService.Instance.LinkWithGoogleAsync(authCode);
             Debug.Log("Link is successful.");
+            OnGoogleLogin?.Invoke(true);
         }
         catch(AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
         {
@@ -349,6 +357,7 @@ public class LoginManager : MonoBehaviour
         {
             await AuthenticationService.Instance.UnlinkGooglePlayGamesAsync();
             Debug.Log("Unlink is successful.");
+            OnGoogleLogin?.Invoke(false);
         }
         catch (AuthenticationException ex)
         {
@@ -366,4 +375,12 @@ public class LoginManager : MonoBehaviour
 
 #endif
 
+    private async Task InitializeUnityServices()
+    {
+        if (UnityServices.State == ServicesInitializationState.Uninitialized)
+        {
+            Debug.Log("Initializing Unity Services...");
+            await UnityServices.InitializeAsync();
+        }
+    }
 }

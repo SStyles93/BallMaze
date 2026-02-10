@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine.Rendering.Universal;
 
-public class SaveableData { }
+[Serializable]
+public class SaveableData {}
 
 /// <summary>
 /// Data of the Session (Game)
