@@ -18,11 +18,6 @@ public class CoreManager : MonoBehaviour
 
     void Start()
     {
-        if (SavingManager.Instance == null)
-            Debug.Log("Saving Manager does not exist");
-        SavingManager.Instance?.LoadSession();
-        CloudSaveManager.Instance?.TryLoadAllFromCloud();
-
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)

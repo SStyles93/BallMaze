@@ -1,9 +1,6 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Unity.Services.Authentication;
-using Unity.Services.Authentication.PlayerAccounts;
 using Unity.Services.Core;
 using UnityEngine;
 

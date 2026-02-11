@@ -30,6 +30,7 @@ public class StartMenuManager : MonoBehaviour
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
             .Unload(SceneDatabase.Scenes.StartMenu)
             .WithOverlay()
+            .WithCloudLoad()
             .Perform();
     }
 }

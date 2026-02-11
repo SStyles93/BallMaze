@@ -19,7 +19,10 @@ public class EndPannelManager : MonoBehaviour
         continueButton.SetActive(true);
         // START ( * * * )
         if (levelManager.CurrentLevelData.numberOfStars >= 3)
+        {
             AudioManager.Instance?.PlayWinSound();
+            GoogleReviewManager.Instance.RequestReview();
+        }
     }
 
     /// <summary>

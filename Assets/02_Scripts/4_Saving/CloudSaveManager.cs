@@ -33,12 +33,13 @@ public class CloudSaveManager : MonoBehaviour
     private string CLOUD_KEY = "mm_cloud_save";
 
     [SerializeField] private bool verboseLogging = false;
+    [SerializeField] private float saveIntervalHours = 2f; // save every 2 hours
 
     public bool IsAvailable => isAvailable;
     private bool isAvailable;
     private long lastKnownCloudVersion = -1;
-    private float _lastSaveTime = -999f;
-    private const float SaveCooldownSeconds = 20f;
+    private const string PlayerPrefKey = "CloudSave_LastPlayTime";
+    private float accumulatedPlayTime = 0f; // in seconds
 
     private readonly SemaphoreSlim saveSemaphore = new(1, 1);
 
@@ -75,27 +76,101 @@ public class CloudSaveManager : MonoBehaviour
         LoginManager.OnAuthenticationReady -= SetCloudSaveEnabled;
     }
 
-    private void SetCloudSaveEnabled()
+    private void Update()
     {
-        isAvailable = true;
+        if (!IsAvailable) return;
 
-        if (verboseLogging)
-            Debug.Log($"[CloudSave] Enabled");
+        // --- TIMED DATA SAVING ---
+
+        // Increment accumulated play time in seconds
+        accumulatedPlayTime += Time.deltaTime;
+
+        // Load previous saved playtime if not loaded yet
+        if (!PlayerPrefs.HasKey(PlayerPrefKey))
+            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+
+        float lastSavedTime = PlayerPrefs.GetFloat(PlayerPrefKey, 0f);
+        float totalTime = lastSavedTime + accumulatedPlayTime;
+
+        if (totalTime >= saveIntervalHours * 3600f)
+        {
+            TrySaveAllToCloud();
+            // Reset counter
+            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+            accumulatedPlayTime = 0f;
+
+            if (verboseLogging)
+                Debug.Log("[CloudSave] Auto Saving");
+        }
     }
 
+    private void OnApplicationQuit()
+    {
+        // --- SAVING OF PLAY TIME ---
+        if (accumulatedPlayTime > 0f)
+        {
+            float lastSavedTime = PlayerPrefs.GetFloat(PlayerPrefKey, 0f);
+            PlayerPrefs.SetFloat(PlayerPrefKey, lastSavedTime + accumulatedPlayTime);
+            PlayerPrefs.Save();
+        }
+    }
     // ==============================
     // PUBLIC ENTRY POINTS
     // ==============================
 
-    public void TrySaveAllToCloud()
+    // --- User Buttons ---
+
+    public void ForceCloudSave()
     {
         if (!IsAvailable) return;
 
-        float now = Time.realtimeSinceStartup;
-        if (now - _lastSaveTime < SaveCooldownSeconds)
-            return;
+        SavingManager.Instance.SaveSession();
 
-        _lastSaveTime = now;
+        // Trigger the cloud save immediately
+        _ = SaveWithConflictResolutionAsync();
+
+        // Reset the gameplay timer
+        accumulatedPlayTime = 0f;
+        PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+        PlayerPrefs.Save();
+
+        if (verboseLogging)
+            Debug.Log("[CloudSave] Forced cloud save and reset timer.");
+    }
+
+    public async void ForceDeleteCloudData()
+    {
+        if (!IsAvailable)
+        {
+            Debug.LogWarning("[CloudSave] Cannot delete data: Cloud save not available.");
+            return;
+        }
+
+        try
+        {
+            await CloudSaveService.Instance.Data.Player.DeleteAllAsync();
+
+            accumulatedPlayTime = 0f;
+            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+            PlayerPrefs.Save();
+
+            SavingManager.Instance.DeleteAllData();
+
+            Debug.Log("[CloudSave] Cloud data deleted successfully.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[CloudSave] Failed to delete cloud data: {e}");
+        }
+    }
+
+    // --- API ENTRY ---
+
+    public void TrySaveAllToCloud()
+    {
+        if (!IsAvailable) return;
+        if (verboseLogging)
+            Debug.Log("[CloudSave] Trying to Save All Data to Cloud");
 
         _ = SaveWithConflictResolutionAsync();
     }
@@ -103,6 +178,10 @@ public class CloudSaveManager : MonoBehaviour
     public void TryLoadAllFromCloud()
     {
         if (!IsAvailable) return;
+
+        if (verboseLogging)
+            Debug.Log("[CloudSave] Trying to Load All Data from Cloud");
+
         _ = LoadAndResolveAsync();
     }
 
@@ -138,6 +217,7 @@ public class CloudSaveManager : MonoBehaviour
             CloudSavePayload cloudPayload = await LoadFromCloudAsync();
 
             CloudSavePayload winner = ResolveConflict(localPayload, cloudPayload);
+            Debug.Log($"Saving resolved with payload v{winner.version} at {winner.lastModifiedUtc}");
 
             await SaveToCloudAsync(winner);
 
@@ -164,11 +244,18 @@ public class CloudSaveManager : MonoBehaviour
         try
         {
             CloudSavePayload cloudPayload = await LoadFromCloudAsync();
-            if (cloudPayload == null) return;
+            if (cloudPayload == null)
+            {
+                Exception ex = new Exception($"[CloudSave] cloudPayload is null");
+                OnCloudOperationFailed?.Invoke(ex);
+                return;
+            }
 
             CloudSavePayload localPayload = BuildPayload();
 
             CloudSavePayload winner = ResolveConflict(localPayload, cloudPayload);
+
+            Debug.Log($"Loading resolved with payload v{winner.version} at {winner.lastModifiedUtc}");
 
             if (winner == cloudPayload)
             {
@@ -189,6 +276,15 @@ public class CloudSaveManager : MonoBehaviour
     // ==============================
     // CLOUD SDK
     // ==============================
+
+    private void SetCloudSaveEnabled()
+    {
+        isAvailable = true;
+
+        if (verboseLogging)
+            Debug.Log($"[CloudSave] Enabled");
+    }
+
 
     private async Task<CloudSavePayload> LoadFromCloudAsync()
     {

@@ -77,6 +77,31 @@ public class SavingManager : MonoBehaviour
         }
     }
 
+    public void DeleteAllData()
+    {
+        dataService.Delete(PlayerDataFileName);
+        currentPlayerData = null;
+        
+        dataService.Delete(GameDataFileName);
+        currentGameData = null;
+        
+        dataService.Delete(SkinDataFileName);
+        currentSkinShopData = null;
+        
+        dataService.Delete(SettingsDataFileName);
+        currentSettingsData = null;
+        
+        dataService.Delete(TutorialDataFileName);
+        currentTutorialData = null;
+
+        SceneController.Instance.NewTransition()
+            .Unload(SceneController.Instance.CurrentActiveScene)
+            .Unload(SceneController.Instance.PreviousActiveScene)
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
+            .WithOverlay()
+            .Perform();
+    }
+
     // --- SAVE ---
 
     /// <summary>

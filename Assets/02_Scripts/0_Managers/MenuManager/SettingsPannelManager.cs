@@ -20,4 +20,14 @@ public class SettingsPannelManager : MonoBehaviour
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.CreditsPannel)
             .Perform();
     }
+
+    public void OnForceSaveData()
+    {
+        CloudSaveManager.Instance?.ForceCloudSave();
+    }
+
+    public void OnForceDeleteData()
+    {
+        CloudSaveManager.Instance?.ForceDeleteCloudData();
+    }
 }
