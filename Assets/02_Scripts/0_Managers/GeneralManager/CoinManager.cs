@@ -262,6 +262,7 @@ public class CoinManager : MonoBehaviour
         if (coins[CoinType.HEART] >= maxHeartAmount)
         {
             coins[CoinType.HEART] = maxHeartAmount;
+            NotificationManager.Instance?.CancelHeartNotification();
             return;
         }
 
@@ -283,6 +284,15 @@ public class CoinManager : MonoBehaviour
         );
 
         SavingManager.Instance?.SavePlayer();
+
+        //--------------------------
+        // --- PUSH NOTIFICATION ---
+        //--------------------------
+        if (coins[CoinType.HEART] < maxHeartAmount)
+        {
+            DateTime nextHeartTime = lastHeartRefillTime.AddMinutes(timeToRegainHeartInMinutes);
+            NotificationManager.Instance?.ScheduleHeartNotification(nextHeartTime);
+        }
     }
 
 
