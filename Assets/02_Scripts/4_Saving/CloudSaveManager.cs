@@ -35,11 +35,21 @@ public class CloudSaveManager : MonoBehaviour
     [SerializeField] private bool verboseLogging = false;
     [SerializeField] private float saveIntervalHours = 2f; // save every 2 hours
 
+    [SerializeField] private float minSaveInterval = 600f; // 600 seconds (10min)
+    private float _lastSaveTime = -999f;
+    private bool _isSaving = false;
+    [SerializeField] private float minDeleteInterval = 600f; // 600 seconds (10min)
+    private float _lastDeleteTime = -999f;
+    private bool _isDeleting = false;
+
+
+
     public bool IsAvailable => isAvailable;
     private bool isAvailable;
     private long lastKnownCloudVersion = -1;
     private const string PlayerPrefKey = "CloudSave_LastPlayTime";
     private float accumulatedPlayTime = 0f; // in seconds
+
 
     private readonly SemaphoreSlim saveSemaphore = new(1, 1);
 
@@ -120,31 +130,81 @@ public class CloudSaveManager : MonoBehaviour
 
     // --- User Buttons ---
 
-    public void ForceCloudSave()
+    public async void ForceCloudSave()
     {
-        if (!IsAvailable) return;
+        if (!IsAvailable)
+        {
+            if (verboseLogging)
+                Debug.LogWarning("[CloudSave] Cannot force save data: Cloud save not available.");
+            return;
+        }
 
-        SavingManager.Instance.SaveSession();
+        if (_isSaving)
+        {
+            if (verboseLogging)
+                Debug.Log("[CloudSave] Save blocked (already saving).");
+            return;
+        }
 
-        // Trigger the cloud save immediately
-        _ = SaveWithConflictResolutionAsync();
+        // Prevent spam saving
+        if (Time.time - _lastSaveTime < minSaveInterval)
+        {
+            if (verboseLogging)
+                Debug.Log("[CloudSave] Save blocked (cooldown active).");
+            return;
+        }
 
-        // Reset the gameplay timer
-        accumulatedPlayTime = 0f;
-        PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
-        PlayerPrefs.Save();
+        _isSaving = true;
+        _lastSaveTime = Time.time;
 
-        if (verboseLogging)
-            Debug.Log("[CloudSave] Forced cloud save and reset timer.");
+        try
+        {
+            SavingManager.Instance.SaveSession();
+
+            await SaveWithConflictResolutionAsync();
+
+            accumulatedPlayTime = 0f;
+            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+            PlayerPrefs.Save();
+
+            if (verboseLogging)
+                Debug.Log("[CloudSave] Forced cloud save and reset timer.");
+        }
+        finally
+        {
+            _isSaving = false;
+        }
+
     }
+
 
     public async void ForceDeleteCloudData()
     {
         if (!IsAvailable)
         {
-            Debug.LogWarning("[CloudSave] Cannot delete data: Cloud save not available.");
+            if (verboseLogging)
+                Debug.LogWarning("[CloudSave] Cannot force delete data: Cloud save not available.");
             return;
         }
+
+        if (_isDeleting)
+        {
+            if (verboseLogging)
+                Debug.Log("[CloudSave] Delete blocked (already deleting).");
+            return;
+        }
+
+        // Prevent spam deleting
+        if (Time.time - _lastDeleteTime < minDeleteInterval)
+        {
+            if (verboseLogging)
+                Debug.Log("[CloudSave] Delete blocked (cooldown active).");
+            return;
+        }
+
+        _isDeleting = true;
+        _lastSaveTime = Time.time;
+
 
         try
         {
@@ -161,6 +221,10 @@ public class CloudSaveManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"[CloudSave] Failed to delete cloud data: {e}");
+        }
+        finally
+        {
+            _isDeleting = false;
         }
     }
 

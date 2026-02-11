@@ -97,7 +97,7 @@ public class SavingManager : MonoBehaviour
         SceneController.Instance.NewTransition()
             .Unload(SceneController.Instance.CurrentActiveScene)
             .Unload(SceneController.Instance.PreviousActiveScene)
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.GamesMenu)
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)
             .WithOverlay()
             .Perform();
     }
