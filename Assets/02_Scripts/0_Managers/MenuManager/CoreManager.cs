@@ -18,6 +18,8 @@ public class CoreManager : MonoBehaviour
 
     void Start()
     {
+        GoogleUpdateManager.Instance?.CheckForUpdate();
+
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)
