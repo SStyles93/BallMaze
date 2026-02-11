@@ -81,16 +81,16 @@ public class SavingManager : MonoBehaviour
     {
         dataService.Delete(PlayerDataFileName);
         currentPlayerData = null;
-        
+
         dataService.Delete(GameDataFileName);
         currentGameData = null;
-        
+
         dataService.Delete(SkinDataFileName);
         currentSkinShopData = null;
-        
+
         dataService.Delete(SettingsDataFileName);
         currentSettingsData = null;
-        
+
         dataService.Delete(TutorialDataFileName);
         currentTutorialData = null;
 
@@ -167,7 +167,7 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void SaveGameDataInFile(string fileName)
     {
-        if(currentGameData == null)
+        if (currentGameData == null)
         {
             currentGameData = new GameData();
         }
@@ -225,11 +225,6 @@ public class SavingManager : MonoBehaviour
         // Timers
         playerSaveData.lastHeartRefillTime = coinManager.LastHeartRefillTime;
         playerSaveData.lastCoinVideoTime = coinManager.LastVideoRewardTime;
-        
-        // Gifts
-        playerSaveData.wasCoinsReceived = coinManager.wasCoinsReceived;
-        playerSaveData.wasRocketReceived = coinManager.wasRocketReceived;
-        playerSaveData.wasUfoReceived = coinManager.wasUfoReceived;
 
 
         // --- SHOP ---
@@ -311,7 +306,7 @@ public class SavingManager : MonoBehaviour
 
         SaveDataInFile(currentSkinShopData, fileName);
     }
-    
+
     /// <summary>
     /// Saves the Tutorial Data in File <br/>
     /// (Tutorial1, Shop, Rocket, Ufo)
@@ -324,15 +319,22 @@ public class SavingManager : MonoBehaviour
             isTutorial1Complete = false,
             isTutorialShopComplete = false,
             isTutorialRocketComplete = false,
-            isTutorialUfoComplete = false
+            isTutorialUfoComplete = false,
+            wasCoinsReceived = false,
+            wasRocketReceived = false,
+            wasUfoReceived = false,
         };
-        
-        if(TutorialManager.Instance == null) return;
+
+        if (TutorialManager.Instance == null) return;
 
         tutorialData.isTutorial1Complete = TutorialManager.Instance.IsTutorial1Complete;
         tutorialData.isTutorialShopComplete = TutorialManager.Instance.IsTutorialShopComplete;
         tutorialData.isTutorialRocketComplete = TutorialManager.Instance.IsTutorialRocketComplete;
         tutorialData.isTutorialUfoComplete = TutorialManager.Instance.IsTutorialUfoComplete;
+        // Gifts
+        tutorialData.wasCoinsReceived = CoinManager.Instance.WasCoinsReceived;
+        tutorialData.wasRocketReceived = CoinManager.Instance.WasRocketReceived;
+        tutorialData.wasUfoReceived = CoinManager.Instance.WasUfoReceived;
 
         currentTutorialData = tutorialData;
         SaveDataInFile(currentTutorialData, fileName);
@@ -467,9 +469,6 @@ public class SavingManager : MonoBehaviour
                 ufos = 0,
                 colorIndex = 0,
                 skinIndex = 0,
-                wasCoinsReceived = false,
-                wasRocketReceived = false,
-                wasUfoReceived = false
             };
             //Debug.Log("Current Session Data does not exist, creating new PlayerData");
             currentPlayerData = playerData;
@@ -500,10 +499,6 @@ public class SavingManager : MonoBehaviour
         coinManager.SetLastHeartRefillTime(currentPlayerData.lastHeartRefillTime);
         coinManager.SetLastCoinVideoTime(currentPlayerData.lastCoinVideoTime);
         LifeManager.Instance.ResetLife();
-
-        coinManager.wasCoinsReceived = currentPlayerData.wasCoinsReceived;
-        coinManager.wasRocketReceived= currentPlayerData.wasRocketReceived;
-        coinManager.wasUfoReceived = currentPlayerData.wasUfoReceived;
 
         // --- SHOP ---
         ShopManager:
@@ -606,7 +601,16 @@ public class SavingManager : MonoBehaviour
 
         if (currentTutorialData == null)
         {
-            TutorialData tutorialData = new TutorialData();
+            currentTutorialData = new TutorialData()
+            {
+                isTutorial1Complete = false,
+                isTutorialShopComplete = false,
+                isTutorialRocketComplete = false,
+                isTutorialUfoComplete = false,
+                wasCoinsReceived = false,
+                wasRocketReceived = false,
+                wasUfoReceived = false,
+            };
             return;
         }
 
@@ -614,6 +618,9 @@ public class SavingManager : MonoBehaviour
         TutorialManager.Instance.IsTutorialShopComplete = currentTutorialData.isTutorialShopComplete;
         TutorialManager.Instance.IsTutorialRocketComplete = currentTutorialData.isTutorialRocketComplete;
         TutorialManager.Instance.IsTutorialUfoComplete = currentTutorialData.isTutorialUfoComplete;
+        CoinManager.Instance.WasCoinsReceived = currentTutorialData.wasCoinsReceived;
+        CoinManager.Instance.WasRocketReceived = currentTutorialData.wasRocketReceived;
+        CoinManager.Instance.WasUfoReceived = currentTutorialData.wasUfoReceived;
 
         SaveDataInFile(currentTutorialData, fileName);
     }

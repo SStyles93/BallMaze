@@ -70,5 +70,7 @@ public class ShopVideoSlot : MonoBehaviour
         Debug.Log($"Rewarded :{rewardAmount} {reward.Name}");
         
         UpdateTimerText(CoinManager.Instance.TimeUntilNextCoinVideo());
+        SavingManager.Instance?.SaveSession();
+        CloudSaveManager.Instance?.MarkDirty();
     }
 }

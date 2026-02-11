@@ -98,12 +98,6 @@ public class SceneController : MonoBehaviour
 
             if (loadException != null)
                 Debug.LogError($"Cloud load failed during transition: {loadException}");
-            
-            if (SavingManager.Instance != null)
-                SavingManager.Instance?.LoadSession();
-            else 
-                Debug.Log("Saving Manager does not exist");
-
         }
 
 

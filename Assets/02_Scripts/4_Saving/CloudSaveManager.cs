@@ -49,6 +49,7 @@ public class CloudSaveManager : MonoBehaviour
     private long lastKnownCloudVersion = -1;
     private const string PlayerPrefKey = "CloudSave_LastPlayTime";
     private float accumulatedPlayTime = 0f; // in seconds
+    private bool isDirty = false;
 
 
     private readonly SemaphoreSlim saveSemaphore = new(1, 1);
@@ -102,13 +103,9 @@ public class CloudSaveManager : MonoBehaviour
         float lastSavedTime = PlayerPrefs.GetFloat(PlayerPrefKey, 0f);
         float totalTime = lastSavedTime + accumulatedPlayTime;
 
-        if (totalTime >= saveIntervalHours * 3600f)
+        if (totalTime >= saveIntervalHours * 3600f || isDirty)
         {
             TrySaveAllToCloud();
-            // Reset counter
-            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
-            accumulatedPlayTime = 0f;
-
             if (verboseLogging)
                 Debug.Log("[CloudSave] Auto Saving");
         }
@@ -177,7 +174,6 @@ public class CloudSaveManager : MonoBehaviour
 
     }
 
-
     public async void ForceDeleteCloudData()
     {
         if (!IsAvailable)
@@ -230,13 +226,26 @@ public class CloudSaveManager : MonoBehaviour
 
     // --- API ENTRY ---
 
+    public void MarkDirty()
+    {
+        isDirty = true;
+    }
+
     public void TrySaveAllToCloud()
     {
         if (!IsAvailable) return;
+
         if (verboseLogging)
             Debug.Log("[CloudSave] Trying to Save All Data to Cloud");
 
+        isDirty = false;
+        PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+        accumulatedPlayTime = 0f;
+
         _ = SaveWithConflictResolutionAsync();
+
+        if (verboseLogging)
+            Debug.Log("[CloudSave] Save completed and timers reset");
     }
 
     public void TryLoadAllFromCloud()

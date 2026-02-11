@@ -16,9 +16,9 @@ public class CoinManager : MonoBehaviour
     [SerializeField] private int hoursBetweenRewardedCoins = 4;
 
     [HideInInspector]
-    public bool wasCoinsReceived = false, 
-        wasRocketReceived = false,
-        wasUfoReceived = false;
+    public bool WasCoinsReceived = false,
+        WasRocketReceived = false,
+        WasUfoReceived = false;
 
 
     Coroutine timerCoroutine;
@@ -265,6 +265,18 @@ public class CoinManager : MonoBehaviour
             NotificationManager.Instance?.CancelHeartNotification();
             return;
         }
+        //------------------------
+        //--- HEART PUSH NOTIF.---
+        //------------------------
+        else
+        {
+            int missingHearts = maxHeartAmount - coins[CoinType.HEART];
+            double minutesUntilFull = missingHearts * timeToRegainHeartInMinutes;
+            DateTime fullHeartsTime = DateTime.UtcNow.AddMinutes(minutesUntilFull);
+
+            Debug.Log($"Scheduling heart notification for {fullHeartsTime} (in {minutesUntilFull} minutes)");
+            NotificationManager.Instance?.ScheduleHeartNotification(fullHeartsTime);
+        }
 
         DateTime now = DateTime.UtcNow;
         TimeSpan elapsed = now - lastHeartRefillTime;
@@ -284,15 +296,6 @@ public class CoinManager : MonoBehaviour
         );
 
         SavingManager.Instance?.SavePlayer();
-
-        //--------------------------
-        // --- PUSH NOTIFICATION ---
-        //--------------------------
-        if (coins[CoinType.HEART] < maxHeartAmount)
-        {
-            DateTime nextHeartTime = lastHeartRefillTime.AddMinutes(timeToRegainHeartInMinutes);
-            NotificationManager.Instance?.ScheduleHeartNotification(nextHeartTime);
-        }
     }
 
 

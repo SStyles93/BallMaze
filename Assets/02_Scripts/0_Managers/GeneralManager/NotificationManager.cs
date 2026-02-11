@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UIElements;
+
 
 #if UNITY_ANDROID
 using UnityEngine.Android;
@@ -37,9 +39,9 @@ public class NotificationManager : MonoBehaviour
         Initialize();
     }
 
-    private void OnApplicationPause(bool pause)
+    private void OnApplicationFocus(bool focus)
     {
-        if (pause)
+        if(focus == false)
         {
             NotificationManager.Instance.ScheduleReengagementNotification(24);
         }
@@ -128,8 +130,8 @@ public class NotificationManager : MonoBehaviour
 #if UNITY_ANDROID
         var notification = new AndroidNotification
         {
-            Title = "❤️ Heart Refilled!",
-            Text = "Full ❤️! Ready to play?",
+            Title = "All ❤️ Restored",
+            Text = "The Maze is waiting.",
             FireTime = localTime,
             SmallIcon = "icon_0",
             LargeIcon = "icon_1"
@@ -193,8 +195,8 @@ public class NotificationManager : MonoBehaviour
 #if UNITY_ANDROID
         var notification = new AndroidNotification
         {
-            Title = "Will you survive the Maze?",
-            Text = "Come back and beat the Maze!",
+            Title = "One more run?",
+            Text = "Every day is a new chance to shine!",
             FireTime = fireTime,
             SmallIcon = "icon_0",
             LargeIcon = "icon_1"
