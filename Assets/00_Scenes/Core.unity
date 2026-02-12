@@ -1980,7 +1980,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
   maxHeartAmount: 9
-  timeToRegainHeartInMinutes: 1
+  timeToRegainHeartInMinutes: 20
   hoursBetweenRewardedCoins: 4
   WasCoinsReceived: 0
   WasRocketReceived: 0

@@ -30,11 +30,12 @@ public class SettingsPannelManager : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
         CloudSaveManager.Instance?.ForceDeleteCloudData();
+        SavingManager.Instance?.DeleteAllData();
 
         SceneController.Instance.NewTransition()
-            .Unload(SceneController.Instance.CurrentActiveScene)
-            .Unload(SceneController.Instance.PreviousActiveScene)
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)
+            .Unload(SceneController.Instance.CurrentActiveScene) //Settings
+            .Unload(SceneController.Instance.PreviousActiveScene) //GamesMenu
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu) // Reload StartScene
             .WithOverlay()
             .Perform();
     }

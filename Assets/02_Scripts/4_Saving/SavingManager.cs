@@ -77,22 +77,32 @@ public class SavingManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Deletes all the local files<br/> 
+    /// Creates new empty data classes<br/>
+    /// Restores all the managers to the new data
+    /// </summary>
     public void DeleteAllData()
     {
         dataService.Delete(PlayerDataFileName);
         currentPlayerData = new PlayerData();
+        RestorePlayerDataFromFile(PlayerDataFileName);
 
         dataService.Delete(GameDataFileName);
         currentGameData = new GameData();
+        RestoreGameDataFromFile(GameDataFileName);
 
         dataService.Delete(SkinDataFileName);
         currentSkinShopData = new SkinShopData();
+        RestoreSkinShopDataFromFile(SkinDataFileName);
 
         dataService.Delete(SettingsDataFileName);
         currentSettingsData = new SettingsData();
+        RestoreSettingsDataFromFile(SettingsDataFileName);
 
         dataService.Delete(TutorialDataFileName);
         currentTutorialData = new TutorialData();
+        RestoreTutorialDataFromFile(TutorialDataFileName);
     }
 
     // --- SAVE ---

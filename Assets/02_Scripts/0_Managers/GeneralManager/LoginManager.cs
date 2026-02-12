@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
@@ -35,36 +35,46 @@ public class LoginManager : MonoBehaviour
 
     private async void Start()
     {
-        if (AuthenticationService.Instance.IsSignedIn)
-        {
-            Debug.Log("Already signed in, skipping login flow.");
-            return;
-        }
-
         if (AuthenticationService.Instance.SessionTokenExists)
         {
-            Debug.Log("Session token found, restoring session...");
+            Debug.Log("Restoring previous session...");
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            FireAuthReadyOnce();
-            return;
         }
-
 
 #if UNITY_ANDROID
         // Wait for Google auth to finish (success OR failure)
         await WaitForGoogleAuth();
 #endif
 
+#if UNITY_ANDROID
+
         if (!string.IsNullOrEmpty(m_GooglePlayGamesToken))
         {
-            Debug.Log("Signing in with Google Play Games...");
-            await SignInWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+            Debug.Log("Google token available");
+
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                Debug.Log("Signing in with Google Play Games...");
+                await SignInWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+            }
+            else
+            {
+                Debug.Log("Linking Google Play Games to existing account...");
+                await LinkWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+            }
         }
         else
+#endif
         {
-            Debug.Log("Google login unavailable, signing in anonymously...");
-            await SignInAnonymouslyAsync();
+            // If still not signed in → anonymous
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                Debug.Log("Signing in anonymously...");
+                await SignInAnonymouslyAsync();
+            }
         }
+
+        FireAuthReadyOnce();
     }
 
     private void LoginGooglePlayGames()
@@ -80,6 +90,7 @@ public class LoginManager : MonoBehaviour
                     m_GooglePlayGamesToken = code;
                     m_GoogleAuthFinished = true;
                 });
+
             }
             else
             {
@@ -97,11 +108,6 @@ public class LoginManager : MonoBehaviour
         {
             timer += Time.deltaTime;
             await Task.Yield();
-        }
-
-        while (!m_GoogleAuthFinished)
-        {
-            Debug.LogWarning("Google Play Games authentication timed out.");
         }
     }
 
@@ -236,7 +242,7 @@ public class LoginManager : MonoBehaviour
             return;
 
         m_AuthReadyFired = true;
-        Debug.Log("Authentication ready � starting cloud save logic");
+        Debug.Log("Authentication ready – starting cloud save logic");
         OnAuthenticationReady?.Invoke();
     }
 
