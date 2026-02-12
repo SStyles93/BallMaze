@@ -116,7 +116,7 @@ public class NotificationManager : MonoBehaviour
     // =========================================================
     // HEART NOTIFICATION
     // =========================================================
-    public void ScheduleHeartNotification(DateTime nextHeartTimeUtc)
+    public void ScheduleHeartNotification(DateTime fullHeartTime)
     {
         HasPermission = Permission.HasUserAuthorizedPermission(permission);
 
@@ -125,7 +125,7 @@ public class NotificationManager : MonoBehaviour
 
         CancelHeartNotification();
 
-        DateTime localTime = nextHeartTimeUtc.ToLocalTime();
+        DateTime localTime = fullHeartTime.ToLocalTime();
 
 #if UNITY_ANDROID
         var notification = new AndroidNotification

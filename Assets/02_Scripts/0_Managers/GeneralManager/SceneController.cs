@@ -96,6 +96,8 @@ public class SceneController : MonoBehaviour
             while (!isDone)
                 yield return null;
 
+            SavingManager.Instance?.LoadSession();
+
             if (loadException != null)
                 Debug.LogError($"Cloud load failed during transition: {loadException}");
         }

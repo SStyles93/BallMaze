@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using Unity.Services.Authentication;
 using Unity.Services.CloudSave;
 
 #region PAYLOAD
@@ -33,7 +34,7 @@ public class CloudSaveManager : MonoBehaviour
     private string CLOUD_KEY = "mm_cloud_save";
 
     [SerializeField] private bool verboseLogging = false;
-    [SerializeField] private float saveIntervalHours = 2f; // save every 2 hours
+    [SerializeField] private float saveIntervalHours = 10f; // save every 10 hours of gameplay
 
     [SerializeField] private float minSaveInterval = 600f; // 600 seconds (10min)
     private float _lastSaveTime = -999f;
@@ -48,6 +49,7 @@ public class CloudSaveManager : MonoBehaviour
     private bool isAvailable;
     private long lastKnownCloudVersion = -1;
     private const string PlayerPrefKey = "CloudSave_LastPlayTime";
+    private const string LastPlayerIdKey = "Last_PlayerId";
     private float accumulatedPlayTime = 0f; // in seconds
     private bool isDirty = false;
 
@@ -75,16 +77,20 @@ public class CloudSaveManager : MonoBehaviour
         }
 
         Instance = this;
+
+        // Load previous saved playtime if not loaded yet
+        if (!PlayerPrefs.HasKey(PlayerPrefKey))
+            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
     }
 
     private void OnEnable()
     {
-        LoginManager.OnAuthenticationReady += SetCloudSaveEnabled;
+        LoginManager.OnAuthenticationReady += OnAuthenticationReady;
     }
 
     private void OnDisable()
     {
-        LoginManager.OnAuthenticationReady -= SetCloudSaveEnabled;
+        LoginManager.OnAuthenticationReady -= OnAuthenticationReady;
     }
 
     private void Update()
@@ -96,9 +102,6 @@ public class CloudSaveManager : MonoBehaviour
         // Increment accumulated play time in seconds
         accumulatedPlayTime += Time.deltaTime;
 
-        // Load previous saved playtime if not loaded yet
-        if (!PlayerPrefs.HasKey(PlayerPrefKey))
-            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
 
         float lastSavedTime = PlayerPrefs.GetFloat(PlayerPrefKey, 0f);
         float totalTime = lastSavedTime + accumulatedPlayTime;
@@ -121,6 +124,14 @@ public class CloudSaveManager : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
+
+
+    [ContextMenu("Delete Cloud Load Done")]
+    public void DeletePlayerPrefs()
+    {
+        PlayerPrefs.DeleteKey("CloudLoad_Done");
+    }
+
     // ==============================
     // PUBLIC ENTRY POINTS
     // ==============================
@@ -199,7 +210,7 @@ public class CloudSaveManager : MonoBehaviour
         }
 
         _isDeleting = true;
-        _lastSaveTime = Time.time;
+        _lastDeleteTime = Time.time;
 
 
         try
@@ -349,13 +360,38 @@ public class CloudSaveManager : MonoBehaviour
     // ==============================
     // CLOUD SDK
     // ==============================
-
-    private void SetCloudSaveEnabled()
+    private void OnAuthenticationReady()
     {
         isAvailable = true;
 
         if (verboseLogging)
             Debug.Log($"[CloudSave] Enabled");
+
+        string currentPlayerId = AuthenticationService.Instance.PlayerId;
+        string lastPlayerId = PlayerPrefs.GetString(LastPlayerIdKey, "");
+
+        if (verboseLogging)
+            Debug.Log($"[CloudSave] Current PlayerId: {currentPlayerId}");
+
+        // If player changed
+        if (currentPlayerId != lastPlayerId)
+        {
+            if (verboseLogging)
+                Debug.Log("[CloudSave] New account detected. Clearing local data.");
+
+            SavingManager.Instance.DeleteAllData();
+
+            PlayerPrefs.SetString(LastPlayerIdKey, currentPlayerId);
+            PlayerPrefs.Save();
+
+            // Force cloud load immediately
+            TryLoadAllFromCloud();
+        }
+        else
+        {
+            if (verboseLogging)
+                Debug.Log("[CloudSave] Same account. Skipping forced cloud load.");
+        }
     }
 
 

@@ -50,6 +50,8 @@ public class CoinManager : MonoBehaviour
     public int InitialHeartAmount => maxHeartAmount;
     public DateTime LastHeartRefillTime => lastHeartRefillTime;
     public DateTime LastVideoRewardTime => lastVideoRewardTime;
+
+    private double currentMinutesUntilFullHearts = -1;
     public static CoinManager Instance { get; private set; }
 
     private void Awake()
@@ -263,6 +265,7 @@ public class CoinManager : MonoBehaviour
         {
             coins[CoinType.HEART] = maxHeartAmount;
             NotificationManager.Instance?.CancelHeartNotification();
+            currentMinutesUntilFullHearts = -1;
             return;
         }
         //------------------------
@@ -271,11 +274,15 @@ public class CoinManager : MonoBehaviour
         else
         {
             int missingHearts = maxHeartAmount - coins[CoinType.HEART];
-            double minutesUntilFull = missingHearts * timeToRegainHeartInMinutes;
-            DateTime fullHeartsTime = DateTime.UtcNow.AddMinutes(minutesUntilFull);
+            int minutesUnityFullHearts = missingHearts * timeToRegainHeartInMinutes;
+            if (currentMinutesUntilFullHearts != minutesUnityFullHearts)
+            {
+                currentMinutesUntilFullHearts = minutesUnityFullHearts;
+                DateTime fullHeartsTime = DateTime.UtcNow.AddMinutes(currentMinutesUntilFullHearts);
 
-            Debug.Log($"Scheduling heart notification for {fullHeartsTime} (in {minutesUntilFull} minutes)");
-            NotificationManager.Instance?.ScheduleHeartNotification(fullHeartsTime);
+                Debug.Log($"Scheduling heart notification for {fullHeartsTime} (in {currentMinutesUntilFullHearts} minutes)");
+                NotificationManager.Instance?.ScheduleHeartNotification(fullHeartsTime);
+            }
         }
 
         DateTime now = DateTime.UtcNow;
@@ -294,8 +301,6 @@ public class CoinManager : MonoBehaviour
         lastHeartRefillTime = lastHeartRefillTime.AddMinutes(
             heartsToAdd * timeToRegainHeartInMinutes
         );
-
-        SavingManager.Instance?.SavePlayer();
     }
 
 

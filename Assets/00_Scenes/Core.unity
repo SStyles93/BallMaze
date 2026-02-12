@@ -1982,9 +1982,9 @@ MonoBehaviour:
   maxHeartAmount: 9
   timeToRegainHeartInMinutes: 1
   hoursBetweenRewardedCoins: 4
-  wasCoinsReceived: 0
-  wasRocketReceived: 0
-  wasUfoReceived: 0
+  WasCoinsReceived: 0
+  WasRocketReceived: 0
+  WasUfoReceived: 0
 --- !u!1 &1445328148
 GameObject:
   m_ObjectHideFlags: 0
@@ -2518,7 +2518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CloudSaveManager
   verboseLogging: 1
-  saveIntervalHours: 2
+  saveIntervalHours: 5
   minSaveInterval: 600
   minDeleteInterval: 600
 --- !u!1 &2109442886
@@ -2576,9 +2576,6 @@ MonoBehaviour:
     ufos: 0
     colorIndex: 0
     skinIndex: 0
-    wasCoinsReceived: 0
-    wasRocketReceived: 0
-    wasUfoReceived: 0
   currentSettingsData:
     isAudioOn: 1
     isMusicOn: 1
@@ -2588,6 +2585,9 @@ MonoBehaviour:
     isTutorialShopComplete: 0
     isTutorialRocketComplete: 0
     isTutorialUfoComplete: 0
+    wasCoinsReceived: 0
+    wasRocketReceived: 0
+    wasUfoReceived: 0
 --- !u!1 &2144166142
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,11 +21,6 @@ public class GamesMenuManager : MonoBehaviour
 
     private void Start()
     {
-        if (SavingManager.Instance != null)
-            SavingManager.Instance?.LoadSession();
-        else
-            Debug.Log("Saving Manager does not exist");
-
         InitializeSlots();
 
         StartCoroutine(ScrollToCurrentLevel());

@@ -80,26 +80,19 @@ public class SavingManager : MonoBehaviour
     public void DeleteAllData()
     {
         dataService.Delete(PlayerDataFileName);
-        currentPlayerData = null;
+        currentPlayerData = new PlayerData();
 
         dataService.Delete(GameDataFileName);
-        currentGameData = null;
+        currentGameData = new GameData();
 
         dataService.Delete(SkinDataFileName);
-        currentSkinShopData = null;
+        currentSkinShopData = new SkinShopData();
 
         dataService.Delete(SettingsDataFileName);
-        currentSettingsData = null;
+        currentSettingsData = new SettingsData();
 
         dataService.Delete(TutorialDataFileName);
-        currentTutorialData = null;
-
-        SceneController.Instance.NewTransition()
-            .Unload(SceneController.Instance.CurrentActiveScene)
-            .Unload(SceneController.Instance.PreviousActiveScene)
-            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)
-            .WithOverlay()
-            .Perform();
+        currentTutorialData = new TutorialData();
     }
 
     // --- SAVE ---

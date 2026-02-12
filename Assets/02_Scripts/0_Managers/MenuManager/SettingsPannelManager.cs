@@ -28,6 +28,14 @@ public class SettingsPannelManager : MonoBehaviour
 
     public void OnForceDeleteData()
     {
+        PlayerPrefs.DeleteAll();
         CloudSaveManager.Instance?.ForceDeleteCloudData();
+
+        SceneController.Instance.NewTransition()
+            .Unload(SceneController.Instance.CurrentActiveScene)
+            .Unload(SceneController.Instance.PreviousActiveScene)
+            .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)
+            .WithOverlay()
+            .Perform();
     }
 }
