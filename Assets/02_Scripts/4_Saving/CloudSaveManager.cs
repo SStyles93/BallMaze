@@ -48,11 +48,10 @@ public class CloudSaveManager : MonoBehaviour
     private float accumulatedPlayTime = 0f; // in seconds
     private bool isDirty = false;
 
-    private const string PlayerPrefKey = "CloudSave_LastPlayTime";
+    private const string LastSaveTime = "CloudSave_LastPlayTime";
     private const string LastPlayerIdKey = "Last_PlayerId";
     private const string LastDeviceIdKey = "Last_DeviceId";
     private const string HasInitializedKey = "Cloud_Initialized";
-    private bool hasLoadedFromCloud = false;
 
     private readonly SemaphoreSlim saveSemaphore = new(1, 1);
     public Task InitializationTask => _initTcs.Task;
@@ -77,8 +76,8 @@ public class CloudSaveManager : MonoBehaviour
         Instance = this;
 
         // Load previous saved playtime if not loaded yet
-        if (!PlayerPrefs.HasKey(PlayerPrefKey))
-            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+        if (!PlayerPrefs.HasKey(LastSaveTime))
+            PlayerPrefs.SetFloat(LastSaveTime, 0f);
     }
 
     private void OnEnable()
@@ -94,11 +93,10 @@ public class CloudSaveManager : MonoBehaviour
     private void Update()
     {
         if (!IsAvailable) return;
-        if (!hasLoadedFromCloud) return; // Prevent saving before cloud baseline
 
         accumulatedPlayTime += Time.deltaTime;
 
-        float lastSavedTime = PlayerPrefs.GetFloat(PlayerPrefKey, 0f);
+        float lastSavedTime = PlayerPrefs.GetFloat(LastSaveTime, 0f);
         float totalTime = lastSavedTime + accumulatedPlayTime;
 
         if (totalTime >= saveIntervalHours * 3600f || isDirty)
@@ -114,8 +112,8 @@ public class CloudSaveManager : MonoBehaviour
         // --- SAVING OF PLAY TIME ---
         if (accumulatedPlayTime > 0f)
         {
-            float lastSavedTime = PlayerPrefs.GetFloat(PlayerPrefKey, 0f);
-            PlayerPrefs.SetFloat(PlayerPrefKey, lastSavedTime + accumulatedPlayTime);
+            float lastSavedTime = PlayerPrefs.GetFloat(LastSaveTime, 0f);
+            PlayerPrefs.SetFloat(LastSaveTime, lastSavedTime + accumulatedPlayTime);
             PlayerPrefs.Save();
         }
     }
@@ -166,16 +164,16 @@ public class CloudSaveManager : MonoBehaviour
         {
             if (verboseLogging)
                 Debug.Log("[CloudSave] Same account + same device. Skipping cloud load.");
-            hasLoadedFromCloud = true;
         }
 
-        OnCloudLoadCompleted?.Invoke();
 
         // Save current identifiers
         PlayerPrefs.SetString(LastPlayerIdKey, currentPlayerId);
         PlayerPrefs.SetString(LastDeviceIdKey, currentDeviceId);
         PlayerPrefs.SetInt(HasInitializedKey, 1);
         PlayerPrefs.Save();
+
+        OnCloudLoadCompleted?.Invoke();
 
         _initTcs.TrySetResult(true);
     }
@@ -219,7 +217,7 @@ public class CloudSaveManager : MonoBehaviour
             await SaveWithConflictResolutionAsync();
 
             accumulatedPlayTime = 0f;
-            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+            PlayerPrefs.SetFloat(LastSaveTime, 0f);
             PlayerPrefs.Save();
 
             if (verboseLogging)
@@ -265,7 +263,7 @@ public class CloudSaveManager : MonoBehaviour
             await CloudSaveService.Instance.Data.Player.DeleteAllAsync();
 
             accumulatedPlayTime = 0f;
-            PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+            PlayerPrefs.SetFloat(LastSaveTime, 0f);
             PlayerPrefs.Save();
 
             SavingManager.Instance.DeleteAllData();
@@ -299,7 +297,7 @@ public class CloudSaveManager : MonoBehaviour
             Debug.Log("[CloudSave] Trying to Save All Data to Cloud");
 
         isDirty = false;
-        PlayerPrefs.SetFloat(PlayerPrefKey, 0f);
+        PlayerPrefs.SetFloat(LastSaveTime, 0f);
         accumulatedPlayTime = 0f;
 
         _ = SaveWithConflictResolutionAsync();
@@ -319,16 +317,17 @@ public class CloudSaveManager : MonoBehaviour
                 if (verboseLogging)
                     Debug.Log($"[CloudSave] Hard loading cloud payload v{cloudPayload.version}");
 
-                ApplyCloudPayload(cloudPayload);
-                lastKnownCloudVersion = cloudPayload.version;
+                if (cloudPayload.version > lastKnownCloudVersion)
+                {
+                    ApplyCloudPayload(cloudPayload);
+                    lastKnownCloudVersion = cloudPayload.version;
+                }
             }
             else
             {
                 if (verboseLogging)
                     Debug.Log("[CloudSave] No cloud save found. Starting fresh.");
             }
-
-            hasLoadedFromCloud = true;
         }
         catch (Exception e)
         {
@@ -362,7 +361,6 @@ public class CloudSaveManager : MonoBehaviour
             }
 
             await SaveToCloudAsync(localPayload);
-
             lastKnownCloudVersion = localPayload.version;
 
             OnCloudSaveCompleted?.Invoke();
