@@ -880,9 +880,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebugPlay: 0
-  unlockAllLevels: 0
-  numberOfLevels: 0
+  isDebugPlay: 1
+  unlockAllLevels: 1
+  numberOfLevels: 120
 --- !u!1 &567788078
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,6 +1056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0afa7ad58ae6b9498612cd391c3460e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  verboseLogging: 0
 --- !u!1 &723521039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1373,6 +1374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b9ddff24c28f1649a102bf5dd51bba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  verboseLogging: 0
 --- !u!1 &1179760689
 GameObject:
   m_ObjectHideFlags: 0
@@ -2588,6 +2590,7 @@ MonoBehaviour:
     wasCoinsReceived: 0
     wasRocketReceived: 0
     wasUfoReceived: 0
+  isDataPresent: 0
 --- !u!1 &2144166142
 GameObject:
   m_ObjectHideFlags: 0

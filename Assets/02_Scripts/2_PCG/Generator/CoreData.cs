@@ -68,24 +68,6 @@ public class Grid
 
     public CellData[,] Raw => cells;
 
-    public bool TryGetEndCell(out CellData endCell)
-    {
-        for (int x = 0; x < Width; x++)
-        {
-            for (int y = 0; y < Height; y++)
-            {
-                if (cells[x, y].isEnd)
-                {
-                    endCell = cells[x, y];
-                    return true;
-                }
-            }
-        }
-
-        endCell = default;
-        return false;
-    }
-
     public List<CellData> GetNeighbours4(int x, int y)
     {
         var neighbours = new List<CellData>();
@@ -218,9 +200,12 @@ public class Grid
         if (endPos.x == -1)
             return false; // No End found
 
-        // 4-way neighbours
+        // 8-way neighbours
         Vector2Int[] dirs =
-            { Vector2Int.up,Vector2Int.down, Vector2Int.left, Vector2Int.right };
+        { 
+            Vector2Int.up,Vector2Int.down, Vector2Int.left, Vector2Int.right,
+            new Vector2Int(1,1) ,new Vector2Int(1,-1), new Vector2Int(-1,1), new Vector2Int(-1,-1),
+        };
 
         foreach (var d in dirs)
         {
@@ -234,6 +219,29 @@ public class Grid
         return true;
     }
 
+    public bool TryGetEndPosition(out Vector2Int endPosition)
+    {
+        endPosition = new Vector2Int(-1, -1);
 
+        // Find the End cell
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                if (GetCell(x, y).overlay == OverlayType.End)
+                {
+                    endPosition = new Vector2Int(x, y);
+                    break;
+                }
+            }
+            if (endPosition.x != -1)
+                break;
+        }
+
+        if (endPosition.x == -1)
+            return false; // No End found
+
+        return true;
+    }
 }
 

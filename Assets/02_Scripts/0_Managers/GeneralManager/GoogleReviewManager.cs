@@ -6,6 +6,9 @@ public class GoogleReviewManager : MonoBehaviour
 {
     public static GoogleReviewManager Instance { get; private set; }
 
+    [SerializeField] private bool verboseLogging = false;
+
+
     private ReviewManager _reviewManager;
     private PlayReviewInfo _reviewInfo;
     // process guard
@@ -33,7 +36,15 @@ public class GoogleReviewManager : MonoBehaviour
     private void Start()
     {
         _sessionStartTime = Time.realtimeSinceStartup;
+
+        if (!PlayerPrefs.HasKey(NextReviewTimeKey))
+        {
+            PlayerPrefs.SetFloat(NextReviewTimeKey, 600f); // First review at 10 min
+            PlayerPrefs.SetInt(ReviewStepKey, 0);
+            PlayerPrefs.Save();
+        }
     }
+
 
 
     private void OnApplicationPause(bool pause)
@@ -57,6 +68,13 @@ public class GoogleReviewManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    [ContextMenu("Delete Review Prefs.")]
+    public void DeleteReviewPlayerPrefs()
+    {
+        PlayerPrefs.DeleteKey(TotalPlayTimeKey);
+        PlayerPrefs.DeleteKey(ReviewStepKey);
+        PlayerPrefs.DeleteKey(NextReviewTimeKey);
+    }
 
     /// <summary>
     /// Calls the Google Review API<br/>
@@ -77,7 +95,14 @@ public class GoogleReviewManager : MonoBehaviour
         int step = PlayerPrefs.GetInt(ReviewStepKey, 0);
 
         if (totalTime < nextReviewTime)
+        {
+            if (verboseLogging)
+                Debug.Log($"[ReviewManager] CanRequestReview\n - False with: TotalTime {totalTime} < {nextReviewTime}");
             return false;
+        }
+
+        if (verboseLogging)
+            Debug.Log($"[ReviewManager] CanRequestReview\n - True with: TotalTime {totalTime} >= {nextReviewTime}");
 
         // Prepare next threshold (exponential growth)
         step++;
@@ -92,6 +117,9 @@ public class GoogleReviewManager : MonoBehaviour
 
     private IEnumerator RequestReviewCoroutine()
     {
+        if (verboseLogging)
+            Debug.Log("[ReviewManager] RequestReviewCoroutine\n - Request Started");
+
         _isProcessing = true;
 
         // --- REQUEST REVIEW ---

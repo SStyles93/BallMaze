@@ -13,6 +13,8 @@ using GooglePlayGames.BasicApi;
 
 public class LoginManager : MonoBehaviour
 {
+    [SerializeField] private bool verboseLogging = false;
+
     private string m_GooglePlayGamesToken;
     private bool m_GoogleAuthFinished;
 
@@ -47,47 +49,62 @@ public class LoginManager : MonoBehaviour
 
     private async void Start()
     {
-        if (AuthenticationService.Instance.SessionTokenExists)
-        {
-            Debug.Log("Restoring previous session...");
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-        }
-
 #if UNITY_ANDROID
-        // Wait for Google auth to finish (success OR failure)
+        // Wait for Google authentication attempt (success OR failure)
         await WaitForGoogleAuth();
-#endif
-
-#if UNITY_ANDROID
 
         if (!string.IsNullOrEmpty(m_GooglePlayGamesToken))
         {
-            Debug.Log("Google token available");
+            if (verboseLogging)
+                Debug.Log("Google token available → Signing in with Google Play Games");
 
-            if (!AuthenticationService.Instance.IsSignedIn)
+            try
             {
-                Debug.Log("Signing in with Google Play Games...");
-                await SignInWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+                await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+
+                if (verboseLogging)
+                {
+                    Debug.Log("Google Sign-In successful");
+                    Debug.Log("PlayerID: " + AuthenticationService.Instance.PlayerId);
+                }
             }
-            else
+            catch (AuthenticationException ex)
             {
-                Debug.Log("Linking Google Play Games to existing account...");
-                await LinkWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
+                Debug.LogException(ex);
+            }
+            catch (RequestFailedException ex)
+            {
+                Debug.LogException(ex);
             }
         }
         else
 #endif
         {
-            // If still not signed in → anonymous
-            if (!AuthenticationService.Instance.IsSignedIn)
+            if (verboseLogging)
+                Debug.Log("Google not available → Falling back to Anonymous");
+
+            try
             {
-                Debug.Log("Signing in anonymously...");
-                await SignInAnonymouslyAsync();
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                if (verboseLogging)
+                {
+                    Debug.Log("Anonymous Sign-In successful");
+                    Debug.Log("PlayerID: " + AuthenticationService.Instance.PlayerId);
+                }
+            }
+            catch (AuthenticationException ex)
+            {
+                Debug.LogException(ex);
+            }
+            catch (RequestFailedException ex)
+            {
+                Debug.LogException(ex);
             }
         }
 
         FireAuthReadyOnce();
     }
+
 
     private void LoginGooglePlayGames()
     {
@@ -95,7 +112,8 @@ public class LoginManager : MonoBehaviour
         {
             if (status == SignInStatus.Success)
             {
-                Debug.Log("Google Play Games login successful");
+                if (verboseLogging)
+                    Debug.Log("Google Play Games login successful");
 
                 PlayGamesPlatform.Instance.RequestServerSideAccess(true, code =>
                 {
@@ -106,7 +124,8 @@ public class LoginManager : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"Google Play Games login failed: {status}");
+                if (verboseLogging)
+                    Debug.LogWarning($"Google Play Games login failed: {status}");
                 m_GoogleAuthFinished = true;
             }
         });
@@ -150,7 +169,7 @@ public class LoginManager : MonoBehaviour
     }
 
 #if UNITY_ANDROID
-    
+
     private async Task SignInOrLinkWithGooglePlayGamesAsync()
     {
         if (string.IsNullOrEmpty(m_GooglePlayGamesToken))
@@ -167,13 +186,14 @@ public class LoginManager : MonoBehaviour
             await LinkWithGooglePlayGamesAsync(m_GooglePlayGamesToken);
         }
     }
-    
+
     private async Task SignInWithGooglePlayGamesAsync(string authCode)
     {
         try
         {
             await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(authCode);
-            Debug.Log("SignIn is successful.");
+            if (verboseLogging)
+                Debug.Log("SignIn is successful.");
             FireAuthReadyOnce();
         }
         catch (AuthenticationException ex)
@@ -195,7 +215,8 @@ public class LoginManager : MonoBehaviour
         try
         {
             await AuthenticationService.Instance.LinkWithGoogleAsync(authCode);
-            Debug.Log("Link is successful.");
+            if (verboseLogging)
+                Debug.Log("Link is successful.");
             FireAuthReadyOnce();
         }
         catch (AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
@@ -244,7 +265,9 @@ public class LoginManager : MonoBehaviour
     {
         if (UnityServices.State == ServicesInitializationState.Uninitialized)
         {
-            Debug.Log("Initializing Unity Services...");
+            if (verboseLogging)
+
+                Debug.Log("Initializing Unity Services...");
             await UnityServices.InitializeAsync();
         }
     }

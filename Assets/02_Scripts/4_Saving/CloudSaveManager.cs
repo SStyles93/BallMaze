@@ -50,12 +50,12 @@ public class CloudSaveManager : MonoBehaviour
 
     private const string LastSaveTime = "CloudSave_LastPlayTime";
     private const string LastPlayerIdKey = "Last_PlayerId";
-    private const string LastDeviceIdKey = "Last_DeviceId";
-    private const string HasInitializedKey = "Cloud_Initialized";
 
     private readonly SemaphoreSlim saveSemaphore = new(1, 1);
     public Task InitializationTask => _initTcs.Task;
     private TaskCompletionSource<bool> _initTcs = new TaskCompletionSource<bool>();
+
+    private CloudSavePayload currentPayload;
 
     // ==============================
     // EVENTS
@@ -123,57 +123,47 @@ public class CloudSaveManager : MonoBehaviour
         isAvailable = true;
 
         string currentPlayerId = AuthenticationService.Instance.PlayerId;
-        string currentDeviceId = SystemInfo.deviceUniqueIdentifier;
-
         string lastPlayerId = PlayerPrefs.GetString(LastPlayerIdKey, "");
-        string lastDeviceId = PlayerPrefs.GetString(LastDeviceIdKey, "");
-        bool hasInitialized = PlayerPrefs.GetInt(HasInitializedKey, 0) == 1;
 
         bool isNewPlayer = currentPlayerId != lastPlayerId;
-        bool isNewDevice = currentDeviceId != lastDeviceId;
 
         if (verboseLogging)
         {
-            Debug.Log($"[CloudSave] PlayerId: {currentPlayerId}");
-            Debug.Log($"[CloudSave] DeviceId: {currentDeviceId}");
-            Debug.Log($"[CloudSave] NewPlayer: {isNewPlayer}");
-            Debug.Log($"[CloudSave] NewDevice: {isNewDevice}");
-            Debug.Log($"[CloudSave] HasInitialized: {hasInitialized}");
+            Debug.Log($"[CloudSave] OnAuthenticationReady\n - PlayerId: {currentPlayerId}");
+            Debug.Log($"[CloudSave] OnAuthenticationReady\n - NewPlayer: {isNewPlayer}");
         }
 
         if (isNewPlayer)
         {
             // Account changed on same device
             if (verboseLogging)
-                Debug.Log("[CloudSave] New account detected. Clearing local data.");
+                Debug.Log("[CloudSave] OnAuthenticationReady\n - New account detected. Clearing local data.");
 
             SavingManager.Instance.DeleteAllData();
             lastKnownCloudVersion = -1;
 
-            await LoadCloudPayloadAndApply();
+            await ForceCloudLoad();
+            OnCloudLoadCompleted?.Invoke();
         }
-        else if (!hasInitialized || isNewDevice)
+        else if (!SavingManager.Instance.isDataPresent)
         {
-            // First install OR new device
             if (verboseLogging)
-                Debug.Log("[CloudSave] First launch or new device. Loading cloud.");
+                Debug.Log("[CloudSave] OnAuthenticationReady\n - No local data found. Forcing cloud load");
 
-            await LoadCloudPayloadAndApply();
+            await ForceCloudLoad();
+            OnCloudLoadCompleted?.Invoke();
         }
         else
         {
             if (verboseLogging)
-                Debug.Log("[CloudSave] Same account + same device. Skipping cloud load.");
+                Debug.Log("[CloudSave] OnAuthenticationReady\n - Same account + same device. Skipping cloud load.");
+            OnCloudLoadCompleted?.Invoke();
         }
 
 
         // Save current identifiers
         PlayerPrefs.SetString(LastPlayerIdKey, currentPlayerId);
-        PlayerPrefs.SetString(LastDeviceIdKey, currentDeviceId);
-        PlayerPrefs.SetInt(HasInitializedKey, 1);
         PlayerPrefs.Save();
-
-        OnCloudLoadCompleted?.Invoke();
 
         _initTcs.TrySetResult(true);
     }
@@ -188,14 +178,14 @@ public class CloudSaveManager : MonoBehaviour
         if (!IsAvailable)
         {
             if (verboseLogging)
-                Debug.LogWarning("[CloudSave] Cannot force save data: Cloud save not available.");
+                Debug.LogWarning("[CloudSave] ForceCloudSave\n - Cannot force save data: Cloud save not available.");
             return;
         }
 
         if (_isSaving)
         {
             if (verboseLogging)
-                Debug.Log("[CloudSave] Save blocked (already saving).");
+                Debug.Log("[CloudSave] ForceCloudSave\n - Save blocked (already saving).");
             return;
         }
 
@@ -203,7 +193,7 @@ public class CloudSaveManager : MonoBehaviour
         if (Time.time - _lastSaveTime < minSaveInterval)
         {
             if (verboseLogging)
-                Debug.Log("[CloudSave] Save blocked (cooldown active).");
+                Debug.Log("[CloudSave] ForceCloudSave\n - Save blocked (cooldown active).");
             return;
         }
 
@@ -221,7 +211,7 @@ public class CloudSaveManager : MonoBehaviour
             PlayerPrefs.Save();
 
             if (verboseLogging)
-                Debug.Log("[CloudSave] Forced cloud save and reset timer.");
+                Debug.Log("[CloudSave] ForceCloudSave\n - Forced cloud save and reset timer.");
         }
         finally
         {
@@ -235,14 +225,14 @@ public class CloudSaveManager : MonoBehaviour
         if (!IsAvailable)
         {
             if (verboseLogging)
-                Debug.LogWarning("[CloudSave] Cannot force delete data: Cloud save not available.");
+                Debug.LogWarning("[CloudSave] ForceDeleteCloudData\n - Cannot force delete data: Cloud save not available.");
             return;
         }
 
         if (_isDeleting)
         {
             if (verboseLogging)
-                Debug.Log("[CloudSave] Delete blocked (already deleting).");
+                Debug.Log("[CloudSave] ForceDeleteCloudData\n - Delete blocked (already deleting).");
             return;
         }
 
@@ -250,7 +240,7 @@ public class CloudSaveManager : MonoBehaviour
         if (Time.time - _lastDeleteTime < minDeleteInterval)
         {
             if (verboseLogging)
-                Debug.Log("[CloudSave] Delete blocked (cooldown active).");
+                Debug.Log("[CloudSave] ForceDeleteCloudData\n - Delete blocked (cooldown active).");
             return;
         }
 
@@ -268,33 +258,33 @@ public class CloudSaveManager : MonoBehaviour
 
             SavingManager.Instance.DeleteAllData();
 
-            Debug.Log("[CloudSave] Cloud data deleted successfully.");
+            Debug.Log("[CloudSave] ForceDeleteCloudData\n - Cloud data deleted successfully.");
         }
         catch (Exception e)
         {
-            Debug.LogError($"[CloudSave] Failed to delete cloud data: {e}");
+            Debug.LogError($"[CloudSave] ForceDeleteCloudData\n - Failed to delete cloud data: {e}");
         }
         finally
         {
             _isDeleting = false;
         }
     }
-    
+
     public void MarkDirty()
     {
         isDirty = true;
     }
-    
+
     // ==============================
     // SAVE / LOAD PIPELINE
     // ==============================
-    
+
     private void TrySaveAllToCloud()
     {
         if (!IsAvailable) return;
 
         if (verboseLogging)
-            Debug.Log("[CloudSave] Trying to Save All Data to Cloud");
+            Debug.Log("[CloudSave] TrySaveAllToCloud");
 
         isDirty = false;
         PlayerPrefs.SetFloat(LastSaveTime, 0f);
@@ -303,10 +293,10 @@ public class CloudSaveManager : MonoBehaviour
         _ = SaveWithConflictResolutionAsync();
 
         if (verboseLogging)
-            Debug.Log("[CloudSave] Save completed and timers reset");
+            Debug.Log("[CloudSave] TrySaveAllToCloud\n - Save completed and timers reset");
     }
 
-    private async Task LoadCloudPayloadAndApply()
+    private async Task ForceCloudLoad()
     {
         try
         {
@@ -314,25 +304,22 @@ public class CloudSaveManager : MonoBehaviour
 
             if (cloudPayload != null)
             {
-                if (verboseLogging)
-                    Debug.Log($"[CloudSave] Hard loading cloud payload v{cloudPayload.version}");
+                ApplyCloudPayload(cloudPayload);
+                lastKnownCloudVersion = cloudPayload.version;
 
-                if (cloudPayload.version > lastKnownCloudVersion)
-                {
-                    ApplyCloudPayload(cloudPayload);
-                    lastKnownCloudVersion = cloudPayload.version;
-                }
+                if (verboseLogging)
+                    Debug.Log($"[CloudSave] ForceCloudLoad\n - Applied: v{cloudPayload.version}");
             }
             else
             {
                 if (verboseLogging)
-                    Debug.Log("[CloudSave] No cloud save found. Starting fresh.");
+                    Debug.Log("[CloudSave] ForceCloudLoad\n - No cloud save found. Starting fresh.");
             }
         }
         catch (Exception e)
         {
             OnCloudOperationFailed?.Invoke(e);
-            Debug.LogError($"[CloudSave] Hard load failed: {e}");
+            Debug.LogError($"[CloudSave] ForceCloudLoad\n - failed: {e}");
         }
     }
 
@@ -341,12 +328,12 @@ public class CloudSaveManager : MonoBehaviour
         await saveSemaphore.WaitAsync();
         try
         {
-            CloudSavePayload localPayload = BuildPayload();
+            CloudSavePayload localPayload = currentPayload;
             CloudSavePayload cloudPayload = await LoadFromCloudAsync();
 
             if (cloudPayload != null)
             {
-                if (localPayload.version < cloudPayload.version)
+                if (cloudPayload.version > localPayload.version)
                 {
                     ApplyCloudPayload(cloudPayload);
                     lastKnownCloudVersion = cloudPayload.version;
@@ -366,12 +353,12 @@ public class CloudSaveManager : MonoBehaviour
             OnCloudSaveCompleted?.Invoke();
 
             if (verboseLogging)
-                Debug.Log($"[CloudSave] Saved v{lastKnownCloudVersion}");
+                Debug.Log($"[CloudSave] SaveWithConflictResolutionAsync\n - Saved: v{lastKnownCloudVersion}");
         }
         catch (Exception e)
         {
             OnCloudOperationFailed?.Invoke(e);
-            Debug.LogError($"[CloudSave] Save failed: {e}");
+            Debug.LogError($"[CloudSave] SaveWithConflictResolutionAsync\n - Failed: {e}");
         }
         finally
         {
@@ -394,7 +381,7 @@ public class CloudSaveManager : MonoBehaviour
             CloudSavePayload payload = item.Value.GetAs<CloudSavePayload>();
 
             if (verboseLogging)
-                Debug.Log($"[CloudSave] Loaded v{payload.version}");
+                Debug.Log($"[CloudSave] LoadedFromCloudAsyn\n - Loaded: v{payload.version}");
 
             return payload;
         }
@@ -416,7 +403,7 @@ public class CloudSaveManager : MonoBehaviour
     // ==============================
     // CONFLICT RESOLUTION
     // ==============================
-    
+
     private void ApplyCloudPayload(CloudSavePayload payload)
     {
         SavingManager.Instance.ForceLocalOverwrite(payload.game);
@@ -425,9 +412,9 @@ public class CloudSaveManager : MonoBehaviour
         SavingManager.Instance.ForceLocalOverwrite(payload.tutorial);
     }
 
-    private CloudSavePayload BuildPayload()
+    public CloudSavePayload BuildPayload()
     {
-        return new CloudSavePayload
+        currentPayload = new CloudSavePayload
         {
             deviceId = SystemInfo.deviceUniqueIdentifier,
             version = lastKnownCloudVersion + 1,
@@ -437,5 +424,12 @@ public class CloudSaveManager : MonoBehaviour
             game = SavingManager.Instance.Get<GameData>(),
             tutorial = SavingManager.Instance.Get<TutorialData>()
         };
+
+        lastKnownCloudVersion++;
+
+        if(verboseLogging)
+        Debug.Log($"[CloudSave] BuildPayload\n - Payload created with: v{currentPayload.version}");
+
+        return currentPayload;
     }
 }

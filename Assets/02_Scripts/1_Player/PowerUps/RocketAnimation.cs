@@ -45,7 +45,15 @@ public class RocketAnimation : MonoBehaviour
                 Debug.Log("No walkable neighbour");
             }
 
-            targetWorldPos = worldPositions[Random.Range(0, worldPositions.Count)];
+            if (worldPositions.Count > 0)
+            {
+                targetWorldPos = worldPositions[Random.Range(0, worldPositions.Count)];
+            }
+            else
+            {
+                targetWorldPos = physicalMazeGeneratorRef.TryGetEndCell();
+            }
+            
         }
 
         targetWorldPos.y = powerUpManagerRef.GetPowerUpHeightOffset(CoinType.ROCKET);

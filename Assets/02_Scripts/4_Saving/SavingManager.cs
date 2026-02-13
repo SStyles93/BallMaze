@@ -17,6 +17,8 @@ public class SavingManager : MonoBehaviour
     public SettingsData currentSettingsData = null;
     public TutorialData currentTutorialData = null;
 
+    public bool isDataPresent = true;
+
     const string GameDataFileName = "GameData";
     const string PlayerDataFileName = "PlayerData";
     const string SkinDataFileName = "ShopData";
@@ -35,6 +37,9 @@ public class SavingManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
 
         dataService = new JsonDataService(); // Or any other IDataService implementation
+
+        // Starts true, will be set to false if data file is missing
+        isDataPresent = true;
     }
 
     // --- CLOUD RELATED METHODS ---
@@ -125,9 +130,11 @@ public class SavingManager : MonoBehaviour
 
         SaveTutorialDataInFile(TutorialDataFileName);
 
+
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
+        CloudSaveManager.Instance.BuildPayload();
     }
 
 
@@ -640,7 +647,9 @@ public class SavingManager : MonoBehaviour
         T loadedData = dataService.Load<T>(fileName);
         if (loadedData == null)
         {
-            //Debug.LogWarning($"No file named \'{fileName}\' found.");
+            if (fileName == SettingsDataFileName) return null;
+            Debug.LogWarning($"[Saving Manager] No file named \'{fileName}\' found.");
+            isDataPresent = false;
             return null;
         }
 

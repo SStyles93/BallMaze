@@ -96,6 +96,16 @@ public class PhysicalMazeGenerator : MonoBehaviour
         isGridGenerated = false;
     }
 
+    public Vector3 TryGetEndCell()
+    {
+        if (currentGrid == null)
+            return Vector3.zero;
+
+        currentGrid.TryGetEndPosition(out Vector2Int endPosition);
+
+        return GridToWorld(endPosition);
+    }
+
     public bool TryGetWalkableEndNeighbours(out List<Vector3> worldPositions)
     {
         worldPositions = new List<Vector3>();

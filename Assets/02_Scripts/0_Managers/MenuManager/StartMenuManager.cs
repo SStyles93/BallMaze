@@ -7,12 +7,9 @@ public class StartMenuManager : MonoBehaviour
 {
     [SerializeField] private float startTimer = 2.0f;
 
-    private float currentStartTimer = 0f;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     async void Start()
     {
-        currentStartTimer = startTimer;
         AudioManager.Instance?.PlayMusic();
 
         await WaitForStartupSequence();
@@ -22,13 +19,10 @@ public class StartMenuManager : MonoBehaviour
 
     private async Task WaitForStartupSequence()
     {
-        // Task 1 - Minimum display time
         Task minTimeTask = Task.Delay((int)(startTimer * 1000));
 
-        // Task 2 - Run booting pipeline (auth + cloud)
         Task bootPipelineTask = RunBootPipeline();
 
-        // Wait for BOTH to finish (whichever takes longer)
         await Task.WhenAll(minTimeTask, bootPipelineTask);
     }
 
@@ -38,7 +32,7 @@ public class StartMenuManager : MonoBehaviour
         {
             // Authentication with timeout
             await Task.WhenAny(
-                LoginManager.Instance.AuthenticationTask, Task.Delay(3000) // 3s timeout
+                LoginManager.Instance.AuthenticationTask, Task.Delay(5000) // 3s timeout
             );
         }
 
@@ -48,7 +42,7 @@ public class StartMenuManager : MonoBehaviour
             if (CloudSaveManager.Instance.IsAvailable)
             {
                 await Task.WhenAny(
-                    CloudSaveManager.Instance.InitializationTask, Task.Delay(3000)
+                    CloudSaveManager.Instance.InitializationTask, Task.Delay(5000)
                 );
             }
         }

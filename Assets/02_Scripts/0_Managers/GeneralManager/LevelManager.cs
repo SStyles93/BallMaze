@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour
     /// <remarks>This method will init. LevelParameters, GenerationParameters, and LevelData</remarks>
     public void InitializeLevel(int index)
     {
-        if (index % 11 == 0) CloudSaveManager.Instance.MarkDirty();
+        if (index % 10 == 0) CloudSaveManager.Instance.MarkDirty();
 
         if (!CanStartLevel(index))
         {
