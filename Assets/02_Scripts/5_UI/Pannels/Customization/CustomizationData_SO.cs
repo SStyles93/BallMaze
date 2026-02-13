@@ -7,6 +7,18 @@ public class CustomizationData_SO : ScriptableObject
 {
     public SkinOption[] skins;
     public ColorOption[] colors;
+
+    public void ResetData()
+    {
+        for (int i = 2; i < skins.Length; i++)
+        {
+            skins[i].isLocked = true;
+        }
+        for (int i = 2; i < colors.Length; i++)
+        {
+            colors[i].isLocked = true;
+        }
+    }
 }
 
 [System.Serializable]

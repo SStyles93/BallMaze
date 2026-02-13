@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using UnityEngine;
 
@@ -8,24 +9,51 @@ public class StartMenuManager : MonoBehaviour
 
     private float currentStartTimer = 0f;
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    async void Start()
     {
         currentStartTimer = startTimer;
         AudioManager.Instance?.PlayMusic();
+
+        await WaitForStartupSequence();
+
+        LoadGameScene();
     }
 
-    // Update is called once per frame
-    void Update()
+    private async Task WaitForStartupSequence()
     {
-        currentStartTimer -= Time.deltaTime;
+        // Task 1 - Minimum display time
+        Task minTimeTask = Task.Delay((int)(startTimer * 1000));
 
-        if (currentStartTimer <= 0f)
+        // Task 2 - Run booting pipeline (auth + cloud)
+        Task bootPipelineTask = RunBootPipeline();
+
+        // Wait for BOTH to finish (whichever takes longer)
+        await Task.WhenAll(minTimeTask, bootPipelineTask);
+    }
+
+    private async Task RunBootPipeline()
+    {
+        if (LoginManager.Instance != null)
         {
-            LoadGameScene();
+            // Authentication with timeout
+            await Task.WhenAny(
+                LoginManager.Instance.AuthenticationTask, Task.Delay(3000) // 3s timeout
+            );
+        }
+
+        if (CloudSaveManager.Instance != null)
+        {
+            // Cloud initialization with timeout
+            if (CloudSaveManager.Instance.IsAvailable)
+            {
+                await Task.WhenAny(
+                    CloudSaveManager.Instance.InitializationTask, Task.Delay(3000)
+                );
+            }
         }
     }
+
     private void LoadGameScene()
     {
         SceneController.Instance.NewTransition()
@@ -34,4 +62,5 @@ public class StartMenuManager : MonoBehaviour
             .WithOverlay()
             .Perform();
     }
+
 }

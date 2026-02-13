@@ -27,6 +27,7 @@ public class HeartPannel : CurrencyPannel
     protected override void Start()
     {
         base.Start();
+        timerPannel.SetActive(true);
         UpdateTimerText(coinManagerRef.TimeUntilNextHeart());
     }
 
@@ -34,13 +35,13 @@ public class HeartPannel : CurrencyPannel
     {
         if (remaining <= TimeSpan.Zero)
         {
-            timerText.text = "FULL";
-            timerPannel.SetActive(false);
+            //timerPannel.SetActive(false);
             shopButton.SetActive(false);
+            timerText.text = "Max";
         }
         else
         {
-            timerPannel.SetActive(true);
+            //timerPannel.SetActive(true);
             shopButton.SetActive(true);
             timerText.text = $"{remaining.Minutes:00}:{remaining.Seconds:00}";
         }

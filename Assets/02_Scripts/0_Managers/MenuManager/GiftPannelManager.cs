@@ -224,7 +224,6 @@ public class GiftPannelManager : MonoBehaviour
     {
         if (!giftOpened) return;
 
-
         canClick = false;
         audioSource.Stop();
 
@@ -255,11 +254,9 @@ public class GiftPannelManager : MonoBehaviour
             }
             canClick = true;
             giftOpened = false;
+            SavingManager.Instance.SaveSession();
             giftPannel.SetActive(false);
         });
-
-        SavingManager.Instance?.SaveSession();
-        CloudSaveManager.Instance?.MarkDirty();
     }
 
     // --- Plan class ---

@@ -17059,6 +17059,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 689690066}
     m_Modifications:
+    - target: {fileID: 738563078742385903, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_text
+      value: 9:99
+      objectReference: {fileID: 0}
+    - target: {fileID: 738563078742385903, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_fontSize
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 815748285569757464, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_text
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 815748285569757464, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_fontSize
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 1775512563004007454, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

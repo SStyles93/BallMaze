@@ -17,11 +17,23 @@ public class LoginManager : MonoBehaviour
     private bool m_GoogleAuthFinished;
 
     public static Action OnAuthenticationReady;
+    public Task AuthenticationTask => _authenticationTcs.Task;
+    private TaskCompletionSource<bool> _authenticationTcs = new TaskCompletionSource<bool>();
     private bool m_AuthReadyFired = false;
 
+    public static LoginManager Instance;
 
     private async void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+
         await InitializeUnityServices();
 
         //OTHER INITS WOULD GO HERE
@@ -242,8 +254,8 @@ public class LoginManager : MonoBehaviour
             return;
 
         m_AuthReadyFired = true;
-        Debug.Log("Authentication ready – starting cloud save logic");
+
+        _authenticationTcs.TrySetResult(true); // complete task
         OnAuthenticationReady?.Invoke();
     }
-
 }

@@ -13,7 +13,6 @@ public class CloudSavePayload : SaveableData
 {
     public string deviceId;
     public long version;
-    public DateTime lastModifiedUtc;
 
     public PlayerData player;
     public SkinShopData skinShop;
@@ -43,18 +42,21 @@ public class CloudSaveManager : MonoBehaviour
     private float _lastDeleteTime = -999f;
     private bool _isDeleting = false;
 
-
-
     public bool IsAvailable => isAvailable;
     private bool isAvailable;
     private long lastKnownCloudVersion = -1;
-    private const string PlayerPrefKey = "CloudSave_LastPlayTime";
-    private const string LastPlayerIdKey = "Last_PlayerId";
     private float accumulatedPlayTime = 0f; // in seconds
     private bool isDirty = false;
 
+    private const string PlayerPrefKey = "CloudSave_LastPlayTime";
+    private const string LastPlayerIdKey = "Last_PlayerId";
+    private const string LastDeviceIdKey = "Last_DeviceId";
+    private const string HasInitializedKey = "Cloud_Initialized";
+    private bool hasLoadedFromCloud = false;
 
     private readonly SemaphoreSlim saveSemaphore = new(1, 1);
+    public Task InitializationTask => _initTcs.Task;
+    private TaskCompletionSource<bool> _initTcs = new TaskCompletionSource<bool>();
 
     // ==============================
     // EVENTS
@@ -63,10 +65,6 @@ public class CloudSaveManager : MonoBehaviour
     public event Action OnCloudSaveCompleted;
     public event Action OnCloudLoadCompleted;
     public event Action<Exception> OnCloudOperationFailed;
-
-    // ==============================
-    // UNITY
-    // ==============================
 
     private void Awake()
     {
@@ -96,12 +94,9 @@ public class CloudSaveManager : MonoBehaviour
     private void Update()
     {
         if (!IsAvailable) return;
+        if (!hasLoadedFromCloud) return; // Prevent saving before cloud baseline
 
-        // --- TIMED DATA SAVING ---
-
-        // Increment accumulated play time in seconds
         accumulatedPlayTime += Time.deltaTime;
-
 
         float lastSavedTime = PlayerPrefs.GetFloat(PlayerPrefKey, 0f);
         float totalTime = lastSavedTime + accumulatedPlayTime;
@@ -125,18 +120,70 @@ public class CloudSaveManager : MonoBehaviour
         }
     }
 
-
-    [ContextMenu("Delete Cloud Load Done")]
-    public void DeletePlayerPrefs()
+    private async void OnAuthenticationReady()
     {
-        PlayerPrefs.DeleteKey("CloudLoad_Done");
+        isAvailable = true;
+
+        string currentPlayerId = AuthenticationService.Instance.PlayerId;
+        string currentDeviceId = SystemInfo.deviceUniqueIdentifier;
+
+        string lastPlayerId = PlayerPrefs.GetString(LastPlayerIdKey, "");
+        string lastDeviceId = PlayerPrefs.GetString(LastDeviceIdKey, "");
+        bool hasInitialized = PlayerPrefs.GetInt(HasInitializedKey, 0) == 1;
+
+        bool isNewPlayer = currentPlayerId != lastPlayerId;
+        bool isNewDevice = currentDeviceId != lastDeviceId;
+
+        if (verboseLogging)
+        {
+            Debug.Log($"[CloudSave] PlayerId: {currentPlayerId}");
+            Debug.Log($"[CloudSave] DeviceId: {currentDeviceId}");
+            Debug.Log($"[CloudSave] NewPlayer: {isNewPlayer}");
+            Debug.Log($"[CloudSave] NewDevice: {isNewDevice}");
+            Debug.Log($"[CloudSave] HasInitialized: {hasInitialized}");
+        }
+
+        if (isNewPlayer)
+        {
+            // Account changed on same device
+            if (verboseLogging)
+                Debug.Log("[CloudSave] New account detected. Clearing local data.");
+
+            SavingManager.Instance.DeleteAllData();
+            lastKnownCloudVersion = -1;
+
+            await LoadCloudPayloadAndApply();
+        }
+        else if (!hasInitialized || isNewDevice)
+        {
+            // First install OR new device
+            if (verboseLogging)
+                Debug.Log("[CloudSave] First launch or new device. Loading cloud.");
+
+            await LoadCloudPayloadAndApply();
+        }
+        else
+        {
+            if (verboseLogging)
+                Debug.Log("[CloudSave] Same account + same device. Skipping cloud load.");
+            hasLoadedFromCloud = true;
+        }
+
+        OnCloudLoadCompleted?.Invoke();
+
+        // Save current identifiers
+        PlayerPrefs.SetString(LastPlayerIdKey, currentPlayerId);
+        PlayerPrefs.SetString(LastDeviceIdKey, currentDeviceId);
+        PlayerPrefs.SetInt(HasInitializedKey, 1);
+        PlayerPrefs.Save();
+
+        _initTcs.TrySetResult(true);
     }
+
 
     // ==============================
     // PUBLIC ENTRY POINTS
     // ==============================
-
-    // --- User Buttons ---
 
     public async void ForceCloudSave()
     {
@@ -234,15 +281,17 @@ public class CloudSaveManager : MonoBehaviour
             _isDeleting = false;
         }
     }
-
-    // --- API ENTRY ---
-
+    
     public void MarkDirty()
     {
         isDirty = true;
     }
-
-    public void TrySaveAllToCloud()
+    
+    // ==============================
+    // SAVE / LOAD PIPELINE
+    // ==============================
+    
+    private void TrySaveAllToCloud()
     {
         if (!IsAvailable) return;
 
@@ -259,38 +308,34 @@ public class CloudSaveManager : MonoBehaviour
             Debug.Log("[CloudSave] Save completed and timers reset");
     }
 
-    public void TryLoadAllFromCloud()
+    private async Task LoadCloudPayloadAndApply()
     {
-        if (!IsAvailable) return;
-
-        if (verboseLogging)
-            Debug.Log("[CloudSave] Trying to Load All Data from Cloud");
-
-        _ = LoadAndResolveAsync();
-    }
-
-    // ==============================
-    // PAYLOAD BUILDING
-    // ==============================
-
-    private CloudSavePayload BuildPayload()
-    {
-        return new CloudSavePayload
+        try
         {
-            deviceId = SystemInfo.deviceUniqueIdentifier,
-            version = lastKnownCloudVersion + 1,
-            lastModifiedUtc = DateTime.UtcNow,
+            CloudSavePayload cloudPayload = await LoadFromCloudAsync();
 
-            player = SavingManager.Instance.Get<PlayerData>(),
-            skinShop = SavingManager.Instance.Get<SkinShopData>(),
-            game = SavingManager.Instance.Get<GameData>(),
-            tutorial = SavingManager.Instance.Get<TutorialData>()
-        };
+            if (cloudPayload != null)
+            {
+                if (verboseLogging)
+                    Debug.Log($"[CloudSave] Hard loading cloud payload v{cloudPayload.version}");
+
+                ApplyCloudPayload(cloudPayload);
+                lastKnownCloudVersion = cloudPayload.version;
+            }
+            else
+            {
+                if (verboseLogging)
+                    Debug.Log("[CloudSave] No cloud save found. Starting fresh.");
+            }
+
+            hasLoadedFromCloud = true;
+        }
+        catch (Exception e)
+        {
+            OnCloudOperationFailed?.Invoke(e);
+            Debug.LogError($"[CloudSave] Hard load failed: {e}");
+        }
     }
-
-    // ==============================
-    // SAVE / LOAD PIPELINE
-    // ==============================
 
     private async Task SaveWithConflictResolutionAsync()
     {
@@ -300,17 +345,30 @@ public class CloudSaveManager : MonoBehaviour
             CloudSavePayload localPayload = BuildPayload();
             CloudSavePayload cloudPayload = await LoadFromCloudAsync();
 
-            CloudSavePayload winner = ResolveConflict(localPayload, cloudPayload);
-            Debug.Log($"Saving resolved with payload v{winner.version} at {winner.lastModifiedUtc}");
+            if (cloudPayload != null)
+            {
+                if (localPayload.version < cloudPayload.version)
+                {
+                    ApplyCloudPayload(cloudPayload);
+                    lastKnownCloudVersion = cloudPayload.version;
 
-            await SaveToCloudAsync(winner);
+                    isDirty = false;
+                    accumulatedPlayTime = 0f;
+                    return;
+                }
 
-            lastKnownCloudVersion = winner.version;
+                if (localPayload.version == cloudPayload.version)
+                    return;
+            }
+
+            await SaveToCloudAsync(localPayload);
+
+            lastKnownCloudVersion = localPayload.version;
 
             OnCloudSaveCompleted?.Invoke();
 
             if (verboseLogging)
-                Debug.Log($"[CloudSave] Saved v{winner.version}");
+                Debug.Log($"[CloudSave] Saved v{lastKnownCloudVersion}");
         }
         catch (Exception e)
         {
@@ -323,77 +381,10 @@ public class CloudSaveManager : MonoBehaviour
         }
     }
 
-    private async Task LoadAndResolveAsync()
-    {
-        try
-        {
-            CloudSavePayload cloudPayload = await LoadFromCloudAsync();
-            if (cloudPayload == null)
-            {
-                Exception ex = new Exception($"[CloudSave] cloudPayload is null");
-                OnCloudOperationFailed?.Invoke(ex);
-                return;
-            }
-
-            CloudSavePayload localPayload = BuildPayload();
-
-            CloudSavePayload winner = ResolveConflict(localPayload, cloudPayload);
-
-            Debug.Log($"Loading resolved with payload v{winner.version} at {winner.lastModifiedUtc}");
-
-            if (winner == cloudPayload)
-            {
-                ApplyCloudPayload(cloudPayload);
-            }
-
-            lastKnownCloudVersion = winner.version;
-
-            OnCloudLoadCompleted?.Invoke();
-        }
-        catch (Exception e)
-        {
-            OnCloudOperationFailed?.Invoke(e);
-            Debug.LogError($"[CloudSave] Load failed: {e}");
-        }
-    }
 
     // ==============================
-    // CLOUD SDK
+    // UNITY CLOUD - SAVE/LOAD
     // ==============================
-    private void OnAuthenticationReady()
-    {
-        isAvailable = true;
-
-        if (verboseLogging)
-            Debug.Log($"[CloudSave] Enabled");
-
-        string currentPlayerId = AuthenticationService.Instance.PlayerId;
-        string lastPlayerId = PlayerPrefs.GetString(LastPlayerIdKey, "");
-
-        if (verboseLogging)
-            Debug.Log($"[CloudSave] Current PlayerId: {currentPlayerId}");
-
-        // If player changed
-        if (currentPlayerId != lastPlayerId)
-        {
-            if (verboseLogging)
-                Debug.Log("[CloudSave] New account detected. Clearing local data.");
-
-            SavingManager.Instance.DeleteAllData();
-
-            PlayerPrefs.SetString(LastPlayerIdKey, currentPlayerId);
-            PlayerPrefs.Save();
-
-            // Force cloud load immediately
-            TryLoadAllFromCloud();
-        }
-        else
-        {
-            if (verboseLogging)
-                Debug.Log("[CloudSave] Same account. Skipping forced cloud load.");
-        }
-    }
-
 
     private async Task<CloudSavePayload> LoadFromCloudAsync()
     {
@@ -423,35 +414,30 @@ public class CloudSaveManager : MonoBehaviour
         await CloudSaveService.Instance.Data.Player.SaveAsync(data);
     }
 
+
     // ==============================
     // CONFLICT RESOLUTION
     // ==============================
-
-    private CloudSavePayload ResolveConflict(
-        CloudSavePayload local,
-        CloudSavePayload cloud)
-    {
-        if (cloud == null) return local;
-        if (local == null) return cloud;
-
-        if (local.version != cloud.version)
-            return local.version > cloud.version ? local : cloud;
-
-        if (local.lastModifiedUtc != cloud.lastModifiedUtc)
-            return local.lastModifiedUtc > cloud.lastModifiedUtc ? local : cloud;
-
-        return local.deviceId == SystemInfo.deviceUniqueIdentifier ? local : cloud;
-    }
-
-    // ==============================
-    // APPLY
-    // ==============================
-
+    
     private void ApplyCloudPayload(CloudSavePayload payload)
     {
         SavingManager.Instance.ForceLocalOverwrite(payload.game);
         SavingManager.Instance.ForceLocalOverwrite(payload.player);
         SavingManager.Instance.ForceLocalOverwrite(payload.skinShop);
         SavingManager.Instance.ForceLocalOverwrite(payload.tutorial);
+    }
+
+    private CloudSavePayload BuildPayload()
+    {
+        return new CloudSavePayload
+        {
+            deviceId = SystemInfo.deviceUniqueIdentifier,
+            version = lastKnownCloudVersion + 1,
+
+            player = SavingManager.Instance.Get<PlayerData>(),
+            skinShop = SavingManager.Instance.Get<SkinShopData>(),
+            game = SavingManager.Instance.Get<GameData>(),
+            tutorial = SavingManager.Instance.Get<TutorialData>()
+        };
     }
 }

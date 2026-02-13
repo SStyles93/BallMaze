@@ -28,10 +28,6 @@ public class ShopVideoSlot : MonoBehaviour
         {
             UpdateTimerText(coinManager.TimeUntilNextCoinVideo());
         }
-
-        AdsManager.Instance.RewardedCoinsVideoAd.OnAdRewarded += GrantRewardAndClosePannel;
-
-        buyButton.onClick.AddListener(LaunchRewardedAd);
     }
 
     void UpdateTimerText(TimeSpan remaining)
@@ -57,20 +53,6 @@ public class ShopVideoSlot : MonoBehaviour
         AdsManager manager = AdsManager.Instance;
         if (manager == null) return;
 
-        if (manager.RewardedCoinsVideoAd.IsAdReady())
-        {
-            manager.RewardedCoinsVideoAd.ShowAd();
-        }
-    }
-
-    private void GrantRewardAndClosePannel(LevelPlayAdInfo adInfo, LevelPlayReward reward)
-    {
-        int rewardAmount = Mathf.Clamp(reward.Amount, 100, 1000);
-        CoinManager.Instance?.RewardCoins(rewardAmount);
-        Debug.Log($"Rewarded :{rewardAmount} {reward.Name}");
-        
-        UpdateTimerText(CoinManager.Instance.TimeUntilNextCoinVideo());
-        SavingManager.Instance?.SaveSession();
-        CloudSaveManager.Instance?.MarkDirty();
+        manager.ShowRewarded("rewarded_coins");
     }
 }

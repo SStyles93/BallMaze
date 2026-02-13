@@ -21,7 +21,6 @@ public class GoogleUpdateManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         _appUpdateManager = new AppUpdateManager();
     }

@@ -68,41 +68,6 @@ public class SceneController : MonoBehaviour
             yield return loadingOverlay.FadeInBlack();
         }
 
-        // Cloud Load 
-        if (plan.CloudLoad && CloudSaveManager.Instance != null && CloudSaveManager.Instance.IsAvailable)
-        {
-            bool isDone = false;
-            Exception loadException = null;
-
-            void OnLoadCompleted()
-            {
-                isDone = true;
-                CloudSaveManager.Instance.OnCloudLoadCompleted -= OnLoadCompleted;
-                CloudSaveManager.Instance.OnCloudOperationFailed -= OnLoadFailed;
-            }
-
-            void OnLoadFailed(Exception e)
-            {
-                loadException = e;
-                isDone = true;
-                CloudSaveManager.Instance.OnCloudLoadCompleted -= OnLoadCompleted;
-                CloudSaveManager.Instance.OnCloudOperationFailed -= OnLoadFailed;
-            }
-
-            CloudSaveManager.Instance.OnCloudLoadCompleted += OnLoadCompleted;
-            CloudSaveManager.Instance.OnCloudOperationFailed += OnLoadFailed;
-            CloudSaveManager.Instance.TryLoadAllFromCloud();
-
-            while (!isDone)
-                yield return null;
-
-            SavingManager.Instance?.LoadSession();
-
-            if (loadException != null)
-                Debug.LogError($"Cloud load failed during transition: {loadException}");
-        }
-
-
         // Unload scenes specified in the plan
         foreach (var sceneName in plan.SceneToUnload)
         {
@@ -227,8 +192,6 @@ public class SceneController : MonoBehaviour
         public bool ClearUnusedAssets { get; private set; } = false;
         public bool Overlay { get; private set; } = false;
 
-        public bool CloudLoad { get; private set; } = false;
-
         public SceneTransitionPlan Load(SceneDatabase.Slots slot, SceneDatabase.Scenes scene, bool setActive = true)
         {
             ScenesToLoad[slot.ToString()] = scene.ToString();
@@ -257,12 +220,6 @@ public class SceneController : MonoBehaviour
         public SceneTransitionPlan WithClearUnusedAssets()
         {
             ClearUnusedAssets = true;
-            return this;
-        }
-
-        public SceneTransitionPlan WithCloudLoad()
-        {
-            CloudLoad = true;
             return this;
         }
 

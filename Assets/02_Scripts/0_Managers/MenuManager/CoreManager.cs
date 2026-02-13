@@ -20,14 +20,9 @@ public class CoreManager : MonoBehaviour
     {
         GoogleUpdateManager.Instance?.CheckForUpdate();
 
-        if (SavingManager.Instance != null)
-            SavingManager.Instance?.LoadSession();
-        else
-            Debug.Log("Saving Manager does not exist");
-
         SceneController.Instance
             .NewTransition()
             .Load(SceneDatabase.Slots.Menu, SceneDatabase.Scenes.StartMenu)
             .Perform();
-    }
+    }   
 }

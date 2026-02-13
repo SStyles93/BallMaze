@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +22,11 @@ public class SavingManager : MonoBehaviour
     const string SkinDataFileName = "ShopData";
     const string SettingsDataFileName = "SettingsData";
     const string TutorialDataFileName = "TutorialsData";
+
+    private void OnEnable()
+    {
+        CloudSaveManager.Instance.OnCloudLoadCompleted += LoadSession;
+    }
 
     private void Awake()
     {
@@ -85,23 +92,19 @@ public class SavingManager : MonoBehaviour
     public void DeleteAllData()
     {
         dataService.Delete(PlayerDataFileName);
-        currentPlayerData = new PlayerData();
-        RestorePlayerDataFromFile(PlayerDataFileName);
-
         dataService.Delete(GameDataFileName);
-        currentGameData = new GameData();
-        RestoreGameDataFromFile(GameDataFileName);
-
         dataService.Delete(SkinDataFileName);
-        currentSkinShopData = new SkinShopData();
-        RestoreSkinShopDataFromFile(SkinDataFileName);
-
         dataService.Delete(SettingsDataFileName);
-        currentSettingsData = new SettingsData();
-        RestoreSettingsDataFromFile(SettingsDataFileName);
-
         dataService.Delete(TutorialDataFileName);
-        currentTutorialData = new TutorialData();
+
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+
+        RestoreGameDataFromFile(GameDataFileName);
+        RestoreSkinShopDataFromFile(SkinDataFileName);
+        RestorePlayerDataFromFile(PlayerDataFileName);
+        RestoreSettingsDataFromFile(SettingsDataFileName);
         RestoreTutorialDataFromFile(TutorialDataFileName);
     }
 
@@ -420,36 +423,33 @@ public class SavingManager : MonoBehaviour
 
             //Debug.Log("Current Session Data does not exist, creating new levelsData");
         }
+        // --- DEBUG: Creates "finished" leveldata for all levels
+        if (CoreManager.Instance.unlockAllLevels)
+        {
+            LevelData levelData = new LevelData()
+            {
+                numberOfStars = 3,
+                coinsLeftToEarn = 0,
+                livesLostToThisLevel = 0,
+                failedTimes = 0,
+                wasLevelFinished = true
+            };
+            for (int i = 1; i <= CoreManager.Instance.numberOfLevels; i++)
+            {
+                LevelManager.Instance.levelDataDictionnary.Add(i, levelData);
+            }
+        }
         else
         {
-            // --- DEBUG: Creates "finished" leveldata for all levels
-            if (CoreManager.Instance.unlockAllLevels)
+            // Retrieves the LevelDatas and sets them in the LevelManager
+            foreach (var kvp in gameData.levelsData)
             {
-                LevelData levelData = new LevelData()
-                {
-                    numberOfStars = 3,
-                    coinsLeftToEarn = 0,
-                    livesLostToThisLevel = 0,
-                    failedTimes = 0,
-                    wasLevelFinished = true
-                };
-                for (int i = 1; i <= CoreManager.Instance.numberOfLevels; i++)
-                {
-                    LevelManager.Instance.levelDataDictionnary.Add(i, levelData);
-                }
+                LevelManager.Instance.levelDataDictionnary[kvp.Key] = kvp.Value;
             }
-            else
-            {
-                // Retrieves the LevelDatas and sets them in the LevelManager
-                foreach (var kvp in gameData.levelsData)
-                {
-                    LevelManager.Instance.levelDataDictionnary[kvp.Key] = kvp.Value;
-                }
-            }
-
-            LevelManager.Instance.GlobalDifficultyModifier.difficultyDebt = gameData.difficultyDebt;
-            LevelManager.Instance.GlobalDifficultyModifier.remainingLevels = gameData.remainingLevels;
         }
+
+        LevelManager.Instance.GlobalDifficultyModifier.difficultyDebt = gameData.difficultyDebt;
+        LevelManager.Instance.GlobalDifficultyModifier.remainingLevels = gameData.remainingLevels;
     }
 
     /// <summary>
@@ -529,7 +529,6 @@ public class SavingManager : MonoBehaviour
         {
             //Debug.Log("Current SettingsData does not exist, creating a new one");
             currentSettingsData = new SettingsData();
-            return;
         }
 
         AudioManager audioManager = AudioManager.Instance;
@@ -559,8 +558,8 @@ public class SavingManager : MonoBehaviour
 
         if (currentSkinShopData == null)
         {
-            //Debug.Log("Current ShopData does not exist, creating a new one");
             currentSkinShopData = new SkinShopData();
+            dataSO.ResetData();
             return;
         }
 
@@ -614,7 +613,6 @@ public class SavingManager : MonoBehaviour
                 wasRocketReceived = false,
                 wasUfoReceived = false,
             };
-            return;
         }
 
         TutorialManager.Instance.IsTutorial1Complete = currentTutorialData.isTutorial1Complete;
