@@ -1,3 +1,4 @@
+using System.Net.Sockets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ public class PowerUpButton : UIButton
     PlayerState m_playerState = PlayerState.Alive;
     
     bool isLockedByDistance = false;
+    bool isLockedByEnd = false;
     bool isUnlocked = false;
 
     protected override void Awake()
@@ -34,6 +36,7 @@ public class PowerUpButton : UIButton
         
         PlayerMovement.OnPlayerStateChanged += SetPlayerState;
         PowerUpDistanceChecker.OnPowerUpBlocked += SetLockByDistance;
+        EndTrigger.OnPowerUpBlocked += SetLockByEnd;
 
 
         button.onClick.AddListener(TryUsePowerUp);
@@ -49,6 +52,7 @@ public class PowerUpButton : UIButton
 
         PlayerMovement.OnPlayerStateChanged -= SetPlayerState;
         PowerUpDistanceChecker.OnPowerUpBlocked -= SetLockByDistance;
+        EndTrigger.OnPowerUpBlocked += SetLockByEnd;
 
         button.onClick.RemoveListener(TryUsePowerUp);
     }
@@ -105,6 +109,11 @@ public class PowerUpButton : UIButton
         isLockedByDistance = locked;
         RefreshButtonState();
     }
+    private void SetLockByEnd()
+    {
+        isLockedByEnd = true;
+        RefreshButtonState();
+    }
 
     private void SetPowerUpState(PowerUpState powerUpState)
     {
@@ -122,7 +131,7 @@ public class PowerUpButton : UIButton
     {
         bool isPlayerAlive = m_playerState == PlayerState.Alive ? true : false;
         bool isPowerUpClear = m_powerUpState == PowerUpState.Clear ? true : false;
-        isUnlocked = isPlayerAlive && isPowerUpClear && !isLockedByDistance;
+        isUnlocked = isPlayerAlive && isPowerUpClear && !isLockedByDistance && !isLockedByEnd;
         canvasGroup.alpha = isUnlocked ? 1.0f : 0.1f;
     }
 }
