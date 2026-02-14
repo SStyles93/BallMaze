@@ -880,9 +880,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebugPlay: 0
-  unlockAllLevels: 0
-  numberOfLevels: 0
+  isDebugPlay: 1
+  unlockAllLevels: 1
+  numberOfLevels: 200
 --- !u!1 &567788078
 GameObject:
   m_ObjectHideFlags: 0
