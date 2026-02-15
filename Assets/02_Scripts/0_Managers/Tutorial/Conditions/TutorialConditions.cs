@@ -33,6 +33,84 @@ public class TapAnywhereCondition : ITutorialCondition
     }
 }
 
+[System.Serializable]
+public class PressInputActionCondition : ITutorialCondition
+{
+    [SerializeField] private InputActionReference action;
+
+    public bool IsSatisfied()
+    {
+        if (action == null || action.action == null)
+            return false;
+
+        return action.action.WasPressedThisFrame();
+    }
+}
+
+
+
+[System.Serializable]
+public class TapGamepadButtonCondition : ITutorialCondition
+{
+    public enum GamepadButton
+    {
+        South,
+        North,
+        East,
+        West,
+        LeftShoulder,
+        RightShoulder,
+        LeftTrigger,
+        RightTrigger,
+        Start,
+        Select
+    }
+
+    public GamepadButton button;
+
+    public bool IsSatisfied()
+    {
+        var gamepad = Gamepad.current;
+        if (gamepad == null)
+            return false;
+
+        switch (button)
+        {
+            case GamepadButton.South:
+                return gamepad.buttonSouth.wasPressedThisFrame;
+
+            case GamepadButton.North:
+                return gamepad.buttonNorth.wasPressedThisFrame;
+
+            case GamepadButton.East:
+                return gamepad.buttonEast.wasPressedThisFrame;
+
+            case GamepadButton.West:
+                return gamepad.buttonWest.wasPressedThisFrame;
+
+            case GamepadButton.LeftShoulder:
+                return gamepad.leftShoulder.wasPressedThisFrame;
+
+            case GamepadButton.RightShoulder:
+                return gamepad.rightShoulder.wasPressedThisFrame;
+
+            case GamepadButton.LeftTrigger:
+                return gamepad.leftTrigger.wasPressedThisFrame;
+
+            case GamepadButton.RightTrigger:
+                return gamepad.rightTrigger.wasPressedThisFrame;
+
+            case GamepadButton.Start:
+                return gamepad.startButton.wasPressedThisFrame;
+
+            case GamepadButton.Select:
+                return gamepad.selectButton.wasPressedThisFrame;
+        }
+
+        return false;
+    }
+}
+
 
 [System.Serializable]
 public class TapInAreaCondition : ITutorialCondition, IContextBoundCondition, ITargetedTutorialCondition
