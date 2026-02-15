@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine.Rendering.Universal;
 
-public class SaveableData { }
+[Serializable]
+public class SaveableData {}
 
 /// <summary>
 /// Data of the Session (Game)
@@ -44,9 +45,6 @@ public class PlayerData : SaveableData
     public int ufos;
     public int colorIndex;
     public int skinIndex;
-    public bool wasCoinsReceived = false;
-    public bool wasRocketReceived = false;
-    public bool wasUfoReceived = false;
 }
 
 /// <summary>
@@ -80,4 +78,7 @@ public class TutorialData : SaveableData
     public bool isTutorialShopComplete = false;
     public bool isTutorialRocketComplete = false;
     public bool isTutorialUfoComplete = false;
+    public bool wasCoinsReceived = false;
+    public bool wasRocketReceived = false;
+    public bool wasUfoReceived = false;
 }

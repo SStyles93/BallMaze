@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravityScale = 2f;
     // Helping values are used to direct jumps accroding to input
     [SerializeField] private float groundHelp = 0.2f;
-    [SerializeField] private float iceHelp = 0.6f;
+    [SerializeField] private float iceHelp = 0.35f;
 
     [Header("Ground Check")]
     [SerializeField] private float groundCheckDistance = 1.1f;
@@ -157,6 +157,10 @@ public class PlayerMovement : MonoBehaviour
         OnPlayerStateChanged?.Invoke(State);
     }
 
+    public void ForceJump()
+    {
+        Jump();
+    }
 
     // ---------------- ROLLING ----------------
 

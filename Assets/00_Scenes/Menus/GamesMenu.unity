@@ -16948,6 +16948,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Presentoir
       objectReference: {fileID: 0}
+    - target: {fileID: 2091858385440816280, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2091858385440816280, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2272078233177734621, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.0055
+      objectReference: {fileID: 0}
+    - target: {fileID: 2272078233177734621, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.0055
+      objectReference: {fileID: 0}
+    - target: {fileID: 2272078233177734621, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.0055
+      objectReference: {fileID: 0}
     - target: {fileID: 3373250828834965413, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -17004,6 +17024,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8409686946927421109, guid: 1bcc64e2c9e58b244bd7edec2b0aecf0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3604a541e7041834eb1407821802a21f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17035,6 +17059,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 689690066}
     m_Modifications:
+    - target: {fileID: 738563078742385903, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_text
+      value: 9:99
+      objectReference: {fileID: 0}
+    - target: {fileID: 738563078742385903, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_fontSize
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 815748285569757464, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_text
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 815748285569757464, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
+      propertyPath: m_fontSize
+      value: 120
+      objectReference: {fileID: 0}
     - target: {fileID: 1775512563004007454, guid: a84da073e9ed5f14b89ea909e86d4700, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

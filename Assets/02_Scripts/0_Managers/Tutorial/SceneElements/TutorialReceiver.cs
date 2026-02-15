@@ -41,5 +41,10 @@ public abstract class TutorialReceiver : MonoBehaviour, ITutorialReceiver
         }
     }
 
+    /// <summary>
+    /// Receives the tutorial signals that are equal to ones entered in the ListenToSignalIds<br/>
+    /// For single signals it is not necessary to re-check the signal ID
+    /// </summary>
+    /// <param name="signal">Signal ID</param>
     public abstract void OnTutorialSignal(TutorialSignal signal);
 }

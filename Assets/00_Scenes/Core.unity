@@ -671,7 +671,7 @@ GameObject:
   - component: {fileID: 440803646}
   - component: {fileID: 440803644}
   - component: {fileID: 440803643}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SecondFingerPointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -836,6 +836,51 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 9999
   m_TargetDisplay: 0
+--- !u!1 &448052818
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 448052819}
+  - component: {fileID: 448052820}
+  m_Layer: 0
+  m_Name: GraphicalManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &448052819
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 448052818}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1441058359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &448052820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 448052818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d54efb7d52d784abc0ba7de02d0b2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  m_targetFrameRate: 60
 --- !u!1 &453198340
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,9 +925,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcad66cb6dc26a419af8bbaeefe9f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDebugPlay: 0
-  unlockAllLevels: 0
-  numberOfLevels: 999
+  isDebugPlay: 1
+  unlockAllLevels: 1
+  numberOfLevels: 200
 --- !u!1 &567788078
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,6 +1057,95 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &712818452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 712818453}
+  - component: {fileID: 712818454}
+  m_Layer: 0
+  m_Name: LoginManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &712818453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712818452}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1670860430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &712818454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712818452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0afa7ad58ae6b9498612cd391c3460e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  verboseLogging: 0
+--- !u!1 &723521039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 723521040}
+  - component: {fileID: 723521041}
+  m_Layer: 0
+  m_Name: NotificationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &723521040
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723521039}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1670860430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &723521041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723521039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c40513f622b77e4ba5ae1e1d328005b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &726726291
 GameObject:
   m_ObjectHideFlags: 0
@@ -1067,6 +1201,51 @@ MonoBehaviour:
   validateClip: {fileID: 8300000, guid: e7782d87603539140b19b1940d0abad7, type: 3}
   starClip: {fileID: 8300000, guid: c4850539d7f313a418beb6c3ceeb7c5c, type: 3}
   winClip: {fileID: 8300000, guid: f8e03807babc29149bb2e97acbd24834, type: 3}
+--- !u!1 &817822024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 817822025}
+  - component: {fileID: 817822026}
+  m_Layer: 0
+  m_Name: GoogleUpdateManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &817822025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817822024}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1670860430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &817822026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817822024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a07aec3a95d20243a36fa1caa53d743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoogleUpdateManager
+  useImmediateUpdate: 1
 --- !u!1 &849186763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,6 +1375,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2010482526}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1170391635
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1170391636}
+  - component: {fileID: 1170391637}
+  m_Layer: 0
+  m_Name: GoogleReviewManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1170391636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170391635}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1670860430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1170391637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1170391635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b9ddff24c28f1649a102bf5dd51bba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  verboseLogging: 0
 --- !u!1 &1179760689
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,7 +1522,7 @@ GameObject:
   - component: {fileID: 1214221843}
   - component: {fileID: 1214221845}
   - component: {fileID: 1214221844}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1744,19 +1968,19 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1585592073}
   - {fileID: 726726292}
   - {fileID: 1441120721}
   - {fileID: 453198341}
   - {fileID: 263602415}
   - {fileID: 1312464704}
+  - {fileID: 448052819}
   - {fileID: 1230751199}
   - {fileID: 1943483671}
   - {fileID: 2109442887}
   - {fileID: 1179760690}
-  - {fileID: 1445328149}
   - {fileID: 1192641769}
   - {fileID: 2144166143}
+  - {fileID: 1670860430}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1441120720
@@ -1806,9 +2030,9 @@ MonoBehaviour:
   maxHeartAmount: 9
   timeToRegainHeartInMinutes: 20
   hoursBetweenRewardedCoins: 4
-  wasCoinsReceived: 0
-  wasRocketReceived: 0
-  wasUfoReceived: 0
+  WasCoinsReceived: 0
+  WasRocketReceived: 0
+  WasUfoReceived: 0
 --- !u!1 &1445328148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1834,12 +2058,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1445328148}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1441058359}
+  m_Father: {fileID: 1670860430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1445328150
 MonoBehaviour:
@@ -1910,12 +2134,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1585592072}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1441058359}
+  m_Father: {fileID: 1670860430}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1585592074
 MonoBehaviour:
@@ -1946,7 +2170,7 @@ GameObject:
   - component: {fileID: 1647435490}
   - component: {fileID: 1647435492}
   - component: {fileID: 1647435493}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FingerPointer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2035,6 +2259,44 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!1 &1670860429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1670860430}
+  m_Layer: 0
+  m_Name: ---- SERVICES ----
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1670860430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670860429}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1585592073}
+  - {fileID: 2013885667}
+  - {fileID: 1170391636}
+  - {fileID: 817822025}
+  - {fileID: 712818453}
+  - {fileID: 723521040}
+  - {fileID: 1445328149}
+  m_Father: {fileID: 1441058359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1900290287
 GameObject:
   m_ObjectHideFlags: 0
@@ -2259,6 +2521,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e31057ef324a04478bb4f7d469b3cdc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.EnhancedTouch.TouchSimulation
+--- !u!1 &2013885666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2013885667}
+  - component: {fileID: 2013885668}
+  m_Layer: 0
+  m_Name: CloudSave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2013885667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013885666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1670860430}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2013885668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013885666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13625af040767184f83c587533ec6792, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CloudSaveManager
+  verboseLogging: 0
+  saveIntervalHours: 5
+  minSaveInterval: 600
+  minDeleteInterval: 600
 --- !u!1 &2109442886
 GameObject:
   m_ObjectHideFlags: 0
@@ -2314,9 +2624,6 @@ MonoBehaviour:
     ufos: 0
     colorIndex: 0
     skinIndex: 0
-    wasCoinsReceived: 0
-    wasRocketReceived: 0
-    wasUfoReceived: 0
   currentSettingsData:
     isAudioOn: 1
     isMusicOn: 1
@@ -2326,6 +2633,10 @@ MonoBehaviour:
     isTutorialShopComplete: 0
     isTutorialRocketComplete: 0
     isTutorialUfoComplete: 0
+    wasCoinsReceived: 0
+    wasRocketReceived: 0
+    wasUfoReceived: 0
+  isDataPresent: 0
 --- !u!1 &2144166142
 GameObject:
   m_ObjectHideFlags: 0
@@ -2371,6 +2682,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1595844b4f76b44478d561dc26a655fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  IsTutorial1Complete: 0
+  IsTutorialShopComplete: 0
+  IsTutorialRocketComplete: 0
+  IsTutorialUfoComplete: 0
   tutorialCanvas: {fileID: 442186516}
   tutorialCanvasGroup: {fileID: 385315541}
   overlayMask: {fileID: 1266310482}
@@ -2402,7 +2717,19 @@ MonoBehaviour:
       allowedMovement: 1
       onStepStart:
         m_PersistentCalls:
-          m_Calls: []
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: ResumeGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       onStepComplete:
         m_PersistentCalls:
           m_Calls: []
@@ -2415,7 +2742,7 @@ MonoBehaviour:
       tutorialUIElements:
       - elementAnimation: {fileID: 1647435492}
         animationSequence: 04000000
-        duration: 0.1
+        duration: 0.001
         loop: 1
         anchorID: game_tap_jump
       maskData:
@@ -2428,11 +2755,23 @@ MonoBehaviour:
       conditionLogic: 0
       completionConditions:
       - rid: 4426608721726275709
-      allowedInput: -1
+      allowedInput: 20
       allowedMovement: 0
       onStepStart:
         m_PersistentCalls:
           m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: PauseGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
           - m_Target: {fileID: 1312464705}
             m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
             m_MethodName: SetTimeScale
@@ -2441,7 +2780,7 @@ MonoBehaviour:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
-              m_FloatArgument: 0.1
+              m_FloatArgument: 0.001
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
@@ -2460,39 +2799,185 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  - tutorialName: SwipeAndTap
-    levelNumber: 1
-    tutorialType: Move Jump
-    description: Teaches the player to jump while moving
-    steps:
-    - description: Swipe and Tap
+          - m_Target: {fileID: 2144166145}
+            m_TargetAssemblyTypeName: TutorialSignalEmitter, Assembly-CSharp
+            m_MethodName: Emit
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: tutorial1/jump
+              m_BoolArgument: 0
+            m_CallState: 2
+    - description: Swipe after Tap
       tutorialUIElements:
       - elementAnimation: {fileID: 1647435492}
         animationSequence: 00000000
         duration: 1
         loop: 1
         anchorID: game_swipe_forward
-      - elementAnimation: {fileID: 440803644}
-        animationSequence: 04000000
+      maskData:
+        enableMask: 1
+        focusTargetId: game_swipe_forward
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 0
+      completionConditions:
+      - rid: 4426608767079022731
+      allowedInput: -1
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+  - tutorialName: SwipeAndTap
+    levelNumber: 1
+    tutorialType: Swipe And Tap
+    description: Teaches the player to swipe and tap
+    steps:
+    - description: Swipe
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 00000000
         duration: 1
         loop: 1
-        anchorID: game_tap_jump_two
+        anchorID: game_swipe_forward
       maskData:
-        enableMask: 0
-        focusTargetId: game_tap_jump
+        enableMask: 1
+        focusTargetId: game_swipe_forward
         padding: 10
         blockOutsideClicks: 1
       autoComplete: 0
       waitTime: 0
       conditionLogic: 1
       completionConditions:
-      - rid: 4426608721726275710
-      - rid: 4426608721726275772
+      - rid: 4426608767079022732
       allowedInput: -1
       allowedMovement: 1
       onStepStart:
         m_PersistentCalls:
           m_Calls: []
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls: []
+    - description: Tap after swipe
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 00000000
+        duration: 0.001
+        loop: 0
+        anchorID: game_swipe_forward
+      - elementAnimation: {fileID: 440803644}
+        animationSequence: 04000000
+        duration: 0.001
+        loop: 1
+        anchorID: game_tap_jump_two
+      maskData:
+        enableMask: 1
+        focusTargetId: game_tap_jump_two
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 1
+      completionConditions:
+      - rid: 4426608767079022709
+      allowedInput: 20
+      allowedMovement: 0
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: PauseGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: SetTimeScale
+            m_Mode: 4
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0.001
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      onStepComplete:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: ResumeGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 2144166145}
+            m_TargetAssemblyTypeName: TutorialSignalEmitter, Assembly-CSharp
+            m_MethodName: Emit
+            m_Mode: 5
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: tutorial1/jump
+              m_BoolArgument: 0
+            m_CallState: 2
+    - description: Finish Level (Forward)
+      tutorialUIElements:
+      - elementAnimation: {fileID: 1647435492}
+        animationSequence: 00000000
+        duration: 1
+        loop: 1
+        anchorID: game_swipe_forward
+      maskData:
+        enableMask: 1
+        focusTargetId: game_swipe_forward
+        padding: 10
+        blockOutsideClicks: 1
+      autoComplete: 0
+      waitTime: 0
+      conditionLogic: 1
+      completionConditions:
+      - rid: 4426608767079022711
+      allowedInput: 13
+      allowedMovement: 1
+      onStepStart:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1312464705}
+            m_TargetAssemblyTypeName: GameStateManager, Assembly-CSharp
+            m_MethodName: ResumeGame
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
       onStepComplete:
         m_PersistentCalls:
           m_Calls:
@@ -2955,10 +3440,6 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-  IsTutorial1Complete: 0
-  IsTutorialShopComplete: 0
-  IsTutorialRocketComplete: 0
-  IsTutorialUfoComplete: 0
   references:
     version: 2
     RefIds:
@@ -2966,21 +3447,16 @@ MonoBehaviour:
       type: {class: DragFromToCondition, ns: , asm: Assembly-CSharp}
       data:
         anchorId: game_swipe_forward
-        startRadius: 80
-        endRadius: 80
-        minDragDistance: 50
+        startRadius: 50
+        endRadius: 50
+        minDragDistance: 3000
     - rid: 4426608721726275709
       type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
       data:
         anchorId: game_tap_jump
-        padding: 0
+        padding: 10
         maxMoveDistance: 40
         maxDuration: 0.3
-    - rid: 4426608721726275710
-      type: {class: SwipeCondition, ns: , asm: Assembly-CSharp}
-      data:
-        direction: {x: 0, y: 1}
-        minDistance: 10
     - rid: 4426608721726275732
       type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -3063,11 +3539,28 @@ MonoBehaviour:
       data:
         direction: {x: 0, y: 1}
         minDistance: 3000
-    - rid: 4426608721726275772
-      type: {class: TapInAreaCondition, ns: , asm: Assembly-CSharp}
+    - rid: 4426608767079022709
+      type: {class: TapAndReleaseInAreaCondition, ns: , asm: Assembly-CSharp}
       data:
         anchorId: game_tap_jump_two
-        padding: 0
+        padding: 10
+        maxMoveDistance: 40
+        maxDuration: 0.3
+    - rid: 4426608767079022711
+      type: {class: SwipeAndReleaseCondition, ns: , asm: Assembly-CSharp}
+      data:
+        direction: {x: 0, y: 1}
+        minDistance: 3000
+    - rid: 4426608767079022731
+      type: {class: SwipeCondition, ns: , asm: Assembly-CSharp}
+      data:
+        direction: {x: 0, y: 1}
+        minDistance: 3000
+    - rid: 4426608767079022732
+      type: {class: SwipeCondition, ns: , asm: Assembly-CSharp}
+      data:
+        direction: {x: 0, y: 1}
+        minDistance: 3000
 --- !u!114 &2144166145
 MonoBehaviour:
   m_ObjectHideFlags: 0

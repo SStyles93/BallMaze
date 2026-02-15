@@ -106,7 +106,7 @@ public class PlayerSound : MonoBehaviour
     private void PlayThumpSound(float pitch)
     {
         audioSource.pitch = pitch;
-        audioSource.volume = .3f;
+        audioSource.volume = .1f;
         PlaySoundOnce(thumpClip);
     }
 

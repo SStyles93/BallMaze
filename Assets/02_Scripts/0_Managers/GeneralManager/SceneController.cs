@@ -55,11 +55,9 @@ public class SceneController : MonoBehaviour
     private IEnumerator ExecutePlan(SceneTransitionPlan plan)
     {
         if (isBusy)
-        {
-            //Debug.LogWarning("Scene change already in progress");
             yield break;
-        }
         isBusy = true;
+
         yield return StartCoroutine(ChangeSceneRoutine(plan));
     }
 

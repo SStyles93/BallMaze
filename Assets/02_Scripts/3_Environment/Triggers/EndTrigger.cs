@@ -1,4 +1,5 @@
 ﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,8 @@ public class EndTrigger : MonoBehaviour
 
     private Button homeButton;
 
+    public static event Action OnPowerUpBlocked;
+
     private void Start()
     {
         wasLevelProcessed = false;
@@ -50,6 +53,7 @@ public class EndTrigger : MonoBehaviour
     private IEnumerator EndSequence(Transform player, Rigidbody rb)
     {
         homeButton.interactable = false;
+        OnPowerUpBlocked?.Invoke();
 
         float centerTime = animationDuration * 0.10f;
         float levitateTime = animationDuration * 0.60f;

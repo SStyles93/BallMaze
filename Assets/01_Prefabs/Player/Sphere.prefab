@@ -204,7 +204,7 @@ MonoBehaviour:
   jumpForce: 15
   gravityScale: 2
   groundHelp: 0.2
-  iceHelp: 0.5
+  iceHelp: 0.35
   groundCheckDistance: 1
   groundDetectionRadius: 0.75
   groundedLayerMask:

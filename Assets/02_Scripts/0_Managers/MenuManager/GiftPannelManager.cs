@@ -64,22 +64,22 @@ public class GiftPannelManager : MonoBehaviour
         plan.WithShake()
             .WithDelay(1);
 
-        if (!CoinManager.Instance.wasCoinsReceived)
+        if (!CoinManager.Instance.WasCoinsReceived)
         {
             plan.AddGift(CoinType.COIN, 450);
-            CoinManager.Instance.wasCoinsReceived = true;
+            CoinManager.Instance.WasCoinsReceived = true;
             planMustBePerformed = true;
         }
-        if (!CoinManager.Instance.wasRocketReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 9)
+        if (!CoinManager.Instance.WasRocketReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 9)
         {
             plan.AddGift(CoinType.ROCKET, 5);
-            CoinManager.Instance.wasRocketReceived = true;
+            CoinManager.Instance.WasRocketReceived = true;
             planMustBePerformed = true;
         }
-        if (!CoinManager.Instance.wasUfoReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 19)
+        if (!CoinManager.Instance.WasUfoReceived && LevelManager.Instance.GetHighestFinishedLevelIndex() > 19)
         {
             plan.AddGift(CoinType.UFO, 5);
-            CoinManager.Instance.wasUfoReceived = true;
+            CoinManager.Instance.WasUfoReceived = true;
             planMustBePerformed = true;
         }
 
@@ -224,7 +224,6 @@ public class GiftPannelManager : MonoBehaviour
     {
         if (!giftOpened) return;
 
-
         canClick = false;
         audioSource.Stop();
 
@@ -248,7 +247,6 @@ public class GiftPannelManager : MonoBehaviour
             {
                 CoinManager.Instance.IncreaseCurrencyAmount(giftDef.type, giftDef.value);
             }
-            SavingManager.Instance.SavePlayer();
 
             foreach (var giftObject in gifts)
             {
@@ -256,6 +254,7 @@ public class GiftPannelManager : MonoBehaviour
             }
             canClick = true;
             giftOpened = false;
+            SavingManager.Instance.SaveSession();
             giftPannel.SetActive(false);
         });
     }

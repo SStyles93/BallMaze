@@ -107,7 +107,8 @@ public class ShopIAPManager : MonoBehaviour
 
             var product = GetFirstProduct(order);
             GrantPayouts(product.definition.id);
-            SavingManager.Instance.SavePlayer();
+            SavingManager.Instance.SaveSession();
+            CloudSaveManager.Instance?.MarkDirty();
         }
         else if (order is FailedOrder failed)
         {

@@ -16,9 +16,9 @@ public class CoinManager : MonoBehaviour
     [SerializeField] private int hoursBetweenRewardedCoins = 4;
 
     [HideInInspector]
-    public bool wasCoinsReceived = false, 
-        wasRocketReceived = false,
-        wasUfoReceived = false;
+    public bool WasCoinsReceived = false,
+        WasRocketReceived = false,
+        WasUfoReceived = false;
 
 
     Coroutine timerCoroutine;
@@ -50,6 +50,8 @@ public class CoinManager : MonoBehaviour
     public int InitialHeartAmount => maxHeartAmount;
     public DateTime LastHeartRefillTime => lastHeartRefillTime;
     public DateTime LastVideoRewardTime => lastVideoRewardTime;
+
+    private double currentMinutesUntilFullHearts = -1;
     public static CoinManager Instance { get; private set; }
 
     private void Awake()
@@ -262,7 +264,25 @@ public class CoinManager : MonoBehaviour
         if (coins[CoinType.HEART] >= maxHeartAmount)
         {
             coins[CoinType.HEART] = maxHeartAmount;
+            NotificationManager.Instance?.CancelHeartNotification();
+            currentMinutesUntilFullHearts = -1;
             return;
+        }
+        //------------------------
+        //--- HEART PUSH NOTIF.---
+        //------------------------
+        else
+        {
+            int missingHearts = maxHeartAmount - coins[CoinType.HEART];
+            int minutesUnityFullHearts = missingHearts * timeToRegainHeartInMinutes;
+            if (currentMinutesUntilFullHearts != minutesUnityFullHearts)
+            {
+                currentMinutesUntilFullHearts = minutesUnityFullHearts;
+                DateTime fullHeartsTime = DateTime.UtcNow.AddMinutes(currentMinutesUntilFullHearts);
+
+                Debug.Log($"Scheduling heart notification for {fullHeartsTime} (in {currentMinutesUntilFullHearts} minutes)");
+                NotificationManager.Instance?.ScheduleHeartNotification(fullHeartsTime);
+            }
         }
 
         DateTime now = DateTime.UtcNow;
@@ -281,8 +301,6 @@ public class CoinManager : MonoBehaviour
         lastHeartRefillTime = lastHeartRefillTime.AddMinutes(
             heartsToAdd * timeToRegainHeartInMinutes
         );
-
-        SavingManager.Instance?.SavePlayer();
     }
 
 

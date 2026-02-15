@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,15 +13,22 @@ public class SavingManager : MonoBehaviour
 
     public GameData currentGameData = null;
     public PlayerData currentPlayerData = null;
-    public SkinShopData currentSkinData = null;
+    public SkinShopData currentSkinShopData = null;
     public SettingsData currentSettingsData = null;
     public TutorialData currentTutorialData = null;
+
+    public bool isDataPresent = true;
 
     const string GameDataFileName = "GameData";
     const string PlayerDataFileName = "PlayerData";
     const string SkinDataFileName = "ShopData";
     const string SettingsDataFileName = "SettingsData";
     const string TutorialDataFileName = "TutorialsData";
+
+    private void OnEnable()
+    {
+        CloudSaveManager.Instance.OnCloudLoadCompleted += LoadSession;
+    }
 
     private void Awake()
     {
@@ -28,6 +37,80 @@ public class SavingManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
 
         dataService = new JsonDataService(); // Or any other IDataService implementation
+
+        // Starts true, will be set to false if data file is missing
+        isDataPresent = true;
+    }
+
+    // --- CLOUD RELATED METHODS ---
+
+    public T Get<T>() where T : SaveableData
+    {
+        if (typeof(T) == typeof(GameData))
+            return currentGameData as T;
+
+        if (typeof(T) == typeof(PlayerData))
+            return currentPlayerData as T;
+
+        if (typeof(T) == typeof(SkinShopData))
+            return currentSkinShopData as T;
+
+        if (typeof(T) == typeof(TutorialData))
+            return currentTutorialData as T;
+
+        return null;
+    }
+
+    public void ForceLocalOverwrite<T>(T data, bool saveToDisk = true) where T : SaveableData
+    {
+        if (data == null) return;
+
+        switch (data)
+        {
+            case GameData g:
+                currentGameData = g;
+                if (saveToDisk) SaveDataInFile(g, GameDataFileName);
+                break;
+
+            case PlayerData p:
+                currentPlayerData = p;
+                if (saveToDisk) SaveDataInFile(p, PlayerDataFileName);
+                break;
+
+            case SkinShopData s:
+                currentSkinShopData = s;
+                if (saveToDisk) SaveDataInFile(s, SkinDataFileName);
+                break;
+
+            case TutorialData t:
+                currentTutorialData = t;
+                if (saveToDisk) SaveDataInFile(t, TutorialDataFileName);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Deletes all the local files<br/> 
+    /// Creates new empty data classes<br/>
+    /// Restores all the managers to the new data
+    /// </summary>
+    public void DeleteAllData()
+    {
+        dataService.Delete(PlayerDataFileName);
+        dataService.Delete(GameDataFileName);
+        dataService.Delete(SkinDataFileName);
+        dataService.Delete(SettingsDataFileName);
+        dataService.Delete(TutorialDataFileName);
+
+#if UNITY_EDITOR
+        AssetDatabase.Refresh();
+#endif
+
+        RestoreGameDataFromFile(GameDataFileName);
+        RestoreSkinShopDataFromFile(SkinDataFileName);
+        RestorePlayerDataFromFile(PlayerDataFileName);
+        RestoreSettingsDataFromFile(SettingsDataFileName);
+        RestoreTutorialDataFromFile(TutorialDataFileName);
     }
 
     // --- SAVE ---
@@ -47,9 +130,11 @@ public class SavingManager : MonoBehaviour
 
         SaveTutorialDataInFile(TutorialDataFileName);
 
+
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
+        CloudSaveManager.Instance.BuildPayload();
     }
 
 
@@ -60,9 +145,6 @@ public class SavingManager : MonoBehaviour
         AssetDatabase.Refresh();
 #endif
     }
-    /// <summary>
-    /// Captures the player's data (currency (int), colorIndex(int), materialIndex(int))
-    /// </summary>
     public void SavePlayer()
     {
         SavePlayerDataInFile(PlayerDataFileName);
@@ -84,7 +166,6 @@ public class SavingManager : MonoBehaviour
         AssetDatabase.Refresh();
 #endif
     }
-
     public void SaveTutorials()
     {
         SaveTutorialDataInFile(SettingsDataFileName);
@@ -99,7 +180,7 @@ public class SavingManager : MonoBehaviour
     /// </summary>
     private void SaveGameDataInFile(string fileName)
     {
-        if(currentGameData == null)
+        if (currentGameData == null)
         {
             currentGameData = new GameData();
         }
@@ -157,11 +238,6 @@ public class SavingManager : MonoBehaviour
         // Timers
         playerSaveData.lastHeartRefillTime = coinManager.LastHeartRefillTime;
         playerSaveData.lastCoinVideoTime = coinManager.LastVideoRewardTime;
-        
-        // Gifts
-        playerSaveData.wasCoinsReceived = coinManager.wasCoinsReceived;
-        playerSaveData.wasRocketReceived = coinManager.wasRocketReceived;
-        playerSaveData.wasUfoReceived = coinManager.wasUfoReceived;
 
 
         // --- SHOP ---
@@ -239,11 +315,16 @@ public class SavingManager : MonoBehaviour
             shopData.colorsLockedState[colorOption.Id] = colorOption.isLocked;
         }
 
-        currentSkinData = shopData;
+        currentSkinShopData = shopData;
 
-        SaveDataInFile(currentSkinData, fileName);
+        SaveDataInFile(currentSkinShopData, fileName);
     }
 
+    /// <summary>
+    /// Saves the Tutorial Data in File <br/>
+    /// (Tutorial1, Shop, Rocket, Ufo)
+    /// </summary>
+    /// <param name="fileName"></param>
     private void SaveTutorialDataInFile(string fileName)
     {
         TutorialData tutorialData = new TutorialData
@@ -251,15 +332,22 @@ public class SavingManager : MonoBehaviour
             isTutorial1Complete = false,
             isTutorialShopComplete = false,
             isTutorialRocketComplete = false,
-            isTutorialUfoComplete = false
+            isTutorialUfoComplete = false,
+            wasCoinsReceived = false,
+            wasRocketReceived = false,
+            wasUfoReceived = false,
         };
-        
-        if(TutorialManager.Instance == null) return;
+
+        if (TutorialManager.Instance == null) return;
 
         tutorialData.isTutorial1Complete = TutorialManager.Instance.IsTutorial1Complete;
         tutorialData.isTutorialShopComplete = TutorialManager.Instance.IsTutorialShopComplete;
         tutorialData.isTutorialRocketComplete = TutorialManager.Instance.IsTutorialRocketComplete;
         tutorialData.isTutorialUfoComplete = TutorialManager.Instance.IsTutorialUfoComplete;
+        // Gifts
+        tutorialData.wasCoinsReceived = CoinManager.Instance.WasCoinsReceived;
+        tutorialData.wasRocketReceived = CoinManager.Instance.WasRocketReceived;
+        tutorialData.wasUfoReceived = CoinManager.Instance.WasUfoReceived;
 
         currentTutorialData = tutorialData;
         SaveDataInFile(currentTutorialData, fileName);
@@ -302,7 +390,6 @@ public class SavingManager : MonoBehaviour
     {
         RestoreSettingsDataFromFile(SettingsDataFileName);
     }
-
     public void LoadTutorials()
     {
         RestoreTutorialDataFromFile(TutorialDataFileName);
@@ -343,36 +430,33 @@ public class SavingManager : MonoBehaviour
 
             //Debug.Log("Current Session Data does not exist, creating new levelsData");
         }
+        // --- DEBUG: Creates "finished" leveldata for all levels
+        if (CoreManager.Instance.unlockAllLevels)
+        {
+            LevelData levelData = new LevelData()
+            {
+                numberOfStars = 3,
+                coinsLeftToEarn = 0,
+                livesLostToThisLevel = 0,
+                failedTimes = 0,
+                wasLevelFinished = true
+            };
+            for (int i = 1; i <= CoreManager.Instance.numberOfLevels; i++)
+            {
+                LevelManager.Instance.levelDataDictionnary.Add(i, levelData);
+            }
+        }
         else
         {
-            // --- DEBUG: Creates "finished" leveldata for all levels
-            if (CoreManager.Instance.unlockAllLevels)
+            // Retrieves the LevelDatas and sets them in the LevelManager
+            foreach (var kvp in gameData.levelsData)
             {
-                LevelData levelData = new LevelData()
-                {
-                    numberOfStars = 3,
-                    coinsLeftToEarn = 0,
-                    livesLostToThisLevel = 0,
-                    failedTimes = 0,
-                    wasLevelFinished = true
-                };
-                for (int i = 1; i <= CoreManager.Instance.numberOfLevels; i++)
-                {
-                    LevelManager.Instance.levelDataDictionnary.Add(i, levelData);
-                }
+                LevelManager.Instance.levelDataDictionnary[kvp.Key] = kvp.Value;
             }
-            else
-            {
-                // Retrieves the LevelDatas and sets them in the LevelManager
-                foreach (var kvp in gameData.levelsData)
-                {
-                    LevelManager.Instance.levelDataDictionnary[kvp.Key] = kvp.Value;
-                }
-            }
-
-            LevelManager.Instance.GlobalDifficultyModifier.difficultyDebt = gameData.difficultyDebt;
-            LevelManager.Instance.GlobalDifficultyModifier.remainingLevels = gameData.remainingLevels;
         }
+
+        LevelManager.Instance.GlobalDifficultyModifier.difficultyDebt = gameData.difficultyDebt;
+        LevelManager.Instance.GlobalDifficultyModifier.remainingLevels = gameData.remainingLevels;
     }
 
     /// <summary>
@@ -395,9 +479,6 @@ public class SavingManager : MonoBehaviour
                 ufos = 0,
                 colorIndex = 0,
                 skinIndex = 0,
-                wasCoinsReceived = false,
-                wasRocketReceived = false,
-                wasUfoReceived = false
             };
             //Debug.Log("Current Session Data does not exist, creating new PlayerData");
             currentPlayerData = playerData;
@@ -429,10 +510,6 @@ public class SavingManager : MonoBehaviour
         coinManager.SetLastCoinVideoTime(currentPlayerData.lastCoinVideoTime);
         LifeManager.Instance.ResetLife();
 
-        coinManager.wasCoinsReceived = currentPlayerData.wasCoinsReceived;
-        coinManager.wasRocketReceived= currentPlayerData.wasRocketReceived;
-        coinManager.wasUfoReceived = currentPlayerData.wasUfoReceived;
-
         // --- SHOP ---
         ShopManager:
         CustomizationManager shopManager = CustomizationManager.Instance;
@@ -459,7 +536,6 @@ public class SavingManager : MonoBehaviour
         {
             //Debug.Log("Current SettingsData does not exist, creating a new one");
             currentSettingsData = new SettingsData();
-            return;
         }
 
         AudioManager audioManager = AudioManager.Instance;
@@ -483,21 +559,21 @@ public class SavingManager : MonoBehaviour
     {
         if (CustomizationManager.Instance == null) return;
 
-        currentSkinData = LoadFile<SkinShopData>(fileName);
+        currentSkinShopData = LoadFile<SkinShopData>(fileName);
 
         var dataSO = CustomizationManager.Instance.customizationData_SO;
 
-        if (currentSkinData == null)
+        if (currentSkinShopData == null)
         {
-            //Debug.Log("Current ShopData does not exist, creating a new one");
-            currentSkinData = new SkinShopData();
+            currentSkinShopData = new SkinShopData();
+            dataSO.ResetData();
             return;
         }
 
         // Restore skins state (un-locked)
         foreach (var skinOption in dataSO.skins)
         {
-            if (currentSkinData.skinsLockedState.TryGetValue(skinOption.Id, out bool locked))
+            if (currentSkinShopData.skinsLockedState.TryGetValue(skinOption.Id, out bool locked))
             {
                 skinOption.isLocked = locked;
             }
@@ -510,7 +586,7 @@ public class SavingManager : MonoBehaviour
         // Restore colors state (un-locked)
         foreach (var colorOption in dataSO.colors)
         {
-            if (currentSkinData.colorsLockedState.TryGetValue(colorOption.Id, out bool locked))
+            if (currentSkinShopData.colorsLockedState.TryGetValue(colorOption.Id, out bool locked))
             {
                 colorOption.isLocked = locked;
             }
@@ -521,6 +597,11 @@ public class SavingManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Restores the Tutorial info <br/>
+    /// (Tutorial1, Shop, Rocket, Ufo)
+    /// </summary>
+    /// <param name="fileName"></param>
     private void RestoreTutorialDataFromFile(string fileName)
     {
         if (TutorialManager.Instance == null) return;
@@ -529,14 +610,25 @@ public class SavingManager : MonoBehaviour
 
         if (currentTutorialData == null)
         {
-            TutorialData tutorialData = new TutorialData();
-            return;
+            currentTutorialData = new TutorialData()
+            {
+                isTutorial1Complete = false,
+                isTutorialShopComplete = false,
+                isTutorialRocketComplete = false,
+                isTutorialUfoComplete = false,
+                wasCoinsReceived = false,
+                wasRocketReceived = false,
+                wasUfoReceived = false,
+            };
         }
 
         TutorialManager.Instance.IsTutorial1Complete = currentTutorialData.isTutorial1Complete;
         TutorialManager.Instance.IsTutorialShopComplete = currentTutorialData.isTutorialShopComplete;
         TutorialManager.Instance.IsTutorialRocketComplete = currentTutorialData.isTutorialRocketComplete;
         TutorialManager.Instance.IsTutorialUfoComplete = currentTutorialData.isTutorialUfoComplete;
+        CoinManager.Instance.WasCoinsReceived = currentTutorialData.wasCoinsReceived;
+        CoinManager.Instance.WasRocketReceived = currentTutorialData.wasRocketReceived;
+        CoinManager.Instance.WasUfoReceived = currentTutorialData.wasUfoReceived;
 
         SaveDataInFile(currentTutorialData, fileName);
     }
@@ -555,7 +647,9 @@ public class SavingManager : MonoBehaviour
         T loadedData = dataService.Load<T>(fileName);
         if (loadedData == null)
         {
-            //Debug.LogWarning($"No file named \'{fileName}\' found.");
+            if (fileName == SettingsDataFileName) return null;
+            Debug.LogWarning($"[Saving Manager] No file named \'{fileName}\' found.");
+            isDataPresent = false;
             return null;
         }
 

@@ -100,6 +100,8 @@ public class LevelManager : MonoBehaviour
     /// <remarks>This method will init. LevelParameters, GenerationParameters, and LevelData</remarks>
     public void InitializeLevel(int index)
     {
+        if (index % 10 == 0) CloudSaveManager.Instance.MarkDirty();
+
         if (!CanStartLevel(index))
         {
             Debug.LogWarning($"Cannot start level {index} because previous level is unfinished.");
@@ -278,7 +280,6 @@ public class LevelManager : MonoBehaviour
         CoinManager.Instance.IncreaseCurrencyAmount(CoinType.STAR, earnedStars);
         CoinManager.Instance.IncreaseCurrencyAmount(CoinType.COIN, currencyEarned);
         SavingManager.Instance?.SaveGame();
-
     }
 
     /// <summary>

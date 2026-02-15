@@ -45,5 +45,7 @@ EditorBuildSettings:
     path: Assets/00_Scenes/TutorialUfo.unity
     guid: e7bb105ea66fcc54aad4de76bb1c3b25
   m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 200870d0a4a32724a81a60cb34ac79bc, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 1976aa4569902794ea621b93544db909, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: b369852d9e5a62c42aaedf664ffbd4ec, type: 2}
   m_UseUCBPForAssetBundles: 0

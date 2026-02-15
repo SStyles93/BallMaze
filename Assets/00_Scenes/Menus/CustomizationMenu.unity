@@ -174,6 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 010831fe6a7ea4f478aa933ac0c51941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CustomizationTutorialManager
+  customizationData_SO: {fileID: 11400000, guid: a8006b3f7ff62d842bc9f255b43dfa2d, type: 2}
 --- !u!1 &134850229
 GameObject:
   m_ObjectHideFlags: 0
@@ -17437,7 +17438,7 @@ PrefabInstance:
     - target: {fileID: 2877163494514145770, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
       propertyPath: customizationData_SO
       value: 
-      objectReference: {fileID: 11400000, guid: dc466f131398c3c4f8d126caa1b616bf, type: 2}
+      objectReference: {fileID: 11400000, guid: a8006b3f7ff62d842bc9f255b43dfa2d, type: 2}
     - target: {fileID: 2877163494514145770, guid: e091cfbc669860948ab6dcfba5161528, type: 3}
       propertyPath: playerCustomizationRef
       value: 

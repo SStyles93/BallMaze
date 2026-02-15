@@ -55,7 +55,7 @@ public class TutorialUIElement
 {
     public TutorialUIAnimation elementAnimation;
     public TutorialUIAnimType[] animationSequence;
-    
+
     [Header("Runtime Animation Data")]
     public float duration = 0.5f;
     public bool loop;
@@ -75,6 +75,12 @@ public class TutorialMaskData
 
 public class TutorialManager : MonoBehaviour
 {
+    [Header("Tutorial States")]
+    public bool IsTutorial1Complete = false;
+    public bool IsTutorialShopComplete = false;
+    public bool IsTutorialRocketComplete = false;
+    public bool IsTutorialUfoComplete = false;
+
     [Header("UI References")]
     [SerializeField] private Canvas tutorialCanvas;
     [SerializeField] private CanvasGroup tutorialCanvasGroup;
@@ -90,11 +96,6 @@ public class TutorialManager : MonoBehaviour
     private bool forceStepComplete = false;
 
 
-    [HideInInspector]
-    public bool IsTutorial1Complete = false, 
-        IsTutorialShopComplete = false,
-        IsTutorialRocketComplete = false,
-        IsTutorialUfoComplete = false;
 
     public static TutorialManager Instance;
 
@@ -154,7 +155,7 @@ public class TutorialManager : MonoBehaviour
             _ => false
         };
     }
-    
+
     // Internal helper
     private void StartTutorialInternal(Tutorial tutorial)
     {

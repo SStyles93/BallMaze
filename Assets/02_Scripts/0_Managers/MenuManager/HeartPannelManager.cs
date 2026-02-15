@@ -37,8 +37,6 @@ public class HeartPannelManager : MonoBehaviour
 
         UpdateTimerText(coinManager.TimeUntilNextHeart());
         UpdateCoinValueText();
-
-        AdsManager.Instance.RewardedHeartsVideoAd.OnAdRewarded += GrantRewardAndClosePannel;
     }
 
     private void SetCurrencyValue(CoinType type, int value)
@@ -128,18 +126,6 @@ public class HeartPannelManager : MonoBehaviour
         AdsManager manager = AdsManager.Instance;
         if (manager == null) return;
 
-        if (manager.RewardedHeartsVideoAd.IsAdReady())
-        {
-            manager.RewardedHeartsVideoAd.ShowAd();
-        }
-    }
-
-    private void GrantRewardAndClosePannel(LevelPlayAdInfo adInfo, LevelPlayReward reward)
-    {
-        int rewardAmount = Mathf.Clamp(reward.Amount, 1, 3);
-        CoinManager.Instance?.RewardHearts(rewardAmount);
-
-        Debug.Log($"Rewarded :{rewardAmount} {reward.Name}");
-        ExitHeartPannel();
+        manager.ShowRewarded("rewarded_hearts");
     }
 }
