@@ -254,7 +254,8 @@ public class GiftPannelManager : MonoBehaviour
             }
             canClick = true;
             giftOpened = false;
-            SavingManager.Instance.SaveSession();
+            if (SavingManager.Instance != null)
+                SavingManager.Instance.SaveSession();
             giftPannel.SetActive(false);
         });
     }

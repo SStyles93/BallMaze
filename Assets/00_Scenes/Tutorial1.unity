@@ -41117,6 +41117,10 @@ PrefabInstance:
       propertyPath: Damping.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4188583864013449926, guid: d1331a85c3efc2049bdb638d6c07e48d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5693295654109602499, guid: d1331a85c3efc2049bdb638d6c07e48d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 15.04487

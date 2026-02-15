@@ -134,7 +134,8 @@ public class SavingManager : MonoBehaviour
 #if UNITY_EDITOR
         AssetDatabase.Refresh();
 #endif
-        CloudSaveManager.Instance.BuildPayload();
+        if (CloudSaveManager.Instance != null)
+            CloudSaveManager.Instance.BuildPayload();
     }
 
 

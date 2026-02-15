@@ -6,7 +6,8 @@ public class CustomizationMenuManager : MonoBehaviour
 
     private void Start()
     {
-        SavingManager.Instance.LoadSession();
+        if (SavingManager.Instance != null)
+            SavingManager.Instance.LoadSession();
         playButton.InitializeLastLevelToPlay();
     }
 
@@ -35,6 +36,7 @@ public class CustomizationMenuManager : MonoBehaviour
 
     public void SaveSession()
     {
-        SavingManager.Instance.SaveSession();
+        if (SavingManager.Instance != null)
+            SavingManager.Instance.SaveSession();
     }
 }

@@ -21,7 +21,8 @@ public class EndPannelManager : MonoBehaviour
         if (levelManager.CurrentLevelData.numberOfStars >= 3)
         {
             AudioManager.Instance?.PlayWinSound();
-            GoogleReviewManager.Instance.RequestReview();
+            if (GoogleReviewManager.Instance != null)
+                GoogleReviewManager.Instance.RequestReview();
         }
     }
 
@@ -30,7 +31,7 @@ public class EndPannelManager : MonoBehaviour
     /// </summary>
     public void LoadCurrentScene()
     {
-            LoadScene(0);
+        LoadScene(0);
     }
 
     /// <summary>
@@ -50,8 +51,8 @@ public class EndPannelManager : MonoBehaviour
         LifeManager.Instance.ResetLife();
 
         levelManager.InitializeLevel(levelManager.CurrentLevelIndex + sceneIndex);
-        
-        SceneController.SceneTransitionPlan customPlan  = SceneController.Instance.NewTransition();
+
+        SceneController.SceneTransitionPlan customPlan = SceneController.Instance.NewTransition();
         customPlan.Unload(SceneController.Instance.PreviousActiveScene);
         levelManager.LoadLevel(levelManager.CurrentLevelIndex, customPlan);
     }
