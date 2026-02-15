@@ -370,6 +370,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2538647222011068558, guid: 2e9159acd60f24c4fbc41fd08f786d42, type: 3}
+      propertyPath: m_PreviewTimeScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2538647222011068558, guid: 2e9159acd60f24c4fbc41fd08f786d42, type: 3}
       propertyPath: m_Parameters.widthMultiplier
       value: 1
       objectReference: {fileID: 0}
@@ -417,6 +421,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 569871771093822925}
+    - target: {fileID: 4369940289791482897, guid: 2e9159acd60f24c4fbc41fd08f786d42, type: 3}
+      propertyPath: distoritionTrail
+      value: 
+      objectReference: {fileID: 7700034848076824078}
     - target: {fileID: 4593470224065385001, guid: 2e9159acd60f24c4fbc41fd08f786d42, type: 3}
       propertyPath: m_Parameters.colorGradient.atime0
       value: 8635
@@ -458,6 +466,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e9159acd60f24c4fbc41fd08f786d42, type: 3}
+--- !u!1 &7700034848076824078 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4000312331095049447, guid: 2e9159acd60f24c4fbc41fd08f786d42, type: 3}
+  m_PrefabInstance: {fileID: 6728362703669590761}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7892995797360838981 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3519140762433254316, guid: 2e9159acd60f24c4fbc41fd08f786d42, type: 3}

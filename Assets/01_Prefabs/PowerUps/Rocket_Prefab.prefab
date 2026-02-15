@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrailPositionUpdate
   player: {fileID: 3365707335649233678}
   feetOffset: 0
+  distoritionTrail: {fileID: 4278274410404460348}
 --- !u!1 &3679639208353719546
 GameObject:
   m_ObjectHideFlags: 0
