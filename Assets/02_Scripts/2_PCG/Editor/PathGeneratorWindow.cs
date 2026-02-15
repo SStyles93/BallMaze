@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 public class PathGeneratorWindow : EditorWindow
@@ -104,7 +102,7 @@ public class PathGeneratorWindow : EditorWindow
         GUILayout.Space(10);
         if (GUILayout.Button("Generate"))
         {
-            grid = PxP.PCG.Generator.GenerateMaze(parameters, out usedSeed);
+            grid = PxP.PCG.Generator.GenerateMaze(levelIndex, parameters, out usedSeed);
 
             if (physicalGenerator == null)
                 physicalGenerator = FindFirstObjectByType<PhysicalMazeGenerator>();
@@ -323,7 +321,7 @@ public class PathGeneratorWindow : EditorWindow
         if (parameters == null)
             return;
 
-        grid = PxP.PCG.Generator.GenerateMaze(parameters, out usedSeed);
+        grid = PxP.PCG.Generator.GenerateMaze(levelIndex, parameters, out usedSeed);
 
         if (physicalGenerator != null)
         {

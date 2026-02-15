@@ -3774,3 +3774,262 @@ MonoBehaviour:
       overlay: 0
       isEnd: 0
     usedSeed: -160900234
+  - index: 999999
+    gridWidth: 3
+    gridHeight: 20
+    randomEnd: 0
+    fixedEnd: {x: 1, y: 0}
+    endMinHeightPercent: 0
+    inputSeed: -596090533
+    iceRatio: 0
+    piqueRatio: 0
+    doorDownRatio: 0
+    doorUpRatio: 0
+    movingPlatformRatio: 0
+    emptyRatio: 0
+    coinsToEarn: 60
+    starCount: 0
+    minStarDistance: 2
+    starsConnectToEnd: 1
+    gridData:
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 2
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 3
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 1
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 1
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 1
+      ground: 5
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+      isEnd: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 3
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    - isEmpty: 0
+      ground: 0
+      overlay: 1
+      isEnd: 0
+    - isEmpty: 1
+      ground: 0
+      overlay: 0
+      isEnd: 0
+    usedSeed: -596090533

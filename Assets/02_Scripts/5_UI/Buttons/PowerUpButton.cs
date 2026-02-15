@@ -18,7 +18,7 @@ public class PowerUpButton : UIButton
 
     PowerUpState m_powerUpState = PowerUpState.Clear;
     PlayerState m_playerState = PlayerState.Alive;
-    
+
     bool isLockedByDistance = false;
     bool isLockedByEnd = false;
     bool isUnlocked = false;
@@ -33,7 +33,7 @@ public class PowerUpButton : UIButton
         base.Start();
 
         powerUpManager.OnPowerUpStateChanged += SetPowerUpState;
-        
+
         PlayerMovement.OnPlayerStateChanged += SetPlayerState;
         PowerUpDistanceChecker.OnPowerUpBlocked += SetLockByDistance;
         EndTrigger.OnPowerUpBlocked += SetLockByEnd;
@@ -67,7 +67,7 @@ public class PowerUpButton : UIButton
         if (powerUpManager == null || CoinManager.Instance == null) return;
 
         if (powerUpManager.PlayerState != PlayerState.Alive) return;
-            
+
         if (!isUnlocked) return;
 
         if (CoinManager.Instance.CanAfford(powerType, 1))
@@ -132,6 +132,7 @@ public class PowerUpButton : UIButton
         bool isPlayerAlive = m_playerState == PlayerState.Alive ? true : false;
         bool isPowerUpClear = m_powerUpState == PowerUpState.Clear ? true : false;
         isUnlocked = isPlayerAlive && isPowerUpClear && !isLockedByDistance && !isLockedByEnd;
-        canvasGroup.alpha = isUnlocked ? 1.0f : 0.1f;
+        if (canvasGroup != null)
+            canvasGroup.alpha = isUnlocked ? 1.0f : 0.1f;
     }
 }

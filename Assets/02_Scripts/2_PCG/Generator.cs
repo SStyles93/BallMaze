@@ -6,12 +6,15 @@ namespace PxP.PCG
     public static class Generator
     {
         public static Grid GenerateMaze(
+            int levelIndex,
             GeneratorParameters_SO p,
             out int usedSeed)
         {
-            usedSeed = p.inputSeed == -1
-                ? Random.Range(int.MinValue, int.MaxValue)
-                : p.inputSeed;
+            usedSeed = levelIndex == -1 ?
+                p.inputSeed == -1 ?
+                Random.Range(int.MinValue, int.MaxValue)
+                : p.inputSeed
+                : levelIndex;
 
             var rng = new System.Random(usedSeed);
 

@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour
     /// <remarks>This method will init. LevelParameters, GenerationParameters, and LevelData</remarks>
     public void InitializeLevel(int index)
     {
-        if (index % 10 == 0) CloudSaveManager.Instance.MarkDirty();
+        if (index % (levelsPerCycle*2) == 0) CloudSaveManager.Instance.MarkDirty();
 
         if (!CanStartLevel(index))
         {
@@ -451,7 +451,7 @@ public class LevelManager : MonoBehaviour
         baseParameters.inputSeed = -1;
 
         // 5️ Generate new grid
-        Grid grid = PxP.PCG.Generator.GenerateMaze(baseParameters, out usedSeed);
+        Grid grid = PxP.PCG.Generator.GenerateMaze(levelIndex, baseParameters, out usedSeed);
 
         return grid;
     }
