@@ -224,8 +224,6 @@ public class PhysicalMazeGenerator : MonoBehaviour
     private void ApplyEnvironmentColors(int presetIndex)
     {
         material.SetColor("_TopColor", environmentColors_SO.Presets[presetIndex].Top);
-        material.SetColor("_RightColor", environmentColors_SO.Presets[presetIndex].Right);
-        material.SetColor("_LeftColor", environmentColors_SO.Presets[presetIndex].Left);
         material.SetColor("_FrontColor", environmentColors_SO.Presets[presetIndex].Front);
         emissiveBandMaterial.SetColor("_EmissionColor", environmentColors_SO.Presets[presetIndex].Emissive);
     }

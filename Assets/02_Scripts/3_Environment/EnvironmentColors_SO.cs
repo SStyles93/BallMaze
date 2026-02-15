@@ -32,8 +32,6 @@ public class EnvironmentColors_SO : ScriptableObject
                 _target.Presets[_target.Presets.Length - 1] =
                     new ColorPreset(
                         _target.materialReference.GetColor("_TopColor"),
-                        _target.materialReference.GetColor("_RightColor"),
-                        _target.materialReference.GetColor("_LeftColor"),
                         _target.materialReference.GetColor("_FrontColor"),
                         _target.emissiveMaterialReference.GetColor("_EmissionColor"));
 
@@ -46,8 +44,6 @@ public class EnvironmentColors_SO : ScriptableObject
             {
                 if (_target.targetPresetIndex > _target.Presets.Length-1 || _target.targetPresetIndex < 0) return;
                 _target.materialReference.SetColor("_TopColor", _target.Presets[_target.targetPresetIndex].Top);
-                _target.materialReference.SetColor("_RightColor", _target.Presets[_target.targetPresetIndex].Right);
-                _target.materialReference.SetColor("_LeftColor", _target.Presets[_target.targetPresetIndex].Left);
                 _target.materialReference.SetColor("_FrontColor", _target.Presets[_target.targetPresetIndex].Front);
                 _target.emissiveMaterialReference.SetColor("_EmissionColor", _target.Presets[_target.targetPresetIndex].Emissive);
             }
@@ -60,8 +56,6 @@ public class EnvironmentColors_SO : ScriptableObject
 public class ColorPreset
 {
     public Color Top = Color.white;
-    public Color Right = Color.white;
-    public Color Left = Color.white;
     public Color Front = Color.white;
     [ColorUsage(true,true)]
     public Color Emissive = Color.white;
@@ -73,13 +67,10 @@ public class ColorPreset
     /// <param name="right"></param>
     /// <param name="left"></param>
     /// <param name="front"></param>
-    public ColorPreset(Color top, Color right, Color left, Color front, Color emissive)
+    public ColorPreset(Color top, Color front, Color emissive)
     {
         Top = top;
-        Right = right;
-        Left = left;
-        Front = front;
-        Emissive = 
+        Front = front; 
         Emissive = emissive;
     }
 }
